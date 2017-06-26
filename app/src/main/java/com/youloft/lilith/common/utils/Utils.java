@@ -2,7 +2,11 @@ package com.youloft.lilith.common.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
+import android.support.annotation.DimenRes;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
+import android.util.Base64;
 
 /**
  * 工具类入口用于管理Context
@@ -35,19 +39,14 @@ public class Utils {
     public static Context getContext() {
         if (context != null) return context;
         throw new NullPointerException("u should init first");
-import android.content.Context;
-import android.content.res.Resources;
-import android.support.annotation.DimenRes;
-import android.text.TextUtils;
-import android.util.Base64;
+    }
 
-/**
- * Created by zchao on 2017/6/26.
- * desc:
- * version:
- */
+    /**
+     * Created by zchao on 2017/6/26.
+     * desc:
+     * version:
+     */
 
-public class Utils {
     public static int dp2Px(Resources resources, float dp) {
         final float scale = resources
                 .getDisplayMetrics().density;
@@ -57,6 +56,7 @@ public class Utils {
     public static float sp2Px(Resources resources, @DimenRes int id) {
         return (int) resources.getDimension(id);
     }
+
     /**
      * 反编码Base64到明文
      *
@@ -71,6 +71,7 @@ public class Utils {
 
     /**
      * 获取状态栏的高度
+     *
      * @return
      */
     public static int getStatusHeight(Context context) {
