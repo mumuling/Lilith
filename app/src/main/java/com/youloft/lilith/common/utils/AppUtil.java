@@ -1,6 +1,5 @@
 package com.youloft.lilith.common.utils;
 
-import android.content.Context;
 
 import com.meituan.android.walle.WalleChannelReader;
 
@@ -22,10 +21,10 @@ public class AppUtil {
      * @return
      * @see {https://github.com/Meituan-Dianping/walle}
      */
-    public String getChannel(Context appContext) {
+    public String getChannel() {
         if (sChannel == null) {
             try {
-                sChannel = WalleChannelReader.getChannel(appContext.getApplicationContext());
+                sChannel = WalleChannelReader.getChannel(Utils.getContext());
             } catch (NullPointerException e) {
                 return "unknow";
             } catch (Exception e) {
@@ -34,4 +33,6 @@ public class AppUtil {
         }
         return sChannel;
     }
+
+
 }
