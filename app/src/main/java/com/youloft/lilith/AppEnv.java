@@ -8,4 +8,6 @@ import android.app.Application;
  * Created by coder on 2017/6/26.
  */
 public class AppEnv extends Application {
+
+
 }
