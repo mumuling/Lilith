@@ -2,7 +2,10 @@ package com.youloft.lilith;
 
 import android.app.Application;
 
+import com.youloft.lilith.common.cache.CacheStore;
 import com.youloft.lilith.common.utils.Utils;
+
+import java.io.IOException;
 
 /**
  * Application
@@ -18,5 +21,14 @@ public class AppEnv extends Application {
 
     public static AppEnv getContext() {
         return null;
+    }
+
+    /**
+     * 获取APi类别缓存
+     *
+     * @return
+     */
+    public static CacheStore getApiCache() {
+        return CacheStore.getStore("api");
     }
 }
