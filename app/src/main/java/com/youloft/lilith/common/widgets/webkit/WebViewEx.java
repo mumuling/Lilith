@@ -95,4 +95,19 @@ public class WebViewEx extends WebView {
             mWebViewClientEx.setURLHandler(urlHandler);
     }
 
+    /**
+     * 设置窗口处理Handler
+     *
+     * @param handler
+     */
+    public void setWindowHandler(WebChromeClientEx.IWebWindowHandler handler) {
+        if (mWebChromeClientEx != null && handler != null) {
+            mWebChromeClientEx.setWindowHandler(handler);
+            getSettings().setSupportMultipleWindows(true);
+        } else {
+            getSettings().setSupportMultipleWindows(false);
+        }
+    }
+
+
 }
