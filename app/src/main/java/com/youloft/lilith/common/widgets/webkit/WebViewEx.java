@@ -110,4 +110,14 @@ public class WebViewEx extends WebView {
     }
 
 
+    /**
+     * 设置全屏处理
+     *
+     * @param handler
+     */
+    public void setFullScreenHandler(WebChromeClientEx.IFullScreenHandler handler) {
+        if (mWebChromeClientEx != null && handler != null) {
+            mWebChromeClientEx.setFullScreenHandler(handler);
+        }
+    }
 }
