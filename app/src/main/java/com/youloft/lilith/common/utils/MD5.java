@@ -28,15 +28,6 @@ public final class MD5 {
     @SuppressWarnings("unused")
     private static char sHexDigits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
-    private static MessageDigest sDigest;
-
-    static {
-        try {
-            sDigest = MessageDigest.getInstance(ALGORITHM);
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(ALGORITHM, e);
-        }
-    }
 
     private MD5() {
     }
@@ -44,25 +35,13 @@ public final class MD5 {
     final public static String encode(String source) {
         if (TextUtils.isEmpty(source))
             return "";
-        byte[] btyes = source.getBytes();
-        byte[] encodedBytes = sDigest.digest(btyes);
-        return hexString(encodedBytes);
+        try {
+            MessageDigest digest = MessageDigest.getInstance(ALGORITHM);
+            digest.update(source.getBytes("utf-8"));
+            return StringUtils.hexString(digest.digest());
+        } catch (Throwable e) {
+        }
+        return "";
     }
 
-    public static String hexString(byte[] source) {
-        if (source == null || source.length <= 0) {
-            return "";
-        }
-
-        final int size = source.length;
-        final char str[] = new char[size * 2];
-        int index = 0;
-        byte b;
-        for (int i = 0; i < size; i++) {
-            b = source[i];
-            str[index++] = sHexDigits[b >>> 4 & 0xf];
-            str[index++] = sHexDigits[b & 0xf];
-        }
-        return new String(str);
-    }
 }

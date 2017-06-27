@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +16,7 @@ import android.widget.TextView;
 
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.utils.SafeUtils;
-import com.youloft.lilith.common.utils.Utils;
+import com.youloft.lilith.common.utils.ViewUtil;
 
 import java.util.ArrayList;
 
@@ -37,7 +38,7 @@ public class NavBarLayout extends LinearLayout {
 
     public NavBarLayout(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        int height = Utils.dp2Px(context.getResources(), 60);
+        int height = ViewUtil.dp2px(60);
         setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,height));
         initDefaultTabs();
         initTabsView();
@@ -67,12 +68,15 @@ public class NavBarLayout extends LinearLayout {
                                 resetAllSelect();
                                 ((NavItemView) v).setSelect(true);
                                 if (mTabChangeListener != null) {
-                                    mTabChangeListener.tabChange(tb.mIndex);
+                                    mTabChangeListener.selectChange(tb.mIndex);
                                 }
                             }
                         }
                     }
                 });
+            }
+            if (mTabChangeListener != null) {
+                mTabChangeListener.tabsChange();
             }
         }
     }
@@ -86,6 +90,13 @@ public class NavBarLayout extends LinearLayout {
         }
     }
 
+    public void setSelectTab(int index){
+        if (index < 0 || index > mTabViews.size()-1) {
+            return;
+        }
+        resetAllSelect();
+        mTabViews.get(index).setSelect(true);
+    }
 
     /**
      * 设置默认的tab项目
@@ -97,7 +108,11 @@ public class NavBarLayout extends LinearLayout {
         mTabs.add(new TabItemBean("我", R.mipmap.ic_launcher, 3, false));
     }
 
-    public void setmTabChangeListener(OnTabChangeListener mTabChangeListener) {
+    public ArrayList<TabItemBean> getTabs(){
+        return mTabs;
+    }
+
+    public void setTabChangeListener(OnTabChangeListener mTabChangeListener) {
         this.mTabChangeListener = mTabChangeListener;
     }
 
@@ -109,8 +124,9 @@ public class NavBarLayout extends LinearLayout {
      * @author zchao created at 2017/6/27 9:40
      * @see
     */
-    interface OnTabChangeListener{
-        void tabChange(int index);
+    public interface OnTabChangeListener{
+        void selectChange(int index);
+        void tabsChange();
     }
 
     /**

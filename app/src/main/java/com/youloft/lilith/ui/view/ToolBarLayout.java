@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
 import com.youloft.lilith.common.utils.Utils;
+import com.youloft.lilith.common.utils.ViewUtil;
 
 /**
  * Created by zchao on 2017/6/26.
@@ -36,9 +37,9 @@ public class ToolBarLayout extends FrameLayout {
             return;
         }
         if (fix) {
-            mAddedHeight = Utils.getStatusHeight(getContext());
+            mAddedHeight = ViewUtil.getStatusHeight();
         } else {
-            mAddedHeight = -Utils.getStatusHeight(getContext());
+            mAddedHeight = -ViewUtil.getStatusHeight();
         }
         if (Build.VERSION.SDK_INT >= 19) {
             setPadding(getPaddingLeft(), getPaddingTop()

@@ -41,21 +41,6 @@ public class Utils {
         throw new NullPointerException("u should init first");
     }
 
-    /**
-     * Created by zchao on 2017/6/26.
-     * desc:
-     * version:
-     */
-
-    public static int dp2Px(Resources resources, float dp) {
-        final float scale = resources
-                .getDisplayMetrics().density;
-        return (int) (dp * scale + 0.5f);
-    }
-
-    public static float sp2Px(Resources resources, @DimenRes int id) {
-        return (int) resources.getDimension(id);
-    }
 
     /**
      * 反编码Base64到明文
@@ -69,25 +54,5 @@ public class Utils {
         return new String(Base64.decode(decodeStr, Base64.DEFAULT));
     }
 
-    /**
-     * 获取状态栏的高度
-     *
-     * @return
-     */
-    public static int getStatusHeight(Context context) {
-        int resheigtId = -1;
 
-        try {
-            if (resheigtId < 1) {
-                Class clazz = Class.forName("com.android.internal.R$dimen");
-                Object object = clazz.newInstance();
-                resheigtId = Integer.parseInt(clazz.getField("status_bar_height")
-                        .get(object).toString());
-            }
-        } catch (Exception e) {
-            return Utils.dp2Px(context.getResources(), 20);
-        }
-        int statusHeight = context.getResources().getDimensionPixelSize(resheigtId);
-        return statusHeight;
-    }
 }

@@ -1,6 +1,8 @@
 package com.youloft.lilith.common.utils;
 
 
+import android.content.Context;
+
 /**
  * View相关Util
  * Created by coder on 2017/6/26.
@@ -51,4 +53,25 @@ public class ViewUtil {
         return (int) (pxValue / fontScale + 0.5f);
     }
 
+
+    /**
+     * 获取状态栏的高度
+     *
+     * @return
+     */
+    public static int getStatusHeight() {
+        int resheigtId = -1;
+        try {
+            if (resheigtId < 1) {
+                Class clazz = Class.forName("com.android.internal.R$dimen");
+                Object object = clazz.newInstance();
+                resheigtId = Integer.parseInt(clazz.getField("status_bar_height")
+                        .get(object).toString());
+            }
+        } catch (Exception e) {
+            return dp2px(20);
+        }
+        int statusHeight = Utils.getContext().getResources().getDimensionPixelSize(resheigtId);
+        return statusHeight;
+    }
 }
