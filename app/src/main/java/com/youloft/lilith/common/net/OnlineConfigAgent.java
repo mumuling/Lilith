@@ -168,11 +168,11 @@ public class OnlineConfigAgent {
             lastUpdateVer = "";
         }
         HashMap<String, String> params = new HashMap<String, String>();
-        params.put("APPID", CFG_APP_KEY);
-        params.put("APPVER", CFG_APP_VER);
-        params.put("LASTUPDATE", lastUpdateVer);
-        String url = URLFormatter.parseUrl(Urls.CONFIG, NetUtil.initParams(params));
-        String data = WebUtils.getString(url, null, null);
+        params.put("appid", CFG_APP_KEY);
+        params.put("appver", CFG_APP_VER);
+        params.put("lastupdate", lastUpdateVer);
+//        String url = URLFormatter.parseUrl(Urls.CONFIG, NetUtil.initParams(params));
+        String data = WebUtils.getString(Urls.CONFIG, NetUtil.initParams(params));
         if (!TextUtils.isEmpty(data)) {
             ConfigResp configResp = JSON.parseObject(data, ConfigResp.class);
             if (configResp != null) {

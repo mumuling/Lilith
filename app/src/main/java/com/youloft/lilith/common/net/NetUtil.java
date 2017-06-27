@@ -9,24 +9,28 @@ import com.youloft.lilith.LLApplication;
 
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.concurrent.Callable;
 
-import bolts.Task;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 
 /**
  * Desc: 网络请求工具类，包括公共参数的封装
  * Change:
  *
- * @version
  * @author zchao created at 2017/6/26 14:10
  * @see
-*/
+ */
 
 public class NetUtil {
     private static HashMap<String, String> mParams;
     private static TokenStore mTokenStore;
     private static NetUtil instance = null;
+
     /**
      * 公共参数封装
      *
@@ -38,13 +42,7 @@ public class NetUtil {
         }
         if (mTokenStore == null) {
             mTokenStore = new TokenStore(AppEnv.getAppContext());
-            Task.callInBackground(new Callable<Void>() {
-                @Override
-                public Void call() throws Exception {
-                    updateToken();
-                    return null;
-                }
-            });
+            updateToken();
         }
         mParams.put("CID", "Youloft_Android");
         mParams.put("CC", Locale.getDefault().getCountry());
@@ -60,14 +58,27 @@ public class NetUtil {
 
 
     private final Object tokenLock = new Object();
+
     public void updateToken() {
         synchronized (tokenLock) {
-            mTokenStore.loadToken();
-            initPublicParam();
+            io.reactivex.Observable.create(new ObservableOnSubscribe<Object>() {
+                @Override
+                public void subscribe(@NonNull ObservableEmitter<Object> e) throws Exception {
+                    boolean b = mTokenStore.loadToken();
+                    e.onNext(b);
+                }
+            }).subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Consumer<Object>() {
+                        @Override
+                        public void accept(@NonNull Object o) throws Exception {
+                            initPublicParam();
+                        }
+                    });
         }
     }
 
-    public static NetUtil getInstance(){
+    public static NetUtil getInstance() {
         if (instance == null) {
             instance = new NetUtil();
         }
@@ -80,7 +91,7 @@ public class NetUtil {
             NetUtil.getInstance().initPublicParam();
         }
         if (!mParams.containsKey("TKN")) {
-            if (mTokenStore != null && mTokenStore.getToken() != null){
+            if (mTokenStore != null && mTokenStore.getToken() != null) {
                 mParams.put("TKN", mTokenStore.getToken());
             }
         }

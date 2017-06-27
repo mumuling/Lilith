@@ -1,6 +1,7 @@
 package com.youloft.lilith.ui.view;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
@@ -34,9 +35,31 @@ public class BaseToolBar extends ToolBarLayout {
     public BaseToolBar(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         initView(context);
+        initStyles(context, attrs);
         setBackgroundColor(Color.RED);
     }
 
+    /**
+     * 初始化style
+     * @param context
+     * @param attrs
+     */
+    private void initStyles(Context context, AttributeSet attrs) {
+        final TypedArray a = context.obtainStyledAttributes(
+                attrs, R.styleable.BaseToolBar);
+        boolean showBackBtn = a.getBoolean(R.styleable.BaseToolBar_show_back_btn, true);
+        boolean showTitle = a.getBoolean(R.styleable.BaseToolBar_show_title_btn, true);
+        boolean showShareBtn = a.getBoolean(R.styleable.BaseToolBar_show_share_btn, true);
+
+        mBackBtn.setVisibility(showBackBtn ? VISIBLE : GONE);
+        mShareBtn.setVisibility(showShareBtn ? VISIBLE : GONE);
+        mTitleTV.setVisibility(showTitle ? VISIBLE : GONE);
+    }
+
+    /**
+     * 初始化View
+     * @param context
+     */
     private void initView(Context context) {
         View view = LayoutInflater.from(context).inflate(R.layout.tool_bar, this);
         mBackBtn = (ImageView) findViewById(R.id.tool_bar_back_btn);
@@ -44,8 +67,36 @@ public class BaseToolBar extends ToolBarLayout {
         mTitleTV = (TextView) findViewById(R.id.tool_bar_title);
     }
 
+    /**
+     *
+     * @param color
+     */
     public void setBackgroundColor(int color){
         super.setBackgroundColor(color);
+    }
+
+    /**
+     * 设置是否显示返回按钮
+     * @param showBackBtn
+     */
+    public void setShowBackBtn(boolean showBackBtn){
+        mBackBtn.setVisibility(showBackBtn ? VISIBLE : GONE);
+    }
+
+    /**
+     * 设置是否显示title按钮
+     * @param showTitleBtn
+     */
+    public void setShowTitleBtn(boolean showTitleBtn){
+        mTitleTV.setVisibility(showTitleBtn ? VISIBLE : GONE);
+    }
+
+    /**
+     * 设置是否显示分享按钮
+     * @param showShareBtn
+     */
+    public void setShowShareBtn(boolean showShareBtn){
+        mShareBtn.setVisibility(showShareBtn ? VISIBLE : GONE);
     }
 
     /**

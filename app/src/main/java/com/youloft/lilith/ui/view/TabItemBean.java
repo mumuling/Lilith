@@ -21,4 +21,5 @@ public class TabItemBean {
     public int mTabIc;          //主页底部tab的item图标
     public int mIndex;          //位置
     public boolean mSelected;   //是否选中
+    public boolean mIsAdded = false; //是否添加此类的fragment到主界面
 }
