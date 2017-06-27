@@ -4,11 +4,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.youloft.lilith.R;
+import com.youloft.lilith.common.widgets.picker.BaseActivity;
 
 /**
  * 主页面
  */
-public class LilithActivity extends AppCompatActivity {
+public class LilithActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

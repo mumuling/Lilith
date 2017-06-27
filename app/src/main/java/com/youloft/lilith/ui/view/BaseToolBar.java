@@ -1,12 +1,14 @@
 package com.youloft.lilith.ui.view;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -32,6 +34,7 @@ public class BaseToolBar extends ToolBarLayout {
     public BaseToolBar(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         initView(context);
+        setBackgroundColor(Color.RED);
     }
 
     private void initView(Context context) {
@@ -39,6 +42,10 @@ public class BaseToolBar extends ToolBarLayout {
         mBackBtn = (ImageView) findViewById(R.id.tool_bar_back_btn);
         mShareBtn = (ImageView) findViewById(R.id.tool_bar_share_btn);
         mTitleTV = (TextView) findViewById(R.id.tool_bar_title);
+    }
+
+    public void setBackgroundColor(int color){
+        super.setBackgroundColor(color);
     }
 
     /**

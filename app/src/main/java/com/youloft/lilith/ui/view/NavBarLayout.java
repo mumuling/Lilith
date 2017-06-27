@@ -1,6 +1,7 @@
 package com.youloft.lilith.ui.view;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -26,6 +27,9 @@ import java.util.ArrayList;
 
 public class NavBarLayout extends LinearLayout {
     private ArrayList<TabItemBean> mTabs = new ArrayList<>();
+    private ArrayList<NavItemView> mTabViews = new ArrayList<>();
+
+    private OnTabChangeListener mTabChangeListener = null;
 
     public NavBarLayout(Context context) {
         this(context, null);
@@ -33,8 +37,8 @@ public class NavBarLayout extends LinearLayout {
 
     public NavBarLayout(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        LinearLayout.LayoutParams lp = (LayoutParams) getLayoutParams();
-        lp.height = Utils.dp2Px(getResources(), 60);
+        int height = Utils.dp2Px(context.getResources(), 60);
+        setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,height));
         initDefaultTabs();
         initTabsView();
     }
@@ -43,6 +47,7 @@ public class NavBarLayout extends LinearLayout {
      * 添加tabItem的view
      */
     private void initTabsView() {
+        mTabViews.clear();
         if (mTabs != null && mTabs.size() > 0) {
             for (int i = 0; i < mTabs.size(); i++) {
                 TabItemBean item = SafeUtils.getSafeData(mTabs, i);
@@ -52,18 +57,60 @@ public class NavBarLayout extends LinearLayout {
                 NavItemView itemView = new NavItemView(getContext());
                 itemView.setData(item);
                 addView(itemView);
+                mTabViews.add(i,itemView);
+                itemView.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (v instanceof NavItemView) {
+                            TabItemBean tb = ((NavItemView) v).getData();
+                            if (tb != null) {
+                                resetAllSelect();
+                                ((NavItemView) v).setSelect(true);
+                                if (mTabChangeListener != null) {
+                                    mTabChangeListener.tabChange(tb.mIndex);
+                                }
+                            }
+                        }
+                    }
+                });
             }
         }
     }
+
+    private void resetAllSelect() {
+        for (int i = 0; i < mTabViews.size(); i++) {
+            NavItemView itemView = SafeUtils.getSafeData(mTabViews, i);
+            if (itemView != null) {
+                itemView.setSelect(false);
+            }
+        }
+    }
+
 
     /**
      * 设置默认的tab项目
      */
     private void initDefaultTabs() {
-        mTabs.add(new TabItemBean("星座", R.mipmap.ic_launcher));
-        mTabs.add(new TabItemBean("话题", R.mipmap.ic_launcher));
-        mTabs.add(new TabItemBean("测测", R.mipmap.ic_launcher));
-        mTabs.add(new TabItemBean("我", R.mipmap.ic_launcher));
+        mTabs.add(new TabItemBean("星座", R.mipmap.ic_launcher, 0, true));
+        mTabs.add(new TabItemBean("话题", R.mipmap.ic_launcher, 1, false));
+        mTabs.add(new TabItemBean("测测", R.mipmap.ic_launcher, 2, false));
+        mTabs.add(new TabItemBean("我", R.mipmap.ic_launcher, 3, false));
+    }
+
+    public void setmTabChangeListener(OnTabChangeListener mTabChangeListener) {
+        this.mTabChangeListener = mTabChangeListener;
+    }
+
+    /**
+     * Desc: 主界面底部icon点击接口
+     * Change:
+     *
+     * @version
+     * @author zchao created at 2017/6/27 9:40
+     * @see
+    */
+    interface OnTabChangeListener{
+        void tabChange(int index);
     }
 
     /**
@@ -97,8 +144,25 @@ public class NavBarLayout extends LinearLayout {
          */
         public void setData(TabItemBean tabInfo){
             pTabInfo = tabInfo;
+            bindView();
+        }
+
+        private void bindView(){
             mNavIc.setImageResource(pTabInfo.mTabIc);
             mNavName.setText(pTabInfo.mTabName);
+            setBackgroundColor(pTabInfo.mSelected ? Color.RED : Color.TRANSPARENT);
+        }
+
+        public TabItemBean getData(){
+            return pTabInfo;
+        }
+
+        public void setSelect(boolean select){
+            if (pTabInfo.mSelected == select) {
+                return;
+            }
+            pTabInfo.mSelected = select;
+            bindView();
         }
     }
 }

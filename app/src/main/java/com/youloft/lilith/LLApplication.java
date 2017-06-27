@@ -3,10 +3,12 @@ package com.youloft.lilith;
 import android.app.Application;
 import android.content.Context;
 
+import com.youloft.lilith.common.cache.CacheStore;
 import com.youloft.lilith.common.net.AppEnv;
 import com.youloft.lilith.common.net.NetUtil;
 import com.youloft.lilith.common.net.OnlineConfigAgent;
 import com.youloft.lilith.common.utils.Callback;
+import com.youloft.lilith.common.utils.Utils;
 
 /**
  * Application
@@ -36,6 +38,8 @@ public class LLApplication extends Application {
         NetUtil.getInstance().initPublicParam();
 
         mContext = this;
+
+        Utils.init(this);
     }
 
     public static Context getContext(){
@@ -55,4 +59,13 @@ public class LLApplication extends Application {
 //        TCAgent.init(this, "1A3BC081BB9A442E8AFF29ACB08069E3", channel);
 //        TCAgent.setReportUncaughtExceptions(true);
     }
+    /**
+     * 获取APi类别缓存
+     *
+     * @return
+     */
+    public static CacheStore getApiCache() {
+        return CacheStore.getStore("api");
+    }
+
 }

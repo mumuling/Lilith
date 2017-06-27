@@ -46,7 +46,6 @@ public class BaseActivity extends Activity {
 
     /**
      * 使用沉浸式菜单栏
-     * 迁移至CFApp
      */
     private void immerseToolbar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
