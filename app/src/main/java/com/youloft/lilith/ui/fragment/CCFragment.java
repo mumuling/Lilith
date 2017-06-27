@@ -11,6 +11,6 @@ import com.youloft.lilith.common.base.BaseFragment;
 
 public class CCFragment extends BaseFragment {
     public CCFragment() {
-        super(R.layout.fragment_xz);
+        super(R.layout.fragment_cc);
     }
 }

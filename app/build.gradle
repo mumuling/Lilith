@@ -50,6 +50,7 @@ dependencies {
     compile project(':statistics')
     compile 'com.jakewharton:butterknife:8.6.0'
     compile 'com.jakewharton:butterknife-compiler:8.6.0'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
 }
 
 //渠道打包配置
