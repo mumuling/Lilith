@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
     <com.youloft.lilith.ui.view.BaseToolBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/tool_bar"
-        app:show_back_btn="false"
-        app:show_share_btn="false"
-        app:show_title_btn="true"
-        />
-    <ListView
-        android:layout_width="match_parent"
+        app:show_share_btn="false"/>
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/lv_topic"/>
+        android:layout_gravity="center"
+        android:text="这个话题"/>
 </LinearLayout>

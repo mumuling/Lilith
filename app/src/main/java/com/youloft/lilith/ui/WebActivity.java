@@ -54,6 +54,7 @@ public class WebActivity extends AppCompatActivity implements WebChromeClientEx.
         mFullScreenGroup = (ViewGroup) findViewById(R.id.full_container);
         mWebGroup = (ViewGroup) findViewById(R.id.web_container);
         mWebWindowManager = new WebWindowManager<>(this, mWebGroup, mProtocolHandler, this);
+        loadUrl("https://c.51wnl.com/wnl_feedback_new/android.html?pushToken=[PUSHTOKEN]&appver=[APPVERSION]&osver=[OSVERSION]&deviceType=[DEVICETYPE]&userId=[WNLUSERID]&deviceId=[DEVICEID]");
     }
 
     /**
@@ -80,7 +81,7 @@ public class WebActivity extends AppCompatActivity implements WebChromeClientEx.
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (mProtocolHandler != null) {
-            mProtocolHandler.onActivityResult(requestCode, resultCode, data);
+            mProtocolHandler.onActivityResult(this, requestCode, resultCode, data);
         }
         super.onActivityResult(requestCode, resultCode, data);
 

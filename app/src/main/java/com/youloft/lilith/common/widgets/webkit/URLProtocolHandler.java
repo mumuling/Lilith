@@ -32,6 +32,26 @@ public class URLProtocolHandler {
         sHandleMap.put("getfilecode", new FileHandle());
     }
 
+
+    /**
+     * 注册Handle
+     *
+     * @param action
+     * @param handle
+     */
+    public static void registerHandle(String action, AbsHandle handle) {
+        sHandleMap.put(action, handle);
+    }
+
+    /**
+     * 反注册handle
+     *
+     * @param action
+     */
+    public static void unregisterHandle(String action) {
+        sHandleMap.remove(action);
+    }
+
     public URLProtocolHandler(Activity activity) {
         this.mActivity = activity;
     }
@@ -115,14 +135,21 @@ public class URLProtocolHandler {
      * @return
      */
     private void handleProtocolImpl(WebView view, String url, String action, String paramStr) {
-        if (TextUtils.isEmpty(action)) {
+        if (TextUtils.isEmpty(action) || view == null) {
             return;
         }
+        if (mActivity == null
+                && view.getContext() != null
+                && view.getContext() instanceof Activity) {
+            mActivity = (Activity) view.getContext();
+        }
 
-        if (sHandleMap.containsKey(action)) {
+
+        if (sHandleMap.containsKey(action) && mActivity != null) {
             sHandleMap.get(action).handle(mActivity, view, url, action, paramStr);
             return;
         }
+
         switch (action) {
             case "rate":
                 handleRateApp(view.getContext());
@@ -171,11 +198,11 @@ public class URLProtocolHandler {
      * @param resultCode
      * @param data
      */
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
         if (sHandleMap != null) {
             for (AbsHandle absHandle : sHandleMap.values()) {
                 try {
-                    absHandle.onActivityResult(requestCode, resultCode, data);
+                    absHandle.onActivityResult(activity, requestCode, resultCode, data);
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
