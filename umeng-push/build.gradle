@@ -8,7 +8,7 @@ android {
         minSdkVersion versions.minSdk
         targetSdkVersion versions.targetSdk
     }
-    
+
     buildTypes {
         release {
             minifyEnabled false

@@ -15,6 +15,7 @@ import com.youloft.lilith.common.widgets.webkit.URLProtocolHandler;
 import com.youloft.lilith.common.widgets.webkit.WebChromeClientEx;
 import com.youloft.lilith.common.widgets.webkit.WebViewEx;
 import com.youloft.lilith.common.widgets.webkit.WebWindowManager;
+import com.youloft.socialize.SocializeApp;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
@@ -80,11 +81,14 @@ public class WebActivity extends AppCompatActivity implements WebChromeClientEx.
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        //协议处理回调
         if (mProtocolHandler != null) {
             mProtocolHandler.onActivityResult(this, requestCode, resultCode, data);
         }
-        super.onActivityResult(requestCode, resultCode, data);
 
+        //分享回调
+        SocializeApp.get(this).onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
