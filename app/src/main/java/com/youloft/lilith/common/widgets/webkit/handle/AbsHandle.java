@@ -27,9 +27,9 @@ public abstract class AbsHandle {
      * 系统回调
      *
      * @param requestCode
-     * @param requestCode1
+     * @param resultCode
      * @param data
      */
-    public void onActivityResult(int requestCode, int requestCode1, Intent data) {
+    public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
     }
 }

@@ -15,7 +15,7 @@ public class WebViewClientEx extends WebViewClient {
     private URLProtocolHandler mProtocolHandler;
 
     public WebViewClientEx() {
-        mProtocolHandler = new URLProtocolHandler();
+        mProtocolHandler = new URLProtocolHandler(null);
     }
 
     public void setURLHandler(URLProtocolHandler handler) {
