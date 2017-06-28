@@ -1,5 +1,6 @@
 package com.youloft.lilith.ui;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
+import android.webkit.WebView;
 
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.widgets.webkit.URLProtocolHandler;
@@ -17,7 +19,7 @@ import com.youloft.lilith.common.widgets.webkit.WebWindowManager;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
 /**
- * WebActivity
+ * 网页Activity
  */
 public class WebActivity extends AppCompatActivity implements WebChromeClientEx.IFullScreenHandler {
 
@@ -27,14 +29,28 @@ public class WebActivity extends AppCompatActivity implements WebChromeClientEx.
 
     private WebWindowManager<WebViewEx> mWebWindowManager;
 
-    private URLProtocolHandler mProtocolHandler = new URLProtocolHandler() {
-
-    };
+    /**
+     * 协议处理
+     */
+    private URLProtocolHandler mProtocolHandler = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web);
+        mProtocolHandler = new URLProtocolHandler(this) {
+            @Override
+            protected void handleClose() {
+                finish();
+            }
+
+            @Override
+            protected void handleWebBack(WebView view) {
+                if (!backToWeb()) {
+                    handleClose();
+                }
+            }
+        };
         mFullScreenGroup = (ViewGroup) findViewById(R.id.full_container);
         mWebGroup = (ViewGroup) findViewById(R.id.web_container);
         mWebWindowManager = new WebWindowManager<>(this, mWebGroup, mProtocolHandler, this);
@@ -62,22 +78,42 @@ public class WebActivity extends AppCompatActivity implements WebChromeClientEx.
 
 
     @Override
-    public void onBackPressed() {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (mProtocolHandler != null) {
+            mProtocolHandler.onActivityResult(requestCode, resultCode, data);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (backToWeb()) {
+            return;
+        }
+        super.onBackPressed();
+    }
+
+    /**
+     * 回退
+     *
+     * @return
+     */
+    private boolean backToWeb() {
         //处理当前页面后退
         WebViewEx topView = mWebWindowManager.getTopView();
         if (topView != null && topView.canGoBack()) {
             topView.goBack();
-            return;
+            return true;
         }
 
         //处理Web弹栈
         if (mWebWindowManager != null
                 && mWebWindowManager.hasTab()) {
             mWebWindowManager.popWebView();
-            return;
+            return true;
         }
-        super.onBackPressed();
+        return false;
     }
 
     /**
