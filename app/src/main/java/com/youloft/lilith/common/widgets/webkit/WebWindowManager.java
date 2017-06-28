@@ -96,7 +96,7 @@ public class WebWindowManager<T extends WebView> implements IWebWindowHandler {
      * @return
      */
     public boolean hasTab() {
-        return mWebViewStack.empty();
+        return !mWebViewStack.empty();
     }
 
     /**

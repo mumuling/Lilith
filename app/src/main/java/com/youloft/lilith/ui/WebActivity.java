@@ -38,7 +38,6 @@ public class WebActivity extends AppCompatActivity implements WebChromeClientEx.
         mFullScreenGroup = (ViewGroup) findViewById(R.id.full_container);
         mWebGroup = (ViewGroup) findViewById(R.id.web_container);
         mWebWindowManager = new WebWindowManager<>(this, mWebGroup, mProtocolHandler, this);
-        loadUrl("http://www.tudou.com");
     }
 
     /**
@@ -50,7 +49,6 @@ public class WebActivity extends AppCompatActivity implements WebChromeClientEx.
         if (TextUtils.isEmpty(url)) {
             return;
         }
-
         //对于不是以Http打头的URL直接进行协议处理后关闭网页
         if (!url.toLowerCase().startsWith("http")) {
             if (mProtocolHandler != null) {
@@ -62,6 +60,25 @@ public class WebActivity extends AppCompatActivity implements WebChromeClientEx.
         mWebWindowManager.getTopView().loadUrl(url);
     }
 
+
+    @Override
+    public void onBackPressed() {
+
+        //处理当前页面后退
+        WebViewEx topView = mWebWindowManager.getTopView();
+        if (topView != null && topView.canGoBack()) {
+            topView.goBack();
+            return;
+        }
+
+        //处理Web弹栈
+        if (mWebWindowManager != null
+                && mWebWindowManager.hasTab()) {
+            mWebWindowManager.popWebView();
+            return;
+        }
+        super.onBackPressed();
+    }
 
     /**
      * 显示全屏视图
