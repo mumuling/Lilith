@@ -5,6 +5,8 @@ import android.net.Uri;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.youloft.lilith.common.widgets.webkit.utils.WebKitUtils;
+
 /**
  * WebViewClient
  * Created by coder on 2017/6/27.
