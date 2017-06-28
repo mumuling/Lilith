@@ -81,6 +81,9 @@ public class NavBarLayout extends LinearLayout {
         }
     }
 
+    /**
+     * 重置所有view的选中状态
+     */
     private void resetAllSelect() {
         for (int i = 0; i < mTabViews.size(); i++) {
             NavItemView itemView = SafeUtils.getSafeData(mTabViews, i);
@@ -90,6 +93,10 @@ public class NavBarLayout extends LinearLayout {
         }
     }
 
+    /**
+     * 让某一个tab处于选中状态
+     * @param index
+     */
     public void setSelectTab(int index){
         if (index < 0 || index > mTabViews.size()-1) {
             return;

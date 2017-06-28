@@ -9,6 +9,7 @@ import com.youloft.lilith.LLApplication;
 
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -85,7 +86,7 @@ public class NetUtil {
         return instance;
     }
 
-    public static HashMap<String, String> initParams(HashMap<String, String> params) {
+    public static Map<String, String> initParams(Map<String, String> params) {
 
         if (mParams == null || mParams.isEmpty()) {
             NetUtil.getInstance().initPublicParam();
