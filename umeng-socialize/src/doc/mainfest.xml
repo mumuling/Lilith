@@ -1,0 +1,35 @@
+<manifest>
+    <uses-sdk tools:overrideLibrary="com.umeng.socialize.evernote,com.umeng.socialize.pinterest" />
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+
+    <activity android:configChanges="keyboardHidden|orientation|screenSize" android:exported="true"
+        android:name=".wxapi.WXEntryActivity" android:screenOrientation="portrait"
+        android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+    <activity android:launchMode="singleTask" android:name="com.umeng.qq.tencent.AuthActivity"
+        android:noHistory="true">
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+
+            <data android:scheme="tencent100424468" />
+        </intent-filter>
+    </activity>
+    <activity android:configChanges="orientation|keyboardHidden|screenSize"
+        android:name="com.umeng.qq.tencent.AssistActivity"
+        android:screenOrientation="portrait"
+        android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+</manifest>
