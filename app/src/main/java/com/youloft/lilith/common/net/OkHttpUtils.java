@@ -113,10 +113,11 @@ public class OkHttpUtils {
 
     /**
      * GET方式获取
+     * 说明：此方法只用于某些不需要公共参数的，如果请求需要公共参数直接使用{@link #getString(String, Map)}
      *
      * @param url 地址
      * @param params 业务参数，
-     * @param usePublicParams 如果为true自动加入公共参数
+     * @param usePublicParams 如果为false忽略公共参数，反正会在拦截器中自动添加上公共参数
      * @return
      */
     public String getString(String url, Map<String, String> params, boolean usePublicParams) {
@@ -153,6 +154,7 @@ public class OkHttpUtils {
      * @param baseUrl
      * @param headers
      * @param params
+     * @param usePublicParam 如果为false忽略公共参数，反正会在拦截器中自动添加上公共参数
      * @return
      */
     public Response requestExecute(String baseUrl, Map<String, String> headers, Map<String, String> params, boolean usePublicParam) throws IOException {
@@ -184,6 +186,7 @@ public class OkHttpUtils {
      * @param baseUrl
      * @param headers
      * @param params
+     * @param usePublicParam 如果为false忽略公共参数，反正会在拦截器中自动添加上公共参数
      * @return
      */
     public <T>void requestEnqueue(String baseUrl, Map<String, String> headers, Map<String, String> params,

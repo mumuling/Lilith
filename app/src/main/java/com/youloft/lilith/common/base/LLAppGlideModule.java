@@ -15,7 +15,7 @@ import java.io.File;
 
 /**
  * Created by zchao on 2017/6/28.
- * desc: glide4.0全局配置
+ * desc: glide4.0全局配置；编译时可能出现AppGlide不能使用的问题。直接（Make Project）即可，或者先clean一下
  * version:
  */
 @GlideModule
