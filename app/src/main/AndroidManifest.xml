@@ -25,6 +25,8 @@
         <activity
             android:name=".ui.WebActivity"
             android:configChanges="orientation|keyboardHidden|screenSize" />
+        <activity android:name=".topic.TopicDetailActivity"
+            android:launchMode="singleTop"/>
     </application>
 
 

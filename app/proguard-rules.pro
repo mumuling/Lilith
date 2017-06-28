@@ -24,11 +24,10 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
-#glide
- -keep public class * implements com.bumptech.glide.module.GlideModule
-    -keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
-      **[] $VALUES;
-      public *;
-    }
-
--keep class com.bumptech.glide.integration.okhttp.OkHttpGlideModule
+#Glide的混淆规则
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public class * extends com.bumptech.glide.AppGlideModule
+-keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
+    **[] $VALUES;
+    public *;
+}

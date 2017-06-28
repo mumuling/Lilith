@@ -4,12 +4,38 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowTranslucentStatus">true</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="numberPickerStyle">@style/NumberPicker</item>
     </style>
 
+    <style name="BaseDialog" parent="DialogTheme">
+
+    </style>
 
     <declare-styleable name="BaseToolBar">
         <attr name="show_back_btn" format="boolean"/>
         <attr name="show_share_btn" format="boolean"/>
         <attr name="show_title_btn" format="boolean"/>
     </declare-styleable>
+
+    <style name="DialogTheme" parent="@android:style/Theme.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="numberPickerStyle">@style/NumberPicker</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.3</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowSoftInputMode">adjustNothing|stateHidden</item>
+    </style>
+
+
+
+
+
 </resources>

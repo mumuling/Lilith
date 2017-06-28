@@ -1,10 +1,6 @@
 package com.youloft.lilith.common.net;
 
 
-import android.os.Handler;
-
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -16,11 +12,10 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import retrofit2.http.PUT;
 
 
 /**
- * Desc: 
+ * Desc: 网路请求
  * Change: 
  * 
  * @version 
@@ -45,13 +40,37 @@ public class WebUtils {
         try {
             Response response = request("GET", url, null, params);
             if (response.isSuccessful()) {
-                return response.body().string();
+                return response.body() == null ? "" :response.body().string();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
+
+    /**
+     * GET方式获取
+     *
+     * @param url 地址
+     * @param params 所有参数，
+     * @param usePublicParams 如果为true自动加入公共参数
+     * @return
+     */
+    public static String getString(String url, Map<String, String> params, boolean usePublicParams) {
+        try {
+            if (usePublicParams) {
+                params = NetUtil.initParams(params);
+            }
+            Response response = request("GET", url, null, params);
+            if (response.isSuccessful()) {
+                return response.body() == null ? "" :response.body().string();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
 
     /**
