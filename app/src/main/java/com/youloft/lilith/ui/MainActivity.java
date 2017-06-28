@@ -1,5 +1,6 @@
 package com.youloft.lilith.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.FrameLayout;
 
@@ -33,6 +34,7 @@ public class MainActivity extends BaseActivity {
         mMainTabManager = new TabManager(this);
         Glide.with(this);
 
+        startActivity(new Intent(this,WebActivity.class));
     }
 
 }

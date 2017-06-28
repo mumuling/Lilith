@@ -40,15 +40,23 @@ public class WebViewEx extends WebView {
         //WebviewClient
         mWebViewClientEx = new WebViewClientEx();
         setWebViewClient(mWebViewClientEx);
+
+        //Setting
         WebSettings settings = getSettings();
+
+        //Cookie
         CookieManager.getInstance().setAcceptCookie(true);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             CookieManager.getInstance().setAcceptThirdPartyCookies(this, true);
         }
+
+        //JavaScript
         settings.setJavaScriptEnabled(true);
         settings.setJavaScriptCanOpenWindowsAutomatically(true);
         settings.setNeedInitialFocus(false);
         settings.setAllowFileAccess(true);
+
+        //cache
         String dbPath = context.getApplicationContext().getDir("web-cache", Context.MODE_PRIVATE).getAbsolutePath();
         // support android API 7-
         try {
@@ -83,6 +91,8 @@ public class WebViewEx extends WebView {
         }
         setHorizontalScrollBarEnabled(false);
         setVerticalScrollBarEnabled(false);
+
+        settings.setUserAgentString(WebKitUtils.combinUA(settings.getUserAgentString()));
     }
 
     /**
@@ -110,4 +120,14 @@ public class WebViewEx extends WebView {
     }
 
 
+    /**
+     * 设置全屏处理
+     *
+     * @param handler
+     */
+    public void setFullScreenHandler(WebChromeClientEx.IFullScreenHandler handler) {
+        if (mWebChromeClientEx != null && handler != null) {
+            mWebChromeClientEx.setFullScreenHandler(handler);
+        }
+    }
 }

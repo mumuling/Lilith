@@ -21,11 +21,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.WebActivity"></activity>
-
-        <meta-data
-            android:name="com.youloft.lilith.common.cache.LLGlideModule"
-            android:value="GlideModule" />
+        <activity
+            android:name=".ui.WebActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
     </application>
 
 
