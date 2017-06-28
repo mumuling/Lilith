@@ -1,10 +1,17 @@
 package com.youloft.lilith.common.widgets.webkit;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.webkit.WebView;
+
+import com.youloft.lilith.common.widgets.webkit.handle.AbsHandle;
+import com.youloft.lilith.common.widgets.webkit.handle.FileHandle;
+import com.youloft.lilith.common.widgets.webkit.handle.ShareHandle;
+
+import java.util.HashMap;
 
 /**
  * URL协议处理器
@@ -12,6 +19,23 @@ import android.webkit.WebView;
  */
 
 public class URLProtocolHandler {
+
+    private Activity mActivity = null;
+
+    private static HashMap<String, AbsHandle> sHandleMap = null;
+
+
+    //初始化协议
+    static {
+        sHandleMap = new HashMap<>();
+        sHandleMap.put("share", new ShareHandle());
+        sHandleMap.put("getfilecode", new FileHandle());
+    }
+
+    public URLProtocolHandler(Activity activity) {
+        this.mActivity = activity;
+    }
+
 
     /**
      * 处理URL
@@ -52,6 +76,7 @@ public class URLProtocolHandler {
             i.putExtra(Intent.EXTRA_TEXT, "");
             view.getContext().startActivity(Intent.createChooser(i, "发送邮件"));
         } catch (Throwable e) {
+            e.printStackTrace();
         }
         return true;
     }
@@ -93,6 +118,11 @@ public class URLProtocolHandler {
         if (TextUtils.isEmpty(action)) {
             return;
         }
+
+        if (sHandleMap.containsKey(action)) {
+            sHandleMap.get(action).handle(mActivity, view, url, action, paramStr);
+            return;
+        }
         switch (action) {
             case "rate":
                 handleRateApp(view.getContext());
@@ -100,41 +130,14 @@ public class URLProtocolHandler {
                 handleWebBack(view);
             case "exit":
                 handleClose();
-            case "share":
-                handleShare(view, url, action, paramStr);
-            case "getfilecode":
-                handleFileChoose(view, url, action, paramStr);
         }
-    }
-
-    /**
-     * 处理文件选择
-     *
-     * @param view
-     * @param url
-     * @param action
-     * @param paramStr
-     */
-    protected void handleFileChoose(WebView view, String url, String action, String paramStr) {
-
-    }
-
-    /**
-     * 处理分享支持
-     *
-     * @param view
-     * @param url
-     * @param action
-     * @param paramStr
-     */
-    protected void handleShare(WebView view, String url, String action, String paramStr) {
-
     }
 
     /**
      * 处理关闭
      */
     protected void handleClose() {
+
     }
 
     /**
@@ -161,4 +164,22 @@ public class URLProtocolHandler {
     }
 
 
+    /**
+     * Activity回调
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (sHandleMap != null) {
+            for (AbsHandle absHandle : sHandleMap.values()) {
+                try {
+                    absHandle.onActivityResult(requestCode, resultCode, data);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }
