@@ -39,7 +39,7 @@ public class TokenStore {
 
             Log.d("TAG_TOKEN", "token request in network");
             try {
-                String json = WebUtils.getString(url, null);
+                String json = OkHttpUtils.getInstance().getString(url, null, false);
                 JSONObject object = new JSONObject(json);
                 if (object.optInt("status") == 200) {
                     String t = object.optJSONObject("msg").optString("token");
