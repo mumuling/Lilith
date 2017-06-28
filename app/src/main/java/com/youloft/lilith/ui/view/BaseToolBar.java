@@ -159,7 +159,7 @@ public class BaseToolBar extends ToolBarLayout {
         });
     }
 
-    interface OnToolBarItemClickListener {
+    public interface OnToolBarItemClickListener {
         void OnBackBtnClick();
         void OnTitleBtnClick();
         void OnShareBtnClick();
