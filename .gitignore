@@ -7,7 +7,6 @@
 /build
 /captures
 .externalNativeBuild
-libs/
 src/main/java/com/youloft/lilith/common/
 src/main/java/com/youloft/lilith/cons/
 src/main/java/com/youloft/lilith/fate/

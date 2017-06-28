@@ -1,4 +1,4 @@
-package com.youloft.lilith.common.widgets.webkit;
+package com.youloft.lilith.common.widgets.webkit.utils;
 
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;

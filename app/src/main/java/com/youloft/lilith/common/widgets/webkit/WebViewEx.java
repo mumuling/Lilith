@@ -7,6 +7,8 @@ import android.webkit.CookieManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
+import com.youloft.lilith.common.widgets.webkit.utils.WebKitUtils;
+
 /**
  * WebView基础类
  * Created by coder on 2017/6/27.
