@@ -13,11 +13,11 @@ public interface AuthListener {
     int ACTION_DELETE = 1;
     int ACTION_GET_PROFILE = 2;
 
-    void onStart(SocializePlatform var1);
+    void onStart(SocializePlatform platform);
 
-    void onComplete(SocializePlatform var1, int var2, Map<String, String> var3);
+    void onComplete(SocializePlatform platform, int code, Map<String, String> data);
 
-    void onError(SocializePlatform var1, int var2, Throwable var3);
+    void onError(SocializePlatform platform, int code, Throwable err);
 
-    void onCancel(SocializePlatform var1, int var2);
+    void onCancel(SocializePlatform platform, int code);
 }
