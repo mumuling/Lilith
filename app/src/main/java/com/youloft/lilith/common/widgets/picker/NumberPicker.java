@@ -37,7 +37,6 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.Scroller;
 
 import com.youloft.lilith.R;
-import com.youloft.lilith.common.widgets.I18N.trans.I18N;
 
 
 /**
@@ -853,7 +852,7 @@ public class NumberPicker extends View {
                 } else if (value > getMaxValue()) {
                     return "";
                 }
-                return I18N.convert(formatter.format(value));
+                return formatter.format(value);
             }
         };
         initializeSelectorWheelIndices();
@@ -1485,8 +1484,8 @@ public class NumberPicker extends View {
     }
 
     private String formatNumber(int value) {
-        return I18N.convert((mFormatter != null) ? mFormatter.format(value) : String
-                .valueOf(value));
+        return (mFormatter != null) ? mFormatter.format(value) : String
+                .valueOf(value);
     }
 
 

@@ -28,7 +28,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 public class NetUtil {
-    private static HashMap<String, String> mParams;
+    private static HashMap<String, String> mParams = null;
     private static TokenStore mTokenStore;
     private static NetUtil instance = null;
 
@@ -45,22 +45,40 @@ public class NetUtil {
             mTokenStore = new TokenStore(AppEnv.getAppContext());
             updateToken();
         }
-        mParams.put("CID", "Youloft_Android");
-        mParams.put("CC", Locale.getDefault().getCountry());
-        mParams.put("AV", AppEnv.getVersionName());
-        mParams.put("MAC", AppEnv.getMacAddress());
-        mParams.put("DID", AppEnv.getDeviceId());
-        mParams.put("CHN", AppEnv.getChannel(AppEnv.getAppContext()));
-        mParams.put("LANG", Locale.getDefault().getLanguage());
-        mParams.put("BD", AppEnv.BUNDLE);
-        mParams.put("T", String.valueOf(System.currentTimeMillis() / 1000));
+        if (mTokenStore.getToken() != null) {
+            mParams.put("tkn", mTokenStore.getToken());
+        }
+        mParams.put("cid", "Youloft_Android");
+        mParams.put("cc", Locale.getDefault().getCountry());
+        mParams.put("av", AppEnv.getVersionName());
+        mParams.put("mac", AppEnv.getMacAddress());
+        mParams.put("did", AppEnv.getDeviceId());
+        mParams.put("chn", AppEnv.getChannel(AppEnv.getAppContext()));
+        mParams.put("lang", Locale.getDefault().getLanguage());
+        mParams.put("bd", AppEnv.BUNDLE);
+        mParams.put("t", String.valueOf(System.currentTimeMillis() / 1000));
 
     }
 
+    public HashMap<String, String> getParams() {
+        if (mParams == null || mParams.isEmpty()) {
+            NetUtil.getInstance().initPublicParam();
+        }
+        if (!mParams.containsKey("tkn")) {
+            if (mTokenStore != null) {
+                if (mTokenStore.getToken() != null) {
+                    mParams.put("tkn", mTokenStore.getToken());
+                } else {
+                    updateToken();
+                }
+            }
+        }
+        return mParams;
+    }
 
     private final Object tokenLock = new Object();
 
-    public void updateToken() {
+    public synchronized void updateToken() {
         synchronized (tokenLock) {
             io.reactivex.Observable.create(new ObservableOnSubscribe<Object>() {
                 @Override
@@ -73,7 +91,9 @@ public class NetUtil {
                     .subscribe(new Consumer<Object>() {
                         @Override
                         public void accept(@NonNull Object o) throws Exception {
-                            initPublicParam();
+                            if (mTokenStore != null && mTokenStore.getToken() != null) {
+                                mParams.put("tkn", mTokenStore.getToken());
+                            }
                         }
                     });
         }
@@ -84,23 +104,6 @@ public class NetUtil {
             instance = new NetUtil();
         }
         return instance;
-    }
-
-    public static Map<String, String> initParams(Map<String, String> params) {
-
-        if (mParams == null || mParams.isEmpty()) {
-            NetUtil.getInstance().initPublicParam();
-        }
-        if (!mParams.containsKey("TKN")) {
-            if (mTokenStore != null && mTokenStore.getToken() != null) {
-                mParams.put("TKN", mTokenStore.getToken());
-            }
-        }
-        if (params == null) {
-            return mParams;
-        }
-        params.putAll(mParams);
-        return params;
     }
 
     /**

@@ -172,7 +172,7 @@ public class OnlineConfigAgent {
         params.put("appver", CFG_APP_VER);
         params.put("lastupdate", lastUpdateVer);
 //        String url = URLFormatter.parseUrl(Urls.CONFIG, NetUtil.initParams(params));
-        String data = WebUtils.getString(Urls.CONFIG, params, true);
+        String data = OkHttpUtils.getInstance().getString(Urls.CONFIG, params, true);
         if (!TextUtils.isEmpty(data)) {
             ConfigResp configResp = JSON.parseObject(data, ConfigResp.class);
             if (configResp != null) {
