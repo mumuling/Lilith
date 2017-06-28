@@ -25,15 +25,6 @@ public class LLApplication extends Application {
         AppEnv.setAppContext(this);
 
         setChannelBundle();
-        //加载预置数据
-        OnlineConfigAgent.getInstance().loadPreloadConfig(getApplicationContext(), new Callback<Void, Integer>() {
-            @Override
-            public Void call(Integer t) {
-                if (t != null) {
-                }
-                return null;
-            }
-        });
 
         NetUtil.getInstance().initPublicParam();
 

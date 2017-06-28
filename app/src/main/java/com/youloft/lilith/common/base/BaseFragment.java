@@ -56,7 +56,7 @@ public abstract class BaseFragment extends Fragment {
     }
 
 
-    public BaseActivity getJActivity() {
+    public BaseActivity getBActivity() {
         return (BaseActivity) getActivityContext();
     }
 

@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import org.greenrobot.eventbus.EventBus;
+
 /**
  * Created by zchao on 2017/6/26.
  * desc: Activity基类
@@ -24,25 +26,21 @@ public class BaseActivity extends FragmentActivity {
             immerseToolbar();
         }
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     protected void onDestroy() {
-
         super.onDestroy();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-//        Analytics.postActivityResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-//        Analytics.postActivityPause(this);
     }
 
     /**

@@ -1,4 +1,4 @@
-package com.youloft.lilith.common.widgets.picker;
+package com.youloft.lilith.common.widgets.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
