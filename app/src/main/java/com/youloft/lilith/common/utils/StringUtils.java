@@ -1,6 +1,12 @@
 package com.youloft.lilith.common.utils;
 
+import android.content.Context;
 import android.text.Editable;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 /**
  * Created by javen on 14-11-6.
@@ -176,4 +182,66 @@ public class StringUtils {
         text = text.substring(0, len - elen - 1) + "…";
         return text + subText;
     }
+
+    /**
+     * 读文件内容到String中
+     *
+     * @param name
+     * @param charset
+     * @return
+     */
+    public static String readStringFromAssets(Context context, String name, String charset, String failValue) {
+        try {
+            InputStream in = context.getAssets().open(name);
+            return readStringFromStream(in, charset, true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return failValue;
+    }
+
+    /**
+     * 从输入流中读取String
+     *
+     * @param in
+     * @param charset
+     * @return
+     */
+    public static String readStringFromStream(InputStream in, String charset, boolean autoclose) throws IOException {
+        BufferedReader br = null;
+        String line = null;
+        StringBuilder content = new StringBuilder();
+        try {
+            br = new BufferedReader(new InputStreamReader(in, charset));
+            while ((line = br.readLine()) != null) {
+                content.append(line);
+            }
+        } finally {
+            if (autoclose && in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return content.toString();
+    }
+
+    /**
+     * 截字符 串
+     *
+     * @param text
+     * @param begin
+     * @param len
+     * @return
+     */
+    public static String subString(String text, int begin, int len) {
+        if (begin < 0) {
+            return "";
+        }
+        int end = Math.min(begin + len, text.length());
+        return text.substring(begin, end);
+    }
+
 }

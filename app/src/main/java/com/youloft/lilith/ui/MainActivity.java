@@ -1,14 +1,11 @@
 package com.youloft.lilith.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.FrameLayout;
 
-import com.alibaba.fastjson.JSON;
-import com.bumptech.glide.GenericRequestBuilder;
-import com.bumptech.glide.Glide;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
-import com.youloft.lilith.common.net.OnlineConfigAgent;
 import com.youloft.lilith.ui.view.NavBarLayout;
 
 import butterknife.BindView;
@@ -31,8 +28,7 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_lilith);
         ButterKnife.bind(this);
         mMainTabManager = new TabManager(this);
-        Glide.with(this);
-
+//        startActivity(new Intent(this,WebActivity.class));
     }
 
 }

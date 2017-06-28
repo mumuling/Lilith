@@ -13,4 +13,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="测测" />
+    <ImageView
+        android:id="@+id/img"
+        android:layout_gravity="center"
+        android:scaleType="centerCrop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </FrameLayout>
