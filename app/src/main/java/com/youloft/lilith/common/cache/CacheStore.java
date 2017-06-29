@@ -117,6 +117,8 @@ public class CacheStore {
                 return upstream.doOnNext(new Consumer<T>() {
                     @Override
                     public void accept(@NonNull T t) throws Exception {
+                        if (t == null)
+                            return;
                         CacheObj<T> cacheObj = new CacheObj<T>(key, t);
                         mMemoryCache.put(key, cacheObj);
                         if (mDiskCache != null) {

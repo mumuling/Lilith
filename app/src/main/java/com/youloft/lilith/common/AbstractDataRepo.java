@@ -86,7 +86,8 @@ public abstract class AbstractDataRepo {
                                            final Map<String, String> params,
                                            final boolean usePublic,
                                            final Class<T> clz,
-                                           final String cacheKey, final long cacheDuration) {
+                                           final String cacheKey,
+                                           final long cacheDuration) {
         return Flowable.just(url)
                 .filter(new Predicate<String>() {
                     @Override
@@ -110,34 +111,15 @@ public abstract class AbstractDataRepo {
                         String string = response.body().string();
                         return JSON.parseObject(string, clz);
                     }
-                }).onErrorReturn(new Function<Throwable, T>() {
+                }).compose(RxFlowableUtil.<T>applyNetIoSchedulers())//切换线程
+                .compose(LLApplication.getApiCache().<T>cacheTransform(cacheKey))//写入缓存;
+                .onErrorReturn(new Function<Throwable, T>() {
                     @Override
                     public T apply(@NonNull Throwable throwable) throws Exception {
                         return LLApplication.getApiCache().getCacheObjSync(cacheKey, clz);
                     }
-                }).compose(RxFlowableUtil.<T>applyNetIoSchedulers())//切换线程
-                .compose(LLApplication.getApiCache().<T>cacheTransform(cacheKey));//写入缓存;
+                });
 
-//        return Flowable.create(new ObservableOnSubscribe<Response>() {
-//            @Override
-//            public void subscribe(@NonNull ObservableEmitter<Response> e) throws Exception {
-//                try {
-//                    Response response = OkHttpUtils.getInstance().requestExecute(url, header, params, usePublic);
-//                    e.onNext(response);
-//                    e.onComplete();
-//                } catch (Throwable throwable) {
-//                    e.onError(throwable);
-//                }
-//            }
-//        }).map(new Function<Response, T>() {
-//            @Override
-//            public T apply(@NonNull Response response) throws Exception {
-//                String string = response.body().string();
-//                return JSON.parseObject(string, clz);
-//            }
-//        }).toFlowable(BackpressureStrategy.BUFFER)
-//                .compose(RxFlowableUtil.<T>applyNetIoSchedulers())//切换线程
-//                .compose(LLApplication.getApiCache().<T>cacheTransform(cacheKey));//写入缓存
     }
 
 
