@@ -1,5 +1,6 @@
 package com.youloft.lilith.topic;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.ImageView;
@@ -54,7 +55,8 @@ public class TopicDetailActivity extends BaseActivity {
 
             @Override
             public void OnTitleBtnClick() {
-
+                startActivity(new Intent(TopicDetailActivity.this,PointDetailActivity.class));
+                overridePendingTransition(R.anim.slide_in_bottom,0);
             }
 
             @Override

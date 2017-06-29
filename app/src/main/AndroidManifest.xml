@@ -51,7 +51,8 @@
             android:launchMode="singleTop" />
         <activity android:name=".topic.PointDetailActivity"
             android:screenOrientation="portrait"
-            android:launchMode="singleTop"/>
+            android:launchMode="singleTop"
+            android:theme="@style/TranslucentThem"/>
 
         <!-- share begin -->
 
