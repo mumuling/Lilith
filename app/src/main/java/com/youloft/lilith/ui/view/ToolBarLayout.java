@@ -7,8 +7,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
-import com.youloft.lilith.common.utils.Utils;
-import com.youloft.lilith.common.utils.ViewUtil;
+import com.youloft.lilith.common.utils.ViewUtils;
 
 /**
  * Created by zchao on 2017/6/26.
@@ -37,9 +36,9 @@ public class ToolBarLayout extends FrameLayout {
             return;
         }
         if (fix) {
-            mAddedHeight = ViewUtil.getStatusHeight();
+            mAddedHeight = ViewUtils.getStatusHeight();
         } else {
-            mAddedHeight = -ViewUtil.getStatusHeight();
+            mAddedHeight = -ViewUtils.getStatusHeight();
         }
         if (Build.VERSION.SDK_INT >= 19) {
             setPadding(getPaddingLeft(), getPaddingTop()

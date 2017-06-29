@@ -16,7 +16,7 @@ import android.view.WindowManager;
 
 import com.meituan.android.walle.WalleChannelReader;
 import com.youloft.lilith.BuildConfig;
-import com.youloft.lilith.common.utils.MD5;
+import com.youloft.lilith.common.utils.Encryption;
 
 import java.io.File;
 import java.util.HashMap;
@@ -121,13 +121,14 @@ public class AppEnv {
         }
         return CHANNEL;
     }
+
     /**
      * 获取新的TOken
      *
      * @return
      */
     private static String obtainDeviceId() {
-        return MD5.encode(
+        return Encryption.encodeMD5(
                 String.valueOf(Build.DEVICE
                         + Build.VERSION.RELEASE
                         + getAndroidId()

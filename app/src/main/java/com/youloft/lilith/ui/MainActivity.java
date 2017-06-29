@@ -1,6 +1,5 @@
 package com.youloft.lilith.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.FrameLayout;
 
@@ -28,7 +27,7 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_lilith);
         ButterKnife.bind(this);
         mMainTabManager = new TabManager(this);
-//        startActivity(new Intent(this,WebActivity.class));
+
     }
 
 }

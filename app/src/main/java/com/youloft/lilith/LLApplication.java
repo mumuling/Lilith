@@ -9,6 +9,9 @@ import com.youloft.lilith.common.net.AppEnv;
 import com.youloft.lilith.common.net.NetUtil;
 import com.youloft.lilith.common.utils.Util;
 import com.youloft.lilith.common.utils.Utils;
+import com.youloft.lilith.push.PushMessageHandler;
+import com.youloft.lilith.push.PushNotificationClickHandler;
+import com.youloft.push.PushApp;
 
 /**
  * Application
@@ -16,6 +19,25 @@ import com.youloft.lilith.common.utils.Utils;
  * Created by coder on 2017/6/26.
  */
 public class LLApplication extends Application {
+
+
+    /**
+     * 初始化Push
+     *
+     * @param context
+     * @param appKey
+     * @param secret
+     * @param channel
+     */
+    private static void initPush(Context context, String appKey, String secret, String channel) {
+        PushApp.getInstance(context)
+                .setAppkeyAndSecret(appKey, secret)
+                .setMessageChannel(channel)
+                .registePushDevice()
+                .setMessageHandler(new PushMessageHandler())
+                .setNotificationClickHandler(new PushNotificationClickHandler());
+    }
+
     private static LLApplication mContext = null;
 
     @Override
@@ -47,7 +69,7 @@ public class LLApplication extends Application {
         ARouter.init(this);
     }
 
-    public static Context getContext(){
+    public static Context getContext() {
         return mContext;
     }
 
@@ -64,6 +86,7 @@ public class LLApplication extends Application {
 //        TCAgent.init(this, "1A3BC081BB9A442E8AFF29ACB08069E3", channel);
 //        TCAgent.setReportUncaughtExceptions(true);
     }
+
     /**
      * 获取APi类别缓存
      *
