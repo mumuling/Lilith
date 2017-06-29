@@ -3,7 +3,11 @@ package com.youloft.lilith;
 import android.app.Application;
 import android.content.Context;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.common.cache.CacheStore;
+import com.youloft.lilith.common.net.AppEnv;
+//import com.youloft.lilith.common.net.NetUtil;
+//import com.youloft.lilith.common.net.OnlineConfigAgent;
 import com.youloft.lilith.common.utils.Utils;
 import com.youloft.lilith.push.PushMessageHandler;
 import com.youloft.lilith.push.PushNotificationClickHandler;
@@ -42,6 +46,20 @@ public class LLApplication extends Application {
         mContext = this;
         AppConfig.init(this);
         Utils.init(this);
+        initARouter();
+        setChannelBundle();
+        NetUtil.getInstance().initPublicParam();
+    }
+
+    /**
+     * 初始化ARouter
+     */
+    private void initARouter() {
+        if (Util.isApkInDebug(mContext)) {
+            ARouter.openLog();     // 打印日志
+            ARouter.openDebug();   // 开启调试模式(如果在InstantRun模式下运行，必须开启调试模式！线上版本需要关闭,否则有安全风险)
+        }
+        ARouter.init(this);
     }
 
     public static Context getContext() {

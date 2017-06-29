@@ -15,6 +15,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".SchemeFilterActivity">
+
+            <!-- Schame -->
+            <intent-filter>
+                <data
+                    android:host="m.aliyun.com"
+                    android:scheme="arouter" />
+
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+        </activity>
         <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,8 +43,7 @@
             android:name=".topic.TopicDetailActivity"
             android:launchMode="singleTop" />
 
-
-        <!--share begin-->
+        <!-- share begin -->
 
         <activity
             android:name=".wxapi.WXEntryActivity"
@@ -38,7 +51,6 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
         <activity
             android:name="com.umeng.qq.tencent.AuthActivity"
             android:launchMode="singleTask"
@@ -61,8 +73,8 @@
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="5126ff896c738f2bfa000438" />
-        <!--share end-->
+        <!-- share end -->
+        <activity android:name=".ARouterTestActivity"></activity>
     </application>
-
 
 </manifest>
