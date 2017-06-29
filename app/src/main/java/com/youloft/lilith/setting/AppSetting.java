@@ -1,23 +1,24 @@
-package com.youloft.lilith.common.net;
+package com.youloft.lilith.setting;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.youloft.lilith.LLApplication;
+
 /**
- * Desc: 
- * Change: 
- * 
- * @version 
+ * Desc:
+ * Change:
+ *
  * @author zchao created at 2017/6/26 13:28
- * @see 
-*/
+ * @see
+ */
 
 public class AppSetting {
     public static AppSetting mInstance = new AppSetting();
     private SharedPreferences mSharedPreference;
 
     private AppSetting() {
-        mSharedPreference = AppEnv.getAppContext().getSharedPreferences("app_setting", Context.MODE_PRIVATE);
+        mSharedPreference = LLApplication.getContext().getSharedPreferences("app_setting", Context.MODE_PRIVATE);
     }
 
     public static AppSetting getInstance() {

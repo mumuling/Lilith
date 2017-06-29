@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 
 import com.youloft.lilith.R;
-import com.youloft.lilith.common.utils.SafeUtils;
+import com.youloft.lilith.common.utils.SafeUtil;
 import com.youloft.lilith.ui.fragment.CCFragment;
 import com.youloft.lilith.ui.fragment.HTFragment;
 import com.youloft.lilith.ui.fragment.MEFragment;
@@ -53,7 +53,7 @@ public class TabManager implements NavBarLayout.OnTabChangeListener {
         ArrayList<TabItemBean> tabs = mNavBar.getTabs();
         mFragments.clear();
         for (int i = 0; i < tabs.size(); i++) {
-            TabItemBean safeData = SafeUtils.getSafeData(tabs, i);
+            TabItemBean safeData = SafeUtil.getSafeData(tabs, i);
             if (safeData == null) {
                 continue;
             }
@@ -111,7 +111,7 @@ public class TabManager implements NavBarLayout.OnTabChangeListener {
         if (mCurrentFragment != null) {
             ft.hide(mCurrentFragment);
         }
-        mCurrentFragment = SafeUtils.getSafeData(mFragments, index);
+        mCurrentFragment = SafeUtil.getSafeData(mFragments, index);
         if (mCurrentFragment != null) {
             ft.show(mCurrentFragment);
         }

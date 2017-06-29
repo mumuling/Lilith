@@ -6,7 +6,7 @@ package com.youloft.lilith.common.utils;
  * Created by coder on 2017/6/26.
  */
 
-public class ViewUtils {
+public class ViewUtil {
     /**
      * dp转px
      *

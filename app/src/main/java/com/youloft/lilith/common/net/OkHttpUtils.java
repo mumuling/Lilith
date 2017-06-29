@@ -6,11 +6,14 @@ import android.os.Looper;
 import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSON;
+import com.youloft.lilith.AppConfig;
+import com.youloft.lilith.common.utils.DeviceUtil;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -27,14 +30,27 @@ import okhttp3.Response;
 
 /**
  * Desc: 网路请求, 同步请求{@link #requestExecute(String, Map, Map)}, {@link #requestExecute(String, Map, Map, boolean)},
- *                  异步请求{@link #requestEnqueue(String, Map, Map, Class, IRequestResult) {@link #requestEnqueue(String, Map, Map, boolean, Class, IRequestResult)}}
- * Change: 
- * 
- * @version 
+ * 异步请求{@link #requestEnqueue(String, Map, Map, Class, IRequestResult) {@link #requestEnqueue(String, Map, Map, boolean, Class, IRequestResult)}}
+ * Change:
+ *
  * @author zchao created at 2017/6/26 14:43
- * @see 
-*/
+ * @see
+ */
 public class OkHttpUtils {
+
+
+    private static HashMap<String, String> sPublicParams = new HashMap<>();
+
+    static {
+        //不变的参数
+        sPublicParams.put("cid", AppConfig.CID);
+        sPublicParams.put("cc", AppConfig.CC);
+        sPublicParams.put("av", AppConfig.VERSION_NAME);
+        sPublicParams.put("chn", AppConfig.CHANNEL);
+        sPublicParams.put("lang", AppConfig.LANG);
+        sPublicParams.put("bd", AppConfig.Bundle);
+    }
+
 
     private static OkHttpClient client = null;
 
@@ -42,7 +58,7 @@ public class OkHttpUtils {
 
     private Handler mHandler = new Handler(Looper.getMainLooper());
 
-    public static OkHttpUtils getInstance(){
+    public static OkHttpUtils getInstance() {
         if (instance == null) {
             synchronized (OkHttpUtils.class) {
                 if (instance == null) {
@@ -66,11 +82,11 @@ public class OkHttpUtils {
     /**
      * 拦截器，用于处理公共参数
      */
-    Interceptor publicInterceptor = new Interceptor(){
+    Interceptor publicInterceptor = new Interceptor() {
         @Override
         public Response intercept(Chain chain) throws IOException {
             Request request = chain.request();
-            if (!(request.tag() != null && (request.tag() instanceof Boolean) && !(boolean)request.tag())) {
+            if (!(request.tag() != null && (request.tag() instanceof Boolean) && !(boolean) request.tag())) {
                 request = addPublicParam(request);
             }
             Response response = null;
@@ -78,17 +94,19 @@ public class OkHttpUtils {
             return response;
         }
     };
+
     /**
      * 添加公共参数,返回一个新的请求Request
+     *
      * @param oldRequest
      * @return
      */
     private Request addPublicParam(Request oldRequest) {
         HttpUrl.Builder builder = oldRequest.url()
                 .newBuilder();
-        HashMap<String, String> params = NetUtil.getInstance().getParams();
+        HashMap<String, String> params = obtainPublicParams();
         if (params != null) {
-            for (Map.Entry<String, String> param: params.entrySet()) {
+            for (Map.Entry<String, String> param : params.entrySet()) {
                 builder.setEncodedQueryParameter(param.getKey(), param.getValue());
             }
         }
@@ -100,14 +118,28 @@ public class OkHttpUtils {
 
         return newRequest;
     }
+
+    /**
+     * 获取公共参数
+     *
+     * @return
+     */
+    private HashMap<String, String> obtainPublicParams() {
+        //可变参数
+        sPublicParams.put("mac", DeviceUtil.getWifiMacAddress());
+        sPublicParams.put("did", AppConfig.getDeviceId());
+        sPublicParams.put("t", String.valueOf(System.currentTimeMillis() / 1000));
+        return sPublicParams;
+    }
+
     /**
      * GET方式获取
      *
-     * @param url 地址
+     * @param url    地址
      * @param params 所有参数，
      * @return
      */
-    public String getString(String url,  Map<String, String> params) {
+    public String getString(String url, Map<String, String> params) {
         return getString(url, params, true);
     }
 
@@ -115,24 +147,23 @@ public class OkHttpUtils {
      * GET方式获取
      * 说明：此方法只用于某些不需要公共参数的，如果请求需要公共参数直接使用{@link #getString(String, Map)}
      *
-     * @param url 地址
-     * @param params 业务参数，
+     * @param url             地址
+     * @param params          业务参数，
      * @param usePublicParams 如果为false忽略公共参数，反正会在拦截器中自动添加上公共参数
      * @return
      */
     public String getString(String url, Map<String, String> params, boolean usePublicParams) {
         try {
 
-            Response response = requestExecute(url, null, params ,usePublicParams);
+            Response response = requestExecute(url, null, params, usePublicParams);
             if (response.isSuccessful()) {
-                return response.body() == null ? "" :response.body().string();
+                return response.body() == null ? "" : response.body().string();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
-
 
 
     /**
@@ -148,6 +179,7 @@ public class OkHttpUtils {
 
         return client.newCall(request).execute();
     }
+
     /**
      * 同步GET請求
      *
@@ -171,7 +203,7 @@ public class OkHttpUtils {
      * @param params
      * @return
      */
-    public <T>void requestEnqueue(String baseUrl, Map<String, String> headers, Map<String, String> params, Class<T> cls, IRequestResult<T> callBack ){
+    public <T> void requestEnqueue(String baseUrl, Map<String, String> headers, Map<String, String> params, Class<T> cls, IRequestResult<T> callBack) {
         Request request = getRequest("GET", baseUrl, headers, params, true);
         try {
             client.newCall(request).enqueue(new RequestCallBack<>(callBack, cls));
@@ -189,8 +221,8 @@ public class OkHttpUtils {
      * @param usePublicParam 如果为false忽略公共参数，反正会在拦截器中自动添加上公共参数
      * @return
      */
-    public <T>void requestEnqueue(String baseUrl, Map<String, String> headers, Map<String, String> params,
-                                  boolean usePublicParam, Class<T> cls, IRequestResult<T> callBack ){
+    public <T> void requestEnqueue(String baseUrl, Map<String, String> headers, Map<String, String> params,
+                                   boolean usePublicParam, Class<T> cls, IRequestResult<T> callBack) {
         Request request = getRequest("GET", baseUrl, headers, params, usePublicParam);
         try {
             client.newCall(request).enqueue(new RequestCallBack<>(callBack, cls));
@@ -201,11 +233,12 @@ public class OkHttpUtils {
 
     /**
      * 对url进行组装
+     *
      * @param baseUrl 基础url
-     * @param params 业务参数
+     * @param params  业务参数
      * @return
      */
-    public String constructUrl(String baseUrl, Map<String, String> params){
+    public String constructUrl(String baseUrl, Map<String, String> params) {
         if (TextUtils.isEmpty(baseUrl)) {
             return "";
         }
@@ -226,17 +259,18 @@ public class OkHttpUtils {
             }
         }
 
-        return sb.substring(0, sb.length() -1);
+        return sb.substring(0, sb.length() - 1);
     }
 
 
     /**
      * 构建request
-     * @param method 方法名，如果是get请求则传入 "GET"
-     * @param baseUrl url
-     * @param headers header参数
-     * @param params    业务参数
-     * @param usePublicParam    是否自动添加公共参数；如果为false则在拦截器中处理时不添加公共参数
+     *
+     * @param method         方法名，如果是get请求则传入 "GET"
+     * @param baseUrl        url
+     * @param headers        header参数
+     * @param params         业务参数
+     * @param usePublicParam 是否自动添加公共参数；如果为false则在拦截器中处理时不添加公共参数
      * @return
      */
     private Request getRequest(String method, String baseUrl, Map<String, String> headers, Map<String, String> params, boolean usePublicParam) {
@@ -277,10 +311,9 @@ public class OkHttpUtils {
      * Desc: okhttp回调接口，继承自okhttp的callback
      * Change:
      *
-     * @version
      * @author zchao created at 2017/6/28 11:33
      * @see
-    */
+     */
     public class RequestCallBack<T> implements Callback {
 
         private IRequestResult<T> mIRequestResult;
