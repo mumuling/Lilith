@@ -117,7 +117,7 @@ public class CacheStore {
                 return upstream.doOnNext(new Consumer<T>() {
                     @Override
                     public void accept(@NonNull T t) throws Exception {
-                        if (t == null)
+                        if (t == null || TextUtils.isEmpty(key))
                             return;
                         CacheObj<T> cacheObj = new CacheObj<T>(key, t);
                         mMemoryCache.put(key, cacheObj);
@@ -329,5 +329,21 @@ public class CacheStore {
             return retCache.data;
         }
         return null;
+    }
+
+    public boolean hasCache(String cacheKey) {
+        try {
+            CacheObj o = (CacheObj) mMemoryCache.get(cacheKey);
+            if (o != null) {
+                return true;
+            }
+            if (mDiskCache == null) {
+                return false;
+            }
+            DiskLruCache.Value value = mDiskCache.get(cacheKey);
+            return value != null;
+        } catch (Throwable e) {
+            return false;
+        }
     }
 }

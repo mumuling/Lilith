@@ -21,6 +21,7 @@ import com.youloft.lilith.common.rx.RxObservableUtil;
 import com.youloft.lilith.cons.ConsRepo;
 import com.youloft.lilith.ui.view.NavBarLayout;
 
+import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
@@ -81,7 +82,7 @@ public class MainActivity extends BaseActivity {
                     @Override
                     public void accept(@NonNull Throwable throwable) throws Exception {
                         Log.e(TAG, "throwable", throwable);
-                        tv.setText("error");
+//                        tv.setText("error");
                     }
                 });
     }
