@@ -3,6 +3,8 @@ package com.youloft.lilith.ui.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -20,10 +22,11 @@ import com.youloft.lilith.ui.view.BaseToolBar;
  * version:
  */
 
-public class HTFragment extends BaseFragment implements AdapterView.OnItemClickListener{
+public class HTFragment extends BaseFragment{
     private BaseToolBar mToolBar;
-    private ListView mTopicLv;
+    private RecyclerView mTopicRv;
     private TopicAdapter mAdapter;
+    private LinearLayoutManager mLayoutManager;
     public HTFragment() {
         super(R.layout.fragment_ht);
     }
@@ -36,15 +39,15 @@ public class HTFragment extends BaseFragment implements AdapterView.OnItemClickL
 
     private void initView() {
         mToolBar = (BaseToolBar) getView().findViewById(R.id.tool_bar);
-        mTopicLv = (ListView) getView().findViewById(R.id.lv_topic);
-        mAdapter = new TopicAdapter(getContext());
-        mTopicLv.setAdapter(mAdapter);
-        mTopicLv.setOnItemClickListener(this);
+        mTopicRv = (RecyclerView) getView().findViewById(R.id.lv_topic);
         mToolBar.setTitle("话题");
+        //设置recycleView
+        mLayoutManager = new LinearLayoutManager(getContext());
+        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mTopicRv.setLayoutManager(mLayoutManager);
+        mAdapter = new TopicAdapter(getContext());
+        mTopicRv.setAdapter(mAdapter);
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        getActivity().startActivity(new Intent(getActivity(),TopicDetailActivity.class));
-    }
+
 }
