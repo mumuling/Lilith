@@ -105,6 +105,10 @@ public class MainActivity extends BaseActivity {
 
         Toaster.showShort("Fuck2");
 
+        ARouter.getInstance().build("/ui/web")
+                .withString("url", "http://www.tudou.com")
+                .navigation();
+
         mConsRepo.testData()
                 .compose(this.<HashMap>bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())
