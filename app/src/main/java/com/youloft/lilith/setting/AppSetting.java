@@ -18,7 +18,7 @@ public class AppSetting {
     private SharedPreferences mSharedPreference;
 
     private AppSetting() {
-        mSharedPreference = LLApplication.getContext().getSharedPreferences("app_setting", Context.MODE_PRIVATE);
+        mSharedPreference = LLApplication.getInstance().getSharedPreferences("app_setting", Context.MODE_PRIVATE);
     }
 
     public static AppSetting getInstance() {
