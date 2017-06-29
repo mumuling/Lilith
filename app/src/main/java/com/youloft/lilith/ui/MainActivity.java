@@ -21,6 +21,7 @@ import com.youloft.lilith.common.net.OnlineConfigAgent;
 import com.youloft.lilith.common.rx.RxFlowableUtil;
 import com.youloft.lilith.common.rx.RxObservableUtil;
 import com.youloft.lilith.common.rx.RxObserver;
+import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.cons.ConsRepo;
 import com.youloft.lilith.info.UserRepo;
 import com.youloft.lilith.share.ShareEventListener;
@@ -97,6 +98,12 @@ public class MainActivity extends BaseActivity {
 
                     }
                 });
+
+        Toaster.showShort("Fuck");
+
+        Toaster.showShort("Fuck1");
+
+        Toaster.showShort("Fuck2");
 
         mConsRepo.testData()
                 .compose(this.<HashMap>bindToLifecycle())

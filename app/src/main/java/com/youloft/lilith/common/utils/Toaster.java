@@ -472,4 +472,3 @@ public class Toaster {
         }
     }
 }
-}
