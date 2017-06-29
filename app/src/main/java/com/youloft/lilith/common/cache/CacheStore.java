@@ -142,7 +142,7 @@ public class CacheStore {
      * @param <T>
      * @return
      */
-    public <T> Flowable<T> readCache(final String key, final Class<T> type, final Predicate<String> cacheFilter) {
+    public <T> Flowable<T> readCache(final String key, final Class<T> type) {
         return Flowable.just(key).compose(new FlowableTransformer<String, T>() {
             @Override
             public Publisher<T> apply(@NonNull Flowable<String> upstream) {
@@ -151,9 +151,6 @@ public class CacheStore {
                     public boolean test(@NonNull String s) throws Exception {
                         if (mMemoryCache.get(s) == null && mDiskCache.get(s) == null) {
                             return false;
-                        }
-                        if (cacheFilter != null) {
-                            return cacheFilter.test(s);
                         }
                         return true;
                     }
@@ -305,9 +302,9 @@ public class CacheStore {
             @Override
             public boolean test(@NonNull String s) throws Exception {
                 if (isExpired(s, duration)) {
-                    return false;
+                    return true;
                 }
-                return true;
+                return false;
             }
         };
     }

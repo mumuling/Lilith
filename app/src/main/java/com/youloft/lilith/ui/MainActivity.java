@@ -71,7 +71,6 @@ public class MainActivity extends BaseActivity {
 
         new ConsRepo().testData()
                 .compose(this.<HashMap>bindToLifecycle())
-                .firstOrError()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<HashMap>() {
                     @Override
