@@ -8,13 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.trello.rxlifecycle2.components.support.RxFragment;
+
 /**
  * Created by zchao on 2017/6/26.
  * desc: Fragment基类
  * version:
  */
 
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseFragment extends RxFragment {
 
     protected int mContentResId;            //资源id
     protected Activity mContext;
@@ -70,9 +72,10 @@ public abstract class BaseFragment extends Fragment {
     public void onResume() {
         super.onResume();
     }
+
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
-        if (!isCreated){
+        if (!isCreated) {
             return;
         }
         super.setUserVisibleHint(isVisibleToUser);

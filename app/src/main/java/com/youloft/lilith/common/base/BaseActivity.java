@@ -9,13 +9,16 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.trello.rxlifecycle2.components.RxActivity;
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
+
 /**
  * Created by zchao on 2017/6/26.
  * desc: Activity基类
  * version:
  */
 
-public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener {
+public abstract class BaseActivity extends RxAppCompatActivity implements View.OnClickListener {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
