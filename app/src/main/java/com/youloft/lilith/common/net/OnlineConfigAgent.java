@@ -54,7 +54,7 @@ public class OnlineConfigAgent {
     /**
      * 初始化Config
      */
-    public static void initConfig(String appKey, String appVer) {
+    public static OnlineConfigAgent initConfig(String appKey, String appVer) {
         if (sAgentInstance == null) {
             synchronized (OnlineConfigAgent.class) {
                 if (sAgentInstance == null) {
@@ -62,6 +62,7 @@ public class OnlineConfigAgent {
                 }
             }
         }
+        return sAgentInstance;
     }
 
     /**
