@@ -16,6 +16,8 @@ import com.youloft.lilith.topic.adapter.TopicAdapter;
 import com.youloft.lilith.ui.WebActivity;
 import com.youloft.lilith.ui.view.BaseToolBar;
 
+import io.reactivex.internal.schedulers.RxThreadFactory;
+
 /**
  * Created by zchao on 2017/6/27.
  * desc: 话题fragment，只是个样子。可自己修改
@@ -35,12 +37,13 @@ public class HTFragment extends BaseFragment{
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView();
+
     }
 
     private void initView() {
         mToolBar = (BaseToolBar) getView().findViewById(R.id.tool_bar);
         mTopicRv = (RecyclerView) getView().findViewById(R.id.lv_topic);
-        mToolBar.setTitle("话题");
+        mToolBar.setTitle("星座话题");
         //设置recycleView
         mLayoutManager = new LinearLayoutManager(getContext());
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);

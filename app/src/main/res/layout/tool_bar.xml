@@ -15,6 +15,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:textColor="#f5f0e9"
+            android:textSize="17sp"
             android:text="@string/tttt" />
 
         <ImageView
