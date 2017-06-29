@@ -18,15 +18,18 @@ import com.youloft.lilith.common.net.OkHttpUtils;
 import com.youloft.lilith.common.net.OnlineConfigAgent;
 import com.youloft.lilith.common.rx.RxFlowableUtil;
 import com.youloft.lilith.common.rx.RxObservableUtil;
+import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.cons.ConsRepo;
 import com.youloft.lilith.ui.view.NavBarLayout;
 
+import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
 import java.util.HashMap;
 import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.LogManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -71,18 +74,18 @@ public class MainActivity extends BaseActivity {
 
         new ConsRepo().testData()
                 .compose(this.<HashMap>bindToLifecycle())
-                .firstOrError()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<HashMap>() {
+                .toObservable()
+                .subscribe(new RxObserver<HashMap>() {
                     @Override
-                    public void accept(@NonNull HashMap hashMap) throws Exception {
-                        tv.setText(hashMap.toString());
+                    protected void onFailed(Throwable e) {
+                        tv.setText("onFailed");
                     }
-                }, new Consumer<Throwable>() {
+
                     @Override
-                    public void accept(@NonNull Throwable throwable) throws Exception {
-                        Log.e(TAG, "throwable", throwable);
-                        tv.setText("error");
+                    public void onDataSuccess(HashMap hashMap) {
+                        tv.setText(hashMap.toString());
+                        Log.d(TAG, "accept() called with: hashMap = [" + hashMap + "]");
                     }
                 });
     }

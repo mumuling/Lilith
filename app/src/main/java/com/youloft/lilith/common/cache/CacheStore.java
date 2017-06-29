@@ -117,6 +117,8 @@ public class CacheStore {
                 return upstream.doOnNext(new Consumer<T>() {
                     @Override
                     public void accept(@NonNull T t) throws Exception {
+                        if (t == null || TextUtils.isEmpty(key))
+                            return;
                         CacheObj<T> cacheObj = new CacheObj<T>(key, t);
                         mMemoryCache.put(key, cacheObj);
                         if (mDiskCache != null) {
@@ -142,7 +144,7 @@ public class CacheStore {
      * @param <T>
      * @return
      */
-    public <T> Flowable<T> readCache(final String key, final Class<T> type, final Predicate<String> cacheFilter) {
+    public <T> Flowable<T> readCache(final String key, final Class<T> type) {
         return Flowable.just(key).compose(new FlowableTransformer<String, T>() {
             @Override
             public Publisher<T> apply(@NonNull Flowable<String> upstream) {
@@ -151,9 +153,6 @@ public class CacheStore {
                     public boolean test(@NonNull String s) throws Exception {
                         if (mMemoryCache.get(s) == null && mDiskCache.get(s) == null) {
                             return false;
-                        }
-                        if (cacheFilter != null) {
-                            return cacheFilter.test(s);
                         }
                         return true;
                     }
@@ -305,9 +304,9 @@ public class CacheStore {
             @Override
             public boolean test(@NonNull String s) throws Exception {
                 if (isExpired(s, duration)) {
-                    return false;
+                    return true;
                 }
-                return true;
+                return false;
             }
         };
     }
@@ -330,5 +329,21 @@ public class CacheStore {
             return retCache.data;
         }
         return null;
+    }
+
+    public boolean hasCache(String cacheKey) {
+        try {
+            CacheObj o = (CacheObj) mMemoryCache.get(cacheKey);
+            if (o != null) {
+                return true;
+            }
+            if (mDiskCache == null) {
+                return false;
+            }
+            DiskLruCache.Value value = mDiskCache.get(cacheKey);
+            return value != null;
+        } catch (Throwable e) {
+            return false;
+        }
     }
 }
