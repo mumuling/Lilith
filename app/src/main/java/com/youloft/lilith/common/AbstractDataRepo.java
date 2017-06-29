@@ -1,8 +1,10 @@
 package com.youloft.lilith.common;
 
+import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.alibaba.android.arouter.facade.template.IProvider;
 import com.alibaba.fastjson.JSON;
 import com.youloft.lilith.LLApplication;
 import com.youloft.lilith.common.net.OkHttpUtils;
@@ -32,8 +34,12 @@ import okhttp3.Response;
  * 仅做为一个规范
  * Created by coder on 2017/6/29.
  */
-public abstract class AbstractDataRepo {
+public abstract class AbstractDataRepo implements IProvider {
 
+    @Override
+    public void init(Context context) {
+
+    }
 
     /**
      * 联合请求

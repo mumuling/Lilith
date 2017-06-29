@@ -5,6 +5,8 @@ import android.util.Log;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.alibaba.android.arouter.facade.annotation.Autowired;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.trello.rxlifecycle2.RxLifecycle;
@@ -20,6 +22,7 @@ import com.youloft.lilith.common.rx.RxFlowableUtil;
 import com.youloft.lilith.common.rx.RxObservableUtil;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.cons.ConsRepo;
+import com.youloft.lilith.info.UserRepo;
 import com.youloft.lilith.share.ShareEventListener;
 import com.youloft.lilith.ui.view.NavBarLayout;
 import com.youloft.socialize.SocializeAction;
@@ -58,6 +61,13 @@ import static com.youloft.lilith.LLApplication.getApiCache;
  * 主页面
  */
 public class MainActivity extends BaseActivity {
+
+    @Autowired(name = "/repo/user")
+    UserRepo mUserRepo;
+
+    @Autowired(name = "/repo/cons")
+    ConsRepo mConsRepo;
+
     private static final String TAG = "MainActivity";
     @BindView(R.id.main_content)
     FrameLayout mContent;
@@ -72,22 +82,23 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lilith);
+        ARouter.getInstance().inject(this);
         ButterKnife.bind(this);
         //更新配置项
         OnlineConfigAgent.getInstance().onAppStart(getApplicationContext());
         mMainTabManager = new TabManager(this);
-//分享
-        new SocializeAction(this)
-                .setPlatform(SocializePlatform.QQ)
-                .withText("fuck")
-                .withMedia(new ShareWeb("http://www.baidu.com"))
-                .setCallback(new ShareEventListener("Share") {
+
+        mUserRepo.loginWithPhone("aa")
+                .compose(this.<HashMap>bindToLifecycle())
+                .toObservable()
+                .subscribe(new RxObserver<HashMap>() {
                     @Override
-                    public void onStart(SocializePlatform share_media) {
-                        super.onStart(share_media);
+                    public void onDataSuccess(HashMap hashMap) {
+
                     }
-                }).share();
-        new ConsRepo().testData()
+                });
+
+        mConsRepo.testData()
                 .compose(this.<HashMap>bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())
                 .toObservable()
