@@ -41,18 +41,4 @@ public class Utils {
         throw new NullPointerException("u should init first");
     }
 
-
-    /**
-     * 反编码Base64到明文
-     *
-     * @return
-     */
-    public static String base64Decode(String decodeStr) {
-        if (TextUtils.isEmpty(decodeStr)) {
-            return decodeStr;
-        }
-        return new String(Base64.decode(decodeStr, Base64.DEFAULT));
-    }
-
-
 }

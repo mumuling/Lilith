@@ -7,7 +7,6 @@ import com.youloft.lilith.common.cache.CacheStore;
 import com.youloft.lilith.common.net.AppEnv;
 //import com.youloft.lilith.common.net.NetUtil;
 //import com.youloft.lilith.common.net.OnlineConfigAgent;
-import com.youloft.lilith.common.utils.Callback;
 import com.youloft.lilith.common.utils.Utils;
 import com.youloft.lilith.push.PushMessageHandler;
 import com.youloft.lilith.push.PushNotificationClickHandler;
@@ -47,7 +46,7 @@ public class LLApplication extends Application {
 
         AppEnv.setAppContext(this);
 
-        setChannelBundle();
+//        setChannelBundle();
         //加载预置数据
 //        OnlineConfigAgent.getInstance().loadPreloadConfig(getApplicationContext(), new Callback<Void, Integer>() {
 //            @Override

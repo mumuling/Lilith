@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +15,7 @@ import android.widget.TextView;
 
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.utils.SafeUtils;
-import com.youloft.lilith.common.utils.ViewUtil;
+import com.youloft.lilith.common.utils.ViewUtils;
 
 import java.util.ArrayList;
 
@@ -38,7 +37,7 @@ public class NavBarLayout extends LinearLayout {
 
     public NavBarLayout(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        int height = ViewUtil.dp2px(60);
+        int height = ViewUtils.dp2px(60);
         setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,height));
         initDefaultTabs();
         initTabsView();
