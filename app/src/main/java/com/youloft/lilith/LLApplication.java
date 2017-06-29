@@ -12,6 +12,10 @@ import com.youloft.lilith.router.AppRouter;
 import com.youloft.push.PushApp;
 import com.youloft.statistics.AppAnalytics;
 
+import io.reactivex.Flowable;
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.ObservableTransformer;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
@@ -37,9 +41,9 @@ public class LLApplication extends Application {
         //初始化基础配置
         AppConfig.init(this);
         //初始化推送
-        initPush(this, AppConfig.UMENG_APPKEY, AppConfig.UMENG_PUSH_SECRET, AppConfig.CHANNEL);
+//        initPush(this, AppConfig.UMENG_APPKEY, AppConfig.UMENG_PUSH_SECRET, AppConfig.CHANNEL);
         //初始化统计
-        AppAnalytics.init(this, AppConfig.TD_APPID, AppConfig.CHANNEL);
+//        AppAnalytics.init(this, AppConfig.TD_APPID, AppConfig.CHANNEL);
         //初始化页面路由
         AppRouter.init(this, AppConfig.DebugMode);
         //初始化在线参数

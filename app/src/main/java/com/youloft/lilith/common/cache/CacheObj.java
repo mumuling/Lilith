@@ -21,5 +21,12 @@ public class CacheObj<T> {
         this.data = data;
     }
 
-
+    @Override
+    public String toString() {
+        return "CacheObj{" +
+                "data=" + data +
+                ", cacheStamp=" + cacheStamp +
+                ", key='" + key + '\'' +
+                '}';
+    }
 }
