@@ -3,17 +3,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <VideoView
+        android:id="@+id/vv_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <LinearLayout
-        android:id="@+id/ll_login"
+        android:background="#aa1d051d"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#1d051d"
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
         <!--圆形的icon-->
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/iv_header"
             android:layout_width="@dimen/head_portrait"
             android:layout_height="@dimen/head_portrait"
             android:layout_marginTop="68dp"
@@ -22,7 +25,6 @@
 
         <!--名称-->
         <TextView
-            android:id="@+id/tv_nick_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -32,7 +34,6 @@
 
         <!--莉莉丝下面  手机号码模块-->
         <LinearLayout
-            android:id="@+id/ll_phone_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
@@ -40,31 +41,16 @@
             android:layout_marginTop="38dp"
             android:orientation="vertical">
 
-
-            <FrameLayout
+            <EditText
+                android:id="@+id/et_phone_number"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:id="@+id/et_phone_number"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:inputType="number"
-                    android:textColor="#ffffff"
-                    android:textSize="20dp"
-                    android:visibility="invisible" />
-
-                <TextView
-                    android:id="@+id/tv_phone_number"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="手机号"
-                    android:textColor="#55ffffff"
-                    android:textSize="20dp" />
-
-
-            </FrameLayout>
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:hint="手机号"
+                android:inputType="number"
+                android:textColor="#ffffff"
+                android:textColorHint="#66ffffff"
+                android:textSize="20dp" />
 
             <View
                 android:layout_width="match_parent"
@@ -75,7 +61,6 @@
 
         <!--莉莉丝下面  密码号码模块-->
         <LinearLayout
-            android:id="@+id/ll_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
@@ -83,31 +68,16 @@
             android:layout_marginTop="22dp"
             android:orientation="vertical">
 
-
-            <FrameLayout
+            <EditText
+                android:id="@+id/et_password"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:id="@+id/et_password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:inputType="textPassword"
-                    android:textColor="#ffffff"
-                    android:textSize="20dp"
-                    android:visibility="invisible" />
-
-                <TextView
-                    android:id="@+id/tv_password"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="密码"
-                    android:textColor="#55ffffff"
-                    android:textSize="20dp" />
-
-
-            </FrameLayout>
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:hint="密码"
+                android:inputType="textPassword"
+                android:textColor="#ffffff"
+                android:textColorHint="#66ffffff"
+                android:textSize="20dp" />
 
             <View
                 android:layout_width="match_parent"
@@ -118,6 +88,7 @@
 
         <!--登录按钮-->
         <Button
+            android:id="@+id/btn_login"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginLeft="50dp"
@@ -147,6 +118,7 @@
                 android:textSize="13dp" />
 
             <TextView
+                android:id="@+id/tv_service_terms"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="服务条款"
@@ -161,6 +133,7 @@
                 android:textSize="13dp" />
 
             <TextView
+                android:id="@+id/tv_privacy_terms"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="隐私条款"
@@ -178,6 +151,7 @@
             android:layout_marginTop="22dp">
 
             <TextView
+                android:id="@+id/tv_forget_password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="忘记密码？"
@@ -185,6 +159,7 @@
                 android:textSize="15dp" />
 
             <TextView
+                android:id="@+id/tv_register"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -197,11 +172,11 @@
 
     <!--最下面的其他登录方式-->
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_marginBottom="12.3dp"
-        android:layout_gravity="bottom|center"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="12.3dp"
+        android:orientation="vertical">
         <!--其他登录方式文字-->
         <LinearLayout
             android:layout_width="wrap_content"
@@ -230,13 +205,14 @@
         </LinearLayout>
         <!--其他登录方式的icon与文字-->
         <LinearLayout
-            android:layout_gravity="center_horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:layout_marginTop="15dp"
             android:orientation="horizontal">
             <!--快捷登录-->
             <LinearLayout
+                android:id="@+id/ll_quick_login"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -259,6 +235,7 @@
             </LinearLayout>
             <!--微信登录-->
             <LinearLayout
+                android:id="@+id/ll_wechat_login"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="56dp"
@@ -282,13 +259,13 @@
             </LinearLayout>
             <!--QQ登录,暂未启用-->
             <LinearLayout
-                android:visibility="gone"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="56dp"
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:layout_width="30dp"
@@ -306,13 +283,13 @@
             </LinearLayout>
             <!--微博登录,暂未启用-->
             <LinearLayout
-                android:visibility="gone"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="56dp"
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:layout_width="30dp"

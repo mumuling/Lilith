@@ -7,8 +7,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.youloft.lilith.R;
+import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.base.BaseFragment;
-import com.youloft.lilith.common.base.GlideApp;
 import com.youloft.lilith.common.net.IRequestResult;
 import com.youloft.lilith.common.net.OkHttpUtils;
 import com.youloft.lilith.common.utils.LogUtil;
