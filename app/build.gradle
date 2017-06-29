@@ -71,6 +71,8 @@ dependencies {
     //arouter
     compile 'com.alibaba:arouter-api:1.1.0'
     annotationProcessor 'com.alibaba:arouter-compiler:1.1.0'
+
+    compile 'de.hdodenhof:circleimageview:2.1.0'
 }
 
 //渠道打包配置
