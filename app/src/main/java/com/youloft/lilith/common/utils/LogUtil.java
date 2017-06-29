@@ -38,7 +38,7 @@ import javax.xml.transform.stream.StreamSource;
 /**
  * 日志工具类
  */
-public final class LogUtils {
+public final class LogUtil {
 
     public static final int V = Log.VERBOSE;
     public static final int D = Log.DEBUG;
@@ -83,7 +83,7 @@ public final class LogUtils {
     private static final String NULL = "null";
     private static final String ARGS = "args";
 
-    private LogUtils() {
+    private LogUtil() {
         throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
@@ -99,62 +99,62 @@ public final class LogUtils {
         }
 
         public Builder setLogSwitch(final boolean logSwitch) {
-            LogUtils.sLogSwitch = logSwitch;
+            LogUtil.sLogSwitch = logSwitch;
             return this;
         }
 
         public Builder setConsoleSwitch(final boolean consoleSwitch) {
-            LogUtils.sLog2ConsoleSwitch = consoleSwitch;
+            LogUtil.sLog2ConsoleSwitch = consoleSwitch;
             return this;
         }
 
         public Builder setGlobalTag(final String tag) {
             if (isSpace(tag)) {
-                LogUtils.sGlobalTag = "";
+                LogUtil.sGlobalTag = "";
                 sTagIsSpace = true;
             } else {
-                LogUtils.sGlobalTag = tag;
+                LogUtil.sGlobalTag = tag;
                 sTagIsSpace = false;
             }
             return this;
         }
 
         public Builder setLogHeadSwitch(final boolean logHeadSwitch) {
-            LogUtils.sLogHeadSwitch = logHeadSwitch;
+            LogUtil.sLogHeadSwitch = logHeadSwitch;
             return this;
         }
 
         public Builder setLog2FileSwitch(final boolean log2FileSwitch) {
-            LogUtils.sLog2FileSwitch = log2FileSwitch;
+            LogUtil.sLog2FileSwitch = log2FileSwitch;
             return this;
         }
 
         public Builder setDir(final String dir) {
             if (isSpace(dir)) {
-                LogUtils.dir = null;
+                LogUtil.dir = null;
             } else {
-                LogUtils.dir = dir.endsWith(FILE_SEP) ? dir : dir + FILE_SEP;
+                LogUtil.dir = dir.endsWith(FILE_SEP) ? dir : dir + FILE_SEP;
             }
             return this;
         }
 
         public Builder setDir(final File dir) {
-            LogUtils.dir = dir == null ? null : dir.getAbsolutePath() + FILE_SEP;
+            LogUtil.dir = dir == null ? null : dir.getAbsolutePath() + FILE_SEP;
             return this;
         }
 
         public Builder setBorderSwitch(final boolean borderSwitch) {
-            LogUtils.sLogBorderSwitch = borderSwitch;
+            LogUtil.sLogBorderSwitch = borderSwitch;
             return this;
         }
 
         public Builder setConsoleFilter(@TYPE final int consoleFilter) {
-            LogUtils.sConsoleFilter = consoleFilter;
+            LogUtil.sConsoleFilter = consoleFilter;
             return this;
         }
 
         public Builder setFileFilter(@TYPE final int fileFilter) {
-            LogUtils.sFileFilter = fileFilter;
+            LogUtil.sFileFilter = fileFilter;
             return this;
         }
 

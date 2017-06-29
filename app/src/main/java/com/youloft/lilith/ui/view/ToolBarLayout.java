@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
-import com.youloft.lilith.common.utils.Utils;
 import com.youloft.lilith.common.utils.ViewUtil;
 
 /**

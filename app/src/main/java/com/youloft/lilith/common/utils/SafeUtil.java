@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by javen on 15/10/21.
  */
-public class SafeUtils {
+public class SafeUtil {
 
 
     /**

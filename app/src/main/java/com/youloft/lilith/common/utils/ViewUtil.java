@@ -1,8 +1,6 @@
 package com.youloft.lilith.common.utils;
 
 
-import android.content.Context;
-
 /**
  * View相关Util
  * Created by coder on 2017/6/26.

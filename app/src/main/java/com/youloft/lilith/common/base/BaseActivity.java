@@ -6,9 +6,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by zchao on 2017/6/26.
@@ -16,7 +19,7 @@ import android.view.WindowManager;
  * version:
  */
 
-public class BaseActivity extends FragmentActivity {
+public class BaseActivity extends AppCompatActivity implements View.OnClickListener{
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -24,25 +27,21 @@ public class BaseActivity extends FragmentActivity {
             immerseToolbar();
         }
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     protected void onDestroy() {
-
         super.onDestroy();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-//        Analytics.postActivityResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-//        Analytics.postActivityPause(this);
     }
 
     /**
@@ -75,4 +74,8 @@ public class BaseActivity extends FragmentActivity {
         return true;
     }
 
+    @Override
+    public void onClick(View v) {
+
+    }
 }

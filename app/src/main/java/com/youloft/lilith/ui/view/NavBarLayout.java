@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.youloft.lilith.R;
-import com.youloft.lilith.common.utils.SafeUtils;
+import com.youloft.lilith.common.utils.SafeUtil;
 import com.youloft.lilith.common.utils.ViewUtil;
 
 import java.util.ArrayList;
@@ -51,7 +50,7 @@ public class NavBarLayout extends LinearLayout {
         mTabViews.clear();
         if (mTabs != null && mTabs.size() > 0) {
             for (int i = 0; i < mTabs.size(); i++) {
-                TabItemBean item = SafeUtils.getSafeData(mTabs, i);
+                TabItemBean item = SafeUtil.getSafeData(mTabs, i);
                 if (item == null) {
                     continue;
                 }
@@ -86,7 +85,7 @@ public class NavBarLayout extends LinearLayout {
      */
     private void resetAllSelect() {
         for (int i = 0; i < mTabViews.size(); i++) {
-            NavItemView itemView = SafeUtils.getSafeData(mTabViews, i);
+            NavItemView itemView = SafeUtil.getSafeData(mTabViews, i);
             if (itemView != null) {
                 itemView.setSelect(false);
             }

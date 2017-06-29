@@ -8,13 +8,16 @@ import android.text.TextUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.youloft.lilith.common.utils.Callback;
-import com.youloft.lilith.common.utils.Utils;
+import com.alibaba.fastjson.annotation.JSONField;
+import com.youloft.lilith.common.utils.Encryption;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.annotations.NonNull;
 import okio.BufferedSource;
 import okio.Okio;
 
@@ -23,11 +26,8 @@ import okio.Okio;
  * Created by coder on 16/4/21.
  */
 public class OnlineConfigAgent {
-    private static final String CFG_APP_KEY = "android-wnl-tv";
-    public static final String CFG_FL_KEY = "Festival_BEF_FL";
-    private static String CFG_APP_VER = "2";
-
-    private static final String TAG = "OnlineConfigAgent";
+    private final String appKey;
+    private final String appVer;
     //最后更新的版本号
     private static final String KEY_LASTUPDATE = "online_lastupdate";
     //最后一次更新
@@ -46,7 +46,24 @@ public class OnlineConfigAgent {
     private static OnlineConfigAgent sAgentInstance = null;
     boolean NetworkRecievered = false;
 
-    private OnlineConfigAgent() {
+    private OnlineConfigAgent(String appKey, String appVer) {
+        this.appKey = appKey;
+        this.appVer = appVer;
+    }
+
+
+    /**
+     * 初始化Config
+     */
+    public static OnlineConfigAgent initConfig(String appKey, String appVer) {
+        if (sAgentInstance == null) {
+            synchronized (OnlineConfigAgent.class) {
+                if (sAgentInstance == null) {
+                    sAgentInstance = new OnlineConfigAgent(appKey, appVer);
+                }
+            }
+        }
+        return sAgentInstance;
     }
 
     /**
@@ -56,39 +73,36 @@ public class OnlineConfigAgent {
      */
     public static OnlineConfigAgent getInstance() {
         if (sAgentInstance == null) {
-            synchronized (OnlineConfigAgent.class) {
-                if (sAgentInstance == null) {
-                    sAgentInstance = new OnlineConfigAgent();
-                }
-            }
+            throw new RuntimeException("must be init first");
         }
         return sAgentInstance;
-    }
 
+    }
 
 
     /**
      * 加载预置配置
      *
      * @param context
-     * @param callback
      */
-    public void loadPreloadConfig(Context context, final Callback<Void, Integer> callback) {
-        if (context instanceof Activity) {
-            context = context.getApplicationContext();
-        }
-        final Context finalContext = context;
-        new Thread(new Runnable() {
+    public Observable<Integer> loadPreloadConfig(final Context context) {
+        return Observable.create(new ObservableOnSubscribe<Integer>() {
             @Override
-            public void run() {
-                BufferedSource buffer = null;
+            public void subscribe(@NonNull ObservableEmitter<Integer> e) throws Exception {
                 try {
-                    SharedPreferences sp = ConfigStore.getInstance(finalContext).getSharedPreferences();
+                    Context ctx = context;
+                    if (context instanceof Activity) {
+                        ctx = context.getApplicationContext();
+                    }
+                    BufferedSource buffer = null;
+                    SharedPreferences sp = ConfigStore.getInstance(ctx).getSharedPreferences();
                     String lastUpdateVer = sp.getString(KEY_LASTUPDATE, null);
                     if (lastUpdateVer != null) {
+                        e.onNext(2);//已经从网络更新
+                        e.onComplete();
                         return;
                     }
-                    InputStream inputStream = finalContext.getAssets().open("preload.json");
+                    InputStream inputStream = ctx.getAssets().open("preload.json");
                     buffer = Okio.buffer(Okio.source(inputStream));
                     String str = buffer.readUtf8();
                     JSONObject object = JSON.parseObject(str);
@@ -97,27 +111,22 @@ public class OnlineConfigAgent {
                         if (sp.contains(key)) {
                             continue;
                         }
-                        editor.putString(key, Utils.base64Decode(object.getString(key)));
+                        editor.putString(key, Encryption.decodeBase64(object.getString(key)));
                     }
                     editor.putString(KEY_LASTUPDATE, "0");
                     if (!NetworkRecievered) {
                         editor.commit();
-                        if (callback != null) {
-                            callback.call(1);
-                        }
+                        e.onNext(1);//读取预置数据成功
+                        e.onComplete();
+                        return;
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    try {
-                        if (buffer != null)
-                            buffer.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                } catch (Throwable e1) {
+                    e.onError(e1);//发生异常扔回
+                    e.onComplete();
                 }
+
             }
-        }).start();
+        });
     }
 
     boolean isUpdating = false;
@@ -160,7 +169,7 @@ public class OnlineConfigAgent {
         String lastUpdateVer = sharedPreferences.getString(KEY_LASTUPDATE, null);
         long lastRequestTime = sharedPreferences.getLong(KEY_LASTREQUEST, 0);
         String lastVer = sharedPreferences.getString(KEY_LASTREQUEST_VER, "0");
-        if (lastVer.equalsIgnoreCase(CFG_APP_VER)) {
+        if (lastVer.equalsIgnoreCase(appVer)) {
             if (Math.abs(lastRequestTime - System.currentTimeMillis()) < EXPIRED_REQUEST) {
                 return;
             }
@@ -168,8 +177,8 @@ public class OnlineConfigAgent {
             lastUpdateVer = "";
         }
         HashMap<String, String> params = new HashMap<String, String>();
-        params.put("appid", CFG_APP_KEY);
-        params.put("appver", CFG_APP_VER);
+        params.put("appid", appKey);
+        params.put("appver", appVer);
         params.put("lastupdate", lastUpdateVer);
 //        String url = URLFormatter.parseUrl(Urls.CONFIG, NetUtil.initParams(params));
         String data = OkHttpUtils.getInstance().getString(Urls.CONFIG, params, true);
@@ -181,11 +190,11 @@ public class OnlineConfigAgent {
                     NetworkRecievered = true;
                     JSONObject configData = configResp.data;
                     for (String jsonKey : configData.keySet()) {
-                        editor.putString(jsonKey, Utils.base64Decode(configData.getString(jsonKey)));
+                        editor.putString(jsonKey, Encryption.decodeBase64(configData.getString(jsonKey)));
                     }
                     sConfigCache.clear();
                     editor.putString(KEY_LASTUPDATE, configResp.r);
-                    editor.putString(KEY_LASTREQUEST_VER, CFG_APP_VER);
+                    editor.putString(KEY_LASTREQUEST_VER, appVer);
                 }
                 editor.putLong(KEY_LASTREQUEST, System.currentTimeMillis());
                 editor.apply();
@@ -327,7 +336,7 @@ public class OnlineConfigAgent {
     static class ConfigStore {
         private static ConfigStore sStoreIntance = null;
         private Context mContext;
-        private String KEY_PREF_NAME = "online_config_wnl";
+        private String KEY_PREF_NAME = "online_config";
 
         private ConfigStore(Context context) {
             if (context instanceof Activity) {
@@ -365,4 +374,18 @@ public class OnlineConfigAgent {
 
     }
 
+
+    /**
+     * 响应实体
+     */
+    static class ConfigResp {
+        @JSONField(name = "status")
+        public int status;
+
+        @JSONField(name = "msg")
+        public JSONObject data;
+
+        @JSONField(name = "r")
+        public String r;
+    }
 }
