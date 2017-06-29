@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.annotation.JSONField;
 import com.youloft.lilith.common.utils.Encryption;
 
 import java.io.InputStream;
@@ -54,7 +55,7 @@ public class OnlineConfigAgent {
     /**
      * 初始化Config
      */
-    public static void initConfig(String appKey, String appVer) {
+    public static OnlineConfigAgent initConfig(String appKey, String appVer) {
         if (sAgentInstance == null) {
             synchronized (OnlineConfigAgent.class) {
                 if (sAgentInstance == null) {
@@ -62,6 +63,7 @@ public class OnlineConfigAgent {
                 }
             }
         }
+        return sAgentInstance;
     }
 
     /**
@@ -372,4 +374,18 @@ public class OnlineConfigAgent {
 
     }
 
+
+    /**
+     * 响应实体
+     */
+    static class ConfigResp {
+        @JSONField(name = "status")
+        public int status;
+
+        @JSONField(name = "msg")
+        public JSONObject data;
+
+        @JSONField(name = "r")
+        public String r;
+    }
 }

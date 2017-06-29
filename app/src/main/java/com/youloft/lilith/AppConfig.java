@@ -22,6 +22,7 @@ public class AppConfig {
      * 协议参数
      */
     public static final String CID = "Youloft_Android";
+    public static final String CONFIG_APP_KEY = "lilith_android";
 
     /*包名*/
     public static final String Bundle = BuildConfig.APPLICATION_ID;

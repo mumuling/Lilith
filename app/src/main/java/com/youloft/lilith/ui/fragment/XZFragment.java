@@ -2,15 +2,12 @@ package com.youloft.lilith.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseFragment;
-import com.youloft.lilith.common.utils.LogUtils;
-import com.youloft.lilith.common.widgets.picker.TimePicker;
 
 /**
  * Created by zchao on 2017/6/27.

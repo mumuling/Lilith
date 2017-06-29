@@ -59,6 +59,6 @@ public class NetUtil {
      * @return
      */
     public static NetworkInfo getActiveNetworkInfo() {
-        return ((ConnectivityManager) LLApplication.getContext().getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+        return ((ConnectivityManager) Utils.getContext().getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
     }
 }
