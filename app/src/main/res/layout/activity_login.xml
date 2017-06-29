@@ -9,9 +9,9 @@
         android:layout_height="match_parent" />
 
     <LinearLayout
-        android:background="#aa1d051d"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#aa1d051d"
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
@@ -46,6 +46,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@null"
+                android:digits="0123456789-"
                 android:hint="手机号"
                 android:inputType="number"
                 android:textColor="#ffffff"

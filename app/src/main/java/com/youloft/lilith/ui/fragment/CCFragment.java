@@ -9,11 +9,6 @@ import android.widget.TextView;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.base.BaseFragment;
-import com.youloft.lilith.common.net.IRequestResult;
-import com.youloft.lilith.common.net.OkHttpUtils;
-import com.youloft.lilith.common.utils.LogUtil;
-
-import java.util.HashMap;
 
 /**
  * Created by zchao on 2017/6/27.

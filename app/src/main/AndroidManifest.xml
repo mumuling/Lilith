@@ -91,6 +91,7 @@
         <!-- share end -->
         <activity android:name=".ARouterTestActivity" />
         <activity android:name=".login.LoginActivity"/>
+        <activity android:name=".login.QuickLoginActivity"/>
     </application>
 
 </manifest>
