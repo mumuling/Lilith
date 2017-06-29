@@ -73,8 +73,7 @@ public abstract class AbstractDataRepo {
         if (TextUtils.isEmpty(key)) {
             return Flowable.empty();
         }
-        return LLApplication.getApiCache()
-                .<T>readCache(key, clz);
+        return LLApplication.getApiCache().readCache(key, clz);
 
     }
 
@@ -97,6 +96,7 @@ public abstract class AbstractDataRepo {
                                            final Class<T> clz,
                                            final String cacheKey,
                                            final long cacheDuration) {
+
         Flowable<T> compose = Flowable.just(url)
                 .filter(new Predicate<String>() {
                     @Override
@@ -109,17 +109,15 @@ public abstract class AbstractDataRepo {
                         }
                         return LLApplication.getApiCache().isExpired(cacheKey, cacheDuration);
                     }
-                }).map(new Function<String, Response>() {
+                })
+                .map(new Function<String, Response>() {
                     @Override
                     public Response apply(@NonNull String s) throws Exception {
                         return OkHttpUtils.getInstance().requestExecute(url, header, params, usePublic);
                     }
-                }).filter(new Predicate<Response>() {
-                    @Override
-                    public boolean test(@NonNull Response response) throws Exception {
-                        return response != null;
-                    }
-                }).map(new Function<Response, T>() {
+                })
+                .compose(RxFlowableUtil.<Response>applyNetIoSchedulers())//线程切换
+                .map(new Function<Response, T>() {
                     @Override
                     public T apply(@NonNull Response response) throws Exception {
                         if (response.code() == 200) {
@@ -129,9 +127,8 @@ public abstract class AbstractDataRepo {
                             throw new RuntimeException("No Content");
                         }
                     }
-                }).compose(RxFlowableUtil.<T>applyNetIoSchedulers())//切换线程
+                })
                 .compose(LLApplication.getApiCache().<T>cacheTransform(cacheKey));
-
         if (TextUtils.isEmpty(cacheKey)
                 || !LLApplication.getApiCache().hasCache(cacheKey)) {
             return compose;

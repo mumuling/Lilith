@@ -14,6 +14,7 @@ import java.util.Map;
  */
 public class AppAnalytics {
 
+    private static Context sCtx = null;
 
     /**
      * 初始化应用统计
@@ -23,6 +24,7 @@ public class AppAnalytics {
      * @param channel
      */
     public static void init(Application application, String appId, String channel) {
+        sCtx = application;
         TCAgent.init(application, appId, channel);
         TCAgent.setReportUncaughtExceptions(true);
     }
@@ -37,41 +39,37 @@ public class AppAnalytics {
     /**
      * 设置开启反作弊功能
      *
-     * @param application
      * @param enabled
      */
-    public static void setAntiCheatingEnabled(Application application, boolean enabled) {
-        TCAgent.setAntiCheatingEnabled(application, enabled);
+    public static void setAntiCheatingEnabled(boolean enabled) {
+        TCAgent.setAntiCheatingEnabled(sCtx, enabled);
     }
 
     /**
      * 页面统计--进入
      *
-     * @param ctx
      * @param pageName
      */
-    public static void onPageStart(Context ctx, String pageName) {
-        TCAgent.onPageStart(ctx, pageName);
+    public static void onPageStart(String pageName) {
+        TCAgent.onPageStart(sCtx, pageName);
     }
 
     /**
      * 页面统计--离开
      *
-     * @param ctx
      * @param pageName
      */
-    public static void onPageEnd(Context ctx, String pageName) {
-        TCAgent.onPageEnd(ctx, pageName);
+    public static void onPageEnd(String pageName) {
+        TCAgent.onPageEnd(sCtx, pageName);
     }
 
     /**
      * 获取设备ID
      *
-     * @param context
      * @return
      */
-    public static String getDeviceId(Context context) {
-        return TCAgent.getDeviceId(context);
+    public static String getDeviceId() {
+        return TCAgent.getDeviceId(sCtx);
     }
 
     /**
@@ -96,44 +94,40 @@ public class AppAnalytics {
     /**
      * 上报自定义事件
      *
-     * @param context
      * @param eventId EVENT_ID
      */
-    public static void onEvent(Context context, String eventId) {
-        TCAgent.onEvent(context, eventId);
+    public static void onEvent(String eventId) {
+        TCAgent.onEvent(sCtx, eventId);
     }
 
     /**
      * 上报带有Label的自定义事件
      *
-     * @param context
      * @param eventId
      * @param eventLabel
      */
-    public static void onEvent(Context context, String eventId, String eventLabel) {
-        TCAgent.onEvent(context, eventId, eventLabel);
+    public static void onEvent(String eventId, String eventLabel) {
+        TCAgent.onEvent(sCtx, eventId, eventLabel);
     }
 
     /**
      * 上报带有参数&&Label的自定义事件
      *
-     * @param context
      * @param eventId
      * @param eventLabel
      * @param map
      */
-    public static void onEvent(Context context, String eventId, String eventLabel, Map map) {
-        TCAgent.onEvent(context, eventId, eventLabel, map);
+    public static void onEvent(String eventId, String eventLabel, Map map) {
+        TCAgent.onEvent(sCtx, eventId, eventLabel, map);
     }
 
     /**
      * 上报错误
      *
-     * @param context
      * @param throwable
      */
-    public static void onError(Context context, Throwable throwable) {
-        TCAgent.onError(context, throwable);
+    public static void onError(Throwable throwable) {
+        TCAgent.onError(sCtx, throwable);
     }
 
 

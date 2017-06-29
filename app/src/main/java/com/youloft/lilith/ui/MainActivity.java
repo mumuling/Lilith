@@ -20,7 +20,12 @@ import com.youloft.lilith.common.rx.RxFlowableUtil;
 import com.youloft.lilith.common.rx.RxObservableUtil;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.cons.ConsRepo;
+import com.youloft.lilith.share.ShareEventListener;
 import com.youloft.lilith.ui.view.NavBarLayout;
+import com.youloft.socialize.SocializeAction;
+import com.youloft.socialize.SocializePlatform;
+import com.youloft.socialize.media.ShareWeb;
+import com.youloft.socialize.wrapper.ShareListener;
 
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
@@ -71,7 +76,17 @@ public class MainActivity extends BaseActivity {
         //更新配置项
         OnlineConfigAgent.getInstance().onAppStart(getApplicationContext());
         mMainTabManager = new TabManager(this);
-
+//分享
+        new SocializeAction(this)
+                .setPlatform(SocializePlatform.QQ)
+                .withText("fuck")
+                .withMedia(new ShareWeb("http://www.baidu.com"))
+                .setCallback(new ShareEventListener("Share") {
+                    @Override
+                    public void onStart(SocializePlatform share_media) {
+                        super.onStart(share_media);
+                    }
+                }).share();
         new ConsRepo().testData()
                 .compose(this.<HashMap>bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())

@@ -45,7 +45,7 @@ public class AppConfig {
     public static float DENSITY = 1;
 
     /*渠道*/
-    public static String CHANNEL = "";
+    public static String CHANNEL = "unknow";
 
 
     /**
