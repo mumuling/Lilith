@@ -3,15 +3,47 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#282142">
     <com.youloft.lilith.ui.view.BaseToolBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/tool_bar"
         app:show_share_btn="false"/>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:id="@+id/top_content_fl">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/top_iamge"
+            android:scaleType="centerCrop"
+            android:src="@drawable/div1"
+            android:alpha="0.5"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="是刚回到家黄金分割就多个"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            />
+    </FrameLayout>
+
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="这个话题"/>
+        android:text="请选择您的观点"
+        android:textColor="#ffffff"
+        android:textSize="20sp"
+        android:layout_marginTop="20dp"/>
+    <ImageView
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="center"
+        android:id="@+id/circle_image"/>
 </LinearLayout>
