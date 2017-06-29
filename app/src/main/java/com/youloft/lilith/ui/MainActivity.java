@@ -5,6 +5,7 @@ import android.widget.FrameLayout;
 
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
+import com.youloft.lilith.common.net.OnlineConfigAgent;
 import com.youloft.lilith.ui.view.NavBarLayout;
 
 import butterknife.BindView;
@@ -26,6 +27,8 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lilith);
         ButterKnife.bind(this);
+        //更新配置项
+        OnlineConfigAgent.getInstance().onAppStart(getApplicationContext());
         mMainTabManager = new TabManager(this);
 
     }

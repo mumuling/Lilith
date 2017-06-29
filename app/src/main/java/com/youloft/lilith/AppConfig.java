@@ -23,6 +23,9 @@ public class AppConfig {
      */
     public static final String CID = "Youloft_Android";
     public static final String CONFIG_APP_KEY = "lilith_android";
+    public static final String TD_APPID = "";//talkingdata
+    public static final String UMENG_APPKEY = "";//umeng
+    public static final String UMENG_PUSH_SECRET = "";//推送
 
     /*包名*/
     public static final String Bundle = BuildConfig.APPLICATION_ID;

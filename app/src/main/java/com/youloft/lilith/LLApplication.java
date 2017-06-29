@@ -3,7 +3,6 @@ package com.youloft.lilith;
 import android.app.Application;
 import android.content.Context;
 
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.common.cache.CacheStore;
 import com.youloft.lilith.common.net.OnlineConfigAgent;
 import com.youloft.lilith.common.utils.Utils;
@@ -11,6 +10,7 @@ import com.youloft.lilith.push.PushMessageHandler;
 import com.youloft.lilith.push.PushNotificationClickHandler;
 import com.youloft.lilith.router.AppRouter;
 import com.youloft.push.PushApp;
+import com.youloft.statistics.AppAnalytics;
 
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
@@ -32,8 +32,14 @@ public class LLApplication extends Application {
     public void onCreate() {
         super.onCreate();
         sInstance = this;
+        //初始化工具类
         Utils.init(this);
+        //初始化基础配置
         AppConfig.init(this);
+        //初始化推送
+        initPush(this, AppConfig.UMENG_APPKEY, AppConfig.UMENG_PUSH_SECRET, AppConfig.CHANNEL);
+        //初始化统计
+        AppAnalytics.init(this, AppConfig.TD_APPID, AppConfig.CHANNEL);
         //初始化页面路由
         AppRouter.init(this, AppConfig.DebugMode);
         //初始化在线参数
@@ -44,12 +50,14 @@ public class LLApplication extends Application {
                 .subscribe(new Consumer<Integer>() {
                     @Override
                     public void accept(@NonNull Integer integer) throws Exception {
-
+                        if (integer == 2) {
+                            //loaddefault config success;
+                        }
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(@NonNull Throwable throwable) throws Exception {
-
+                        //加载参数发生异常
                     }
                 });
     }

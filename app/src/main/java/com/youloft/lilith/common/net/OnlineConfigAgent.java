@@ -331,6 +331,15 @@ public class OnlineConfigAgent {
     }
 
     /**
+     * 应用启动
+     *
+     * @param context
+     */
+    public void onAppStart(Context context) {
+        updateOnlineConfig(context);
+    }
+
+    /**
      * 配置存储工具类
      */
     static class ConfigStore {
