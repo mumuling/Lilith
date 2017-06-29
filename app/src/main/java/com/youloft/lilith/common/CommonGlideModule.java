@@ -1,4 +1,4 @@
-package com.youloft.lilith.common.base;
+package com.youloft.lilith.common;
 
 import android.content.Context;
 
@@ -19,7 +19,7 @@ import java.io.File;
  * version:
  */
 @GlideModule
-public class LLAppGlideModule extends AppGlideModule {
+public class CommonGlideModule extends AppGlideModule {
 
     @Override
     public boolean isManifestParsingEnabled() {
