@@ -7,6 +7,7 @@ import android.os.Build;
 import android.view.WindowManager;
 
 import com.meituan.android.walle.WalleChannelReader;
+import com.youloft.lilith.setting.AppSetting;
 
 import java.util.Locale;
 
@@ -16,7 +17,6 @@ import java.util.Locale;
  * Created by coder on 2017/6/26.
  */
 public class AppConfig {
-
 
     /**
      * 协议参数
@@ -92,8 +92,13 @@ public class AppConfig {
     }
 
 
+    /**
+     * 获取设备ID
+     *
+     * @return
+     */
     public static String getDeviceId() {
-        return null;
+        return AppSetting.getDeviceId();
     }
 }
 
