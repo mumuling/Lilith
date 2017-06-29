@@ -7,6 +7,12 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
+    <permission
+        android:name="${applicationId}.permission.setting"
+        android:label="@string/lilith_permission_label"
+        android:protectionLevel="normal" />
+
+    <uses-permission android:name="${applicationId}.permission.setting" />
     <application
         android:name=".LLApplication"
         android:allowBackup="true"
@@ -70,6 +76,11 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
+        <provider
+            android:name=".common.provider.SettingProvider"
+            android:authorities="${applicationId}"
+            android:exported="false"
+            android:permission="${applicationId}.permission.setting" />
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="5126ff896c738f2bfa000438" />

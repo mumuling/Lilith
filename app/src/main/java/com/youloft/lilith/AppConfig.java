@@ -7,6 +7,7 @@ import android.os.Build;
 import android.view.WindowManager;
 
 import com.meituan.android.walle.WalleChannelReader;
+import com.youloft.lilith.setting.AppSetting;
 
 import java.util.Locale;
 
@@ -17,12 +18,14 @@ import java.util.Locale;
  */
 public class AppConfig {
 
-
     /**
      * 协议参数
      */
     public static final String CID = "Youloft_Android";
     public static final String CONFIG_APP_KEY = "lilith_android";
+    public static final String TD_APPID = "";//talkingdata
+    public static final String UMENG_APPKEY = "";//umeng
+    public static final String UMENG_PUSH_SECRET = "";//推送
 
     /*包名*/
     public static final String Bundle = BuildConfig.APPLICATION_ID;
@@ -89,8 +92,13 @@ public class AppConfig {
     }
 
 
+    /**
+     * 获取设备ID
+     *
+     * @return
+     */
     public static String getDeviceId() {
-        return null;
+        return AppSetting.getDeviceId();
     }
 }
 
