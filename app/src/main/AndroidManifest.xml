@@ -47,7 +47,11 @@
             android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity
             android:name=".topic.TopicDetailActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTop" />
+        <activity android:name=".topic.PointDetailActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"/>
 
         <!-- share begin -->
 
@@ -85,7 +89,8 @@
             android:name="UMENG_APPKEY"
             android:value="5126ff896c738f2bfa000438" />
         <!-- share end -->
-        <activity android:name=".ARouterTestActivity"></activity>
+        <activity android:name=".ARouterTestActivity" />
+        <activity android:name=".login.LoginActivity"/>
     </application>
 
 </manifest>

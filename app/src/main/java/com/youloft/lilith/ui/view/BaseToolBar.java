@@ -36,7 +36,7 @@ public class BaseToolBar extends ToolBarLayout {
         super(context, attrs);
         initView(context);
         initStyles(context, attrs);
-        setBackgroundColor(Color.RED);
+        setBackgroundColor(Color.parseColor("#30284d"));
     }
 
     /**

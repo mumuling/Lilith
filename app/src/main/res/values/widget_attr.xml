@@ -49,6 +49,8 @@
     </style>
 
     <drawable name="div">#FFDFDFDF</drawable>
+    <drawable name="div1">#a15e5e</drawable>
+    <drawable name="div2">#b32a2870</drawable>
 
     <declare-styleable name="AutoScaleTextView">
         <attr name="scale_lines" format="integer" />
