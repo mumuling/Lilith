@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseFragment;
 import com.youloft.lilith.common.utils.LogUtils;
@@ -26,21 +27,10 @@ public class XZFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         TextView viewById = (TextView) view.findViewById(R.id.text);
-        final TimePicker timeP = (TimePicker) view.findViewById(R.id.time);
         viewById.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (timeP.mHourDay == TimePicker.HOUR_24) {
-                    timeP.setTimeRange(TimePicker.HOUR_12);
-                } else {
-                    timeP.setTimeRange(TimePicker.HOUR_24);
-                }
-            }
-        });
-        timeP.setDateChangedListener(new TimePicker.onTimeChangedListener() {
-            @Override
-            public void onDateChanged(int hour, int min, int amOrpm) {
-                LogUtils.e("aaa", hour + ":"  + min +" " + amOrpm);
+                ARouter.getInstance().build("/test/arouterTest").navigation();
             }
         });
     }

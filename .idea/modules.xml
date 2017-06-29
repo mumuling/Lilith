@@ -4,9 +4,9 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Lilith.iml" filepath="$PROJECT_DIR$/Lilith.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/share/share.iml" filepath="$PROJECT_DIR$/share/share.iml" />
       <module fileurl="file://$PROJECT_DIR$/statistics/statistics.iml" filepath="$PROJECT_DIR$/statistics/statistics.iml" />
       <module fileurl="file://$PROJECT_DIR$/umeng-push/umeng-push.iml" filepath="$PROJECT_DIR$/umeng-push/umeng-push.iml" />
+      <module fileurl="file://$PROJECT_DIR$/umeng-socialize/umeng-socialize.iml" filepath="$PROJECT_DIR$/umeng-socialize/umeng-socialize.iml" />
     </modules>
   </component>
 </project>
