@@ -5,16 +5,20 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Log;
+import android.text.method.PasswordTransformationMethod;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
+
+import org.w3c.dom.Text;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,6 +37,12 @@ public class LoginActivity extends BaseActivity {
     EditText etPhoneNumber;//手机号码
     @BindView(R.id.et_password)
     EditText etPassword;//密码
+    @BindView(R.id.iv_clean_number)
+    ImageView ivCleanNumber; //清空电话号码
+    @BindView(R.id.iv_is_show_pwd)
+    ImageView ivIsShowPwd; //是否明文展示密码
+    @BindView(R.id.iv_clean_password)
+    ImageView ivCleanPassword; //清空密码
 
     private int mPreNumberLength;//电话号码变化之前的长度
 
@@ -48,6 +58,7 @@ public class LoginActivity extends BaseActivity {
      * 输入框的设定
      */
     private void initEditText() {
+        //电话号码变化的监听
         etPhoneNumber.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -66,7 +77,38 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
+                //变化之后如果有字符串 就显示叉叉, 如果没有就隐藏叉叉
+                if (etPhoneNumber.getText().toString().length() != 0) {
+                    ivCleanNumber.setVisibility(View.VISIBLE);
+                } else {
+                    ivCleanNumber.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
 
+
+        //密码输入框的监听
+        etPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                //变化之后如果有字符串 就显示叉叉, 如果没有就隐藏叉叉
+                if (etPassword.getText().toString().length() != 0) {
+                    ivCleanPassword.setVisibility(View.VISIBLE);
+                    ivIsShowPwd.setVisibility(View.VISIBLE);
+                } else {
+                    ivCleanPassword.setVisibility(View.INVISIBLE);
+                    ivIsShowPwd.setVisibility(View.INVISIBLE);
+                }
             }
         });
     }
@@ -147,5 +189,31 @@ public class LoginActivity extends BaseActivity {
     @OnClick(R.id.ll_wechat_login)
     public void wechatLogin(View view) {
         Toast.makeText(this, "微信登录", Toast.LENGTH_SHORT).show();
+    }
+
+    private boolean isShowPassword = true;//是否显示密码的标识
+
+    //清空账号密码,和是否明文显示密码的点击事件
+    @OnClick({R.id.iv_clean_number, R.id.iv_is_show_pwd, R.id.iv_clean_password})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.iv_clean_number:
+                etPhoneNumber.setText(null);
+                break;
+            case R.id.iv_is_show_pwd:
+                if (isShowPassword) {
+                    etPassword.setTransformationMethod(null);
+                    isShowPassword = false;
+                } else {
+                    etPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    isShowPassword = true;
+                }
+                etPassword.setSelection(etPassword.getText().toString().length());
+
+                break;
+            case R.id.iv_clean_password:
+                etPassword.setText(null);
+                break;
+        }
     }
 }

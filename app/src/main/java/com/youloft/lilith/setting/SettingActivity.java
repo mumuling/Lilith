@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
+import com.youloft.lilith.router.AppRouter;
 import com.youloft.lilith.ui.view.BaseToolBar;
 
 import butterknife.BindView;

@@ -27,11 +27,11 @@
 
             <ImageView
                 android:id="@+id/flag1"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp"
-                android:background="#00ff00" />
+                android:src="@drawable/binding_phone_icon"
+                android:layout_marginLeft="20dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -57,12 +57,12 @@
 
             <ImageView
                 android:id="@+id/flag5"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/mine_more_icon"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="15dp"
-                android:background="#00ff00" />
+                android:layout_marginRight="15dp" />
         </RelativeLayout>
 
 
@@ -90,11 +90,11 @@
 
                 <ImageView
                     android:id="@+id/flag2"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="20dp"
-                    android:background="#00ff00" />
+                    android:src="@drawable/binding_wechat_icon" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -108,12 +108,12 @@
                     android:textSize="16dp" />
 
                 <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="15dp"
-                    android:background="#00ff00" />
+                    android:src="@drawable/mine_more_icon" />
             </RelativeLayout>
             <!--分割线-->
             <View
@@ -132,11 +132,11 @@
 
                 <ImageView
                     android:id="@+id/flag3"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="20dp"
-                    android:background="#00ff00" />
+                    android:src="@drawable/binding_qq_icon" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -150,12 +150,12 @@
                     android:textSize="16dp" />
 
                 <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="15dp"
-                    android:background="#00ff00" />
+                    android:src="@drawable/mine_more_icon" />
             </RelativeLayout>
             <!--分割线-->
             <View
@@ -174,11 +174,11 @@
 
                 <ImageView
                     android:id="@+id/flag4"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="20dp"
-                    android:background="#00ff00" />
+                    android:src="@drawable/binding_weibo_icon" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -192,12 +192,12 @@
                     android:textSize="16dp" />
 
                 <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="15dp"
-                    android:background="#00ff00" />
+                    android:src="@drawable/mine_more_icon" />
             </RelativeLayout>
             <!--分割线-->
             <View

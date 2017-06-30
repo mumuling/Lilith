@@ -16,6 +16,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center|bottom"
             android:layout_marginBottom="70dp">
+            <!--用户头像-->
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/iv_header"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/div" />
             <!--我的星座-->
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/iv_constellation"
@@ -24,13 +31,6 @@
                 android:layout_gravity="right"
                 android:background="#ff0000"
                 android:scaleType="centerCrop" />
-            <!--用户头像-->
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/iv_header"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/div" />
         </FrameLayout>
 
         <!--用户昵称-->
@@ -150,11 +150,11 @@
 
                 <ImageView
                     android:id="@+id/flag1"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="20dp"
-                    android:background="#00ff00" />
+                    android:src="@drawable/mine_talk_icon" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -168,12 +168,12 @@
                     android:textSize="16dp" />
 
                 <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="15dp"
-                    android:background="#00ff00" />
+                    android:src="@drawable/mine_more_icon" />
             </RelativeLayout>
             <!--分割线-->
             <View
@@ -193,11 +193,11 @@
 
                 <ImageView
                     android:id="@+id/flag2"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="20dp"
-                    android:background="#00ff00" />
+                    android:src="@drawable/mine_data_icon" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -211,12 +211,12 @@
                     android:textSize="16dp" />
 
                 <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="15dp"
-                    android:background="#00ff00" />
+                    android:src="@drawable/mine_more_icon" />
             </RelativeLayout>
             <!--分割线-->
             <View
@@ -236,11 +236,11 @@
 
                 <ImageView
                     android:id="@+id/flag3"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="20dp"
-                    android:background="#00ff00" />
+                    android:src="@drawable/mine_set_icon" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -254,12 +254,13 @@
                     android:textSize="16dp" />
 
                 <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:layout_marginRight="15dp"
-                    android:background="#00ff00" />
+                    android:src="@drawable/mine_more_icon"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="15dp" />
             </RelativeLayout>
             <!--分割线-->
             <View

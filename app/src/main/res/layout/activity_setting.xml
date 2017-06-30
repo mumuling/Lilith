@@ -39,32 +39,22 @@
                 android:paddingBottom="14.5dp"
                 android:paddingTop="14dp">
 
-                <ImageView
-                    android:id="@+id/flag1"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="20dp"
-                    android:background="#00ff00" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/flag1"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="10dp"
-                    android:layout_toEndOf="@+id/flag1"
+                    android:layout_marginLeft="20dp"
                     android:text="修改密码"
                     android:textColor="#ffffff"
                     android:textSize="16dp" />
 
                 <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="15dp"
-                    android:background="#00ff00" />
+                    android:src="@drawable/mine_more_icon" />
             </RelativeLayout>
             <!--分割线   这个分割线需要控制显示与隐藏  -->
             <View
@@ -82,32 +72,23 @@
                 android:paddingBottom="14.5dp"
                 android:paddingTop="14dp">
 
-                <ImageView
-                    android:id="@+id/flag2"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="20dp"
-                    android:background="#00ff00" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/flag2"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="10dp"
-                    android:layout_toEndOf="@+id/flag2"
+                    android:layout_marginLeft="20dp"
                     android:text="绑定账号"
                     android:textColor="#ffffff"
                     android:textSize="16dp" />
 
                 <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="15dp"
-                    android:background="#00ff00" />
+                    android:src="@drawable/mine_more_icon" />
             </RelativeLayout>
             <!--分割线-->
             <View
@@ -140,32 +121,23 @@
                 android:paddingBottom="14.5dp"
                 android:paddingTop="14dp">
 
-                <ImageView
-                    android:id="@+id/flag3"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="20dp"
-                    android:background="#00ff00" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/flag3"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="10dp"
-                    android:layout_toEndOf="@+id/flag3"
+                    android:layout_marginLeft="20dp"
                     android:text="检查更新"
                     android:textColor="#ffffff"
                     android:textSize="16dp" />
 
                 <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="15dp"
-                    android:background="#00ff00" />
+                    android:src="@drawable/mine_more_icon"/>
             </RelativeLayout>
             <!--分割线-->
             <View
@@ -183,32 +155,23 @@
                 android:paddingBottom="14.5dp"
                 android:paddingTop="14dp">
 
-                <ImageView
-                    android:id="@+id/flag4"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="20dp"
-                    android:background="#00ff00" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/flag4"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="10dp"
-                    android:layout_toEndOf="@+id/flag4"
+                    android:layout_marginLeft="20dp"
                     android:text="意见反馈"
                     android:textColor="#ffffff"
                     android:textSize="16dp" />
 
                 <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="15dp"
-                    android:background="#00ff00" />
+                    android:src="@drawable/mine_more_icon" />
             </RelativeLayout>
             <!--分割线-->
             <View
@@ -226,32 +189,23 @@
                 android:paddingBottom="14.5dp"
                 android:paddingTop="14dp">
 
-                <ImageView
-                    android:id="@+id/flag5"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="20dp"
-                    android:background="#00ff00" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/flag5"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="10dp"
-                    android:layout_toEndOf="@+id/flag5"
+                    android:layout_marginLeft="20dp"
                     android:text="关于我们"
                     android:textColor="#ffffff"
                     android:textSize="16dp" />
 
                 <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="15dp"
-                    android:background="#00ff00" />
+                    android:src="@drawable/mine_more_icon" />
             </RelativeLayout>
             <!--分割线-->
             <View
@@ -263,14 +217,14 @@
         <!--退出登录-->
         <TextView
             android:id="@+id/tv_logout"
-            android:layout_marginTop="24dp"
             android:layout_width="match_parent"
-            android:clickable="true"
+            android:layout_height="50dp"
+            android:layout_marginTop="24dp"
             android:background="@drawable/slt_usercenter"
-            android:textSize="16dp"
+            android:clickable="true"
             android:gravity="center"
-            android:textColor="#ffffff"
             android:text="退出登录"
-            android:layout_height="50dp" />
+            android:textColor="#ffffff"
+            android:textSize="16dp" />
     </LinearLayout>
 </LinearLayout>
