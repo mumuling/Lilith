@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.webkit.WebView;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.common.widgets.webkit.handle.AbsHandle;
 import com.youloft.lilith.common.widgets.webkit.handle.FileHandle;
 import com.youloft.lilith.common.widgets.webkit.handle.ShareHandle;
@@ -65,6 +66,11 @@ public class URLProtocolHandler {
      * @return
      */
     public boolean handleUrl(WebView view, String url) {
+        //处理Lilith跳转
+        if (url.toLowerCase().startsWith("lilith://")) {
+            ARouter.getInstance().build(url).navigation();
+            return true;
+        }
         if (url.toLowerCase().startsWith("protocol")) {
             handleProtocolUrl(view, url);
             return true;
