@@ -93,6 +93,10 @@
         <activity android:name=".ARouterTestActivity" />
         <activity android:name=".login.LoginActivity"/>
         <activity android:name=".login.QuickLoginActivity"/>
+        <activity android:name=".setting.SettingActivity"/>
+        <activity android:name=".setting.FeedBackActivity"/>
+        <activity android:name=".setting.AboutMeActivity"/>
+        <activity android:name=".setting.BindAccountActivity"/>
     </application>
 
 </manifest>

@@ -4,143 +4,34 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <!--星座和头像部分-->
-    <FrameLayout
+    <!--标题-->
+    <com.youloft.lilith.ui.view.BaseToolBar
+        android:id="@+id/btl_setting"
         android:layout_width="match_parent"
-        android:layout_height="270dp"
-        android:background="#4c2c4b">
+        android:layout_height="wrap_content" />
 
-        <!--中间的头像和小的星座-->
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|bottom"
-            android:layout_marginBottom="70dp">
-            <!--我的星座-->
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/iv_constellation"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_gravity="right"
-                android:background="#ff0000"
-                android:scaleType="centerCrop" />
-            <!--用户头像-->
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/iv_header"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/div" />
-        </FrameLayout>
-
-        <!--用户昵称-->
-        <TextView
-            android:id="@+id/tv_nick_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|bottom"
-            android:layout_marginBottom="44dp"
-            android:text="Easter Roob"
-            android:textColor="#ffffff"
-            android:textSize="16dp" />
-        <!--上升星座-->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_marginBottom="104dp"
-            android:layout_marginLeft="48dp"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/iv_rise"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/div" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="上升星座"
-                android:textColor="#ffffff"
-                android:textSize="16dp" />
-        </LinearLayout>
-
-        <!--太阳星座-->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right|bottom"
-            android:layout_marginBottom="154dp"
-            android:layout_marginRight="39dp"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/iv_sun"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/div" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="太阳星座"
-                android:textColor="#ffffff"
-                android:textSize="16dp" />
-        </LinearLayout>
-
-        <!--月亮星座-->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right|bottom"
-            android:layout_marginBottom="10dp"
-            android:layout_marginRight="79dp"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/iv_moon"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/div" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="月亮星座"
-                android:textColor="#ffffff"
-                android:textSize="16dp" />
-        </LinearLayout>
-    </FrameLayout>
-    <!--下面的话题资料设置-->
-    <FrameLayout
+    <!--内容部分-->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#282142">
+        android:background="#282142"
+        android:orientation="vertical">
 
+        <!--修改密码和绑定账号部分-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#2f2a42"
+            android:layout_marginTop="16dp"
+            android:background="#2f2a40"
             android:orientation="vertical">
             <!--分割线-->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginTop="14dp"
                 android:background="#22ffffff" />
-            <!--我的话题模块-->
+            <!--修改密码-->
             <RelativeLayout
-                android:id="@+id/rl_topic"
+                android:id="@+id/rl_modify_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/slt_usercenter"
@@ -163,7 +54,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="10dp"
                     android:layout_toEndOf="@+id/flag1"
-                    android:text="我的话题"
+                    android:text="修改密码"
                     android:textColor="#ffffff"
                     android:textSize="16dp" />
 
@@ -175,15 +66,15 @@
                     android:layout_marginRight="15dp"
                     android:background="#00ff00" />
             </RelativeLayout>
-            <!--分割线-->
+            <!--分割线   这个分割线需要控制显示与隐藏  -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_marginLeft="20dp"
                 android:background="#22ffffff" />
-            <!--我的资料-->
+            <!--绑定账号-->
             <RelativeLayout
-                android:id="@+id/rl_personal_data"
+                android:id="@+id/rl_bind_account"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/slt_usercenter"
@@ -206,7 +97,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="10dp"
                     android:layout_toEndOf="@+id/flag2"
-                    android:text="我的资料"
+                    android:text="绑定账号"
                     android:textColor="#ffffff"
                     android:textSize="16dp" />
 
@@ -222,11 +113,26 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginLeft="20dp"
                 android:background="#22ffffff" />
-            <!--设置-->
+        </LinearLayout>
+
+
+        <!--检查更新  已经反馈  关于我们-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="#2f2a40"
+            android:orientation="vertical">
+            <!--分割线-->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#22ffffff" />
+
+            <!--检查更新-->
             <RelativeLayout
-                android:id="@+id/rl_setting"
+                android:id="@+id/rl_check_update"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/slt_usercenter"
@@ -249,7 +155,93 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="10dp"
                     android:layout_toEndOf="@+id/flag3"
-                    android:text="设置"
+                    android:text="检查更新"
+                    android:textColor="#ffffff"
+                    android:textSize="16dp" />
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="15dp"
+                    android:background="#00ff00" />
+            </RelativeLayout>
+            <!--分割线-->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="20dp"
+                android:background="#22ffffff" />
+            <!--意见反馈-->
+            <RelativeLayout
+                android:id="@+id/rl_feedback"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/slt_usercenter"
+                android:clickable="true"
+                android:paddingBottom="14.5dp"
+                android:paddingTop="14dp">
+
+                <ImageView
+                    android:id="@+id/flag4"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:background="#00ff00" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/flag4"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@+id/flag4"
+                    android:text="意见反馈"
+                    android:textColor="#ffffff"
+                    android:textSize="16dp" />
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="15dp"
+                    android:background="#00ff00" />
+            </RelativeLayout>
+            <!--分割线-->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="20dp"
+                android:background="#22ffffff" />
+            <!--关于我们-->
+            <RelativeLayout
+                android:id="@+id/rl_about_me"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/slt_usercenter"
+                android:clickable="true"
+                android:paddingBottom="14.5dp"
+                android:paddingTop="14dp">
+
+                <ImageView
+                    android:id="@+id/flag5"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:background="#00ff00" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/flag5"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@+id/flag5"
+                    android:text="关于我们"
                     android:textColor="#ffffff"
                     android:textSize="16dp" />
 
@@ -268,18 +260,17 @@
                 android:background="#22ffffff" />
         </LinearLayout>
 
-        <Button
-            android:id="@+id/btn"
+        <!--退出登录-->
+        <TextView
+            android:id="@+id/tv_logout"
+            android:layout_marginTop="24dp"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_gravity="bottom"
-            android:layout_marginBottom="50dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="50dp"
-            android:layout_marginTop="40dp"
-            android:background="#2a1825"
-            android:text="登录临时跳转"
-            android:textColor="#ffffff" />
-    </FrameLayout>
-
+            android:clickable="true"
+            android:background="@drawable/slt_usercenter"
+            android:textSize="16dp"
+            android:gravity="center"
+            android:textColor="#ffffff"
+            android:text="退出登录"
+            android:layout_height="50dp" />
+    </LinearLayout>
 </LinearLayout>

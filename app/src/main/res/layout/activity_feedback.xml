@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.youloft.lilith.ui.view.BaseToolBar
+        android:id="@+id/btl_feedback"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#282142"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/et_feedback_content"
+            android:layout_width="match_parent"
+            android:layout_height="183dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="11dp"
+            android:background="@drawable/shp_feedback_bg"
+            android:gravity="top"
+            android:hint="请输入遇到的问题或建议..."
+            android:padding="10dp"
+            android:textColor="#999999"
+            android:textColorHint="#999999"
+            android:textSize="15dp" />
+
+        <EditText
+            android:id="@+id/et_feedback_phone"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/shp_feedback_bg"
+            android:hint="联系电话"
+            android:inputType="number"
+            android:padding="10dp"
+            android:textColor="#999999"
+            android:textColorHint="#999999"
+            android:textSize="15dp" />
+
+        <Button
+            android:id="@+id/btn_commit"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="68dp"
+            android:background="@drawable/slt_login_btn"
+            android:text="提交"
+            android:textColor="#ffffff"
+            android:textSize="17dp" />
+    </LinearLayout>
+</LinearLayout>
