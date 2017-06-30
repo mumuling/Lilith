@@ -10,6 +10,9 @@ import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 
+import com.alibaba.android.arouter.facade.annotation.Autowired;
+import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.widgets.webkit.URLProtocolHandler;
 import com.youloft.lilith.common.widgets.webkit.WebChromeClientEx;
@@ -22,7 +25,11 @@ import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 /**
  * 网页Activity
  */
+@Route(path = "/ui/web")
 public class WebActivity extends AppCompatActivity implements WebChromeClientEx.IFullScreenHandler {
+
+    @Autowired(name = "url")
+    String mParamsUrl;// 通过name来映射URL中的不同参数
 
     private ViewGroup mWebGroup;
 
@@ -38,6 +45,7 @@ public class WebActivity extends AppCompatActivity implements WebChromeClientEx.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ARouter.getInstance().inject(this);
         setContentView(R.layout.activity_web);
         mProtocolHandler = new URLProtocolHandler(this) {
             @Override
@@ -55,7 +63,7 @@ public class WebActivity extends AppCompatActivity implements WebChromeClientEx.
         mFullScreenGroup = (ViewGroup) findViewById(R.id.full_container);
         mWebGroup = (ViewGroup) findViewById(R.id.web_container);
         mWebWindowManager = new WebWindowManager<>(this, mWebGroup, mProtocolHandler, this);
-        loadUrl("https://c.51wnl.com/wnl_feedback_new/android.html?pushToken=[PUSHTOKEN]&appver=[APPVERSION]&osver=[OSVERSION]&deviceType=[DEVICETYPE]&userId=[WNLUSERID]&deviceId=[DEVICEID]");
+        loadUrl(mParamsUrl);
     }
 
     /**

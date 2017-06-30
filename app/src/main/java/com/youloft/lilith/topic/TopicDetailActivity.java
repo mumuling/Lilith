@@ -1,14 +1,12 @@
 package com.youloft.lilith.topic;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
-import com.youloft.lilith.common.GlideRequest;
-import com.youloft.lilith.common.GlideRequests;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.ui.GlideCircleTransform;
 import com.youloft.lilith.ui.view.BaseToolBar;
@@ -54,7 +52,8 @@ public class TopicDetailActivity extends BaseActivity {
 
             @Override
             public void OnTitleBtnClick() {
-
+                startActivity(new Intent(TopicDetailActivity.this,PointDetailActivity.class));
+                overridePendingTransition(R.anim.slide_in_bottom,0);
             }
 
             @Override

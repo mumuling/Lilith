@@ -21,6 +21,5 @@ public class ShareHandle extends AbsHandle {
      */
     @Override
     public void handle(Activity activity, WebView webView, String url, String action, String params) {
-
     }
 }

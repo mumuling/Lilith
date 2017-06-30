@@ -3,7 +3,9 @@ package com.youloft.lilith;
 import android.app.Application;
 import android.content.Context;
 
+import com.youloft.lilith.api.LilithApi;
 import com.youloft.lilith.common.cache.CacheStore;
+import com.youloft.lilith.common.net.APIFactory;
 import com.youloft.lilith.common.net.OnlineConfigAgent;
 import com.youloft.lilith.common.utils.Utils;
 import com.youloft.lilith.push.PushMessageHandler;
@@ -78,6 +80,15 @@ public class LLApplication extends Application {
      */
     public static CacheStore getApiCache() {
         return CacheStore.getStore("api");
+    }
+
+    /**
+     * 获取Lilith相关Api
+     *
+     * @return
+     */
+    public static LilithApi getLilithApi() {
+        return APIFactory.createApiInstance(AppConfig.SERVER_LILITH, LilithApi.class);
     }
 
     /**

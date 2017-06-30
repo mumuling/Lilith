@@ -117,7 +117,7 @@ public class CacheStore {
                 return upstream.doOnNext(new Consumer<T>() {
                     @Override
                     public void accept(@NonNull T t) throws Exception {
-                        if (t == null)
+                        if (t == null || TextUtils.isEmpty(key))
                             return;
                         CacheObj<T> cacheObj = new CacheObj<T>(key, t);
                         mMemoryCache.put(key, cacheObj);
@@ -192,27 +192,6 @@ public class CacheStore {
      * @return
      */
     public <T> Observable<CacheObj<T>> getCacheObj(final String key, final Class<T> type) {
-//        return Observable.just(key).map(new Function<String, CacheObj<T>>() {
-//            @Override
-//            public CacheObj<T> apply(@NonNull String key) throws Exception {
-//                CacheObj<T> retCache = (CacheObj<T>) mMemoryCache.get(key);
-//                if (retCache != null) {
-//                    return retCache;
-//                }
-//                if (mDiskCache != null) {
-//                    String diskStr = mDiskCache.get(key).getString(0);
-//                    long cacheTime = mDiskCache.get(key).getFile(0).lastModified();
-//                    if (TextUtils.isEmpty(diskStr)) {
-//                        return null;
-//                    }
-//                    retCache.data = JSON.parseObject(diskStr, type);
-//                    retCache.cacheStamp = cacheTime;
-//                    mMemoryCache.put(key, retCache);
-//                }
-//                return retCache;
-//            }
-//        });
-
         return Observable.create(new ObservableOnSubscribe<CacheObj<T>>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<CacheObj<T>> e) throws Exception {
@@ -329,5 +308,21 @@ public class CacheStore {
             return retCache.data;
         }
         return null;
+    }
+
+    public boolean hasCache(String cacheKey) {
+        try {
+            CacheObj o = (CacheObj) mMemoryCache.get(cacheKey);
+            if (o != null) {
+                return true;
+            }
+            if (mDiskCache == null) {
+                return false;
+            }
+            DiskLruCache.Value value = mDiskCache.get(cacheKey);
+            return value != null;
+        } catch (Throwable e) {
+            return false;
+        }
     }
 }

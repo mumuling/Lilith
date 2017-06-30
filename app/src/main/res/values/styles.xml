@@ -9,6 +9,10 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="numberPickerStyle">@style/NumberPicker</item>
     </style>
+    <style name="TranslucentThem" parent="AppTheme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@color/translucent</item>
+    </style>
 
     <style name="BaseDialog" parent="DialogTheme">
 

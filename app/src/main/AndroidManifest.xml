@@ -25,9 +25,7 @@
 
             <!-- Schame -->
             <intent-filter>
-                <data
-                    android:host="m.aliyun.com"
-                    android:scheme="arouter" />
+                <data android:scheme="arouter" />
 
                 <action android:name="android.intent.action.VIEW" />
 
@@ -47,11 +45,13 @@
             android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity
             android:name=".topic.TopicDetailActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".topic.PointDetailActivity"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:launchMode="singleTop" />
-        <activity android:name=".topic.PointDetailActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTop"/>
+            android:theme="@style/TranslucentThem" />
 
         <!-- share begin -->
 
@@ -89,7 +89,9 @@
             android:name="UMENG_APPKEY"
             android:value="5126ff896c738f2bfa000438" />
         <!-- share end -->
-        <activity android:name=".login.LoginActivity"/>
+        <activity android:name=".ARouterTestActivity" />
+        <activity android:name=".login.LoginActivity" />
+        <activity android:name=".login.QuickLoginActivity" />
     </application>
 
 </manifest>

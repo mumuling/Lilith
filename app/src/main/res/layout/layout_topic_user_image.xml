@@ -7,41 +7,41 @@
     <RelativeLayout
         android:layout_width="108dp"
         android:layout_height="wrap_content">
-    <de.hdodenhof.circleimageview.CircleImageView
+    <ImageView
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:id="@+id/user_image6"
         android:layout_alignParentRight="true"
         android:src="@drawable/div1" />
-    <de.hdodenhof.circleimageview.CircleImageView
+    <ImageView
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:id="@+id/user_image5"
         android:layout_alignParentRight="true"
         android:layout_marginRight="4dp"
         android:src="@drawable/div2" />
-    <de.hdodenhof.circleimageview.CircleImageView
+    <ImageView
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:id="@+id/user_image4"
         android:layout_toLeftOf="@id/user_image5"
         android:layout_marginRight="-11dp"
         android:src="@drawable/div" />
-    <de.hdodenhof.circleimageview.CircleImageView
+    <ImageView
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:id="@+id/user_image3"
         android:layout_toLeftOf="@id/user_image4"
         android:layout_marginRight="5dp"
         android:src="@drawable/div" />
-    <de.hdodenhof.circleimageview.CircleImageView
+    <ImageView
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:id="@+id/user_image2"
         android:layout_toLeftOf="@id/user_image3"
         android:layout_marginRight="5dp"
         android:src="@drawable/div" />
-    <de.hdodenhof.circleimageview.CircleImageView
+    <ImageView
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:id="@+id/user_image1"

@@ -24,8 +24,7 @@ import butterknife.Unbinder;
 public class MEFragment extends BaseFragment {
 
 
-    @BindView(R.id.btn)
-    Button btn;
+
     Unbinder unbinder;
 
     public MEFragment() {
@@ -39,12 +38,7 @@ public class MEFragment extends BaseFragment {
         // TODO: inflate a fragment view
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
         unbinder = ButterKnife.bind(this, rootView);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(mContext, LoginActivity.class));
-            }
-        });
+
         return rootView;
     }
 
