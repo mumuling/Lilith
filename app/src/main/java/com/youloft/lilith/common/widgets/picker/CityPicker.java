@@ -21,11 +21,6 @@ import com.youloft.lilith.common.widgets.picker.wheel.adapters.ArrayWheelAdapter
 import java.util.HashMap;
 import java.util.Map;
 
-import io.reactivex.Observable;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
-
 /**
  * 省市区三级选择
  * 作者：liji on 2015/12/17 10:40

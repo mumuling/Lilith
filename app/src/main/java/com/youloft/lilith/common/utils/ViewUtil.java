@@ -1,6 +1,10 @@
 package com.youloft.lilith.common.utils;
 
 
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.text.TextUtils;
+
 /**
  * View相关Util
  * Created by coder on 2017/6/26.
@@ -71,5 +75,23 @@ public class ViewUtil {
         }
         int statusHeight = Utils.getContext().getResources().getDimensionPixelSize(resheigtId);
         return statusHeight;
+    }
+
+    /**
+     * 渲染文字位置居中，这儿做了处理，解决android默认渲染方式上下不平均问题
+     * @param canvas
+     * @param renderDate
+     * @param centerX 位置的中心点x坐标
+     * @param centerY   位置的中心点y坐标
+     * @param paint
+     */
+    public static void renderTextByCenter(Canvas canvas, String renderDate, float centerX, float centerY, Paint paint){
+        if (TextUtils.isEmpty(renderDate)) {
+            return;
+        }
+        Paint.FontMetricsInt fm = paint.getFontMetricsInt();
+
+        float startY = centerY - fm.descent + (fm.descent - fm.ascent)/ 2;
+        canvas.drawText(renderDate, (centerX - paint.measureText(renderDate)/2), startY, paint);
     }
 }
