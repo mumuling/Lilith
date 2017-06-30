@@ -1,13 +1,16 @@
 package com.youloft.lilith.ui.fragment;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseFragment;
+import com.youloft.lilith.common.widgets.picker.CityPicker;
 
 /**
  * Created by zchao on 2017/6/27.
@@ -16,6 +19,9 @@ import com.youloft.lilith.common.base.BaseFragment;
  */
 
 public class XZFragment extends BaseFragment {
+
+    private CityPicker cityPicker;
+
     public XZFragment() {
         super(R.layout.fragment_xz);
     }
@@ -23,12 +29,33 @@ public class XZFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        TextView viewById = (TextView) view.findViewById(R.id.text);
+        final Button viewById = (Button) view.findViewById(R.id.text);
+        Button show = (Button) view.findViewById(R.id.btn1);
         viewById.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ARouter.getInstance().build("/test/arouterTest").navigation();
+                CityPicker cp = CityPicker.getDefCityPicker(getContext());
+                cp.setOnCityItemClickListener(new CityPicker.OnCityItemClickListener() {
+                    @Override
+                    public void onSelected(String... citySelected) {
+                        String s = "";
+                        for (int i = 0; i < citySelected.length; i++) {
+                            s += citySelected[i];
+                        }
+                        viewById.setText(s);
+                    }
+
+                    @Override
+                    public void onCancel() {
+
+                    }
+                }).show();
+
+
             }
         });
+
+
+
     }
 }

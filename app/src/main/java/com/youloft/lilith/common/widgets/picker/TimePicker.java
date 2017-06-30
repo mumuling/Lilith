@@ -8,6 +8,7 @@ import com.youloft.lilith.R;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import com.youloft.lilith.common.widgets.picker.NumberPicker;
 
 
 /**
@@ -19,7 +20,7 @@ public class TimePicker extends FrameLayout {
 
     protected GregorianCalendar mDate = new GregorianCalendar();
 
-    protected NumberPicker mHour;
+    protected com.youloft.lilith.common.widgets.picker.NumberPicker mHour;
     protected NumberPicker mMin;
 
     public static int HOUR_24 = 1; //使用24小时制

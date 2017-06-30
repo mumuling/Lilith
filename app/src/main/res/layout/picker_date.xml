@@ -4,19 +4,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.youloft.lilith.common.widgets.picker.NumberPicker
+    <com.youloft.lilith.common.widgets.picker.wheel.NumberPicker
         android:id="@+id/year"
         android:layout_width="0dip"
         android:layout_weight="1"
         android:layout_height="match_parent" />
 
-    <com.youloft.lilith.common.widgets.picker.NumberPicker
+    <com.youloft.lilith.common.widgets.picker.wheel.NumberPicker
         android:id="@+id/month"
         android:layout_width="0dip"
         android:layout_weight="1"
         android:layout_height="match_parent" />
 
-    <com.youloft.lilith.common.widgets.picker.NumberPicker
+    <com.youloft.lilith.common.widgets.picker.wheel.NumberPicker
         android:id="@+id/day"
         android:layout_width="0dip"
         android:layout_weight="1"
