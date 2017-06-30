@@ -1,5 +1,7 @@
 package com.youloft.lilith.common.rx;
 
+import android.util.Log;
+
 import io.reactivex.Observer;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
@@ -30,7 +32,9 @@ public abstract class RxObserver<T> implements Observer<T> {
         onFailed(e);
     }
 
-    protected  void onFailed(Throwable e){};
+    protected void onFailed(Throwable e) {
+        Log.e("RxObserver", "onFailed", e);
+    }
 
 
     @Override

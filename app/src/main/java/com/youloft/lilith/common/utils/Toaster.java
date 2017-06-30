@@ -432,6 +432,15 @@ public class Toaster {
      */
     private static void show(final CharSequence text, final int duration) {
         cancel();
+        if (Looper.myLooper() != Looper.getMainLooper()) {
+            sHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    show(text, duration);
+                }
+            });
+            return;
+        }
         boolean isCustom = false;
         if (sViewWeakReference != null) {
             final View view = sViewWeakReference.get();

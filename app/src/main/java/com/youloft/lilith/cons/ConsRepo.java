@@ -1,6 +1,7 @@
 package com.youloft.lilith.cons;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.youloft.lilith.LLApplication;
 import com.youloft.lilith.common.AbstractDataRepo;
 
 import java.util.HashMap;
@@ -16,5 +17,10 @@ public class ConsRepo extends AbstractDataRepo {
     public Flowable<HashMap> testData() {
         return unionFlow("http://op.juhe.cn/onebox/weather/query", null, null, false, HashMap.class, "xxo.xxo", 5000);
     }
+
+    public Flowable<String> getBaiduContent() {
+        return unionRetrofit(LLApplication.getLilithApi().getBaiduContent(), String.class, "baidu_c", 10000);
+    }
+
 
 }

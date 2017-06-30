@@ -27,6 +27,11 @@ public class AppConfig {
     public static final String UMENG_APPKEY = "";//umeng
     public static final String UMENG_PUSH_SECRET = "";//推送
 
+    /**
+     * 服务器相关
+     */
+    public static final String SERVER_LILITH = "http://www.baidu.com";
+
     /*包名*/
     public static final String Bundle = BuildConfig.APPLICATION_ID;
     public static final int VERSION_CODE = BuildConfig.VERSION_CODE;

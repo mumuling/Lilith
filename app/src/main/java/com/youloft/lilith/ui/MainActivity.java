@@ -21,6 +21,7 @@ import com.youloft.lilith.common.net.OnlineConfigAgent;
 import com.youloft.lilith.common.rx.RxFlowableUtil;
 import com.youloft.lilith.common.rx.RxObservableUtil;
 import com.youloft.lilith.common.rx.RxObserver;
+import com.youloft.lilith.common.utils.LogUtil;
 import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.cons.ConsRepo;
 import com.youloft.lilith.info.UserRepo;
@@ -42,6 +43,7 @@ import java.util.logging.LogManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.FlowableSubscriber;
 import io.reactivex.Observable;
@@ -89,15 +91,15 @@ public class MainActivity extends BaseActivity {
         OnlineConfigAgent.getInstance().onAppStart(getApplicationContext());
         mMainTabManager = new TabManager(this);
 
-        mUserRepo.loginWithPhone("aa")
-                .compose(this.<HashMap>bindToLifecycle())
-                .toObservable()
-                .subscribe(new RxObserver<HashMap>() {
-                    @Override
-                    public void onDataSuccess(HashMap hashMap) {
-
-                    }
-                });
+//        mUserRepo.loginWithPhone("aa")
+//                .compose(this.<HashMap>bindToLifecycle())
+//                .toObservable()
+//                .subscribe(new RxObserver<HashMap>() {
+//                    @Override
+//                    public void onDataSuccess(HashMap hashMap) {
+//
+//                    }
+//                });
 
         Toaster.showShort("Fuck");
 
@@ -105,9 +107,9 @@ public class MainActivity extends BaseActivity {
 
         Toaster.showShort("Fuck2");
 
-        ARouter.getInstance().build("/ui/web")
-                .withString("url", "http://www.tudou.com")
-                .navigation();
+//        ARouter.getInstance().build("/ui/web")
+//                .withString("url", "http://www.tudou.com")
+//                .navigation();
 
         mConsRepo.testData()
                 .compose(this.<HashMap>bindToLifecycle())
@@ -125,6 +127,36 @@ public class MainActivity extends BaseActivity {
                         Log.d(TAG, "accept() called with: hashMap = [" + hashMap + "]");
                     }
                 });
+
+
+        mConsRepo.getBaiduContent()
+                .compose(this.<String>bindToLifecycle())
+                .observeOn(AndroidSchedulers.mainThread())
+                .toObservable()
+                .subscribe(new RxObserver<String>() {
+                    @Override
+                    public void onDataSuccess(String s) {
+                        Toaster.showShort("Fuck---" + s);
+                        LogUtil.d("fuck", s);
+                    }
+                });
+
+//        LLApplication
+//                .getLilithApi()
+//                .getBaiduContent()
+//                .<String>toFlowable(BackpressureStrategy.DROP)
+//                .compose(RxFlowableUtil.<String>applyNetIoSchedulers())
+//                .compose(LLApplication.getApiCache().<String>cacheTransform("baidu"))
+//                .toObservable()
+//                .compose(this.<String>bindToLifecycle())
+//                .compose(RxObservableUtil.<String>applyIOSchedulers())
+//                .subscribe(new RxObserver<String>() {
+//                    @Override
+//                    public void onDataSuccess(String s) {
+//                        Toaster.showShort("Content:" + s);
+//                    }
+//                });
+
     }
 
 }

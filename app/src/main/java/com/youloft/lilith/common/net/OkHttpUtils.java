@@ -79,6 +79,10 @@ public class OkHttpUtils {
                 .build();
     }
 
+    public OkHttpClient getClient() {
+        return client;
+    }
+
     /**
      * 拦截器，用于处理公共参数
      */
