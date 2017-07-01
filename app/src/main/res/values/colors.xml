@@ -6,4 +6,11 @@
 
     <color name="province_line_border">#C7C7C7</color>
     <color name="translucent">#00000000</color>
-</resources>
+
+    <!--运势颜色-->
+    <!--<color name="constellation_luck_color">#de5deb</color>-->
+    <!--<color name="constellation_love_color">#ff6161</color>-->
+    <!--<color name="constellation_money_color">#ffb74a</color>-->
+    <!--<color name="constellation_work_color">#49b5ff</color>-->
+    </resources>
+
