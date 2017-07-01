@@ -10,10 +10,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <com.youloft.lilith.cons.view.LuckView
-                android:id="@+id/luck"
+                android:id="@+id/luck1"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="#2f2a40"
+                android:layout_gravity="center"/>
+            <com.youloft.lilith.cons.view.LuckView
+                android:id="@+id/luck2"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="#2f2a40"
+                android:layout_gravity="center"/>
+            <com.youloft.lilith.cons.view.LuckView
+                android:id="@+id/luck3"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="#2f2a40"
+                android:layout_gravity="center"/>
+            <com.youloft.lilith.cons.view.LuckView
+                android:id="@+id/luck4"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:background="#2f2a40"

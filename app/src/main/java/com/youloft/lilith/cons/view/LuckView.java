@@ -19,6 +19,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.youloft.lilith.R;
+import com.youloft.lilith.common.utils.LogUtil;
 import com.youloft.lilith.common.utils.SafeUtil;
 import com.youloft.lilith.common.utils.ViewUtil;
 import com.youloft.lilith.cons.bean.LuckData;
@@ -102,22 +103,31 @@ public class LuckView extends View {
 
     }
 
+    /**
+     * 设置数据
+     * @param date
+     */
     public void setDate(LuckData date) {
         if (date == null) {
             return;
         }
         mData = date;
-
         readyData();
-
     }
 
     private void readyData() {
         if (mData == null) {
             return;
         }
-        initTitle();
-        initPathData();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                initTitle();
+                setTitleLineBound();
+                initPathData();
+                postInvalidate();
+            }
+        }).start();
     }
 
     /**
@@ -125,6 +135,9 @@ public class LuckView extends View {
      */
     private void initPathData() {
         ArrayList<LuckData.LuckItem> data = mData.data;
+        if (data.isEmpty()) {
+            return;
+        }
         //先算出范围大小
         int min = 0;
         int max = 0;
@@ -153,9 +166,16 @@ public class LuckView extends View {
         }
     }
 
+    @Override
+    public void draw(Canvas canvas) {
+        long start = System.currentTimeMillis();
+        super.draw(canvas);
+        LogUtil.d("LuckView","draw time=" + (System.currentTimeMillis() - start));
+    }
 
     /**
-     * 生成path
+     * 生成path,只有与path有关的才能在这里边处理；在这里边处理是应为path跟View大小有关。
+     * 在fragment中有时候回出现重建后view第一时间没有宽度，导致path绘制不出来；
      */
     private void fixPath() {
         mLinePath.rewind();
@@ -179,6 +199,9 @@ public class LuckView extends View {
             mIconRes.setBounds((int)(mCurPosition.x - mDP10), (int)(mCurPosition.y- mDP10), (int)(mCurPosition.x + mDP10), (int)(mCurPosition.y+ mDP10));
         }
 
+    }
+
+    private void setTitleLineBound() {
         mTextPaint.setTextSize(mSizeTitle);
         float titleWidth = mTextPaint.measureText(mTitle);
         float hafTitleWidth = titleWidth/2;
@@ -190,6 +213,9 @@ public class LuckView extends View {
         mRightConsLine.setBounds(rectF);
     }
 
+    /**
+     * 初始化title等数据
+     */
     private void initTitle() {
         int iconRes = 0;
         switch (mData.type) {
@@ -253,16 +279,16 @@ public class LuckView extends View {
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         mItemWidth = (w - getPaddingRight() - getPaddingLeft()) / 7;
-        fixPath();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        fixPath();
         //绘制title
         mTextPaint.setTextSize(mSizeTitle);
         mTextPaint.setColor(mColor);
-
+        //绘制顶部两根线
         ViewUtil.renderTextByCenter(canvas, mTitle, getWidth()/2, mPathTop/2, mTextPaint);
         if (mLeftConsLine != null) {
             mLeftConsLine.draw(canvas);
@@ -304,13 +330,11 @@ public class LuckView extends View {
             mIconRes.draw(canvas);
         }
 
-        //绘制下方文字
+        //绘制下方日期文字
         mTextPaint.setTextSize(mSizeDate);
         mTextPaint.setColor(Color.WHITE);
         ViewUtil.renderTextList(canvas, mDateStr, mTextPaint, 0, mPathRect.height() + mWordCentY, mItemWidth);
         canvas.restore();
-
-
 
     }
 

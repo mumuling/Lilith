@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * version:
  */
 
-public class LuckData {
+public class LuckData extends Object{
     public ArrayList<LuckItem> data;   //每天的数据
     public int type;                   //类型{1：概括运；2：感情运；3：财富运；4工作运}
 
