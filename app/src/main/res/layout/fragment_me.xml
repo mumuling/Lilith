@@ -10,19 +10,22 @@
         android:layout_height="270dp"
         android:background="#4c2c4b">
 
+        <!--中间的头像和小的星座-->
         <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|bottom"
             android:layout_marginBottom="70dp">
-
+            <!--用户头像-->
             <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/iv_header"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/div" />
-
+            <!--我的星座-->
             <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/iv_constellation"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_gravity="right"
@@ -30,7 +33,9 @@
                 android:scaleType="centerCrop" />
         </FrameLayout>
 
+        <!--用户昵称-->
         <TextView
+            android:id="@+id/tv_nick_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|bottom"
@@ -49,6 +54,7 @@
             android:orientation="vertical">
 
             <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/iv_rise"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:scaleType="centerCrop"
@@ -74,13 +80,13 @@
             android:orientation="vertical">
 
             <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/iv_sun"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/div" />
 
             <TextView
-                android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
@@ -88,6 +94,7 @@
                 android:textColor="#ffffff"
                 android:textSize="16dp" />
         </LinearLayout>
+
         <!--月亮星座-->
         <LinearLayout
             android:layout_width="wrap_content"
@@ -99,6 +106,7 @@
             android:orientation="vertical">
 
             <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/iv_moon"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:scaleType="centerCrop"
@@ -114,88 +122,165 @@
         </LinearLayout>
     </FrameLayout>
     <!--下面的话题资料设置-->
-    <LinearLayout
-        android:orientation="vertical"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#282142">
 
-        <!--分割线-->
-        <View
-            android:background="#22ffffff"
-            android:layout_marginTop="14dp"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0.5dp"/>
+            android:layout_height="wrap_content"
+            android:background="#2f2a42"
+            android:orientation="vertical">
+            <!--分割线-->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="14dp"
+                android:background="#22ffffff" />
+            <!--我的话题模块-->
+            <RelativeLayout
+                android:id="@+id/rl_topic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/slt_usercenter"
+                android:clickable="true"
+                android:paddingBottom="14.5dp"
+                android:paddingTop="14dp">
 
-        <!--我的话题模块-->
-        <LinearLayout
-            android:orientation="horizontal"
-            android:focusable="true"
-            android:background="@drawable/slt_usercenter"
-            android:gravity="center_vertical"
-            android:clickable="true"
-            android:layout_width="match_parent"
-            android:layout_height="51dp">
-            <TextView
-                android:layout_marginLeft="45dp"
-                android:textSize="16dp"
-                android:textColor="#ffffff"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="我的话题"/>
-        </LinearLayout>
-        <!--分割线-->
-        <View
-            android:background="#22ffffff"
-            android:layout_marginLeft="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"/>
-        <!--我的资料-->
-        <LinearLayout
-            android:orientation="horizontal"
-            android:focusable="true"
-            android:clickable="true"
-            android:background="@drawable/slt_usercenter"
-            android:gravity="center_vertical"
-            android:layout_width="match_parent"
-            android:layout_height="51dp">
-            <TextView
-                android:layout_marginLeft="45dp"
-                android:textSize="16dp"
-                android:textColor="#ffffff"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="我的资料"/>
-        </LinearLayout>
-        <!--分割线-->
-        <View
-            android:background="#22ffffff"
-            android:layout_marginLeft="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"/>
-        <!--设置-->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="51dp"
-            android:clickable="true"
-            android:background="@drawable/slt_usercenter"
-            android:focusable="true"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/flag1"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:src="@drawable/mine_talk_icon" />
 
-            <TextView
-                android:layout_width="wrap_content"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/flag1"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@+id/flag1"
+                    android:text="我的话题"
+                    android:textColor="#ffffff"
+                    android:textSize="16dp" />
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="15dp"
+                    android:src="@drawable/mine_more_icon" />
+            </RelativeLayout>
+            <!--分割线-->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="20dp"
+                android:background="#22ffffff" />
+            <!--我的资料-->
+            <RelativeLayout
+                android:id="@+id/rl_personal_data"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="45dp"
-                android:text="设置"
-                android:textColor="#ffffff"
-                android:textSize="16dp" />
+                android:background="@drawable/slt_usercenter"
+                android:clickable="true"
+                android:paddingBottom="14.5dp"
+                android:paddingTop="14dp">
+
+                <ImageView
+                    android:id="@+id/flag2"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:src="@drawable/mine_data_icon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/flag2"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@+id/flag2"
+                    android:text="我的资料"
+                    android:textColor="#ffffff"
+                    android:textSize="16dp" />
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="15dp"
+                    android:src="@drawable/mine_more_icon" />
+            </RelativeLayout>
+            <!--分割线-->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="20dp"
+                android:background="#22ffffff" />
+            <!--设置-->
+            <RelativeLayout
+                android:id="@+id/rl_setting"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/slt_usercenter"
+                android:clickable="true"
+                android:paddingBottom="14.5dp"
+                android:paddingTop="14dp">
+
+                <ImageView
+                    android:id="@+id/flag3"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:src="@drawable/mine_set_icon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/flag3"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@+id/flag3"
+                    android:text="设置"
+                    android:textColor="#ffffff"
+                    android:textSize="16dp" />
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginRight="15dp"
+                    android:src="@drawable/mine_more_icon"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="15dp" />
+            </RelativeLayout>
+            <!--分割线-->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#22ffffff" />
         </LinearLayout>
-        <!--分割线-->
-        <View
-            android:background="#22ffffff"
+
+        <Button
+            android:id="@+id/btn"
             android:layout_width="match_parent"
-            android:layout_height="0.5dp"/>
-    </LinearLayout>
+            android:layout_height="40dp"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="50dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="40dp"
+            android:background="#2a1825"
+            android:text="登录临时跳转"
+            android:textColor="#ffffff" />
+    </FrameLayout>
 
 </LinearLayout>
