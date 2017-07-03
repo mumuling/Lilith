@@ -7,10 +7,114 @@
     <com.youloft.lilith.ui.view.BaseToolBar
         android:id="@+id/btl_about_me"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    <TextView
+        android:layout_height="wrap_content" />
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="关于我们"/>
+        android:background="#282142">
+        <!--圆形的icon-->
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="@dimen/head_portrait"
+            android:layout_height="@dimen/head_portrait"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="50dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/div" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="146dp"
+            android:text="版本号: 1.0"
+            android:textColor="#ffffff"
+            android:textSize="15dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="49dp"
+            android:layout_marginRight="49dp"
+            android:layout_marginTop="222dp"
+            android:orientation="vertical">
+
+            <!--微信-->
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:src="@drawable/binding_wechat_icon" />
+
+                <TextView
+                    android:text="微信:  搜索XXXXXXXXX"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="23dp"
+                    android:textColor="#ffffff"
+                    android:textSize="15dp" />
+            </FrameLayout>
+
+            <!--邮箱-->
+            <FrameLayout
+                android:layout_marginTop="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:background="#00ff00"/>
+
+                <TextView
+                    android:text="邮箱：xingzuo @youloft.com"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="23dp"
+                    android:textColor="#ffffff"
+                    android:textSize="15dp" />
+            </FrameLayout>
+
+            <!--微博-->
+            <FrameLayout
+                android:layout_marginTop="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:src="@drawable/binding_weibo_icon" />
+
+                <TextView
+                    android:text="微博：weibo.com/xingzuo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="23dp"
+                    android:textColor="#ffffff"
+                    android:textSize="15dp" />
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:textSize="15dp"
+            android:layout_marginBottom="45dp"
+            android:text="重庆可兰达科技有限公司"
+            android:layout_gravity="bottom|center_horizontal"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:textSize="11dp"
+            android:layout_marginBottom="20dp"
+            android:text="Copyright ® CALENDAR Tech., All Rights Reserved"
+            android:layout_gravity="bottom|center_horizontal"/>
+    </FrameLayout>
 </LinearLayout>
