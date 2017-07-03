@@ -3,11 +3,13 @@ package com.youloft.lilith.topic;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.widget.ImageView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.base.BaseActivity;
+import com.youloft.lilith.topic.adapter.TopicDetailAdapter;
 import com.youloft.lilith.ui.GlideCircleTransform;
 import com.youloft.lilith.ui.view.BaseToolBar;
 
@@ -25,10 +27,13 @@ import butterknife.ButterKnife;
 
 public class TopicDetailActivity extends BaseActivity {
 
+
     @BindView(R.id.tool_bar)
     BaseToolBar toolBar;
-    @BindView(R.id.circle_image)
-    ImageView circleImage;
+    @BindView(R.id.rv_topic_detail)
+    RecyclerView rvTopicDetail;
+    private LinearLayoutManager mLayoutManager;
+    private TopicDetailAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,10 +45,11 @@ public class TopicDetailActivity extends BaseActivity {
 
     private void initView() {
         toolBar.setTitle("星座话题");
-        GlideApp.with(this).asBitmap()
-                .load(R.mipmap.er)
-                .transform(new GlideCircleTransform(this))
-                .into(circleImage);
+        mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        rvTopicDetail.setLayoutManager(mLayoutManager);
+        adapter = new TopicDetailAdapter(this);
+        rvTopicDetail.setAdapter(adapter);
         toolBar.setOnToolBarItemClickListener(new BaseToolBar.OnToolBarItemClickListener() {
             @Override
             public void OnBackBtnClick() {
@@ -52,8 +58,8 @@ public class TopicDetailActivity extends BaseActivity {
 
             @Override
             public void OnTitleBtnClick() {
-                startActivity(new Intent(TopicDetailActivity.this,PointDetailActivity.class));
-                overridePendingTransition(R.anim.slide_in_bottom,0);
+                startActivity(new Intent(TopicDetailActivity.this, PointDetailActivity.class));
+                overridePendingTransition(R.anim.slide_in_bottom, 0);
             }
 
             @Override

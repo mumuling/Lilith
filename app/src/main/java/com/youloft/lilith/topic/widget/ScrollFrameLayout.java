@@ -120,7 +120,9 @@ public class ScrollFrameLayout extends FrameLayout {
                     if ( getChildAt(0).getTop() ==96 && distance > 0) {
                         mCurrentMarginTop = mCurrentMarginTop + distance;
                         onScroll(mCurrentMarginTop, false);
-
+                        if (iscrollChange != null) {
+                            iscrollChange.move();
+                        }
                         return true;
                     }
                 }
@@ -133,6 +135,9 @@ public class ScrollFrameLayout extends FrameLayout {
 //                        mCurrentMarginTop = 0;
 //                    }
                     onScroll(mCurrentMarginTop, false);
+                    if (iscrollChange != null) {
+                        iscrollChange.move();
+                    }
                    // iscrollChange.scrolling(mCurrentMarginTop,FINISH_DISTANCE);
                     return true;
                 }
@@ -142,13 +147,15 @@ public class ScrollFrameLayout extends FrameLayout {
                 isIntercept = false;
                 if (needRcover) {
                     mCurrentMarginTop = 0;
-                   // iscrollChange.onRecover();
+                    iscrollChange.recover();
                 } else {
                     mCurrentMarginTop = getHeight();
                     postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            //iscrollChange.gofinish();
+                            if (iscrollChange != null) {
+                                iscrollChange.goFinish();
+                            }
                         }
                     },200);
                    // iscrollChange.onBacks();
@@ -165,11 +172,9 @@ public class ScrollFrameLayout extends FrameLayout {
         this.iscrollChange = iscrollChange;
     }
     public interface IscrollChange{
-        void startScrolls();
-        void scrolling(float distance, float finish_distance);
-        void onBacks();
-        void onRecover();
-        void gofinish();
+        void goFinish();
+        void recover();
+        void move();
     }
 
 }

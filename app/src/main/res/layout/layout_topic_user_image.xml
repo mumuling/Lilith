@@ -1,52 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-
-    android:orientation="horizontal">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
     <RelativeLayout
-        android:layout_width="108dp"
-        android:layout_height="wrap_content">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/rl_image_root"
+        android:layout_alignParentLeft="true">
     <ImageView
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:id="@+id/user_image6"
-        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@+id/user_image5"
+        android:layout_marginLeft="-16dp"
         android:src="@drawable/div1" />
     <ImageView
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:id="@+id/user_image5"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="4dp"
+        android:layout_toRightOf="@+id/user_image4"
+        android:layout_marginLeft="-11dp"
         android:src="@drawable/div2" />
     <ImageView
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:id="@+id/user_image4"
-        android:layout_toLeftOf="@id/user_image5"
-        android:layout_marginRight="-11dp"
+        android:layout_toRightOf="@+id/user_image3"
+        android:layout_marginLeft="5dp"
         android:src="@drawable/div" />
     <ImageView
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:id="@+id/user_image3"
-        android:layout_toLeftOf="@id/user_image4"
-        android:layout_marginRight="5dp"
+        android:layout_toRightOf="@+id/user_image2"
+        android:layout_marginLeft="5dp"
         android:src="@drawable/div" />
     <ImageView
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:id="@+id/user_image2"
-        android:layout_toLeftOf="@id/user_image3"
-        android:layout_marginRight="5dp"
+        android:layout_toRightOf="@+id/user_image1"
+        android:layout_marginLeft="5dp"
         android:src="@drawable/div" />
     <ImageView
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:id="@+id/user_image1"
-        android:layout_toLeftOf="@id/user_image2"
-        android:layout_marginRight="5dp"
+        android:layout_alignParentLeft="true"
         android:src="@drawable/div" />
     </RelativeLayout>
     <TextView
@@ -55,6 +55,12 @@
         android:layout_gravity="center_vertical"
         android:gravity="center"
         android:id="@+id/user_number"
+        android:layout_toRightOf="@+id/rl_image_root"
         android:layout_marginLeft="10dp"
         android:text="6666"/>
-</LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="立即查看"
+        android:layout_alignParentRight="true"/>
+</RelativeLayout>

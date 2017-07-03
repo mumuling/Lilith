@@ -1,4 +1,4 @@
-package com.youloft.lilith;
+package com.youloft.lilith.router;
 
 import android.net.Uri;
 import android.os.Bundle;

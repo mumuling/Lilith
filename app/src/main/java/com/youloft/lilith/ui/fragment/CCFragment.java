@@ -7,7 +7,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.youloft.lilith.R;
-import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.base.BaseFragment;
 
 /**
@@ -26,10 +25,6 @@ public class CCFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         ImageView img = (ImageView) view.findViewById(R.id.img);
         final TextView tv = (TextView) view.findViewById(R.id.text);
-        GlideApp.with(this).asBitmap()
-                .load("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1498627427494&di=3b1ca86fd98e8044541f68a8e5243902&imgtype=0&src=http%3A%2F%2Ftupian.enterdesk.com%2F2015%2Fxu%2F04%2F20%2F12%2Fzweihua11.jpg")
-                .into(img);
-
 
     }
 }

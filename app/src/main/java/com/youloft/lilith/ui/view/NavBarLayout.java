@@ -37,7 +37,7 @@ public class NavBarLayout extends LinearLayout {
 
     public NavBarLayout(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        int height = ViewUtil.dp2px(60);
+        int height = (int) ViewUtil.dp2px(60);
         setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,height));
         initDefaultTabs();
         initTabsView();

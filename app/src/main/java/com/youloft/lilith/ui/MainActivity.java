@@ -101,11 +101,11 @@ public class MainActivity extends BaseActivity {
 //                    }
 //                });
 
-        Toaster.showShort("Fuck");
-
-        Toaster.showShort("Fuck1");
-
-        Toaster.showShort("Fuck2");
+//        Toaster.showShort("Fuck");
+//
+//        Toaster.showShort("Fuck1");
+//
+//        Toaster.showShort("Fuck2");
 
 //        ARouter.getInstance().build("/ui/web")
 //                .withString("url", "http://www.tudou.com")
@@ -136,7 +136,7 @@ public class MainActivity extends BaseActivity {
                 .subscribe(new RxObserver<String>() {
                     @Override
                     public void onDataSuccess(String s) {
-                        Toaster.showShort("Fuck---" + s);
+//                        Toaster.showShort("Fuck---" + s);
                         LogUtil.d("fuck", s);
                     }
                 });

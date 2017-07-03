@@ -1,6 +1,15 @@
 package com.youloft.lilith.common.utils;
 
 
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.Point;
+import android.text.TextUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * View相关Util
  * Created by coder on 2017/6/26.
@@ -13,9 +22,9 @@ public class ViewUtil {
      * @param dpValue dp值
      * @return px值
      */
-    public static int dp2px(final float dpValue) {
+    public static float dp2px(final float dpValue) {
         final float scale = Utils.getContext().getResources().getDisplayMetrics().density;
-        return (int) (dpValue * scale + 0.5f);
+        return (dpValue * scale + 0.5f);
     }
 
     /**
@@ -24,9 +33,9 @@ public class ViewUtil {
      * @param pxValue px值
      * @return dp值
      */
-    public static int px2dp(final float pxValue) {
+    public static float px2dp(final float pxValue) {
         final float scale = Utils.getContext().getResources().getDisplayMetrics().density;
-        return (int) (pxValue / scale + 0.5f);
+        return  (pxValue / scale + 0.5f);
     }
 
     /**
@@ -67,9 +76,86 @@ public class ViewUtil {
                         .get(object).toString());
             }
         } catch (Exception e) {
-            return dp2px(20);
+            return (int) dp2px(20);
         }
         int statusHeight = Utils.getContext().getResources().getDimensionPixelSize(resheigtId);
         return statusHeight;
+    }
+
+    /**
+     * 渲染文字位置居中，这儿做了处理，解决android默认渲染方式上下不平均问题
+     * @param canvas
+     * @param renderDate
+     * @param centerX 位置的中心点x坐标
+     * @param centerY   位置的中心点y坐标
+     * @param paint
+     */
+    public static void renderTextByCenter(Canvas canvas, String renderDate, float centerX, float centerY, Paint paint){
+        if (TextUtils.isEmpty(renderDate)) {
+            return;
+        }
+        Paint.FontMetricsInt fm = paint.getFontMetricsInt();
+
+        float startY = centerY - fm.descent + (fm.descent - fm.ascent)/ 2;
+        canvas.drawText(renderDate, (centerX - paint.measureText(renderDate)/2), startY, paint);
+    }
+    /**
+     * 渲染一系列数据
+     * @param canvas
+     * @param renderDate
+     * @param paint
+     * @param startX
+     * @param startY
+     * @param itemWidth
+     */
+    public static void renderTextList(Canvas canvas, List<String> renderDate, Paint paint, float startX, float startY, int itemWidth){
+        for (int i = 0; i < renderDate.size(); i++) {
+            String data = SafeUtil.getSafeData(renderDate, i);
+            if (!TextUtils.isEmpty(data)) {
+                renderTextByCenter(canvas, data, startX + i * itemWidth, startY, paint);
+            }
+        }
+    }
+
+    /**
+     * 创建贝塞尔曲线的path
+     * @param path 贝塞尔曲线的path，如果传入空则会返回一个新的Path
+     * @param data 数据集，里边的连接曲线的所有点；至少两个点才行(两点只是直线)；
+     * @param intensity 平滑度，范围[0f, 1f]
+     * @return
+     */
+    public static Path createBezierPath(Path path, ArrayList<Point> data, float intensity){
+        if (data.isEmpty() || data.size() <= 1) {   //  至少两个点
+            return path;
+        }
+        if (path == null)path= new Path();
+        path.reset();
+
+        Point cur = null;
+        Point prev = null;
+        Point prePre = null;
+        Point next = null;
+        int nextIndex = 0;
+
+        cur = prev = prePre = SafeUtil.getSafeData(data, 0);
+
+        path.moveTo(cur.x, cur.y);
+        for (int j = 1; j < data.size(); j++) {
+            prePre = prev;
+            prev = cur;
+            cur = nextIndex == j ? next : data.get(j);
+            nextIndex = j + 1 < data.size() ? j + 1 : j;
+            next = data.get(nextIndex);
+
+            float prevDx = (cur.x - prePre.x) * intensity;
+            float prevDy = (cur.y - prePre.y) * intensity;
+            float curDx = (next.x - prev.x) * intensity;
+            float curDy = (next.y - prev.y) * intensity;
+
+            path.cubicTo(prev.x + prevDx, (prev.y + prevDy),
+                    cur.x - curDx,
+                    (cur.y - curDy), cur.x, cur.y);
+        }
+        return path;
     }
 }

@@ -254,6 +254,7 @@ public class OkHttpUtils {
         }
         for (Map.Entry<String, String> param : params.entrySet()) {
             try {
+                if (TextUtils.isEmpty(param.getValue()))continue;
                 sb.append(URLEncoder.encode(param.getKey(), "UTF-8"))
                         .append('=')
                         .append(URLEncoder.encode(param.getValue(), "UTF-8"))

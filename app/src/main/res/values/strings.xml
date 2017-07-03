@@ -3,4 +3,11 @@
     <string name="tttt">题目</string>
     <!--权限Label-->
     <string name="lilith_permission_label">允许读取和更新丽丽丝设置</string>
+
+    <string-array name="cons_luck_line_color">
+        <item>#de5deb,#99de5deb,#0fde5deb</item>
+        <item>#ff6262,#99ff6161,#0fff6161</item>
+        <item>#ffb74a,#99ffb74a,#0fffb74a</item>
+        <item>#49b5ff,#9949b5ff,#0f49b5ff</item>
+    </string-array>
 </resources>
