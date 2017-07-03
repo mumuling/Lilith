@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
 
@@ -186,7 +187,7 @@ public class LoginActivity extends BaseActivity {
     //快捷登录
     @OnClick(R.id.ll_quick_login)
     public void quickLogin(View view) {
-        startActivity(new Intent(this, QuickLoginActivity.class));
+        ARouter.getInstance().build("/test/QuickLoginActivity").navigation();
     }
 
     //微信登录

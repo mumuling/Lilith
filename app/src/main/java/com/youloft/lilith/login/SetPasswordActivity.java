@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.VideoView;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
 
@@ -26,7 +27,7 @@ import butterknife.OnClick;
  * <p>
  * Created by GYH on 2017/7/3.
  */
-
+@Route(path = "/test/SetPasswordActivity")
 public class SetPasswordActivity extends BaseActivity {
 
     @BindView(R.id.vv_background)

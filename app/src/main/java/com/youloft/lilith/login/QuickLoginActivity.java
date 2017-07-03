@@ -17,6 +17,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.VideoView;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.utils.Toaster;
@@ -31,7 +33,7 @@ import butterknife.OnClick;
  * <p>
  * Created by GYH on 2017/6/29.
  */
-
+@Route(path = "/test/QuickLoginActivity")
 public class QuickLoginActivity extends BaseActivity {
     @BindView(R.id.vv_background)
     VideoView vvBackground;  //背景视频
@@ -216,7 +218,7 @@ public class QuickLoginActivity extends BaseActivity {
     //下面的的大按钮的点击事件
     @OnClick(R.id.btn_login)
     public void onButtonClick(){
-        startActivity(new Intent(this,SetPasswordActivity.class));
+        ARouter.getInstance().build("/test/SetPasswordActivity").navigation();
     }
 
 

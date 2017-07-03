@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.EditText;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.ui.view.BaseToolBar;
@@ -15,7 +16,7 @@ import butterknife.OnClick;
 /**
  * Created by Administrator on 2017/6/30.
  */
-
+@Route(path = "/test/FeedBackActivity")
 public class FeedBackActivity extends BaseActivity {
     @BindView(R.id.btl_feedback)
     BaseToolBar btlFeedback; //标题

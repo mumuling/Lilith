@@ -11,9 +11,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseFragment;
 import com.youloft.lilith.login.LoginActivity;
+import com.youloft.lilith.router.AppRouter;
+import com.youloft.lilith.setting.EditInformationActivity;
 import com.youloft.lilith.setting.SettingActivity;
 
 import butterknife.BindView;
@@ -76,10 +79,10 @@ public class MEFragment extends BaseFragment {
                 Toast.makeText(getActivity(),"话题",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.rl_personal_data:
-                Toast.makeText(getActivity(),"资料",Toast.LENGTH_SHORT).show();
+                ARouter.getInstance().build("/test/EditInformationActivity").navigation();
                 break;
             case R.id.rl_setting:
-                startActivity(new Intent(getActivity(), SettingActivity.class));
+                ARouter.getInstance().build("/test/SettingActivity").navigation();
                 break;
 
         }
