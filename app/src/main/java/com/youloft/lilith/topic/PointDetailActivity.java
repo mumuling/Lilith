@@ -1,13 +1,17 @@
 package com.youloft.lilith.topic;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.utils.ViewUtil;
+import com.youloft.lilith.topic.widget.ScrollFrameLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,10 +25,16 @@ import butterknife.ButterKnife;
  * @class PointDetailActivity
  */
 
-public class PointDetailActivity extends BaseActivity {
+public class PointDetailActivity extends BaseActivity implements ScrollFrameLayout.IscrollChange{
 
     @BindView(R.id.ll_top_root)
     LinearLayout llTopRoot;
+    @BindView(R.id.close_icon)
+    ImageView closeIcon;
+    @BindView(R.id.command_num)
+    TextView commandNum;
+    @BindView(R.id.root)
+    ScrollFrameLayout root;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,8 +49,24 @@ public class PointDetailActivity extends BaseActivity {
         FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) llTopRoot.getLayoutParams();
         params.topMargin = statusHeight;
         llTopRoot.setLayoutParams(params);
+        root.setInterface(this);
 
     }
 
 
+    @Override
+    public void goFinish() {
+        finish();
+        overridePendingTransition(0,0);
+    }
+
+    @Override
+    public void recover() {
+        root.setBackgroundColor(Color.parseColor("#4D000000"));
+    }
+
+    @Override
+    public void move() {
+        root.setBackgroundColor(Color.parseColor("#00000000"));
+    }
 }
