@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="cons_detail_division_style">
+        <item name="android:background">#0fffffff</item>
+    </style>
+</resources>

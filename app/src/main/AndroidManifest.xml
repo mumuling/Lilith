@@ -89,13 +89,13 @@
             android:name="UMENG_APPKEY"
             android:value="5126ff896c738f2bfa000438" />
         <!-- share end -->
-        <activity android:name=".ARouterTestActivity" />
         <activity android:name=".login.LoginActivity" />
         <activity android:name=".login.QuickLoginActivity" />
         <activity android:name=".setting.SettingActivity"/>
         <activity android:name=".setting.FeedBackActivity"/>
         <activity android:name=".setting.AboutMeActivity"/>
         <activity android:name=".setting.BindAccountActivity"/>
+        <activity android:name=".cons.ConsCalDetailActivity" android:theme="@style/TranslucentThem"/>
     </application>
 
 </manifest>

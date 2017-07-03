@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/cons_detail_bg_img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!--<FrameLayout-->
+    <!--android:id="@+id/root1"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginTop="90dp"-->
+    <!--android:paddingLeft="10dp"-->
+    <!--android:paddingRight="10dp">-->
+
+    <LinearLayout
+        android:id="@+id/cons_detail_content_root"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="90dp"
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <LinearLayout
+            android:id="@+id/cons_detail_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/cons_detail_content_bg_top">
+
+            <TextView
+                android:id="@+id/cons_detail_title"
+                android:layout_width="match_parent"
+                android:layout_height="47dp"
+                android:gravity="center"
+                android:text="6月-7月运势日历"
+                android:textColor="@color/cons_detail_text_color" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/cons_detail_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/cons_detail_content_bg_bottom"
+                android:orientation="vertical">
+
+                <com.youloft.lilith.cons.view.ConsCalendar
+                    android:id="@+id/cons_detail_cal_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingBottom="7dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingTop="14dp">
+
+                    <TextView
+                        android:id="@+id/cons_detail_cons_love_tendency"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableLeft="@drawable/calendar_love_icon"
+                        android:drawablePadding="8dp"
+                        android:gravity="center_vertical"
+                        android:textColor="@color/cons_detail_text_color"
+                        android:textSize="15dp"
+                        tools:text="感情运势上升" />
+
+                    <TextView
+                        android:id="@+id/cons_detail_cons_money_tendency"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableLeft="@drawable/calendar_money_icon"
+                        android:drawablePadding="8dp"
+                        android:gravity="center_vertical"
+                        android:textColor="@color/cons_detail_text_color"
+                        android:textSize="15dp"
+                        tools:text="财富运势上升" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingBottom="14dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingTop="7dp">
+
+                    <TextView
+                        android:id="@+id/cons_detail_cons_work_tendency"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableLeft="@drawable/calendar_work_icon"
+                        android:drawablePadding="8dp"
+                        android:gravity="center_vertical"
+                        android:textColor="@color/cons_detail_text_color"
+                        android:textSize="15dp"
+                        tools:text="工作运势上升" />
+
+                </LinearLayout>
+
+                <ImageView
+                    style="@style/cons_detail_division_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="44.5dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingBottom="7dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingTop="7dp">
+
+                    <TextView
+                        android:id="@+id/cons_detail_share"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/constellation_share_icon"
+                        android:drawablePadding="5dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/cons_share_text"
+                        android:textColor="@color/cons_detail_text_color"
+                        android:textSize="13dp" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/cons_detail_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/constellation_calendar_close_icon" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <!--<android.support.v7.widget.RecyclerView-->
+    <!--android:id="@+id/cons_detail_week_view"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginTop="47dp"-->
+    <!--android:background="@color/cons_detail_content_bg_color" />-->
+
+    <!--</FrameLayout>-->
+
+</merge>

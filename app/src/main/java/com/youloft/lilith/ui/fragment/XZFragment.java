@@ -3,10 +3,15 @@ package com.youloft.lilith.ui.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.view.ViewStub;
+import android.widget.FrameLayout;
 
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseFragment;
+import com.youloft.lilith.cons.ConsCalDetailActivity;
 import com.youloft.lilith.cons.bean.LuckData;
+import com.youloft.lilith.cons.view.ConsCalendar;
+import com.youloft.lilith.cons.view.ConsCalendarDetailView;
 import com.youloft.lilith.cons.view.LuckView;
 
 import java.util.ArrayList;
@@ -19,6 +24,11 @@ import java.util.ArrayList;
 
 public class XZFragment extends BaseFragment {
     public int n = 1;
+    private FrameLayout mRoot;
+    private ConsCalendar mConsWeek;
+    private ConsCalendarDetailView mConsDetail;
+    private ViewStub mConsDetailStub;
+    private LuckView luckview2;
 
     public XZFragment() {
         super(R.layout.fragment_xz);
@@ -27,9 +37,40 @@ public class XZFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mConsWeek = (ConsCalendar) view.findViewById(R.id.text);
+        mRoot = (FrameLayout) view.findViewById(R.id.root);
+        mConsDetailStub = (ViewStub) view.findViewById(R.id.cons_detail_view_layout);
 
+        test(view);
+
+        mConsWeek.setCalType(ConsCalendar.CONS_CAL_TYPE_WEEK);
+        mConsWeek.setListener(new ConsCalendar.OnClickListener() {
+            @Override
+            public void onClick() {
+
+                int[] ints = new int[2];
+                mConsWeek.getLocationOnScreen(ints);
+                ConsCalDetailActivity.startConsCalDetailActivity(getContext(), ints, getBActivity().getScreenShort());
+            }
+        });
+
+    }
+
+
+
+    private void showpopup() {
+        if (mConsDetail == null) {
+            mConsDetailStub.inflate();
+            mConsDetail = (ConsCalendarDetailView) getView().findViewById(R.id.cons_detail_view);
+        }
+        if (mConsDetail != null) {
+            mConsDetail.show();
+        }
+    }
+
+    private void test(View view) {
         final LuckView luckview1 = (LuckView) view.findViewById(R.id.luck1);
-        LuckView luckview2 = (LuckView) view.findViewById(R.id.luck2);
+        luckview2 = (LuckView) view.findViewById(R.id.luck2);
         LuckView luckview3 = (LuckView) view.findViewById(R.id.luck3);
         LuckView luckview4 = (LuckView) view.findViewById(R.id.luck4);
 
