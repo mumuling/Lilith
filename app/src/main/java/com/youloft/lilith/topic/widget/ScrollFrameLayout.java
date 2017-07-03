@@ -2,6 +2,9 @@ package com.youloft.lilith.topic.widget;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.graphics.Rect;
+import android.os.Build;
+import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,12 +17,14 @@ import com.youloft.lilith.common.utils.ViewUtil;
  *
  */
 
-public class ScrollFrameLayout extends FrameLayout {
+public class ScrollFrameLayout extends RecyclerView {
     protected float mCurrentMarginTop;
+    protected float mTop;
     private float mMinMoveDistance;
     protected static float FINISH_DISTANCE = 300;
     protected boolean needRcover = true;
     protected boolean needScrollDown = true;//默认不滑动，若要设置滑动，调用setNeedScrollDown()；
+    protected  boolean needAculateTop = true;
 
     private ScrollFrameLayout.IscrollChange iscrollChange;
     public ScrollFrameLayout(Context context) {
@@ -34,12 +39,24 @@ public class ScrollFrameLayout extends FrameLayout {
         setOverScrollMode(View.OVER_SCROLL_NEVER);
         setClickable(true);
         mMinMoveDistance = ViewUtil.dp2px(7);
+        mTop = ViewUtil.getStatusHeight();
+        mCurrentMarginTop = mTop;
+
+
     }
 
 //    private boolean isBounceScrollEnable = false;
 //    public void setBounceScrollEnable(boolean enable){
 //        isBounceScrollEnable = enable;
 //    }
+
+
+
+    @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        super.onLayout(changed, l, t, r, b);
+    }
+
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
@@ -52,8 +69,9 @@ public class ScrollFrameLayout extends FrameLayout {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
+        int downX;
         if (needScrollDown) {
-            return true;
+            return handleEvent(ev);
         }
         return super.onInterceptTouchEvent(ev);
     }
@@ -67,14 +85,16 @@ public class ScrollFrameLayout extends FrameLayout {
     }
 
     public void onScroll(float goaldistanceY, boolean isScollOver) {
+        View view = (View) this.getParent();
+        if (view == null )return;
         if (isScollOver) {
-            ObjectAnimator translateY = ObjectAnimator.ofFloat(this, "y", mCurrentMarginTop);
+            ObjectAnimator translateY = ObjectAnimator.ofFloat(view, "y", mCurrentMarginTop);
             translateY.setInterpolator(mAccelerateInterpolator);
             translateY.setDuration(200);
             translateY.start();
 
         } else {
-            ObjectAnimator translateY = ObjectAnimator.ofFloat(this, "y", goaldistanceY);
+            ObjectAnimator translateY = ObjectAnimator.ofFloat(view, "y", goaldistanceY);
             translateY.setDuration(0);
             translateY.start();
         }
@@ -116,8 +136,8 @@ public class ScrollFrameLayout extends FrameLayout {
                     return false;
                 }
 
-                if (mCurrentMarginTop == 0) {
-                    if ( getChildAt(0).getTop() ==96 && distance > 0) {
+                if (mCurrentMarginTop <=this.getTop()) {
+                    if ( getChildAt(0).getTop() ==0 && distance > 0) {
                         mCurrentMarginTop = mCurrentMarginTop + distance;
                         onScroll(mCurrentMarginTop, false);
                         if (iscrollChange != null) {
@@ -127,9 +147,10 @@ public class ScrollFrameLayout extends FrameLayout {
                     }
                 }
 
-                if (mCurrentMarginTop > 0) {
-                    distance = distance;
+
+                if (mCurrentMarginTop > mTop) {
                     mCurrentMarginTop = mCurrentMarginTop + distance;
+                    if (mCurrentMarginTop < mTop ) mCurrentMarginTop = mTop;
                     needRcover = mCurrentMarginTop <= FINISH_DISTANCE;
 //                    if (mCurrentMarginTop + distance > 0) {
 //                        mCurrentMarginTop = 0;
@@ -146,21 +167,25 @@ public class ScrollFrameLayout extends FrameLayout {
             case MotionEvent.ACTION_CANCEL:
                 isIntercept = false;
                 if (needRcover) {
-                    mCurrentMarginTop = 0;
+                    mCurrentMarginTop = mTop;
                     iscrollChange.recover();
+
                 } else {
                     mCurrentMarginTop = getHeight();
-                    postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (iscrollChange != null) {
-                                iscrollChange.goFinish();
+                    if (mCurrentMarginTop > 10) {
+                        postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (iscrollChange != null) {
+                                    iscrollChange.goFinish();
+                                }
                             }
-                        }
-                    },200);
-                   // iscrollChange.onBacks();
+                        }, 200);
+                        // iscrollChange.onBacks();
+                    }
                 }
                 onScroll(mCurrentMarginTop, true);
+
                 return false;
         }
 

@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.youloft.lilith.topic.widget.ScrollFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.youloft.lilith.topic.widget.SoftInputLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/root"
+    android:fitsSystemWindows="true"
     android:background="#4D000000">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/ll_top_root"
+        android:orientation="vertical"
         android:background="@drawable/activity_point_bg">
         <RelativeLayout
             android:layout_width="match_parent"
@@ -16,7 +18,8 @@
                 android:layout_width="22dp"
                 android:layout_height="22dp"
                 android:id="@+id/close_icon"
-                android:src="@mipmap/ic_launcher"
+                android:clickable="true"
+                android:src="@drawable/topic_close_icon"
                 android:layout_centerVertical="true"
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="18dp"/>
@@ -29,7 +32,46 @@
                 android:textSize="17sp"
                 android:layout_centerInParent="true"/>
         </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#1Affffff"/>
+        <com.youloft.lilith.topic.widget.ScrollFrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/rv_comment_answer"/>
 
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="#30284d"
+        android:orientation="vertical">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#33ffffff"/>
 
-</com.youloft.lilith.topic.widget.ScrollFrameLayout>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/topic_comment_edit_bg"
+        android:id="@+id/comment_edit"
+        android:hint="你来说点什么吧"
+        android:textColorHint="#999999"
+        android:textColor="@color/white"
+        android:drawableLeft="@drawable/topic_talk_icon"
+        android:drawablePadding="8dp"
+        android:textCursorDrawable="@drawable/cursor_bg"
+        android:textSize="15sp"
+        />
+    </LinearLayout>
+
+</com.youloft.lilith.topic.widget.SoftInputLayout>
