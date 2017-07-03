@@ -46,6 +46,7 @@
         <activity
             android:name=".topic.TopicDetailActivity"
             android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait" />
         <activity
             android:name=".topic.PointDetailActivity"

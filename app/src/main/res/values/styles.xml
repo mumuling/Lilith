@@ -15,7 +15,7 @@
     </style>
 
     <style name="BaseDialog" parent="DialogTheme">
-
+        <item name="android:windowSoftInputMode">adjustResize</item>
     </style>
 
     <declare-styleable name="BaseToolBar">
