@@ -89,6 +89,22 @@
             android:name="UMENG_APPKEY"
             android:value="5126ff896c738f2bfa000438" />
         <!-- share end -->
+        <activity android:name=".login.LoginActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".login.QuickLoginActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".setting.SettingActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".setting.FeedBackActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".setting.AboutMeActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".setting.BindAccountActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".login.SetPasswordActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".setting.EditInformationActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".login.LoginActivity" />
         <activity android:name=".login.QuickLoginActivity" />
         <activity android:name=".setting.SettingActivity"/>

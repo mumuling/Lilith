@@ -3,6 +3,7 @@ package com.youloft.lilith.setting;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.ui.view.BaseToolBar;
@@ -15,7 +16,7 @@ import butterknife.ButterKnife;
  * <p>
  * Created by GYH on 2017/6/30.
  */
-
+@Route(path = "/test/BindAccountActivity")
 public class BindAccountActivity extends BaseActivity {
     @BindView(R.id.btl_bind_account)
     BaseToolBar btlBindAccount;

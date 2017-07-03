@@ -6,6 +6,8 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Toast;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.router.AppRouter;
@@ -20,7 +22,7 @@ import butterknife.OnClick;
  * <p>
  * Created by GYH on 2017/6/30.
  */
-
+@Route(path = "/test/SettingActivity")
 public class SettingActivity extends BaseActivity {
     @BindView(R.id.btl_setting)
     BaseToolBar btlSetting;
@@ -41,16 +43,16 @@ public class SettingActivity extends BaseActivity {
                 Toast.makeText(this, "修改密码", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.rl_bind_account://绑定账号
-                startActivity(new Intent(this,BindAccountActivity.class));
+                ARouter.getInstance().build("/test/BindAccountActivity").navigation();
                 break;
             case R.id.rl_check_update://检查更新
                 Toast.makeText(this, "检查更新", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.rl_feedback://意见反馈
-                startActivity(new Intent(this,FeedBackActivity.class));
+                ARouter.getInstance().build("/test/FeedBackActivity").navigation();
                 break;
             case R.id.rl_about_me://关于我们
-                startActivity(new Intent(this,AboutMeActivity.class));
+                ARouter.getInstance().build("/test/AboutMeActivity").navigation();
                 break;
             case R.id.tv_logout://退出登录
                 Toast.makeText(this, "退出登录", Toast.LENGTH_SHORT).show();

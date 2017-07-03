@@ -3,5 +3,284 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <VideoView
+        android:id="@+id/vv_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <!--内容部分-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#aa1d051d"
+        android:orientation="vertical">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="118dp"
+            android:text="快捷登录"
+            android:textColor="#ffffff"
+            android:textSize="40dp" />
+        <!--手机号码-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="42dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/et_phone_number"
+                    android:layout_width="0dp"
+                    android:maxLines="1"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:digits="0123456789"
+                    android:hint="手机号"
+                    android:inputType="number"
+                    android:textColor="#ffffff"
+                    android:textColorHint="#66ffffff"
+                    android:textSize="20dp" />
+
+                <ImageView
+                    android:id="@+id/iv_clean_number"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="15dp"
+                    android:src="@drawable/login_password_delete_icon"
+                    android:visibility="invisible" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="#22ffffff" />
+
+
+        </LinearLayout>
+        <!--验证码-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="22dp"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <EditText
+                    android:id="@+id/et_verification_code"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:hint="输入验证码"
+                    android:cursorVisible="false"
+                    android:inputType="number"
+                    android:textColor="@color/translucent"
+                    android:textColorHint="#66ffffff"
+                    android:textSize="20dp" />
+
+                <!--分割式验证码容器-->
+                <LinearLayout
+                    android:id="@+id/ll_code_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="invisible"
+                    android:orientation="horizontal">
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/tv_code01"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:textColor="#ffffff"
+                            android:textSize="20dp" />
+
+                        <View
+                            android:id="@+id/v_code_line01"
+                            android:layout_width="12dp"
+                            android:layout_height="1dp"
+                            android:layout_gravity="bottom"
+                            android:layout_marginTop="5dp"
+                            android:background="#55ffffff" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="6dp">
+
+                        <TextView
+                            android:id="@+id/tv_code02"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:textColor="#ffffff"
+                            android:textSize="20dp" />
+
+                        <View
+                            android:id="@+id/v_code_line02"
+                            android:layout_width="12dp"
+                            android:layout_height="1dp"
+                            android:layout_gravity="bottom"
+                            android:layout_marginTop="5dp"
+                            android:background="#55ffffff" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="6dp">
+
+                        <TextView
+                            android:id="@+id/tv_code03"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:textColor="#ffffff"
+                            android:textSize="20dp" />
+
+                        <View
+                            android:id="@+id/v_code_line03"
+                            android:layout_width="12dp"
+                            android:layout_height="1dp"
+                            android:layout_gravity="bottom"
+                            android:layout_marginTop="5dp"
+                            android:background="#55ffffff" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="6dp">
+
+                        <TextView
+                            android:id="@+id/tv_code04"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:textColor="#ffffff"
+                            android:textSize="20dp" />
+
+                        <View
+                            android:id="@+id/v_code_line04"
+                            android:layout_width="12dp"
+                            android:layout_height="1dp"
+                            android:layout_gravity="bottom"
+                            android:layout_marginTop="5dp"
+                            android:background="#55ffffff" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="6dp">
+
+                        <TextView
+                            android:id="@+id/tv_code05"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:textColor="#ffffff"
+                            android:textSize="20dp" />
+
+                        <View
+                            android:id="@+id/v_code_line05"
+                            android:layout_width="12dp"
+                            android:layout_height="1dp"
+                            android:layout_gravity="bottom"
+                            android:layout_marginTop="5dp"
+                            android:background="#55ffffff" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="6dp">
+
+                        <TextView
+                            android:id="@+id/tv_code06"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:textColor="#ffffff"
+                            android:textSize="20dp" />
+
+                        <View
+                            android:id="@+id/v_code_line06"
+                            android:layout_width="12dp"
+                            android:layout_height="1dp"
+                            android:layout_gravity="bottom"
+                            android:layout_marginTop="5dp"
+                            android:background="#55ffffff" />
+                    </FrameLayout>
+                </LinearLayout>
+            </FrameLayout>
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#22ffffff" />
+                <!--获取验证码和倒计时文字-->
+                <TextView
+                    android:id="@+id/tv_get_code"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:text="获取验证码"
+                    android:textColor="#55ffffff"
+                    android:textSize="20dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="10dp"
+            android:background="#22ffffff" />
+
+        <!--登录按钮-->
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="48dp"
+            android:background="@drawable/slt_login_btn"
+            android:gravity="center"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"
+            android:text="登录"
+            android:textColor="#ffffff"
+            android:textSize="17dp" />
+    </LinearLayout>
 </FrameLayout>
