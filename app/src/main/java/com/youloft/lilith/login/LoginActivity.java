@@ -5,6 +5,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
@@ -58,6 +59,7 @@ public class LoginActivity extends BaseActivity {
      * 输入框的设定
      */
     private void initEditText() {
+        etPhoneNumber.setFilters(new InputFilter[]{new InputFilter.LengthFilter(13)});
         //电话号码变化的监听
         etPhoneNumber.addTextChangedListener(new TextWatcher() {
             @Override
@@ -69,8 +71,19 @@ public class LoginActivity extends BaseActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 //内容发生变化时,判断是否添加-
                 boolean flag = etPhoneNumber.getText().toString().length() > mPreNumberLength;
-                if (s.toString().length() == 3 && flag || s.toString().length() == 8 && flag) {
+                String text = etPhoneNumber.getText().toString();
+                if (text.length() == 3 && flag || text.length() == 8 && flag) {
                     etPhoneNumber.setText(s.toString() + "-");
+                    etPhoneNumber.setSelection(etPhoneNumber.getText().toString().length());
+                }
+                if (text.length() >= 4 && !String.valueOf(text.charAt(3)).equals("-")){
+                    String result = text.substring(0, 3) + "-" + text.substring(3);
+                    etPhoneNumber.setText(result);
+                    etPhoneNumber.setSelection(etPhoneNumber.getText().toString().length());
+                }
+                if (text.length() >= 9 && !String.valueOf(text.charAt(8)).equals("-")){
+                    String result = text.substring(0, 8) + "-" + text.substring(8);
+                    etPhoneNumber.setText(result);
                     etPhoneNumber.setSelection(etPhoneNumber.getText().toString().length());
                 }
             }
@@ -88,6 +101,7 @@ public class LoginActivity extends BaseActivity {
 
 
         //密码输入框的监听
+        etPassword.setFilters(new InputFilter[]{new InputFilter.LengthFilter(16)});
         etPassword.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -101,7 +115,7 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                //变化之后如果有字符串 就显示叉叉, 如果没有就隐藏叉叉
+                //变化之后如果有字符串 就显示叉叉和眼睛, 如果没有就隐藏叉叉和眼睛
                 if (etPassword.getText().toString().length() != 0) {
                     ivCleanPassword.setVisibility(View.VISIBLE);
                     ivIsShowPwd.setVisibility(View.VISIBLE);
@@ -113,17 +127,7 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        //
-        if (KeyEvent.KEYCODE_DEL == event.getKeyCode() && etPhoneNumber.hasFocusable()
-                && etPhoneNumber.getText().toString().endsWith("-")) {
-            etPhoneNumber.setText(etPhoneNumber.getText().toString().substring(0, etPhoneNumber.getText().toString().length() - 1));
-            etPhoneNumber.setSelection(etPhoneNumber.getText().toString().length());
-        }
-        return super.onKeyDown(keyCode, event);
 
-    }
 
     @Override
     protected void onResume() {
@@ -152,7 +156,7 @@ public class LoginActivity extends BaseActivity {
     //登录按钮
     @OnClick(R.id.btn_login)
     public void login(View view) {
-        Toast.makeText(this, "哈哈", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "登录", Toast.LENGTH_SHORT).show();
     }
 
     //服务条款
@@ -203,9 +207,11 @@ public class LoginActivity extends BaseActivity {
             case R.id.iv_is_show_pwd:
                 if (isShowPassword) {
                     etPassword.setTransformationMethod(null);
+                    ivIsShowPwd.setImageResource(R.drawable.login_password_on_icon);
                     isShowPassword = false;
                 } else {
                     etPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    ivIsShowPwd.setImageResource(R.drawable.login_password_off_icon);
                     isShowPassword = true;
                 }
                 etPassword.setSelection(etPassword.getText().toString().length());
