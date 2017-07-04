@@ -1,10 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingLeft="20dp"
     android:paddingTop="15dp"
     android:orientation="vertical">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_comment_hot"
+        android:text="热门评论"
+        android:paddingBottom="20dp"
+        android:paddingTop="5dp"
+        android:textColor="#ffffff"
+        android:textSize="20sp"
+        android:visibility="gone"/>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -49,7 +58,7 @@
                 android:textSize="13sp"
                 android:layout_marginLeft="4dp"/>
         </LinearLayout>
-        
+
         <ImageView
             android:layout_width="14dp"
             android:layout_height="14dp"
@@ -71,97 +80,44 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="20dp"
-        android:id="@+id/text_vote_result"
+        android:id="@+id/text_answer_content"
         android:layout_marginLeft="40dp"
-        android:text="投票给：相似更好，因为可以更好的理解对方"
-        android:textColor="#ff8282"/>
-    <TextView
+        android:layout_marginRight="20dp"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:text="相似的人应该会更容易相处吧。我和我女朋友就是这样，总有很多话题可以聊。"
+        android:layout_marginTop="4dp"
+        />
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/text_comment_content"
-        android:textColor="@color/white"
-        android:layout_marginRight="20dp"
-        android:textSize="15sp"
         android:layout_marginLeft="40dp"
-        android:text="相似的人应该会更容易相处吧。我和我女朋友就是这样，总有很多话题可以聊。"
-        android:layout_marginTop="2dp"
-        />
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="20dp"
-        android:layout_marginLeft="40dp">
+        android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/text_comment_time"
-            android:textColor="@color/white"
+            android:id="@+id/text_answer_time"
             android:textSize="12sp"
+            android:textColor="@color/white"
             android:text="4分钟前"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/text_comment_answer_count"
-            android:text="666"
+            android:id="@+id/text_reply"
+            android:text="回复"
             android:textColor="@color/white"
             android:textSize="12sp"
-            android:layout_toRightOf="@id/text_comment_time"
-            android:layout_marginLeft="23dp"/>
-
-    </RelativeLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"
-        android:background="#1Fffffff"
-        android:orientation="vertical"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="20dp"
-        android:padding="6dp"
-        android:id="@+id/ll_comment_answer_root"
-        >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/text_answer1"
-            android:textColor="@color/white"
-            android:textSize="15sp"
-            android:text="邹洪郁：还好啦，其实只要好好相处我觉得两个人还是挺好的。"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/text_answer2"
-            android:textColor="@color/white"
-            android:layout_marginTop="6dp"
-            android:textSize="15sp"
-            android:text="邹洪郁：还好啦，其实只要好好相处我觉得两个人还是挺好的。"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/text_answer3"
-            android:textColor="@color/white"
-            android:layout_marginTop="6dp"
-            android:textSize="15sp"
-            android:text="邹洪郁：还好啦，其实只要好好相处我觉得两个人还是挺好的。"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/text_comment_answer_remain"
-            android:text="查看全部642条"
-            android:textColor="@color/white"
-            android:textSize="15sp"
-            android:layout_marginTop="8dp"/>
-
+            android:drawableLeft="@drawable/point"
+            android:drawablePadding="9dp"
+            android:layout_marginLeft="9dp"/>
     </LinearLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:id="@+id/comment_divider_bottom"
+        android:layout_marginLeft="20dp"
         android:background="#1Affffff"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="15dp"/>
 
-</LinearLayout>
+    </LinearLayout>

@@ -15,14 +15,55 @@
         android:textColor="@color/white"
         android:layout_gravity="center_horizontal"/>
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="110dp">
+        android:layout_width="wrap_content"
+        android:layout_height="76dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/topic_viewpoint_bg">
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="3dp">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/topic_point1_circle"
+            android:layout_gravity="center_vertical"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="相似"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:textSize="20sp"/>
+        </FrameLayout>
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="3dp"
+            android:layout_gravity="right|center_vertical">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/topic_point2_circle"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="相似"
+
+            android:layout_gravity="center"
+            android:textColor="@color/white"
+            android:textSize="20sp"/>
+    </FrameLayout>
 
     </FrameLayout>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="发表的观点"
+        android:layout_marginTop="37dp"
         android:textColor="@color/white"
         android:textSize="20sp"
         />

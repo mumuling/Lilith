@@ -1,6 +1,7 @@
 package com.youloft.lilith.topic.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.youloft.lilith.R;
+import com.youloft.lilith.topic.PointDetailActivity;
 
 /**
  *
@@ -33,7 +35,15 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         } else if (viewType == ITEM_TYPE_VOTE_VIEW){
             holder = new VoteHolder(mInflater.inflate(R.layout.item_topic_detail_vote,parent,false));
         } else {
-            holder =new CommentHolder(mInflater.inflate(R.layout.item_topic_detail_comment,parent,false));
+            holder = new CommentHolder(mInflater.inflate(R.layout.item_topic_detail_comment,parent,false));
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, PointDetailActivity.class);
+                    intent.putExtra("data","测试传数据");
+                    mContext.startActivity(intent);
+                }
+            });
         }
         return holder;
     }

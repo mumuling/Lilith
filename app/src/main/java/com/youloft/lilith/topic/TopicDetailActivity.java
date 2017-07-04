@@ -10,6 +10,7 @@ import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.topic.adapter.TopicDetailAdapter;
+import com.youloft.lilith.topic.widget.VoteDialog;
 import com.youloft.lilith.ui.GlideCircleTransform;
 import com.youloft.lilith.ui.view.BaseToolBar;
 
@@ -34,6 +35,7 @@ public class TopicDetailActivity extends BaseActivity {
     RecyclerView rvTopicDetail;
     private LinearLayoutManager mLayoutManager;
     private TopicDetailAdapter adapter;
+    private VoteDialog voteDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,6 +52,7 @@ public class TopicDetailActivity extends BaseActivity {
         rvTopicDetail.setLayoutManager(mLayoutManager);
         adapter = new TopicDetailAdapter(this);
         rvTopicDetail.setAdapter(adapter);
+        voteDialog = new VoteDialog(this);
         toolBar.setOnToolBarItemClickListener(new BaseToolBar.OnToolBarItemClickListener() {
             @Override
             public void OnBackBtnClick() {
@@ -58,8 +61,7 @@ public class TopicDetailActivity extends BaseActivity {
 
             @Override
             public void OnTitleBtnClick() {
-                startActivity(new Intent(TopicDetailActivity.this, PointDetailActivity.class));
-                overridePendingTransition(R.anim.slide_in_bottom, 0);
+                voteDialog.show();
             }
 
             @Override
