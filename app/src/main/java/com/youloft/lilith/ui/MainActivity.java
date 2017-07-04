@@ -111,35 +111,6 @@ public class MainActivity extends BaseActivity {
 //                .withString("url", "http://www.tudou.com")
 //                .navigation();
 
-        mConsRepo.testData()
-                .compose(this.<HashMap>bindToLifecycle())
-                .observeOn(AndroidSchedulers.mainThread())
-                .toObservable()
-                .subscribe(new RxObserver<HashMap>() {
-                    @Override
-                    protected void onFailed(Throwable e) {
-                        tv.setText("onFailed");
-                    }
-
-                    @Override
-                    public void onDataSuccess(HashMap hashMap) {
-                        tv.setText(hashMap.toString());
-                        Log.d(TAG, "accept() called with: hashMap = [" + hashMap + "]");
-                    }
-                });
-
-
-        mConsRepo.getBaiduContent()
-                .compose(this.<String>bindToLifecycle())
-                .observeOn(AndroidSchedulers.mainThread())
-                .toObservable()
-                .subscribe(new RxObserver<String>() {
-                    @Override
-                    public void onDataSuccess(String s) {
-//                        Toaster.showShort("Fuck---" + s);
-                        LogUtil.d("fuck", s);
-                    }
-                });
 
 //        LLApplication
 //                .getLilithApi()

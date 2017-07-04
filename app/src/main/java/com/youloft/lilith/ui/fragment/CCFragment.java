@@ -23,8 +23,6 @@ public class CCFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ImageView img = (ImageView) view.findViewById(R.id.img);
-        final TextView tv = (TextView) view.findViewById(R.id.text);
 
     }
 }

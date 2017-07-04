@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/tool_bar_height">
+    android:layout_height="@dimen/tool_bar_height"
+    xmlns:tools="http://schemas.android.com/tools">
 
         <ImageView
             android:id="@+id/tool_bar_back_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:src="@mipmap/ic_launcher" />
+            android:layout_marginLeft="10dp"
+            android:padding="5dp"
+            android:rotationY="180"
+            android:src="@drawable/mine_more_icon" />
 
         <TextView
             android:id="@+id/tool_bar_title"
@@ -17,12 +21,15 @@
             android:layout_gravity="center"
             android:textColor="#f5f0e9"
             android:textSize="17sp"
-            android:text="@string/tttt" />
+            tools:text="@string/tttt" />
 
         <ImageView
             android:id="@+id/tool_bar_share_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|right"
-            android:src="@mipmap/ic_launcher" />
+            android:padding="5dp"
+            android:layout_marginRight="10dp"
+            android:visibility="invisible"
+            android:src="@drawable/constellation_share_icon" />
 </FrameLayout>

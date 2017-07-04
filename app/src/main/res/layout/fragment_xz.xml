@@ -2,63 +2,11 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fff"
     android:id="@+id/root"
     android:orientation="vertical">
 
-    <ScrollView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/cons_card"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
-
-            <com.youloft.lilith.cons.view.LuckView
-                android:id="@+id/luck1"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_gravity="center"
-                android:background="#2f2a40" />
-
-            <com.youloft.lilith.cons.view.LuckView
-                android:id="@+id/luck2"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_gravity="center"
-                android:background="#2f2a40" />
-
-            <com.youloft.lilith.cons.view.ConsCalendar
-                android:id="@+id/text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scrollbars="none"
-                android:clickable="true"
-                android:background="@color/cons_detail_content_bg_color" />
-
-            <com.youloft.lilith.cons.view.LuckView
-                android:id="@+id/luck3"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_gravity="center"
-                android:background="#2f2a40" />
-
-            <com.youloft.lilith.cons.view.LuckView
-                android:id="@+id/luck4"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_gravity="center"
-                android:background="#2f2a40" />
-        </LinearLayout>
-
-    </ScrollView>
-
-    <ViewStub
-        android:id="@+id/cons_detail_view_layout"
-        android:layout="@layout/cons_detail_show"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"/>
 </FrameLayout>

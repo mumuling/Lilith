@@ -56,14 +56,14 @@ public class ConstellationViewFactory {
 
     /**
      * 获取星座的图片
-     * @param consName
+     * @param consCode
      * @param text1
      * @param text2
      * @param text3
      * @return
      */
-    public Bitmap getConsImg(String consName, String text1, String text2, String text3){
-        ConsInfo consSrc = getConsSrc(consName);
+    public Bitmap getConsImg(String consCode, String text1, String text2, String text3){
+        ConsInfo consSrc = getConsSrc(consCode);
         Bitmap srcBit = BitmapFactory.decodeResource(Utils.getContext().getResources(), consSrc.pImgDrawable);
         int width = srcBit.getWidth();
         int height = srcBit.getHeight();
@@ -110,19 +110,19 @@ public class ConstellationViewFactory {
      */
     private synchronized void initConsMap() {
         if (mConsImg.isEmpty()){
-            mConsImg.put("白羊座", new ConsInfo("白羊座", R.drawable.cons, new float[]{0.2f,0.4f,0.5f,0.6f,0.7f,0.3f}));
-            mConsImg.put("金牛座", new ConsInfo("金牛座", R.drawable.cons, new float[]{0.2f,0.4f,0.5f,0.6f,0.7f,0.3f}));
-            mConsImg.put("双子座", new ConsInfo("双子座", R.drawable.cons, new float[]{0.2f,0.4f,0.5f,0.6f,0.7f,0.3f}));
-            mConsImg.put("巨蟹座", new ConsInfo("巨蟹座", R.drawable.cons, new float[]{0.2f,0.4f,0.5f,0.6f,0.7f,0.3f}));
-            mConsImg.put("狮子座", new ConsInfo("狮子座", R.drawable.cons, new float[]{0.2f,0.4f,0.5f,0.6f,0.7f,0.3f}));
-            mConsImg.put("处女座", new ConsInfo("处女座", R.drawable.cons, new float[]{0.2f,0.4f,0.5f,0.6f,0.7f,0.3f}));
+            mConsImg.put("3", new ConsInfo("白羊座", R.drawable.cons, new float[]{0.2f,0.4f,0.5f,0.6f,0.7f,0.3f}));
+            mConsImg.put("4", new ConsInfo("金牛座", R.drawable.cons, new float[]{0.2f,0.4f,0.5f,0.6f,0.7f,0.3f}));
+            mConsImg.put("5", new ConsInfo("双子座", R.drawable.cons, new float[]{0.2f,0.4f,0.5f,0.6f,0.7f,0.3f}));
+            mConsImg.put("6", new ConsInfo("巨蟹座", R.drawable.cons, new float[]{0.2f,0.4f,0.5f,0.6f,0.7f,0.3f}));
+            mConsImg.put("7", new ConsInfo("狮子座", R.drawable.cons, new float[]{0.2f,0.4f,0.5f,0.6f,0.7f,0.3f}));
+            mConsImg.put("8", new ConsInfo("处女座", R.drawable.cons, new float[]{0.2f,0.4f,0.5f,0.6f,0.7f,0.3f}));
 
-            mConsImg.put("天秤座", new ConsInfo("天秤座", R.drawable.cons, new float[]{0.2f,0.4f,0.5f,0.6f,0.7f,0.3f}));
-            mConsImg.put("天蝎座", new ConsInfo("天蝎座", R.drawable.cons, new float[]{0.2f,0.4f,0.5f,0.6f,0.7f,0.3f}));
-            mConsImg.put("射手座", new ConsInfo("射手座", R.drawable.cons, new float[]{0.2f,0.4f,0.5f,0.6f,0.7f,0.3f}));
-            mConsImg.put("摩羯座", new ConsInfo("摩羯座", R.drawable.cons, new float[]{0.2f,0.4f,0.5f,0.6f,0.7f,0.3f}));
-            mConsImg.put("水瓶座", new ConsInfo("水瓶座", R.drawable.cons, new float[]{0.2f,0.4f,0.5f,0.6f,0.7f,0.3f}));
-            mConsImg.put("双鱼座", new ConsInfo("双鱼座", R.drawable.cons, new float[]{0.2f,0.4f,0.5f,0.6f,0.7f,0.3f}));
+            mConsImg.put("9", new ConsInfo("天秤座", R.drawable.cons, new float[]{0.2f,0.4f,0.5f,0.6f,0.7f,0.3f}));
+            mConsImg.put("10", new ConsInfo("天蝎座", R.drawable.cons, new float[]{0.2f,0.4f,0.5f,0.6f,0.7f,0.3f}));
+            mConsImg.put("11", new ConsInfo("射手座", R.drawable.cons, new float[]{0.2f,0.4f,0.5f,0.6f,0.7f,0.3f}));
+            mConsImg.put("12", new ConsInfo("摩羯座", R.drawable.cons, new float[]{0.2f,0.4f,0.5f,0.6f,0.7f,0.3f}));
+            mConsImg.put("1", new ConsInfo("水瓶座", R.drawable.cons, new float[]{0.2f,0.4f,0.5f,0.6f,0.7f,0.3f}));
+            mConsImg.put("2", new ConsInfo("双鱼座", R.drawable.cons, new float[]{0.2f,0.4f,0.5f,0.6f,0.7f,0.3f}));
 
         }
     }

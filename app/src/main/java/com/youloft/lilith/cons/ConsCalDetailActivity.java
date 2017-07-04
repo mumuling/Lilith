@@ -131,10 +131,10 @@ public class ConsCalDetailActivity extends BaseActivity {
             }
         });
 
-        ValueAnimator alphaAnim = ObjectAnimator.ofFloat(mConsDetailBgImg, View.ALPHA, in?0:0.6f, in?0.6f:0);
+        ValueAnimator alphaAnim = ObjectAnimator.ofFloat(mConsDetailBgImg, View.ALPHA, in?0:0.7f, in?0.7f:0);
 
         final AnimatorSet set = new AnimatorSet();
-        set.setDuration(1000);
+        set.setDuration(350);
         set.playTogether(valueAnimator, valueAnimator1, weekTran, alphaAnim);
         set.addListener(new AnimatorListenerAdapter() {
             @Override

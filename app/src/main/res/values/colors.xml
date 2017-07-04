@@ -18,6 +18,8 @@
     <!--<color name="constellation_love_color">#ff6161</color>-->
     <!--<color name="constellation_money_color">#ffb74a</color>-->
     <!--<color name="constellation_work_color">#49b5ff</color>-->
+    <color name="cons_title_high_light">#de5deb</color>
+    <color name="cons_my_info_en_word_color">#7fffffff</color>
     <color name="white">#ffffff</color>
     <color name="cons_detail_content_bg_color">#433d5f</color>
     <color name="cons_detail_text_color">#f5f0e9</color>
