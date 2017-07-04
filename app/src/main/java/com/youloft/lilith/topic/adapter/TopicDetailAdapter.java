@@ -1,5 +1,6 @@
 package com.youloft.lilith.topic.adapter;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -10,7 +11,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.youloft.lilith.R;
+import com.youloft.lilith.common.utils.ViewUtil;
 import com.youloft.lilith.topic.PointDetailActivity;
+import com.youloft.lilith.topic.widget.VoteView;
 
 /**
  *
@@ -79,8 +82,74 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     public class VoteHolder extends RecyclerView.ViewHolder {
+        private VoteView mVoteView;
         public VoteHolder(View itemView) {
             super(itemView);
+            mVoteView = (VoteView) itemView.findViewById(R.id.vote_view);
+            ValueAnimator firstAnimation =  new ValueAnimator();
+            firstAnimation.setFloatValues(0.0f,1.0f);
+            firstAnimation.setDuration(4000);
+            firstAnimation.setRepeatMode(ValueAnimator.RESTART);
+            firstAnimation.setRepeatCount(ValueAnimator.INFINITE);
+            firstAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    float value = (float) animation.getAnimatedValue() * 2;
+                    if (value > 1.0) value = 1.0f;
+                    int changeWidth = (int) ViewUtil.dp2px(12);
+                    mVoteView.setChangeValue1(changeWidth * value * 2, (int) (255 * (1 - value)));
+                }
+            });
+
+            ValueAnimator secondAnimation =  new ValueAnimator();
+            secondAnimation.setFloatValues(0.0f,1.0f);
+            secondAnimation.setDuration(4000);
+            secondAnimation.setRepeatMode(ValueAnimator.RESTART);
+            secondAnimation.setRepeatCount(ValueAnimator.INFINITE);
+            secondAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    float value = (float) animation.getAnimatedValue();
+                    if (value < 0.125) {
+                        value = 0;
+                    } else if (value > 0.625) {
+                        value = 1;
+                    } else {
+                        value = (float) ((value - 0.125) * 2);
+                    }
+                    int changeWidth = (int) ViewUtil.dp2px(12);
+                    mVoteView.setChangeValue2(changeWidth * value * 2, (int) (255 * (1 - value)));
+                }
+            });
+            ValueAnimator thridAniamtion =  new ValueAnimator();
+            thridAniamtion.setFloatValues(0.0f,1.0f);
+            thridAniamtion.setDuration(4000);
+            thridAniamtion.setRepeatMode(ValueAnimator.RESTART);
+            thridAniamtion.setRepeatCount(ValueAnimator.INFINITE);
+            thridAniamtion.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    float value = (float) animation.getAnimatedValue();
+                    if (value < 0.375) {
+                        value = 0;
+                    } else if (value > 0.875) {
+                        value = 1;
+                    } else {
+                        value = (float) ((value - 0.3755) * 2);
+                    }
+                    int changeWidth = (int) ViewUtil.dp2px(12);
+                    mVoteView.setChangeValue3(changeWidth * value * 2, (int) (255 * (1 - value)));
+                }
+            });
+
+
+
+
+            firstAnimation.start();
+            secondAnimation.start();
+            thridAniamtion.start();
+
+
         }
     }
 

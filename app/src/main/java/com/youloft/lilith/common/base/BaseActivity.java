@@ -1,5 +1,7 @@
 package com.youloft.lilith.common.base;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -41,6 +43,14 @@ public abstract class BaseActivity extends RxAppCompatActivity implements View.O
     @Override
     protected void onPause() {
         super.onPause();
+    }
+
+    public Bitmap getScreenShort(){
+        View decorView = getWindow().getDecorView();
+        decorView.setDrawingCacheEnabled(true);
+        Bitmap drawingCache = decorView.getDrawingCache();
+        decorView.setDrawingCacheEnabled(false);
+        return drawingCache;
     }
 
     /**

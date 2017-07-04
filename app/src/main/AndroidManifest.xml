@@ -107,6 +107,7 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".setting.EditInformationActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".cons.ConsCalDetailActivity" android:theme="@style/TranslucentThem"/>
     </application>
 
 </manifest>
