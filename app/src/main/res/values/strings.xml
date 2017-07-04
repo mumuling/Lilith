@@ -5,6 +5,18 @@
     <string name="lilith_permission_label">允许读取和更新丽丽丝设置</string>
     <string name="master_measure">大师亲算</string>
     <string name="cons_share_text">工作运势上升</string>
+    <string name="nick_name">昵称</string>
+    <string name="sex">性别</string>
+    <string name="date_birth">出生日期</string>
+    <string name="time_birth">出生时间</string>
+    <string name="place_birth">出生地</string>
+    <string name="place_now">现居地</string>
+    <string name="select_sex">请选择性别</string>
+    <string name="select_date_birth">请选择出生日期</string>
+    <string name="select_time_birth">请选择出生时间</string>
+    <string name="select_place_birth">请选择出生地</string>
+    <string name="select_place_now">请选择现居住地</string>
+    <string name="user_information_desc">您的个人信息将用于订制您的每日运势</string>
 
     <string-array name="cons_luck_line_color">
         <item>#de5deb,#99de5deb,#0fde5deb</item>

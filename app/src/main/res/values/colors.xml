@@ -18,17 +18,20 @@
     <!--<color name="constellation_love_color">#ff6161</color>-->
     <!--<color name="constellation_money_color">#ffb74a</color>-->
     <!--<color name="constellation_work_color">#49b5ff</color>-->
-    <color name="white">#ffffff</color>
-    <!--70%透明度白色-->
-    <color name="white_70">#4cffffff</color>
+    <!--不透明明度白色-->
+    <color name="white">#ffffffff</color>
+    <!--70%透明度白色  透明了30%-->
+    <color name="white_70">#b2ffffff</color>
     <!--50%透明度白色-->
     <color name="white_50">#7fffffff</color>
-    <!--20%透明度白色-->
-    <color name="white_20">#ccffffff</color>
+    <!--20%透明度白色 透明了80%-->
+    <color name="white_20">#33ffffff</color>
+    <!--10%透明度白色  透明了90%-->
+    <color name="white_10">#21ffffff</color>
 
     <!--!!!!!!!!!!!!!!!!!!!!!这个是整个项目基调主题背景色-->
     <color name="theme_background">#282142</color>
     <color name="cons_detail_content_bg_color">#433d5f</color>
     <color name="cons_detail_text_color">#f5f0e9</color>
-    </resources>
+</resources>
 
