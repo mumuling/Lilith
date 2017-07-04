@@ -44,7 +44,7 @@ public class ConsTitleHolder extends BaseHolder<String> {
     /**
      *
      */
-    @OnClick(R.id.root)
+    @OnClick(R.id.cons_title_root)
     public void getLogginState(){
         //TODO 这儿需要去判断登录状态，如果没登录则直接跳转到登录界面
         if (false) {
