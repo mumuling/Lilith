@@ -16,7 +16,7 @@
  * Designed by ai
  */
 
-package com.youloft.lilith.common.widgets.picker;
+package com.youloft.lilith.common.widgets.picker.wheel;
 
 import android.content.Context;
 import android.content.res.TypedArray;
