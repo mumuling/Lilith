@@ -3,6 +3,7 @@
     <string name="tttt">题目</string>
     <!--权限Label-->
     <string name="lilith_permission_label">允许读取和更新丽丽丝设置</string>
+    <string name="master_measure">大师亲算</string>
 
     <string-array name="cons_luck_line_color">
         <item>#de5deb,#99de5deb,#0fde5deb</item>
