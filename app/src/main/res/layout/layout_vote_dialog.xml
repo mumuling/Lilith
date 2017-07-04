@@ -43,6 +43,7 @@
         android:layout_marginTop="11dp"
         android:hint="说说你的看法"
         android:textColorHint="#3b325b"
+        android:textCursorDrawable="@drawable/cursor_bg"
         android:background="@null"
         />
     <LinearLayout
