@@ -123,7 +123,6 @@ public class LuckView extends View {
             @Override
             public void run() {
                 initTitle();
-                setTitleLineBound();
                 initPathData();
                 postInvalidate();
             }
@@ -199,6 +198,7 @@ public class LuckView extends View {
             mIconRes.setBounds((int)(mCurPosition.x - mDP10), (int)(mCurPosition.y- mDP10), (int)(mCurPosition.x + mDP10), (int)(mCurPosition.y+ mDP10));
         }
 
+        setTitleLineBound();
     }
 
     private void setTitleLineBound() {
