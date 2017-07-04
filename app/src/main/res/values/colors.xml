@@ -4,6 +4,12 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
+    <!--tab文字颜色-->
+    <color name="tab_text_color">#efdfff</color>
+    <color name="tab_bg_color">#e630284d</color>
+    <color name="tab_line_color">#504671</color>
+
+
     <color name="province_line_border">#C7C7C7</color>
     <color name="translucent">#00000000</color>
 

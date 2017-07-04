@@ -1,14 +1,15 @@
 package com.youloft.lilith.ui.view;
 
 import android.content.Context;
-import android.graphics.Color;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -28,7 +29,7 @@ import java.util.ArrayList;
 public class NavBarLayout extends LinearLayout {
     private ArrayList<TabItemBean> mTabs = new ArrayList<>();
     private ArrayList<NavItemView> mTabViews = new ArrayList<>();
-
+    private Paint mPaint;
     private OnTabChangeListener mTabChangeListener = null;
 
     public NavBarLayout(Context context) {
@@ -37,10 +38,23 @@ public class NavBarLayout extends LinearLayout {
 
     public NavBarLayout(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        int height = (int) ViewUtil.dp2px(60);
-        setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,height));
+        init();
         initDefaultTabs();
         initTabsView();
+    }
+
+    private void init() {
+        int height = (int) ViewUtil.dp2px(49);
+        setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,height));
+        setBackgroundColor(getResources().getColor(R.color.tab_bg_color));
+
+        initLinePaint();
+    }
+
+    private void initLinePaint() {
+        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaint.setStrokeWidth(ViewUtil.dp2px(0.5f));
+        mPaint.setColor(getResources().getColor(R.color.tab_line_color));
     }
 
     /**
@@ -108,10 +122,10 @@ public class NavBarLayout extends LinearLayout {
      * 设置默认的tab项目
      */
     private void initDefaultTabs() {
-        mTabs.add(new TabItemBean("星座", R.mipmap.ic_launcher, 0, true));
-        mTabs.add(new TabItemBean("话题", R.mipmap.ic_launcher, 1, false));
-        mTabs.add(new TabItemBean("测测", R.mipmap.ic_launcher, 2, false));
-        mTabs.add(new TabItemBean("我", R.mipmap.ic_launcher, 3, false));
+        mTabs.add(new TabItemBean("星座", R.drawable.tab_mine_icon_unselect, R.drawable.tab_cece_icon, 0, true));
+        mTabs.add(new TabItemBean("话题", R.drawable.tab_talk_icon_unselect, R.drawable.tab_talk_icon, 1, false));
+        mTabs.add(new TabItemBean("测测", R.drawable.tab_cece_icon_unselect, R.drawable.tab_cece_icon, 2, false));
+        mTabs.add(new TabItemBean("我", R.drawable.tab_mine_icon_unselect, R.drawable.tab_mine_icon, 3, false));
     }
 
     public ArrayList<TabItemBean> getTabs(){
@@ -135,6 +149,16 @@ public class NavBarLayout extends LinearLayout {
         void tabsChange();
     }
 
+    @Override
+    protected void dispatchDraw(Canvas canvas) {
+        super.dispatchDraw(canvas);
+        if (mPaint == null) {
+            initLinePaint();
+        }
+        canvas.drawLine(0,0,getWidth(),0, mPaint);
+    }
+
+
     /**
      * Desc: NavigationBar 的tab
      * Change:
@@ -143,7 +167,7 @@ public class NavBarLayout extends LinearLayout {
      * @author zchao created at 2017/6/26 18:34
      * @see
     */
-    class NavItemView extends FrameLayout{
+    class NavItemView extends LinearLayout{
         public TabItemBean pTabInfo;
         private ImageView mNavIc;
         private TextView mNavName;
@@ -155,10 +179,13 @@ public class NavBarLayout extends LinearLayout {
         public NavItemView(@NonNull Context context, @Nullable AttributeSet attrs) {
             super(context, attrs);
             setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+            setOrientation(VERTICAL);
+            setGravity(Gravity.CENTER_HORIZONTAL);
             View itemView = LayoutInflater.from(context).inflate(R.layout.nav_bar_item, this);
             mNavIc = (ImageView) findViewById(R.id.nav_bar_icon);
             mNavName = (TextView) findViewById(R.id.nav_bar_name);
         }
+
 
         /**
          * 设置此tabView的数据
@@ -170,9 +197,8 @@ public class NavBarLayout extends LinearLayout {
         }
 
         private void bindView(){
-            mNavIc.setImageResource(pTabInfo.mTabIc);
+            mNavIc.setImageResource(pTabInfo.mSelected ? pTabInfo.mTabIc : pTabInfo.mTabIcUnSelect);
             mNavName.setText(pTabInfo.mTabName);
-            setBackgroundColor(pTabInfo.mSelected ? Color.RED : Color.TRANSPARENT);
         }
 
         public TabItemBean getData(){
