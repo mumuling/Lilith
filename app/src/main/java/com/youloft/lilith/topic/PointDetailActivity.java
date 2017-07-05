@@ -4,23 +4,33 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.alibaba.android.arouter.facade.annotation.Autowired;
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
+import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.ViewUtil;
+import com.youloft.lilith.cons.ConsRepo;
 import com.youloft.lilith.topic.adapter.PointAnswerAdapter;
+import com.youloft.lilith.topic.bean.ReplyBean;
+import com.youloft.lilith.topic.bean.TopicBean;
 import com.youloft.lilith.topic.widget.ScrollFrameLayout;
 import com.youloft.lilith.topic.widget.SoftInputLayout;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
 /**
  * 参与者观点的详情页
@@ -30,7 +40,7 @@ import butterknife.OnClick;
  * @time 2017/6/29 14:55
  * @class PointDetailActivity
  */
-
+@Route(path = "/test/PointDetailActivity")
 public class PointDetailActivity extends BaseActivity implements ScrollFrameLayout.IscrollChange {
 
     @BindView(R.id.ll_top_root)
@@ -45,8 +55,11 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
     ScrollFrameLayout rvCommentAnswer;
     @BindView(R.id.comment_edit)
     EditText commentEdit;
+    @Autowired(name = "/repo/topic")
+    TopicRepo mTopicRepo;
     private LinearLayoutManager mLayoutManager;
     private PointAnswerAdapter adapter;
+    private List<ReplyBean.DataBean> replyBeanList = new ArrayList<>();//回复的列表
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,6 +68,27 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
         overridePendingTransition(R.anim.slide_in_bottom, 0);
         ButterKnife.bind(this);
         initView();
+        initReplyData();
+    }
+
+    public void initReplyData() {
+        mTopicRepo.testReply("1",null,"5")
+                .compose(this.<ReplyBean>bindToLifecycle())
+                .observeOn(AndroidSchedulers.mainThread())
+                .toObservable()
+                .subscribe(new RxObserver<ReplyBean>() {
+                    @Override
+                    public void onDataSuccess(ReplyBean list) {
+                        replyBeanList.clear();
+                        replyBeanList.addAll(list.data);
+                        adapter.setReplyList(replyBeanList);
+                    }
+
+                    @Override
+                    protected void onFailed(Throwable e) {
+                        super.onFailed(e);
+                    }
+                });
     }
 
     private void initView() {

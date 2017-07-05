@@ -30,7 +30,7 @@ public class AppConfig {
     /**
      * 服务器相关
      */
-    public static final String SERVER_LILITH = "http://www.baidu.com";
+    public static final String SERVER_LILITH = "http://lilith.51wnl.com";
 
     /*包名*/
     public static final String Bundle = BuildConfig.APPLICATION_ID;

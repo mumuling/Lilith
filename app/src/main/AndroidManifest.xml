@@ -110,6 +110,8 @@
         <activity android:name=".setting.EditInformationActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".cons.ConsCalDetailActivity" android:theme="@style/TranslucentThem"/>
+        <activity android:name=".setting.ModifyPasswordActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

@@ -8,6 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.youloft.lilith.R;
+import com.youloft.lilith.topic.bean.ReplyBean;
+import com.youloft.lilith.topic.holder.PointAnswerNormalHolder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -19,9 +24,20 @@ public class PointAnswerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private static int ITEM_TYPE_NONE= 1000;//无评论
     private static int ITEM_TYPE_NORMAL = 2000;//普通item
     private static int ITEM_TYPE_AUTHOR = 3000;//作者的item
+
+    private List<ReplyBean.DataBean> replyList = new ArrayList<>();
     public PointAnswerAdapter(Context context) {
         this.mContext = context;
         this.mInflater = LayoutInflater.from(context);
+    }
+
+    public void setReplyList(List<ReplyBean.DataBean> replyList) {
+        if (replyList != null ) {
+            this.replyList.clear();
+            this.replyList.addAll(replyList);
+            notifyDataSetChanged();
+        }
+
     }
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -31,14 +47,16 @@ public class PointAnswerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         } else if (viewType == ITEM_TYPE_NONE) {
             holder = new NoAnswerHolder(mInflater.inflate(R.layout.item_point_no_anwser,parent,false));
         } else {
-            holder = new NormalHolder(mInflater.inflate(R.layout.item_point_answer_normal,parent,false));
+            holder = new PointAnswerNormalHolder(mInflater.inflate(R.layout.item_point_answer_normal,parent,false));
         }
         return holder;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
+        if (holder instanceof PointAnswerNormalHolder) {
+            ((PointAnswerNormalHolder)holder).bindView(replyList.get(position- 2));
+        }
     }
 
     @Override
@@ -54,7 +72,7 @@ public class PointAnswerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public int getItemCount() {
-        return 10;
+        return replyList.size() + 2;
     }
 
     public class NoAnswerHolder extends RecyclerView.ViewHolder {
@@ -77,8 +95,14 @@ public class PointAnswerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     public class NormalHolder extends RecyclerView.ViewHolder {
+
         public NormalHolder(View itemView) {
+
             super(itemView);
+        }
+
+        public void bindView(ReplyBean.DataBean dataBean) {
+
         }
     }
 }

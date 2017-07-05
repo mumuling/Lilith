@@ -18,7 +18,7 @@ import butterknife.BindView;
  *
  */
 
-public class VoteDialog extends BaseDialog {
+public class VoteDialog extends BaseDialog implements View.OnClickListener {
 
     private TextView textPointVote;
 
@@ -50,10 +50,31 @@ public class VoteDialog extends BaseDialog {
 
         editVote.requestFocus();
 
-        InputMethodManager inputManager =
-
-                (InputMethodManager) editVote.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-
+        InputMethodManager inputManager = (InputMethodManager) editVote.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.showSoftInput(editVote, 0);
+        reportConfirm = (TextView) findViewById(R.id.report_confirm);
+        reportCancel = (TextView) findViewById(R.id.report_cancel);
+        textPointVote = (TextView) findViewById(R.id.text_point_vote);
+        reportConfirm.setOnClickListener(this);
+        reportCancel.setOnClickListener(this);
+
+    }
+
+    public void setTitle(String title) {
+        textPointVote.setText(title);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.report_cancel:
+                this.dismiss();
+                break;
+            case R.id.report_confirm:
+
+                break;
+            default:
+                break;
+        }
     }
 }

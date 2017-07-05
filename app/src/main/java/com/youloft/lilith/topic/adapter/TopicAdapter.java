@@ -9,8 +9,14 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.R;
 import com.youloft.lilith.topic.TopicDetailActivity;
+import com.youloft.lilith.topic.bean.TopicBean;
+import com.youloft.lilith.topic.widget.TopicUserImageLayout;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**      星座话题列表的Adapter
  *version
@@ -25,9 +31,16 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private static int ITEM_TYPE_HEADER = 1000;//顶部header
     private static int ITEM_TYPE_NORMAL = 2000;//普通item
 
+    private List<TopicBean> topicBeanList = new ArrayList<>();
+
     public TopicAdapter(Context context) {
         this.mContext = context;
         this.mInflater = LayoutInflater.from(context);
+    }
+
+    public void setData(List<TopicBean> data) {
+        topicBeanList.addAll(data);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -44,11 +57,11 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof NormalViewHolder) {
-            ((NormalViewHolder) holder).mTopicContent.setText(position + "");
+            ((NormalViewHolder) holder).bind(topicBeanList.get(position - 1));
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mContext.startActivity(new Intent(mContext,TopicDetailActivity.class));
+                    ARouter.getInstance().build("/test/TopicDetailActivity").navigation();
                 }
             });
         }
@@ -56,7 +69,7 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return 10;
+        return topicBeanList.size() + 1;
     }
 
     @Override
@@ -69,9 +82,16 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
      */
     public class NormalViewHolder extends RecyclerView.ViewHolder {
         public TextView mTopicContent;
+        public TopicUserImageLayout mTopicUserImageLayout;
         public NormalViewHolder(View itemView) {
             super(itemView);
             mTopicContent = (TextView) itemView.findViewById(R.id.topic_content);
+            mTopicUserImageLayout = (TopicUserImageLayout) itemView.findViewById(R.id.layout_user_image);
+        }
+
+        public void bind(TopicBean topic) {
+            mTopicContent.setText(topic.mTitle);
+           // mTopicUserImageLayout.bindData(topic.mVoteUserList,topic.mTotalVote);
         }
     }
 

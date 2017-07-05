@@ -18,6 +18,7 @@
             android:layout_gravity="top|center"
             android:layout_marginTop="23dp"/>
         <com.youloft.lilith.topic.widget.TopicUserImageLayout
+            android:id="@+id/layout_user_image"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:layout_gravity="bottom"

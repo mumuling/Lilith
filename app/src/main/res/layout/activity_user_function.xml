@@ -7,6 +7,7 @@
         android:id="@+id/vv_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
     <!--内容部分-->
     <LinearLayout
         android:layout_width="match_parent"
@@ -335,7 +336,17 @@
             android:paddingBottom="8dp"
             android:paddingTop="8dp"
             android:text="@string/login"
-            android:textColor="@color/white"
+            android:textColor="@color/slt_login_text_color"
             android:textSize="17dp" />
     </LinearLayout>
+
+    <!--返回按钮-->
+    <ImageView
+        android:id="@+id/iv_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="23dp"
+        android:padding="10dp"
+        android:src="@drawable/back_icon" />
 </FrameLayout>
