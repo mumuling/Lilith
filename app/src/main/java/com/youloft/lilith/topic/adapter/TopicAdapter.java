@@ -7,13 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.R;
+import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.topic.TopicDetailActivity;
 import com.youloft.lilith.topic.bean.TopicBean;
 import com.youloft.lilith.topic.widget.TopicUserImageLayout;
+import com.youloft.lilith.ui.GlideCircleTransform;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,18 +30,18 @@ import java.util.List;
 
 public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context mContext;
-    private LayoutInflater mInflater;
+    private LayoutInflater mInflater ;
     private static int ITEM_TYPE_HEADER = 1000;//顶部header
     private static int ITEM_TYPE_NORMAL = 2000;//普通item
 
-    private List<TopicBean> topicBeanList = new ArrayList<>();
+    private List<TopicBean.DataBean> topicBeanList = new ArrayList<>();
 
     public TopicAdapter(Context context) {
         this.mContext = context;
         this.mInflater = LayoutInflater.from(context);
     }
 
-    public void setData(List<TopicBean> data) {
+    public void setData(List<TopicBean.DataBean> data) {
         topicBeanList.addAll(data);
         notifyDataSetChanged();
     }
@@ -55,13 +58,15 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof NormalViewHolder) {
             ((NormalViewHolder) holder).bind(topicBeanList.get(position - 1));
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ARouter.getInstance().build("/test/TopicDetailActivity").navigation();
+                    ARouter.getInstance().build("/test/TopicDetailActivity")
+                            .withInt("tid",topicBeanList.get(position - 1).id)
+                    .navigation();
                 }
             });
         }
@@ -83,15 +88,21 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public class NormalViewHolder extends RecyclerView.ViewHolder {
         public TextView mTopicContent;
         public TopicUserImageLayout mTopicUserImageLayout;
+        public ImageView mTopicImage;
         public NormalViewHolder(View itemView) {
             super(itemView);
             mTopicContent = (TextView) itemView.findViewById(R.id.topic_content);
             mTopicUserImageLayout = (TopicUserImageLayout) itemView.findViewById(R.id.layout_user_image);
+            mTopicImage = (ImageView) itemView.findViewById(R.id.image_topic_bg);
         }
 
-        public void bind(TopicBean topic) {
-            mTopicContent.setText(topic.mTitle);
-           // mTopicUserImageLayout.bindData(topic.mVoteUserList,topic.mTotalVote);
+        public void bind(TopicBean.DataBean topic) {
+            mTopicContent.setText(topic.title);
+            GlideApp.with(itemView)
+                    .asBitmap()
+                    .load(topic.backImg)
+                    .into(mTopicImage);
+            mTopicUserImageLayout.bindData(topic.voteUser,topic.totalVote);
         }
     }
 

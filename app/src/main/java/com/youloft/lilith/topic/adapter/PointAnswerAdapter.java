@@ -55,7 +55,8 @@ public class PointAnswerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof PointAnswerNormalHolder) {
-            ((PointAnswerNormalHolder)holder).bindView(replyList.get(position- 2));
+            if (replyList.size() == 0)return;
+            ((PointAnswerNormalHolder)holder).bindView(replyList.get(position- 1));
         }
     }
 
@@ -63,7 +64,7 @@ public class PointAnswerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public int getItemViewType(int position) {
         if (position == 0) {
             return ITEM_TYPE_AUTHOR;
-        } else if (position == 1) {
+        } else if ( (replyList == null || replyList.size() == 0) &&position == 1) {
             return ITEM_TYPE_NONE;
         } else {
             return ITEM_TYPE_NORMAL;
@@ -72,7 +73,7 @@ public class PointAnswerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public int getItemCount() {
-        return replyList.size() + 2;
+        return replyList.size() == 0? 2:replyList.size()+ 1;
     }
 
     public class NoAnswerHolder extends RecyclerView.ViewHolder {

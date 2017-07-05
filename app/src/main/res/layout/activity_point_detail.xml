@@ -10,6 +10,7 @@
         android:layout_height="match_parent"
         android:id="@+id/ll_top_root"
         android:orientation="vertical"
+        android:layout_marginBottom="52dp"
         android:background="@drawable/activity_point_bg">
         <RelativeLayout
             android:layout_width="match_parent"

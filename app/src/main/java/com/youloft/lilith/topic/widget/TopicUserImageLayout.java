@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
+import com.youloft.lilith.topic.bean.TopicBean;
 import com.youloft.lilith.topic.bean.VoteUserBean;
 import com.youloft.lilith.ui.GlideCircleTransform;
 
@@ -78,15 +79,15 @@ public class TopicUserImageLayout extends RelativeLayout {
         }
     }
 
-    public void bindData (List<VoteUserBean> imageList,int number) {
+    public void bindData (List<TopicBean.DataBean.VoteUserBean> imageList, int number) {
         for (int i = 0; i < imageList.size(); i ++) {
-            GlideApp.with(mContext).asDrawable()
-                    .transform(new GlideCircleTransform(mContext))
-                    .load(imageList.get(i).mHeadImg)
+            GlideApp.with(mContext).asBitmap()
+                    .transform(new GlideCircleTransform(getContext()))
+                    .load(imageList.get(i).headImg)
                     .into(mUserImageList.get(i));
             mUserImageList.get(i).setVisibility(VISIBLE);
         }
-        userNumber.setText(number);
+        userNumber.setText(String.valueOf(number) + "人");
     }
 
 

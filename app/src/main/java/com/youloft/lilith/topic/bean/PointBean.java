@@ -1,6 +1,7 @@
 package com.youloft.lilith.topic.bean;
 
-import java.util.ArrayList;
+import com.youloft.lilith.common.net.AbsResponse;
+
 import java.util.List;
 
 /**    观点对象
@@ -10,52 +11,50 @@ import java.util.List;
  *@class   PointBean
  */
 
-public class PointBean extends Object {
-    public int mId;
-    public int mTopicId;
-    public int mUserId;
-    public String mViewPoint;
-    public int mZanCount;
-    public int mReply;
-    public int mSex;
-    public int mSigns;
-    public String mName;
-    public String mHeadImage;
-    public String mVote;
-    public List<ReplyItem> mReplyList = new ArrayList<>();
-    public PointBean(){}
+public class PointBean extends AbsResponse<List<PointBean.DataBean>> {
 
-    public static class ReplyItem {
-        public ReplyItem(){}
-        public int uId;
-        public String uNickName;
-        public String uContents;
-    }
 
-    public static List<PointBean> getPointListDefault() {
-        List<PointBean> pointBeanList = new ArrayList<>();
-        for (int i = 0; i < 10; i ++) {
-            PointBean pointBean= new PointBean();
-            ReplyItem replyItem = new ReplyItem();
-            pointBean.mName = "星座达人" + i;
-            pointBean.mHeadImage = "http://b.zol-img.com.cn/sjbizhi/images/9/320x510/1457593726716.jpg";
-            pointBean.mId = i;
-            pointBean.mTopicId = i;
-            pointBean.mUserId = i;
-            pointBean.mZanCount = 888;
-            pointBean.mSex = 1;
-            pointBean.mSigns = 6;
-            pointBean.mReply = 456;
-            pointBean.mViewPoint = "相似更好";
-            replyItem.uId = i;
-            replyItem.uNickName = "用户" + i;
-            replyItem.uContents = "用户" + i + "的评论";
-            pointBean.mReplyList.add(replyItem);
-            pointBeanList.add(pointBean);
+    public static class DataBean {
+        /**
+         * id : 2
+         * topicId : 10000
+         * topicOptionId : 1
+         * userId : 10000
+         * viewpoint : 支持
+         * zan : 2
+         * reply : 1
+         * sex : 0
+         * signs : 0
+         * headImg :
+         * isclick : 1
+         * nickName : 小虎儿
+         * replyList : [{"uid":10000,"nickName":"小虎儿","contents":"绝世你的"}]
+         */
+
+        public int id;
+        public int topicId;
+        public int topicOptionId;
+        public int userId;
+        public String viewpoint;
+        public int zan;
+        public int reply;
+        public int sex;
+        public int signs;
+        public String headImg;
+        public int isclick;
+        public String nickName;
+        public List<ReplyListBean> replyList;
+
+        public static class ReplyListBean {
+            /**
+             * uid : 10000
+             * nickName : 小虎儿
+             * contents : 绝世你的
+             */
+
+            public int uid;
+            public String nickName;
+            public String contents;
         }
-        return pointBeanList;
-
     }
-
-
 }

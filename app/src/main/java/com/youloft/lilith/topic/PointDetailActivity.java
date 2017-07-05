@@ -31,6 +31,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * 参与者观点的详情页
@@ -60,6 +61,9 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
     private LinearLayoutManager mLayoutManager;
     private PointAnswerAdapter adapter;
     private List<ReplyBean.DataBean> replyBeanList = new ArrayList<>();//回复的列表
+    public static String TYPE_POINT = "type_point";
+    public static String TYPE_ANSWER = "type_answer";
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,10 +76,11 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
     }
 
     public void initReplyData() {
-        mTopicRepo.testReply("1",null,"5")
+        mTopicRepo.getPointReply("1",null,"5")
                 .compose(this.<ReplyBean>bindToLifecycle())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.newThread())
                 .toObservable()
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new RxObserver<ReplyBean>() {
                     @Override
                     public void onDataSuccess(ReplyBean list) {
