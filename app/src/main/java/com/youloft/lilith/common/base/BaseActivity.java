@@ -2,7 +2,9 @@ package com.youloft.lilith.common.base;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -45,14 +47,43 @@ public abstract class BaseActivity extends RxAppCompatActivity implements View.O
         super.onPause();
     }
 
-    public Bitmap getScreenShort(){
-        View decorView = getWindow().getDecorView();
-        decorView.setDrawingCacheEnabled(true);
-        Bitmap drawingCache = decorView.getDrawingCache();
-        decorView.setDrawingCacheEnabled(false);
-        return drawingCache;
+
+    /**
+     * 截屏
+     *
+     * @return
+     */
+    public Bitmap takeScreenShot(boolean needFixStatu) {
+        try {
+            View view = getWindow().getDecorView().findViewById(android.R.id.content);
+            Bitmap b1 = loadBitmapFromView(view);
+            Bitmap dest = null;
+            if (needFixStatu) {
+                Rect frame = new Rect();
+                getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);
+                int statusBarHeight = frame.top;
+                dest = Bitmap.createBitmap(b1, 0, statusBarHeight, b1.getWidth(), b1.getHeight()
+                        - statusBarHeight);
+            } else {
+                dest = Bitmap.createBitmap(b1, 0, 0, b1.getWidth(), b1.getHeight());
+            }
+            return dest;
+        } catch (Throwable e) {
+            return null;
+        }
     }
 
+    protected Bitmap loadBitmapFromView(View v) {
+        if (v == null) {
+            return null;
+        }
+        Bitmap screenshot;
+        screenshot = Bitmap.createBitmap(v.getWidth(), v.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(screenshot);
+        c.translate(-v.getScrollX(), -v.getScrollY());
+        v.draw(c);
+        return screenshot;
+    }
     /**
      * 使用沉浸式菜单栏
      */

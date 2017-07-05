@@ -31,7 +31,7 @@ public class DeviceUtil {
         //wifi mac地址
         String mac = "";
         try {
-            WifiManager wifi = (WifiManager) Utils.getContext().getSystemService(Context.WIFI_SERVICE);
+            WifiManager wifi = (WifiManager) Utils.getContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
             WifiInfo info = wifi.getConnectionInfo();
             mac = info.getMacAddress();
         } catch (Exception e) {

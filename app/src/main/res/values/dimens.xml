@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="tool_bar_height">50dp</dimen>
+    <dimen name="tool_bar_height">44dp</dimen>
     <!--个人中心头像尺寸-->
     <dimen name="head_portrait">80dp</dimen>
 

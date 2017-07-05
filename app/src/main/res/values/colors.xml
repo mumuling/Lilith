@@ -13,13 +13,10 @@
     <color name="province_line_border">#C7C7C7</color>
     <color name="translucent">#00000000</color>
 
-    <!--运势颜色-->
-    <!--<color name="constellation_luck_color">#de5deb</color>-->
-    <!--<color name="constellation_love_color">#ff6161</color>-->
-    <!--<color name="constellation_money_color">#ffb74a</color>-->
-    <!--<color name="constellation_work_color">#49b5ff</color>-->
-    <!--不透明明度白色-->
-    <color name="white">#ffffffff</color>
+
+    <color name="cons_title_high_light">#de5deb</color>
+    <color name="cons_my_info_en_word_color">#7fffffff</color>
+    <color name="white">#ffffff</color>
     <!--70%透明度白色  透明了30%-->
     <color name="white_70">#b2ffffff</color>
     <!--50%透明度白色-->
@@ -29,6 +26,13 @@
     <!--10%透明度白色  透明了90%-->
     <color name="white_10">#21ffffff</color>
 
+    <!--运势颜色-->
+    <color name="constellation_luck_color">#0fde5deb</color>
+    <color name="constellation_love_color">#0fff6161</color>
+    <color name="constellation_money_color">#0fffb74a</color>
+    <color name="constellation_work_color">#0f49b5ff</color>
+    <color name="constellation_week_color">#453b60</color>
+    <color name="cons_share_bg_color">#33000000</color>
     <!--!!!!!!!!!!!!!!!!!!!!!这个是整个项目基调主题背景色-->
     <color name="theme_background">#282142</color>
     <color name="cons_detail_content_bg_color">#433d5f</color>

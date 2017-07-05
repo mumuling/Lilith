@@ -1,6 +1,10 @@
 package com.youloft.lilith.cons.bean;
 
+import com.youloft.lilith.common.utils.CalendarHelper;
+
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 /**
  * Created by zchao on 2017/6/30.
@@ -10,15 +14,33 @@ import java.util.ArrayList;
 
 public class LuckData extends Object{
     public ArrayList<LuckItem> data;   //每天的数据
-    public int type;                   //类型{1：概括运；2：感情运；3：财富运；4工作运}
+    public int type;                   //类型{1：概括运；2：感情运；3工作运 4：财富运；}
 
     public static class LuckItem {
-        public LuckItem(String day, int luckLevel) {
+        public LuckItem() {
+        }
+
+        public LuckItem(GregorianCalendar day, int luckLevel) {
             this.day = day;
             this.luckLevel = luckLevel;
         }
 
-        public String day;
+        public GregorianCalendar day;
         public int luckLevel;
+
+        public String getDayString(){
+            long intervalDays = CalendarHelper.getIntervalDays(new GregorianCalendar(), day);
+            if (intervalDays < 0) {
+                return "昨天";
+            } else if (intervalDays == 0) {
+                return "今天";
+            } else if (intervalDays == 1){
+                return "明天";
+            } else if (intervalDays == 2) {
+                return "后天";
+            } else {
+                return String.valueOf(day.get(Calendar.DAY_OF_MONTH));
+            }
+        }
     }
 }

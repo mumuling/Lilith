@@ -36,6 +36,8 @@ public class AppConfig {
     public static final String Bundle = BuildConfig.APPLICATION_ID;
     public static final int VERSION_CODE = BuildConfig.VERSION_CODE;
     public static final String VERSION_NAME = BuildConfig.VERSION_NAME;
+    /*tkn*/
+    public static final String TKN = "D0513B7CEF494E82AEAFDFF7B2183ECF";
 
 
     /*运行模式*/

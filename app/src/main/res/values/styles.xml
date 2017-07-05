@@ -58,6 +58,12 @@
         <item name="android:windowExitAnimation">@anim/push_bottom_out</item>
     </style>
 
-
+    <declare-styleable name="RoundImageView">
+        <attr name="radius" format="dimension" /> />
+        <attr name="radius_left_top" format="dimension" /> />
+        <attr name="radius_right_top" format="dimension" /> />
+        <attr name="radius_right_bottom" format="dimension" /> />
+        <attr name="radius_left_bottom" format="dimension" /> />
+    </declare-styleable>
 
 </resources>

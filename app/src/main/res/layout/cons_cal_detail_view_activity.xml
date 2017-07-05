@@ -8,6 +8,7 @@
     <ImageView
         android:id="@+id/cons_detail_bg_img"
         android:layout_width="match_parent"
+        android:scaleType="centerCrop"
         android:layout_height="match_parent" />
 
     <LinearLayout

@@ -7,6 +7,7 @@ import com.youloft.lilith.api.LilithApi;
 import com.youloft.lilith.common.cache.CacheStore;
 import com.youloft.lilith.common.net.APIFactory;
 import com.youloft.lilith.common.net.OnlineConfigAgent;
+import com.youloft.lilith.common.utils.LocationUtil;
 import com.youloft.lilith.common.utils.Utils;
 import com.youloft.lilith.push.PushMessageHandler;
 import com.youloft.lilith.push.PushNotificationClickHandler;
@@ -66,6 +67,7 @@ public class LLApplication extends Application {
                         //加载参数发生异常
                     }
                 });
+        LocationUtil.updateLocation();//后台更新定位缓存数据
     }
 
 

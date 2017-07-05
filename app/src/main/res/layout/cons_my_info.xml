@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cons_my_info_root"
+    android:background="@drawable/cons_top_bg">
+
+    <com.youloft.lilith.cons.view.RoundImageView
+        android:id="@+id/cons_my_info_bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:scaleType="centerCrop"
+        app:radius_left_top="5dp"
+        app:radius_right_top="5dp"/>
+
+    <LinearLayout
+        android:id="@+id/cons_my_info_content_root"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/luck_line_left_icon" />
+
+            <TextView
+                android:id="@+id/cons_my_info_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp"
+                android:text="06.16.2017"
+                android:textColor="@android:color/white"
+                android:textSize="16dp"
+                android:textStyle="italic" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/luck_line_right_icon" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/cons_my_info_week"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="5dp"
+            android:text="SUNDAY"
+            android:textColor="@android:color/white"
+            android:textSize="15dp"
+            android:textStyle="italic" />
+
+        <ImageView
+            android:id="@+id/cons_my_info_cons_img"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/cons_my_info_xz"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="3dp"
+            android:text="天蝎座"
+            android:textColor="@android:color/white"
+            android:textSize="24dp" />
+
+        <TextView
+            android:id="@+id/cons_my_info_date_range"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="2dp"
+            android:text="10.24-11.22"
+            android:textColor="@android:color/white"
+            android:textSize="10dp"
+            android:textStyle="italic" />
+
+        <TextView
+            android:id="@+id/cons_my_info_en_word"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="11dp"
+            android:gravity="center"
+            android:lineSpacingExtra="7dp"
+            android:text="Sorrow and happiness, like the expression on the face, let people see, you know, the heart of the depression will be comfortable."
+            android:textColor="@color/cons_my_info_en_word_color"
+            android:textSize="16dp"
+            android:textStyle="italic" />
+
+        <TextView
+            android:id="@+id/cons_my_info_cn_word"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:lineSpacingExtra="7dp"
+            android:paddingBottom="10dp"
+            android:text="喜怒哀乐喜欢表现在脸上，让人一看便知道，把心中的苦闷说出来会舒服一些。"
+            android:textColor="@android:color/white"
+            android:textSize="16dp" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/cons_my_info_share_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_margin="15dp"
+        android:src="@drawable/constellation_share_icon" />
+</FrameLayout>

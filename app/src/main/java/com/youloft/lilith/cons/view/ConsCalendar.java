@@ -10,6 +10,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 
 import com.youloft.lilith.cons.ConsCalAdapter;
+import com.youloft.lilith.cons.bean.ConsPredictsBean;
 
 /**
  * Created by zchao on 2017/7/1.
@@ -73,7 +74,12 @@ public class ConsCalendar extends RecyclerView {
         adapter.setCalType(type);
     }
 
-    public void setData() {
+    /**
+     * 传入数据
+     * @param data
+     */
+    public void setData(ConsPredictsBean data) {
+
     }
 
     public interface  OnClickListener{
