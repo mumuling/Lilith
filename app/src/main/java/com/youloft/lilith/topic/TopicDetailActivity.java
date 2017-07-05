@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.base.BaseActivity;
@@ -25,7 +26,7 @@ import butterknife.ButterKnife;
  * @time 2017/6/29 14:10
  * @class TopicDetailActivity
  */
-
+@Route(path = "/test/TopicDetailActivity")
 public class TopicDetailActivity extends BaseActivity {
 
 
@@ -36,6 +37,7 @@ public class TopicDetailActivity extends BaseActivity {
     private LinearLayoutManager mLayoutManager;
     private TopicDetailAdapter adapter;
     private VoteDialog voteDialog;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
