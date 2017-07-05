@@ -51,7 +51,7 @@
             android:layout_centerVertical="true"
             android:background="@drawable/slt_login_btn"
             android:text="立即测算"
-            android:textColor="@color/white"
+            android:textColor="@color/slt_login_text_color"
             android:textSize="14dp" />
     </RelativeLayout>
 </FrameLayout>

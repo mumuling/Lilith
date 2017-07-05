@@ -1,7 +1,5 @@
-package com.youloft.lilith.login;
+package com.youloft.lilith.setting;
 
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
@@ -12,7 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.VideoView;
+import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.youloft.lilith.R;
@@ -23,34 +21,39 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * 设置密码界面
+ * 修改密码界面
  * <p>
- * Created by GYH on 2017/7/3.
+ * Created by GYH on 2017/7/5.
  */
-@Route(path = "/test/SetPasswordActivity")
-public class SetPasswordActivity extends BaseActivity {
+@Route(path = "/test/ModifyPasswordActivity")
+public class ModifyPasswordActivity extends BaseActivity {
 
-    @BindView(R.id.vv_background)
-    VideoView vvBackground;  //背景视频
+
+    @BindView(R.id.et_old_password)
+    EditText etOldPassword;     //旧密码
+    @BindView(R.id.iv_old_error)
+    ImageView ivOldError;       //旧密码错误显示的图标
+    @BindView(R.id.iv_old_right)
+    ImageView ivOldRight;       //旧密码正确显示的图标
     @BindView(R.id.et_password)
-    EditText etPassword;  //输入密码
+    EditText etPassword;        //新密码
     @BindView(R.id.iv_is_show_pwd01)
-    ImageView ivIsShowPwd01; //输入密码 是否明文显示
+    ImageView ivIsShowPwd01;    //控制新密码是否明文显示的按钮01
     @BindView(R.id.iv_clean_password01)
-    ImageView ivCleanPassword01;   //清除输入密码
+    ImageView ivCleanPassword01; //清除密码按钮01
     @BindView(R.id.et_confirm_password)
-    EditText etConfirmPassword;  //确认密码
+    EditText etConfirmPassword; //确认新密码
     @BindView(R.id.iv_is_show_pwd02)
-    ImageView ivIsShowPwd02;    //确认密码是否明文显示
+    ImageView ivIsShowPwd02;    //控制新密码是否明文显示的按钮02
     @BindView(R.id.iv_clean_password02)
-    ImageView ivCleanPassword02;  //清除确认密码
-    @BindView(R.id.btn_login)
-    Button btnLogin;  //登录按钮
+    ImageView ivCleanPassword02;  //清除密码按钮02
+    @BindView(R.id.btn_confirm)
+    Button btnConfirm;   //确认按钮
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_set_password);
+        setContentView(R.layout.activity_modify_password);
         ButterKnife.bind(this);
         editTextSetting();
     }
@@ -112,28 +115,6 @@ public class SetPasswordActivity extends BaseActivity {
     }
 
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        initBackgroundVedio();
-    }
-
-    /**
-     * 背景视频设置
-     */
-    private void initBackgroundVedio() {
-        String uri = "android.resource://" + getPackageName() + "/" + R.raw.bg_login;
-        vvBackground.setVideoURI(Uri.parse(uri));
-        vvBackground.start();
-        vvBackground.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-
-            @Override
-            public void onCompletion(MediaPlayer mPlayer) {
-                mPlayer.start();
-                mPlayer.setLooping(true);
-            }
-        });
-    }
 
     private boolean isShowPassword01 = false;//是否显示密码的标识
     private boolean isShowPassword02 = false;//是否显示密码的标识
@@ -178,8 +159,9 @@ public class SetPasswordActivity extends BaseActivity {
         }
     }
 
-    @OnClick(R.id.fl_back)
-    public void onViewClicked() {
+    //返回按钮
+    @OnClick(R.id.iv_back)
+    public void onBackClicked() {
         onBackPressed();
     }
 }

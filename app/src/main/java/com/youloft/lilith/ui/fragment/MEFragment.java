@@ -19,12 +19,17 @@ import com.youloft.lilith.router.AppRouter;
 import com.youloft.lilith.setting.EditInformationActivity;
 import com.youloft.lilith.setting.SettingActivity;
 
+import java.io.File;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 import butterknife.Unbinder;
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.Call;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 
 /**
  * Created by zchao on 2017/6/27.
@@ -67,6 +72,7 @@ public class MEFragment extends BaseFragment {
                 startActivity(new Intent(getActivity(), LoginActivity.class));
             }
         });
+
         return rootView;
     }
 

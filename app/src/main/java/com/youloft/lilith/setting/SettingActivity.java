@@ -1,6 +1,5 @@
 package com.youloft.lilith.setting;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -10,7 +9,6 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
-import com.youloft.lilith.router.AppRouter;
 import com.youloft.lilith.ui.view.BaseToolBar;
 
 import butterknife.BindView;
@@ -40,7 +38,7 @@ public class SettingActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_modify_password://修改密码
-                Toast.makeText(this, "修改密码", Toast.LENGTH_SHORT).show();
+                ARouter.getInstance().build("/test/ModifyPasswordActivity").navigation();
                 break;
             case R.id.rl_bind_account://绑定账号
                 ARouter.getInstance().build("/test/BindAccountActivity").navigation();

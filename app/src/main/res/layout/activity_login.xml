@@ -10,7 +10,7 @@
 
     <!--最下面的其他登录方式-->
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"
         android:layout_marginBottom="12.3dp"
@@ -19,6 +19,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -283,7 +284,7 @@
             android:paddingBottom="8dp"
             android:paddingTop="8dp"
             android:text="@string/login"
-            android:textColor="@color/white"
+            android:textColor="@color/slt_login_text_color"
             android:textSize="17dp" />
 
         <!--隐私条款-->
@@ -324,25 +325,34 @@
                 android:id="@+id/tv_forget_password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:paddingRight="10dp"
+                android:paddingTop="10dp"
                 android:text="@string/forget_password_01"
                 android:textColor="@color/login_register_text_color"
                 android:textSize="15dp" />
 
             <TextView
                 android:id="@+id/tv_register"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:paddingLeft="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
+                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
                 android:text="@string/register"
                 android:textColor="@color/login_register_text_color"
                 android:textSize="15dp" />
         </RelativeLayout>
 
     </LinearLayout>
+    <!--返回按钮-->
+    <ImageView
+        android:id="@+id/iv_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="23dp"
+        android:padding="10dp"
+        android:src="@drawable/back_icon" />
 </FrameLayout>

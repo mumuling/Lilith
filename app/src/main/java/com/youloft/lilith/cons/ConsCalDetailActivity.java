@@ -8,6 +8,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.renderscript.ScriptIntrinsicBlur;
@@ -82,11 +83,10 @@ public class ConsCalDetailActivity extends BaseActivity {
         setContentView(R.layout.cons_cal_detail_view_activity);
         ButterKnife.bind(this);
         week_locals = getIntent().getIntArrayExtra("week_local");
-
         if (mBg != null) {
             mConsDetailBgImg.setImageBitmap(mBg);
         } else {
-            mConsDetailBgImg.setBackgroundColor(Color.BLACK);
+            mConsDetailBgImg.setBackgroundColor(getResources().getColor(R.color.cons_share_bg_color));
         }
         mRoot.post(new Runnable() {
             @Override
@@ -131,7 +131,7 @@ public class ConsCalDetailActivity extends BaseActivity {
             }
         });
 
-        ValueAnimator alphaAnim = ObjectAnimator.ofFloat(mConsDetailBgImg, View.ALPHA, in?0:0.7f, in?0.7f:0);
+        ValueAnimator alphaAnim = ObjectAnimator.ofFloat(mConsDetailBgImg, View.ALPHA, in?0:1f, in?1f:0);
 
         final AnimatorSet set = new AnimatorSet();
         set.setDuration(350);
@@ -148,10 +148,10 @@ public class ConsCalDetailActivity extends BaseActivity {
     }
 
 
-    public static void startConsCalDetailActivity(Context context, int[] local, Bitmap bitmap) {
+    public static void startConsCalDetailActivity(Context context, int[] local, Bitmap bitmapByte) {
         Intent intent = new Intent(context, ConsCalDetailActivity.class);
         intent.putExtra("week_local", local);
-        mBg = bitmap;
+        mBg = bitmapByte;
         context.startActivity(intent);
     }
 

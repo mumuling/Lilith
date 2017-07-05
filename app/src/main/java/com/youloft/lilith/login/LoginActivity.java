@@ -1,15 +1,12 @@
 package com.youloft.lilith.login;
 
-import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -19,8 +16,6 @@ import android.widget.VideoView;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
-
-import org.w3c.dom.Text;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -77,12 +72,12 @@ public class LoginActivity extends BaseActivity {
                     etPhoneNumber.setText(s.toString() + "-");
                     etPhoneNumber.setSelection(etPhoneNumber.getText().toString().length());
                 }
-                if (text.length() >= 4 && !String.valueOf(text.charAt(3)).equals("-")){
+                if (text.length() >= 4 && !String.valueOf(text.charAt(3)).equals("-")) {
                     String result = text.substring(0, 3) + "-" + text.substring(3);
                     etPhoneNumber.setText(result);
                     etPhoneNumber.setSelection(etPhoneNumber.getText().toString().length());
                 }
-                if (text.length() >= 9 && !String.valueOf(text.charAt(8)).equals("-")){
+                if (text.length() >= 9 && !String.valueOf(text.charAt(8)).equals("-")) {
                     String result = text.substring(0, 8) + "-" + text.substring(8);
                     etPhoneNumber.setText(result);
                     etPhoneNumber.setSelection(etPhoneNumber.getText().toString().length());
@@ -129,7 +124,6 @@ public class LoginActivity extends BaseActivity {
     }
 
 
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -172,7 +166,7 @@ public class LoginActivity extends BaseActivity {
     public void forgetPassword(View view) {
         ARouter.getInstance()
                 .build("/test/UserFunctionActivity")
-                .withInt("flag",20002)
+                .withInt("flag", 20002)
                 .navigation();
     }
 
@@ -181,7 +175,7 @@ public class LoginActivity extends BaseActivity {
     public void register(View view) {
         ARouter.getInstance()
                 .build("/test/UserFunctionActivity")
-                .withInt("flag",20003)
+                .withInt("flag", 20003)
                 .navigation();
     }
 
@@ -190,7 +184,7 @@ public class LoginActivity extends BaseActivity {
     public void quickLogin(View view) {
         ARouter.getInstance()
                 .build("/test/UserFunctionActivity")
-                .withInt("flag",20001)
+                .withInt("flag", 20001)
                 .navigation();
     }
 
@@ -226,5 +220,12 @@ public class LoginActivity extends BaseActivity {
                 etPassword.setText(null);
                 break;
         }
+    }
+
+
+
+    @OnClick(R.id.iv_back)
+    public void onViewClicked() {
+        onBackPressed();
     }
 }

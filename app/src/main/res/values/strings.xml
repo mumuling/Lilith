@@ -35,6 +35,12 @@
     <string name="wechat">微信</string>
     <string name="password">密码</string>
     <string name="cons_share_word">分享我的运势</string>
+    <string name="modify_password">修改密码</string>
+    <string name="password_length_description">密码长度6-16位，支持数字、字母、字符</string>
+    <string name="old_password">输入原密码</string>
+    <string name="new_password">输入新密码</string>
+    <string name="confirm_new_password">确认新密码</string>
+    <string name="confirm">确认</string>
 
     <string-array name="cons_luck_line_color">
         <item>#de5deb,#99de5deb,#0fde5deb</item>

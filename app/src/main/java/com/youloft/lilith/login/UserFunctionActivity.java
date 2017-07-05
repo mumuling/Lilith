@@ -256,7 +256,7 @@ public class UserFunctionActivity extends BaseActivity {
         ARouter.getInstance().build("/test/SetPasswordActivity").navigation();
     }
 
-
+    //离开时移除活动中的handler
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -267,5 +267,10 @@ public class UserFunctionActivity extends BaseActivity {
     @OnClick(R.id.iv_clean_number)
     public void onViewClicked() {
         etPhoneNumber.setText(null);
+    }
+
+    @OnClick(R.id.iv_back)
+    public void onBackClicked() {
+        onBackPressed();
     }
 }
