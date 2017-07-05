@@ -8,14 +8,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseFragment;
+import com.youloft.lilith.common.rx.RxObserver;
+import com.youloft.lilith.measure.MeasureRepo;
 import com.youloft.lilith.measure.adapter.MeasureAdapter;
+import com.youloft.lilith.measure.bean.MeasureBean;
 import com.youloft.lilith.ui.view.BaseToolBar;
+
+import java.util.HashMap;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by zchao on 2017/6/27.
@@ -24,12 +34,15 @@ import butterknife.Unbinder;
  */
 
 public class CCFragment extends BaseFragment {
+    @Autowired(name = "/repo/measure")
+    MeasureRepo measureRepo;
 
     @BindView(R.id.btl_CC)
     BaseToolBar btlCC;  //标题栏
     @BindView(R.id.rv_CC)
     RecyclerView rvCC;  //recyclerView
     Unbinder unbinder;
+    private MeasureAdapter mMeasureAdapter;
 
     public CCFragment() {
         super(R.layout.fragment_cc);
@@ -41,8 +54,28 @@ public class CCFragment extends BaseFragment {
         unbinder = ButterKnife.bind(this, rootView);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
         rvCC.setLayoutManager(manager);
-        rvCC.setAdapter(new MeasureAdapter());
+        mMeasureAdapter = new MeasureAdapter(mContext);
+        rvCC.setAdapter(mMeasureAdapter);
+        getMeasureData();
         return rootView;
+    }
+
+    /**
+     * 获取测测的数据
+     */
+    private void getMeasureData() {
+        MeasureRepo.getMeasureData()
+                .compose(this.<MeasureBean>bindToLifecycle())
+                .subscribeOn(Schedulers.newThread())
+                .toObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new RxObserver<MeasureBean>() {
+                    @Override
+                    public void onDataSuccess(MeasureBean measureBean) {
+                        mMeasureAdapter.setData(measureBean.data);
+                    }
+
+                });
     }
 
     @Override
@@ -50,4 +83,6 @@ public class CCFragment extends BaseFragment {
         super.onDestroyView();
         unbinder.unbind();
     }
+
+
 }

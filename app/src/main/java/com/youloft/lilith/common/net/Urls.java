@@ -16,4 +16,8 @@ public class Urls {
     public static final String TOPIC_LIST = "http://lilith.51wnl.com/GetTopicsList";
     public static final String REPLY_LIST = "http://lilith.51wnl.com/GetReplyList";
     public static final String VOTE_LIST = "http://lilith.51wnl.com/GetVoteList";
+
+    //测测的url
+    public static final String MEASURE_URL = "http://lilith.51wnl.com/GetCeceAd";
+
 }
