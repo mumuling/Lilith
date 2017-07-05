@@ -1,12 +1,17 @@
 package com.youloft.lilith.cons.card;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.ViewGroup;
 
 import com.youloft.lilith.R;
+import com.youloft.lilith.common.utils.ViewUtil;
 import com.youloft.lilith.cons.ConsCalDetailActivity;
 import com.youloft.lilith.cons.bean.ConsPredictsBean;
 import com.youloft.lilith.cons.view.ConsCalendar;
+import com.youloft.lilith.ui.MainActivity;
+
+import java.io.ByteArrayOutputStream;
 
 /**
  * Created by zchao on 2017/7/5.
@@ -36,8 +41,13 @@ public class ConsCalWeekHolder extends ConsBaseHolder implements ConsCalendar.On
     public void onClick() {
         int[] local = new int[2];
         mWeekView.getLocationOnScreen(local);
+        if (mContext instanceof MainActivity) {
+            Bitmap screenShort = ((MainActivity) mContext).takeScreenShot(false);
+            screenShort = ViewUtil.blurBitmap(screenShort, mContext);
 
-
-        ConsCalDetailActivity.startConsCalDetailActivity(mContext, local, null);
+            ConsCalDetailActivity.startConsCalDetailActivity(mContext, local, screenShort);
+        } else {
+            ConsCalDetailActivity.startConsCalDetailActivity(mContext, local, null);
+        }
     }
 }
