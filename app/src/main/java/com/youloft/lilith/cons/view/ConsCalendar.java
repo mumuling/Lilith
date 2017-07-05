@@ -34,13 +34,17 @@ public class ConsCalendar extends RecyclerView {
         init();
     }
 
+    /**
+     * 设置整个calendar的点击
+     * @param listener
+     */
     public void setListener(OnClickListener listener) {
         this.listener = listener;
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
-        gestureDetector.onTouchEvent(e);
+        gestureDetector.onTouchEvent(e);    //自己接管手势，否者直接点击无效果
         return true;
     }
 
@@ -79,7 +83,9 @@ public class ConsCalendar extends RecyclerView {
      * @param data
      */
     public void setData(ConsPredictsBean data) {
-
+        if (data != null && data.data != null) {
+            adapter.setConsData(data.data);
+        }
     }
 
     public interface  OnClickListener{

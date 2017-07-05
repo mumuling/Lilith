@@ -1,5 +1,8 @@
 package com.youloft.lilith.cons.bean;
 
+import com.youloft.lilith.common.net.AbsResponse;
+
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -8,15 +11,8 @@ import java.util.List;
  * version:
  */
 
-public class ConsPredictsBean {
-
-    public DataBean data;
-    public int status;
-    public String sign;
-
-
-
-    public static class DataBean {
+public class ConsPredictsBean extends AbsResponse<ConsPredictsBean.DataBean> implements Serializable {
+    public static class DataBean implements Serializable {
         /**
          * bgImg : http://b.zol-img.com.cn/sjbizhi/images/9/320x510/1457593726716.jpg
          * msg : 完美的一句话概括，运势的情况.一定要有逼格！
@@ -39,7 +35,7 @@ public class ConsPredictsBean {
         public String msgwealth;
         public List<PredictsBean> predicts;
 
-        public static class PredictsBean {
+        public static class PredictsBean implements Serializable {
             /**
              * avg : 5
              * date : 2017-07-02

@@ -35,6 +35,7 @@
     <string name="wechat">微信</string>
     <string name="password">密码</string>
     <string name="cons_share_word">分享我的运势</string>
+    <string name="cons_cal_title">运势日历</string>
 
     <string-array name="cons_luck_line_color">
         <item>#de5deb,#99de5deb,#0fde5deb</item>

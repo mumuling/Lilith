@@ -8,31 +8,34 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.renderscript.ScriptIntrinsicBlur;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.AnimationSet;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.youloft.lilith.R;
-import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.base.BaseActivity;
-import com.youloft.lilith.common.utils.ViewUtil;
-import com.youloft.lilith.cons.view.ConsCalItemDecoration;
+import com.youloft.lilith.common.utils.CalendarHelper;
+import com.youloft.lilith.common.utils.SafeUtil;
+import com.youloft.lilith.cons.bean.ConsPredictsBean;
 import com.youloft.lilith.cons.view.ConsCalendar;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by zchao on 2017/7/3.
@@ -68,6 +71,7 @@ public class ConsCalDetailActivity extends BaseActivity {
     FrameLayout mRoot;
     private int[] week_locals;
     private int distance;
+    private ConsPredictsBean mData;
 
     /**
      * 关闭
@@ -83,11 +87,66 @@ public class ConsCalDetailActivity extends BaseActivity {
         setContentView(R.layout.cons_cal_detail_view_activity);
         ButterKnife.bind(this);
         week_locals = getIntent().getIntArrayExtra("week_local");
+        mData = (ConsPredictsBean) getIntent().getSerializableExtra("bean");
         if (mBg != null) {
             mConsDetailBgImg.setImageBitmap(mBg);
         } else {
-            mConsDetailBgImg.setBackgroundColor(getResources().getColor(R.color.cons_share_bg_color));
+            mConsDetailBgImg.setBackgroundColor(getResources().getColor(R.color.cons_detail_bg_color));
         }
+
+        if (mData != null) {
+            bindData(mData);
+        } else {
+            ConsRepo.getConsPredicts("1989-11-11", "", "", "").subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Consumer<ConsPredictsBean>() {
+                        @Override
+                        public void accept(@NonNull ConsPredictsBean consPredictsBean) throws Exception {
+                            if (consPredictsBean != null) {
+                                mData = consPredictsBean;
+                                bindData(mData);
+                            }
+                        }
+                    });
+        }
+
+
+    }
+
+    /**
+     * 绑定数据
+     */
+    private void bindData(ConsPredictsBean data) {
+        if (data == null || data.data == null || data.data.predicts == null) {
+            return;
+        }
+        List<ConsPredictsBean.DataBean.PredictsBean> predicts = data.data.predicts;
+        if (!predicts.isEmpty()) {
+            ConsPredictsBean.DataBean.PredictsBean today = SafeUtil.getSafeData(predicts, 1);
+            ConsPredictsBean.DataBean.PredictsBean dataEnd = SafeUtil.getSafeData(predicts, predicts.size() - 1);
+            int todayMonth = -1;
+            int nextMonth = -1;
+            if (today != null) {
+                todayMonth = getMonth(today.date);
+            }
+            if (dataEnd != null) {
+                nextMonth = getMonth(dataEnd.date);
+            }
+            String titleString = getResources().getString(R.string.cons_cal_title);
+            if (nextMonth > 0 && todayMonth > 0) {
+                if (nextMonth != todayMonth) {
+                    mConsDetailTitle.setText(String.format("%s月-%s月" + titleString, String.valueOf(todayMonth), String.valueOf(nextMonth)));
+                } else {
+                    mConsDetailTitle.setText(String.format("%s月" + titleString, String.valueOf(todayMonth)));
+                }
+            } else if (todayMonth > 0) {
+                mConsDetailTitle.setText(String.format("%s月" + titleString, String.valueOf(todayMonth)));
+            } else {
+                mConsDetailTitle.setText(titleString);
+            }
+            mConsDetailCalView.setData(data);
+        }
+
         mRoot.post(new Runnable() {
             @Override
             public void run() {
@@ -99,21 +158,32 @@ public class ConsCalDetailActivity extends BaseActivity {
         });
     }
 
+    private int getMonth(String dateString) {
+        if (TextUtils.isEmpty(dateString)) {
+            return 0;
+        }
+        Date date = CalendarHelper.parseDate(dateString, ConsCalAdapter.dateFormatString);
+        GregorianCalendar gcl = new GregorianCalendar();
+        gcl.setTimeInMillis(date.getTime());
+        return gcl.get(Calendar.MONTH);
+    }
+
     /**
      * 进入退出动画
+     *
      * @param in
      * @param dis
      */
     private void openAnim(final boolean in, int dis) {
-        ObjectAnimator weekTran = ObjectAnimator.ofFloat(mConsDetailContentRoot, View.TRANSLATION_Y, in?dis:0, in?0:dis);
+        ObjectAnimator weekTran = ObjectAnimator.ofFloat(mConsDetailContentRoot, View.TRANSLATION_Y, in ? dis : 0, in ? 0 : dis);
 
         final LinearLayout.LayoutParams topLayoutParams = (LinearLayout.LayoutParams) mConsDetailContentTop.getLayoutParams();
         int topAnimEnd = mConsDetailContentTop.getHeight();
-        ValueAnimator valueAnimator1 = ObjectAnimator.ofInt(in?0:topAnimEnd, in?topAnimEnd:0);
+        ValueAnimator valueAnimator1 = ObjectAnimator.ofInt(in ? 0 : topAnimEnd, in ? topAnimEnd : 0);
         valueAnimator1.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                topLayoutParams.height = (int)animation.getAnimatedValue();
+                topLayoutParams.height = (int) animation.getAnimatedValue();
                 mConsDetailContentTop.setLayoutParams(topLayoutParams);
             }
         });
@@ -122,7 +192,7 @@ public class ConsCalDetailActivity extends BaseActivity {
         final int bomAnimStart = (mConsDetailCalView.getChildAt(0).getHeight());
         final int bomAnimEnd = mConsDetailContentBottom.getHeight();
 
-        ValueAnimator valueAnimator = ObjectAnimator.ofInt(in?bomAnimStart:bomAnimEnd, in?bomAnimEnd:bomAnimStart);
+        ValueAnimator valueAnimator = ObjectAnimator.ofInt(in ? bomAnimStart : bomAnimEnd, in ? bomAnimEnd : bomAnimStart);
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -131,7 +201,7 @@ public class ConsCalDetailActivity extends BaseActivity {
             }
         });
 
-        ValueAnimator alphaAnim = ObjectAnimator.ofFloat(mConsDetailBgImg, View.ALPHA, in?0:1f, in?1f:0);
+        ValueAnimator alphaAnim = ObjectAnimator.ofFloat(mConsDetailBgImg, View.ALPHA, in ? 0 : 1f, in ? 1f : 0);
 
         final AnimatorSet set = new AnimatorSet();
         set.setDuration(350);
@@ -148,9 +218,12 @@ public class ConsCalDetailActivity extends BaseActivity {
     }
 
 
-    public static void startConsCalDetailActivity(Context context, int[] local, Bitmap bitmapByte) {
+    public static void startConsCalDetailActivity(Context context, int[] local, Bitmap bitmapByte, ConsPredictsBean bean) {
         Intent intent = new Intent(context, ConsCalDetailActivity.class);
         intent.putExtra("week_local", local);
+        if (bean != null) {
+            intent.putExtra("bean", bean);
+        }
         mBg = bitmapByte;
         context.startActivity(intent);
     }

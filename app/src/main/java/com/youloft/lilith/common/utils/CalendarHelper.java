@@ -1,6 +1,7 @@
 package com.youloft.lilith.common.utils;
 
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -17,6 +18,16 @@ public class CalendarHelper {
         SimpleDateFormat format = new SimpleDateFormat(formatString);
         String format1 = format.format(date.getTime());
         return format1;
+    }
+
+    public static Date parseDate(String dateString, String formatString){
+        SimpleDateFormat format = new SimpleDateFormat(formatString);
+        try {
+            return format.parse(dateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return new Date();
+        }
     }
 
     public static String[] dayOfWeek = {"Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"};
