@@ -17,6 +17,23 @@
     <string name="select_place_birth">请选择出生地</string>
     <string name="select_place_now">请选择现居住地</string>
     <string name="user_information_desc">您的个人信息将用于订制您的每日运势</string>
+    <string name="quick_login">快捷登录</string>
+    <string name="forget_password">忘记密码</string>
+    <string name="forget_password_01">忘记密码？</string>
+    <string name="registered_account">注册账号</string>
+    <string name="set_password">设置密码</string>
+    <string name="phone_number">手机号</string>
+    <string name="input_validation_code">输入验证码</string>
+    <string name="get_validation_code">获取验证码</string>
+    <string name="login">登录</string>
+    <string name="re_send">s后重发</string>
+    <string name="existing_number">已注册账号</string>
+    <string name="clause_description">登录代表你同意星座的</string>
+    <string name="privacy_terms">隐私条款</string>
+    <string name="company">重庆可兰达科技有限公司</string>
+    <string name="register">注册</string>
+    <string name="wechat">微信</string>
+    <string name="password">密码</string>
 
     <string-array name="cons_luck_line_color">
         <item>#de5deb,#99de5deb,#0fde5deb</item>

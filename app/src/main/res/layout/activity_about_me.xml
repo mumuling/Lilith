@@ -28,7 +28,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="146dp"
             android:text="版本号: 1.0"
-            android:textColor="#ffffff"
+            android:textColor="@color/white"
             android:textSize="15dp" />
 
         <LinearLayout
@@ -47,54 +47,60 @@
                 <ImageView
                     android:layout_width="15dp"
                     android:layout_height="15dp"
+                    android:layout_gravity="center_vertical"
                     android:src="@drawable/binding_wechat_icon" />
 
                 <TextView
-                    android:text="微信:  搜索XXXXXXXXX"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginLeft="23dp"
-                    android:textColor="#ffffff"
+                    android:text="微信:  搜索XXXXXXXXX"
+                    android:textColor="@color/white"
                     android:textSize="15dp" />
             </FrameLayout>
 
             <!--邮箱-->
             <FrameLayout
-                android:layout_marginTop="20dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
 
                 <ImageView
                     android:layout_width="15dp"
                     android:layout_height="15dp"
-                    android:background="#00ff00"/>
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/aboutus_mail_icon" />
 
                 <TextView
-                    android:text="邮箱：xingzuo @youloft.com"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginLeft="23dp"
-                    android:textColor="#ffffff"
+                    android:text="邮箱：xingzuo @youloft.com"
+                    android:textColor="@color/white"
                     android:textSize="15dp" />
             </FrameLayout>
 
             <!--微博-->
             <FrameLayout
-                android:layout_marginTop="20dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
 
                 <ImageView
                     android:layout_width="15dp"
                     android:layout_height="15dp"
+                    android:layout_gravity="center_vertical"
                     android:src="@drawable/binding_weibo_icon" />
 
                 <TextView
-                    android:text="微博：weibo.com/xingzuo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginLeft="23dp"
-                    android:textColor="#ffffff"
+                    android:text="微博：weibo.com/xingzuo"
+                    android:textColor="@color/white"
                     android:textSize="15dp" />
             </FrameLayout>
 
@@ -103,18 +109,19 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#ffffff"
-            android:textSize="15dp"
+            android:layout_gravity="bottom|center_horizontal"
             android:layout_marginBottom="45dp"
-            android:text="重庆可兰达科技有限公司"
-            android:layout_gravity="bottom|center_horizontal"/>
+            android:text="@string/company"
+            android:textColor="@color/white"
+            android:textSize="15dp" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#ffffff"
-            android:textSize="11dp"
+            android:layout_gravity="bottom|center_horizontal"
             android:layout_marginBottom="20dp"
             android:text="Copyright ® CALENDAR Tech., All Rights Reserved"
-            android:layout_gravity="bottom|center_horizontal"/>
+            android:textColor="@color/white"
+            android:textSize="11dp" />
     </FrameLayout>
 </LinearLayout>
