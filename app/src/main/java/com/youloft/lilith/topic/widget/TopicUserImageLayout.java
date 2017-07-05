@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
+import com.youloft.lilith.topic.bean.VoteUserBean;
 import com.youloft.lilith.ui.GlideCircleTransform;
 
 import java.util.ArrayList;
@@ -76,4 +77,17 @@ public class TopicUserImageLayout extends RelativeLayout {
                     .into(mUserImageList.get(i));
         }
     }
+
+    public void bindData (List<VoteUserBean> imageList,int number) {
+        for (int i = 0; i < imageList.size(); i ++) {
+            GlideApp.with(mContext).asDrawable()
+                    .transform(new GlideCircleTransform(mContext))
+                    .load(imageList.get(i).mHeadImg)
+                    .into(mUserImageList.get(i));
+            mUserImageList.get(i).setVisibility(VISIBLE);
+        }
+        userNumber.setText(number);
+    }
+
+
 }

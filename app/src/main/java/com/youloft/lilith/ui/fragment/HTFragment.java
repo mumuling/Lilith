@@ -13,8 +13,12 @@ import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseFragment;
 import com.youloft.lilith.topic.TopicDetailActivity;
 import com.youloft.lilith.topic.adapter.TopicAdapter;
+import com.youloft.lilith.topic.bean.TopicBean;
 import com.youloft.lilith.ui.WebActivity;
 import com.youloft.lilith.ui.view.BaseToolBar;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.internal.schedulers.RxThreadFactory;
 
@@ -29,6 +33,7 @@ public class HTFragment extends BaseFragment{
     private RecyclerView mTopicRv;
     private TopicAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
+    private List<TopicBean> topicBeanList = new ArrayList<>();
     public HTFragment() {
         super(R.layout.fragment_ht);
     }
@@ -48,7 +53,9 @@ public class HTFragment extends BaseFragment{
         mLayoutManager = new LinearLayoutManager(getContext());
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mTopicRv.setLayoutManager(mLayoutManager);
+        topicBeanList.addAll(TopicBean.getTopicListDefault());
         mAdapter = new TopicAdapter(getContext());
+        mAdapter.setData(topicBeanList);
         mTopicRv.setAdapter(mAdapter);
     }
 

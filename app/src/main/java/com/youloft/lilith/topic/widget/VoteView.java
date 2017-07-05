@@ -18,6 +18,7 @@ import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -57,7 +58,7 @@ public class VoteView extends View {
     private int alpha2 = 255;
     private float changeRadius3 = 00;
     private int alpha3 = 255;
-
+    public OnItemClickListener mItemClickListener;
     public VoteView(Context context) {
         this(context,null);
         this.mContext = context;
@@ -68,10 +69,10 @@ public class VoteView extends View {
         this.mContext = context;
         init();
     }
-
+    public void setInterface(OnItemClickListener listener) {
+        this.mItemClickListener = listener;
+    }
     private void init() {
-        VectorDrawableCompat vectorDrawableCompat = VectorDrawableCompat.create(getResources(),R.drawable.topic_viewpoint_bg,mContext.getTheme());
-
         mPointBg = BitmapFactory.decodeResource(mContext.getResources(),R.drawable.topic_viewpoint_bg);
         leftCircle = BitmapFactory.decodeResource(mContext.getResources(),R.drawable.topic_point1_circle);
         rightCircle = BitmapFactory.decodeResource(mContext.getResources(),R.drawable.topic_point2_circle);
@@ -86,11 +87,11 @@ public class VoteView extends View {
         leftCirclePaint.setAntiAlias(true);
         leftCirclePaint.setStyle(Paint.Style.FILL);
 
-
         rightCirclePaint.setColor(Color.parseColor("#3470b4"));
         rightCirclePaint.setAntiAlias(true);
         rightCirclePaint.setStyle(Paint.Style.FILL);
-
+        this.setClickable(true);
+        this.setEnabled(true);
 
     }
 
@@ -102,9 +103,37 @@ public class VoteView extends View {
     }
 
     @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        int startX = 0;
+        int startY = 0;
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                startX = (int) event.getX();
+                startY = (int) event.getY();
+            case MotionEvent.ACTION_MOVE:
+            case MotionEvent.ACTION_CANCEL:
+                if (mItemClickListener == null) {
+                    return false;
+                }
+                int endX = (int) event.getX();
+                int endY = (int) event.getY();
+                if (startX == endX && startY == endY && startX < leftCircleWidth + ViewUtil.dp2px(19) ) {
+                    mItemClickListener.clickLeft();
+                    return true;
+                }
+                if (startX == endX && startY == endY && startX > bgWidth - rightCircleWidth + ViewUtil.dp2px(19)) {
+                    mItemClickListener.clickRight();
+                    return true;
+                }
+                return false;
+
+        }
+        return super.onTouchEvent(event);
+    }
+
+    @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
          bgWidth = mPointBg.getWidth();
          bgHeight = mPointBg.getHeight();
          leftCircleWidth = leftCircle.getWidth();
@@ -163,5 +192,10 @@ public class VoteView extends View {
         this.changeRadius3 = radius1;
         this.alpha3 =  alpha1;
         invalidate();
+    }
+
+    public interface OnItemClickListener{
+        void clickLeft();
+        void clickRight();
     }
 }
