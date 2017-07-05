@@ -11,7 +11,7 @@ public abstract class AbsResponse<T> {
     @JSONField(name = "status")
     public int status;
 
-    @JSONField(name = "msg")
+    @JSONField(name = "data")
     public T data;
 
     /**

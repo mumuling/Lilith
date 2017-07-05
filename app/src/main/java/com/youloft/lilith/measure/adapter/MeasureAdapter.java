@@ -1,16 +1,21 @@
 package com.youloft.lilith.measure.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.youloft.lilith.R;
+import com.youloft.lilith.measure.bean.MeasureBean;
 import com.youloft.lilith.measure.holder.BaseMeasureHolder;
 import com.youloft.lilith.measure.holder.ImmediatelyMeasureHolder;
 import com.youloft.lilith.measure.holder.MasterMeasureHolder;
 import com.youloft.lilith.measure.holder.MeasureBannerHolder;
 import com.youloft.lilith.measure.holder.MeasureCarouselHolder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 测测的adapter
@@ -26,24 +31,28 @@ public class MeasureAdapter extends RecyclerView.Adapter<BaseMeasureHolder> {
     public static final int ITEM_IMMEDIATELY_MEASURE = 1004;//立即测算
 
 
-
-    public MeasureAdapter() {
-
+    private List<MeasureBean.DataBean> mMeasureData = new ArrayList<>();
+    private Activity mContext;
+    public MeasureAdapter(Activity mContext) {
+        this.mContext = mContext;
     }
 
+    public void setData(List<MeasureBean.DataBean> mMeasureData) {
+        this.mMeasureData = mMeasureData;
+        notifyDataSetChanged();
+    }
 
     @Override
     public BaseMeasureHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
         switch (viewType) {
             case ITEM_CAROUSEL:
-                return new MeasureCarouselHolder(LayoutInflater.from(context).inflate(R.layout.item_measure_carousel,parent,false));
+                return new MeasureCarouselHolder(mContext, parent);
             case ITEM_MASTER_MEASURE:
-                return new MasterMeasureHolder(LayoutInflater.from(context).inflate(R.layout.item_master_measure,parent,false));
+                return new MasterMeasureHolder(mContext, parent);
             case ITEM_BANNER:
-                return new MeasureBannerHolder(LayoutInflater.from(context).inflate(R.layout.item_measure_banner,parent,false));
+                return new MeasureBannerHolder(mContext, parent);
             case ITEM_IMMEDIATELY_MEASURE:
-                return new ImmediatelyMeasureHolder(LayoutInflater.from(context).inflate(R.layout.item_immediately_banner,parent,false));
+                return new ImmediatelyMeasureHolder(mContext, parent);
             default:
                 return null;
         }
@@ -67,10 +76,25 @@ public class MeasureAdapter extends RecyclerView.Adapter<BaseMeasureHolder> {
     @Override
     public void onBindViewHolder(BaseMeasureHolder holder, int position) {
 
+        if (holder instanceof MeasureCarouselHolder) {//轮播holder
+            holder.bindData(mMeasureData.get(0),position);
+        } else if (holder instanceof MasterMeasureHolder) { //大师清算
+            holder.bindData(mMeasureData.get(1),position);
+        } else if (holder instanceof MeasureBannerHolder) { //bannerholder
+            holder.bindData(mMeasureData.get(2),position);
+        } else if (holder instanceof ImmediatelyMeasureHolder) {//立即测算holder
+            holder.bindData(mMeasureData.get(3),position);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return 6;
+        //这里的长度需要计算一下  当最后一个的location为四的时候 需要加上一个长度
+        MeasureBean.DataBean dataBean = mMeasureData.get(mMeasureData.size() - 1);
+        if (dataBean.loction == 4) {
+            return mMeasureData.size() + dataBean.ads.size() - 1;
+        } else {
+            return mMeasureData.size();
+        }
     }
 }

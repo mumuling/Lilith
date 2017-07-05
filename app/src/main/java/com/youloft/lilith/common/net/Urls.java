@@ -12,4 +12,8 @@ package com.youloft.lilith.common.net;
 public class Urls {
 
     public static final String CONFIG = "http://cfg.51wnl.com/api/getallconfig.ashx?";
+
+    //测测的url
+    public static final String MEASURE_URL = "http://lilith.51wnl.com/GetCeceAd";
+
 }
