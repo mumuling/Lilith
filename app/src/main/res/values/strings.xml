@@ -17,11 +17,12 @@
     <string name="select_place_birth">请选择出生地</string>
     <string name="select_place_now">请选择现居住地</string>
     <string name="user_information_desc">您的个人信息将用于订制您的每日运势</string>
+    <string name="cons_share_word">分享我的运势</string>
 
     <string-array name="cons_luck_line_color">
         <item>#de5deb,#99de5deb,#0fde5deb</item>
         <item>#ff6262,#99ff6161,#0fff6161</item>
-        <item>#ffb74a,#99ffb74a,#0fffb74a</item>
         <item>#49b5ff,#9949b5ff,#0f49b5ff</item>
+        <item>#ffb74a,#99ffb74a,#0fffb74a</item>
     </string-array>
 </resources>

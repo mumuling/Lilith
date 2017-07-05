@@ -1,11 +1,20 @@
 package com.youloft.lilith.common.utils;
 
 
+import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
+import android.renderscript.Allocation;
+import android.renderscript.Element;
+import android.renderscript.RenderScript;
+import android.renderscript.ScriptIntrinsicBlur;
 import android.text.TextUtils;
+
+import com.youloft.lilith.LLApplication;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,6 +92,16 @@ public class ViewUtil {
     }
 
     /**
+     * 获取底部状态栏高度
+     * @return
+     */
+    public static int getNavigationBarHeight() {
+        Resources resources = Utils.getContext().getResources();
+        int resourceId = resources.getIdentifier("navigation_bar_height","dimen", "android");
+        int height = resources.getDimensionPixelSize(resourceId);
+        return height;
+    }
+    /**
      * 渲染文字位置居中，这儿做了处理，解决android默认渲染方式上下不平均问题
      * @param canvas
      * @param renderDate
@@ -115,6 +134,37 @@ public class ViewUtil {
                 renderTextByCenter(canvas, data, startX + i * itemWidth, startY, paint);
             }
         }
+    }
+
+
+    public static Bitmap blurBitmap(Bitmap bitmap, Context context) {
+
+        // 用需要创建高斯模糊bitmap创建一个空的bitmap
+        Bitmap outBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+
+        // 初始化Renderscript，这个类提供了RenderScript context，在创建其他RS类之前必须要先创建这个类，他控制RenderScript的初始化，资源管理，释放
+        RenderScript rs = RenderScript.create(context);
+
+        // 创建高斯模糊对象
+        ScriptIntrinsicBlur blurScript = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
+
+        // 创建Allocations，此类是将数据传递给RenderScript内核的主要方法，并制定一个后备类型存储给定类型
+        Allocation allIn = Allocation.createFromBitmap(rs, bitmap);
+        Allocation allOut = Allocation.createFromBitmap(rs, outBitmap);
+
+        // 设定模糊度
+        blurScript.setRadius(25.f);
+
+        blurScript.setInput(allIn);
+        blurScript.forEach(allOut);
+
+        allOut.copyTo(outBitmap);
+
+        bitmap.recycle();
+
+        rs.destroy();
+
+        return outBitmap;
     }
 
     /**

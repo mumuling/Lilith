@@ -105,6 +105,7 @@ public class LuckView extends View {
 
     /**
      * 设置数据
+     *
      * @param date
      */
     public void setDate(LuckData date) {
@@ -149,7 +150,7 @@ public class LuckView extends View {
             min = Math.min(min, luckItem.luckLevel);
             max = Math.max(max, luckItem.luckLevel);
 
-            String str = TextUtils.isEmpty(luckItem.day) ? "未知" : luckItem.day;
+            String str = TextUtils.isEmpty(luckItem.getDayString()) ? "未知" : luckItem.getDayString();
             mDateStr.add(str);
         }
         int range = max - min;
@@ -169,7 +170,7 @@ public class LuckView extends View {
     public void draw(Canvas canvas) {
         long start = System.currentTimeMillis();
         super.draw(canvas);
-        LogUtil.d("LuckView","draw time=" + (System.currentTimeMillis() - start));
+        LogUtil.d("LuckView", "draw time=" + (System.currentTimeMillis() - start));
     }
 
     /**
@@ -195,7 +196,7 @@ public class LuckView extends View {
         //处理小icon
         mCurPosition = SafeUtil.getSafeData(mPositions, 1);
         if (mCurPosition != null) {
-            mIconRes.setBounds((int)(mCurPosition.x - mDP10), (int)(mCurPosition.y- mDP10), (int)(mCurPosition.x + mDP10), (int)(mCurPosition.y+ mDP10));
+            mIconRes.setBounds((int) (mCurPosition.x - mDP10), (int) (mCurPosition.y - mDP10), (int) (mCurPosition.x + mDP10), (int) (mCurPosition.y + mDP10));
         }
 
         setTitleLineBound();
@@ -204,12 +205,12 @@ public class LuckView extends View {
     private void setTitleLineBound() {
         mTextPaint.setTextSize(mSizeTitle);
         float titleWidth = mTextPaint.measureText(mTitle);
-        float hafTitleWidth = titleWidth/2;
-        int lex = (int) (getWidth()/2 - hafTitleWidth - mDP8 - mTitleLineWidth);
-        int ley = (int) (mPathTop/2 - mBsLineWidth/2);
-        Rect rectF = new Rect(lex, ley, (lex + mTitleLineWidth), (int)(ley + mBsLineWidth));
+        float hafTitleWidth = titleWidth / 2;
+        int lex = (int) (getWidth() / 2 - hafTitleWidth - mDP8 - mTitleLineWidth);
+        int ley = (int) (mPathTop / 2 - mBsLineWidth / 2);
+        Rect rectF = new Rect(lex, ley, (lex + mTitleLineWidth), (int) (ley + mBsLineWidth));
         mLeftConsLine.setBounds(rectF);
-        rectF.offset((int)(mTitleLineWidth + mDP8 * 2 + titleWidth), 0);
+        rectF.offset((int) (mTitleLineWidth + mDP8 * 2 + titleWidth), 0);
         mRightConsLine.setBounds(rectF);
     }
 
@@ -228,12 +229,12 @@ public class LuckView extends View {
                 iconRes = R.drawable.constellation_love_icon;
                 break;
             case 3:
-                mTitle = "财富运";
-                iconRes = R.drawable.constellation_money_icon;
-                break;
-            case 4:
                 mTitle = "工作运";
                 iconRes = R.drawable.constellation_work_icon;
+                break;
+            case 4:
+                mTitle = "财富运";
+                iconRes = R.drawable.constellation_money_icon;
                 break;
             default:
                 mTitle = "运势概括";
@@ -263,7 +264,7 @@ public class LuckView extends View {
             return Color.TRANSPARENT;
         }
         String[] colorArray = getResources().getStringArray(R.array.cons_luck_line_color);
-        String color = SafeUtil.getSafeArrayData(colorArray, (type-1));
+        String color = SafeUtil.getSafeArrayData(colorArray, (type - 1));
         if (TextUtils.isEmpty(color)) {
             return Color.TRANSPARENT;
         }
@@ -289,7 +290,7 @@ public class LuckView extends View {
         mTextPaint.setTextSize(mSizeTitle);
         mTextPaint.setColor(mColor);
         //绘制顶部两根线
-        ViewUtil.renderTextByCenter(canvas, mTitle, getWidth()/2, mPathTop/2, mTextPaint);
+        ViewUtil.renderTextByCenter(canvas, mTitle, getWidth() / 2, mPathTop / 2, mTextPaint);
         if (mLeftConsLine != null) {
             mLeftConsLine.draw(canvas);
         }

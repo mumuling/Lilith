@@ -49,6 +49,7 @@ public class OkHttpUtils {
         sPublicParams.put("chn", AppConfig.CHANNEL);
         sPublicParams.put("lang", AppConfig.LANG);
         sPublicParams.put("bd", AppConfig.Bundle);
+        sPublicParams.put("tkn", AppConfig.TKN);
     }
 
 

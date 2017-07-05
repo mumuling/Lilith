@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.renderscript.ScriptIntrinsicBlur;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -82,7 +83,6 @@ public class ConsCalDetailActivity extends BaseActivity {
         ButterKnife.bind(this);
         week_locals = getIntent().getIntArrayExtra("week_local");
 
-//        GlideApp.with(this).load(mBg).transition(new Tra)
         if (mBg != null) {
             mConsDetailBgImg.setImageBitmap(mBg);
         } else {
@@ -151,7 +151,7 @@ public class ConsCalDetailActivity extends BaseActivity {
     public static void startConsCalDetailActivity(Context context, int[] local, Bitmap bitmap) {
         Intent intent = new Intent(context, ConsCalDetailActivity.class);
         intent.putExtra("week_local", local);
-//        mBg = bitmap;
+        mBg = bitmap;
         context.startActivity(intent);
     }
 

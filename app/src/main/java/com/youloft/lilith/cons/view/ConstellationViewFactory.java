@@ -10,6 +10,7 @@ import android.text.TextPaint;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.utils.Utils;
 import com.youloft.lilith.common.utils.ViewUtil;
+import com.youloft.lilith.cons.consmanager.ConsManager;
 
 import java.util.HashMap;
 
@@ -24,7 +25,7 @@ public class ConstellationViewFactory {
     private TextPaint mTextPaint;
     private Canvas mCanvas;
 
-    private static final HashMap<String, ConsInfo> mConsImg = new HashMap<>();
+    private static final HashMap<String, ConsManager.ConsInfo> mConsImg = new HashMap<>();
 
     private static ConstellationViewFactory instance;
 
@@ -40,7 +41,6 @@ public class ConstellationViewFactory {
     }
 
     private ConstellationViewFactory() {
-        initConsMap();
         initPaint();
     }
 
@@ -50,20 +50,25 @@ public class ConstellationViewFactory {
         mPaint.setColor(Color.BLUE);
 
         mTextPaint =  new TextPaint(Paint.ANTI_ALIAS_FLAG);
-        mTextPaint.setTextSize(ViewUtil.dp2px(20));
+        mTextPaint.setTextSize(ViewUtil.dp2px(13));
         mTextPaint.setColor(Color.WHITE);
     }
+
+    public Bitmap getConsImg(int consCode, int love, int career, int wealth) {
+        return getConsImg(String.valueOf(consCode),String.valueOf(love),String.valueOf(career),String.valueOf(wealth));
+    }
+
 
     /**
      * 获取星座的图片
      * @param consCode
-     * @param text1
-     * @param text2
-     * @param text3
+     * @param love
+     * @param career
+     * @param wealth
      * @return
      */
-    public Bitmap getConsImg(String consCode, String text1, String text2, String text3){
-        ConsInfo consSrc = getConsSrc(consCode);
+    public Bitmap getConsImg(String consCode, String love, String career, String wealth){
+        ConsManager.ConsInfo consSrc = ConsManager.getConsSrc(consCode);
         Bitmap srcBit = BitmapFactory.decodeResource(Utils.getContext().getResources(), consSrc.pImgDrawable);
         int width = srcBit.getWidth();
         int height = srcBit.getHeight();
@@ -75,9 +80,9 @@ public class ConstellationViewFactory {
         mCanvas.drawBitmap(srcBit, 0,0,mPaint);
         srcBit = null;
         //绘绘制文字
-        drawWord(text1, consSrc.pCirclePosition[0] * width, consSrc.pCirclePosition[1] * height);
-        drawWord(text2, consSrc.pCirclePosition[2] * width, consSrc.pCirclePosition[3] * height);
-        drawWord(text3, consSrc.pCirclePosition[4] * width, consSrc.pCirclePosition[5] * height);
+        drawWord(love, consSrc.pCirclePosition[0] * width, consSrc.pCirclePosition[1] * height);
+        drawWord(career, consSrc.pCirclePosition[2] * width, consSrc.pCirclePosition[3] * height);
+        drawWord(wealth, consSrc.pCirclePosition[4] * width, consSrc.pCirclePosition[5] * height);
 
         return bitmap;
     }
@@ -89,60 +94,7 @@ public class ConstellationViewFactory {
      * @param y
      */
     private void drawWord(String word, float x, float y) {
-        mCanvas.drawCircle(x, y, 40f, mPaint);
         ViewUtil.renderTextByCenter(mCanvas, word, x, y, mTextPaint);
     }
 
-    /**
-     * 获取星座图片
-     * @param cons
-     * @return
-     */
-    private ConsInfo getConsSrc(String cons){
-        if (mConsImg.isEmpty()) {
-            initConsMap();
-        }
-        return mConsImg.get(cons);
-    }
-
-    /**
-     * 初始化数据
-     */
-    private synchronized void initConsMap() {
-        if (mConsImg.isEmpty()){
-            mConsImg.put("3", new ConsInfo("白羊座", R.drawable.cons, new float[]{0.2f,0.4f,0.5f,0.6f,0.7f,0.3f}));
-            mConsImg.put("4", new ConsInfo("金牛座", R.drawable.cons, new float[]{0.2f,0.4f,0.5f,0.6f,0.7f,0.3f}));
-            mConsImg.put("5", new ConsInfo("双子座", R.drawable.cons, new float[]{0.2f,0.4f,0.5f,0.6f,0.7f,0.3f}));
-            mConsImg.put("6", new ConsInfo("巨蟹座", R.drawable.cons, new float[]{0.2f,0.4f,0.5f,0.6f,0.7f,0.3f}));
-            mConsImg.put("7", new ConsInfo("狮子座", R.drawable.cons, new float[]{0.2f,0.4f,0.5f,0.6f,0.7f,0.3f}));
-            mConsImg.put("8", new ConsInfo("处女座", R.drawable.cons, new float[]{0.2f,0.4f,0.5f,0.6f,0.7f,0.3f}));
-
-            mConsImg.put("9", new ConsInfo("天秤座", R.drawable.cons, new float[]{0.2f,0.4f,0.5f,0.6f,0.7f,0.3f}));
-            mConsImg.put("10", new ConsInfo("天蝎座", R.drawable.cons, new float[]{0.2f,0.4f,0.5f,0.6f,0.7f,0.3f}));
-            mConsImg.put("11", new ConsInfo("射手座", R.drawable.cons, new float[]{0.2f,0.4f,0.5f,0.6f,0.7f,0.3f}));
-            mConsImg.put("12", new ConsInfo("摩羯座", R.drawable.cons, new float[]{0.2f,0.4f,0.5f,0.6f,0.7f,0.3f}));
-            mConsImg.put("1", new ConsInfo("水瓶座", R.drawable.cons, new float[]{0.2f,0.4f,0.5f,0.6f,0.7f,0.3f}));
-            mConsImg.put("2", new ConsInfo("双鱼座", R.drawable.cons, new float[]{0.2f,0.4f,0.5f,0.6f,0.7f,0.3f}));
-
-        }
-    }
-
-
-    /**
-     * 星座图片的信息
-     */
-    public class ConsInfo{
-        public ConsInfo() {
-        }
-
-        public ConsInfo(String pKey, int pImgDrawable, float[] pCirclePosition) {
-            this.pKey = pKey;
-            this.pImgDrawable = pImgDrawable;
-            this.pCirclePosition = pCirclePosition;
-        }
-
-        String pKey;                    //名称
-        int pImgDrawable;               //img资源
-        float[] pCirclePosition;        //图片中的几个点在图片中的比例值；默认三个点，0，1号位置放第一个点的x,y坐标；后边依次
-    }
 }

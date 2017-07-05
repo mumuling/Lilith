@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewStub;
 import android.widget.FrameLayout;
 
+import com.alibaba.fastjson.JSON;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseFragment;
 import com.youloft.lilith.cons.ConsCalDetailActivity;
@@ -49,23 +50,28 @@ public class XZFragment extends BaseFragment {
 
         init(view);
 
-//        initDate();
+        initDate();
     }
 
     /**
      * 初始化数据
      */
     private void initDate() {
-        ConsRepo.getConsPredicts("1989-11-11","","","").subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<ConsPredictsBean>() {
-                    @Override
-                    public void accept(@NonNull ConsPredictsBean consPredictsBean) throws Exception {
-                        if (consPredictsBean != null) {
-                            mCardAdapter.setData(consPredictsBean);
-                        }
-                    }
-                });
+//        ConsRepo.getConsPredicts("1989-11-11","","","").subscribeOn(Schedulers.newThread())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Consumer<ConsPredictsBean>() {
+//                    @Override
+//                    public void accept(@NonNull ConsPredictsBean consPredictsBean) throws Exception {
+//                        if (consPredictsBean != null) {
+//                            mCardAdapter.setData(consPredictsBean);
+//                        }
+//                    }
+//                });
+
+        ConsPredictsBean consPredictsBean = JSON.parseObject(test, ConsPredictsBean.class);
+        if (consPredictsBean != null) {
+            mCardAdapter.setData(consPredictsBean);
+        }
     }
 
     /**
@@ -81,5 +87,6 @@ public class XZFragment extends BaseFragment {
         mConsWeek.setAdapter(mCardAdapter);
     }
 
+    String test = "{\"data\":{\"bgImg\":\"http://static.bbs.nubia.cn/forum/201411/13/0843039z0sz7flu3ojxtz1.jpg\",\"msg\":\"完美的一句话概括，运势的情况.一定要有逼格！\",\"eMsg\":\"Therearenoshortcutstoanyplaceworthgoing.\",\"signs\":1,\"msgAvg\":\"个人心情十分复杂，此时的你最需要的是让心静下来，调整好心情。\",\"msglove\":\"个人心情十分复杂，此时的你最需要的是让心静下来，调整好心情。\",\"msgcareer\":\"个人心情十分复杂，此时的你最需要的是让心静下来，调整好心情。\",\"msgwealth\":\"个人心情十分复杂，此时的你最需要的是让心静下来，调整好心情。\",\"predicts\":[{\"avg\":5,\"date\":\"2017-07-02\",\"ptlove\":5,\"ptcareer\":5,\"ptwealth\":5},{\"avg\":3,\"date\":\"2017-07-03\",\"ptlove\":2,\"ptcareer\":3,\"ptwealth\":4},{\"avg\":6,\"date\":\"2017-07-04\",\"ptlove\":4,\"ptcareer\":8,\"ptwealth\":5},{\"avg\":5,\"date\":\"2017-07-05\",\"ptlove\":3,\"ptcareer\":9,\"ptwealth\":4},{\"avg\":7,\"date\":\"2017-07-06\",\"ptlove\":4,\"ptcareer\":8,\"ptwealth\":9},{\"avg\":9,\"date\":\"2017-07-07\",\"ptlove\":7,\"ptcareer\":9,\"ptwealth\":10},{\"avg\":7,\"date\":\"2017-07-08\",\"ptlove\":4,\"ptcareer\":8,\"ptwealth\":9},{\"avg\":4,\"date\":\"2017-07-09\",\"ptlove\":5,\"ptcareer\":6,\"ptwealth\":2},{\"avg\":5,\"date\":\"2017-07-10\",\"ptlove\":5,\"ptcareer\":5,\"ptwealth\":5},{\"avg\":5,\"date\":\"2017-07-11\",\"ptlove\":5,\"ptcareer\":5,\"ptwealth\":5},{\"avg\":5,\"date\":\"2017-07-12\",\"ptlove\":5,\"ptcareer\":5,\"ptwealth\":5},{\"avg\":5,\"date\":\"2017-07-13\",\"ptlove\":5,\"ptcareer\":5,\"ptwealth\":5},{\"avg\":5,\"date\":\"2017-07-14\",\"ptlove\":5,\"ptcareer\":5,\"ptwealth\":5},{\"avg\":5,\"date\":\"2017-07-15\",\"ptlove\":5,\"ptcareer\":5,\"ptwealth\":5},{\"avg\":5,\"date\":\"2017-07-16\",\"ptlove\":5,\"ptcareer\":5,\"ptwealth\":5},{\"avg\":5,\"date\":\"2017-07-17\",\"ptlove\":5,\"ptcareer\":5,\"ptwealth\":5},{\"avg\":5,\"date\":\"2017-07-18\",\"ptlove\":5,\"ptcareer\":5,\"ptwealth\":5},{\"avg\":5,\"date\":\"2017-07-19\",\"ptlove\":5,\"ptcareer\":5,\"ptwealth\":5},{\"avg\":5,\"date\":\"2017-07-20\",\"ptlove\":5,\"ptcareer\":5,\"ptwealth\":5},{\"avg\":5,\"date\":\"2017-07-21\",\"ptlove\":5,\"ptcareer\":5,\"ptwealth\":5},{\"avg\":5,\"date\":\"2017-07-22\",\"ptlove\":5,\"ptcareer\":5,\"ptwealth\":5},{\"avg\":5,\"date\":\"2017-07-23\",\"ptlove\":5,\"ptcareer\":5,\"ptwealth\":5},{\"avg\":5,\"date\":\"2017-07-24\",\"ptlove\":5,\"ptcareer\":5,\"ptwealth\":5},{\"avg\":5,\"date\":\"2017-07-25\",\"ptlove\":5,\"ptcareer\":5,\"ptwealth\":5},{\"avg\":5,\"date\":\"2017-07-26\",\"ptlove\":5,\"ptcareer\":5,\"ptwealth\":5},{\"avg\":5,\"date\":\"2017-07-27\",\"ptlove\":5,\"ptcareer\":5,\"ptwealth\":5},{\"avg\":5,\"date\":\"2017-07-28\",\"ptlove\":5,\"ptcareer\":5,\"ptwealth\":5},{\"avg\":5,\"date\":\"2017-07-29\",\"ptlove\":5,\"ptcareer\":5,\"ptwealth\":5},{\"avg\":5,\"date\":\"2017-07-30\",\"ptlove\":5,\"ptcareer\":5,\"ptwealth\":5}]},\"status\":200,\"sign\":\"360a71caa7a4086d6b83201ea4444353\"}";
 
 }

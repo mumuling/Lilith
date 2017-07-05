@@ -32,11 +32,11 @@ public class ConsPredictsBean {
         public String bgImg;
         public String msg;
         public String eMsg;
-        public String sign;
-        public Object msgAvg;
-        public Object msglove;
-        public Object msgcareer;
-        public Object msgwealth;
+        public int signs;
+        public String msgAvg;
+        public String msglove;
+        public String msgcareer;
+        public String msgwealth;
         public List<PredictsBean> predicts;
 
         public static class PredictsBean {

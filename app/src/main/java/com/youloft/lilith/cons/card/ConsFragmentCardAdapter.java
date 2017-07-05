@@ -33,14 +33,15 @@ public class ConsFragmentCardAdapter extends RecyclerView.Adapter<BaseHolder> {
     public void onBindViewHolder(BaseHolder holder, int position) {
         if (holder == null)return;
         if (holder instanceof ConsBaseHolder && mData != null) {
-            ((ConsBaseHolder)holder).bindData(mData);
+            ((ConsBaseHolder) holder).bindData(mData);
+        } else {
+            holder.bindData("");
         }
-        holder.bindData("");
     }
 
     @Override
     public int getItemCount() {
-        return 9;
+        return 10;
     }
 
     @Override
