@@ -1,6 +1,5 @@
 package com.youloft.lilith.login;
 
-import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,7 +20,6 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
-import com.youloft.lilith.common.utils.Toaster;
 
 import butterknife.BindView;
 import butterknife.BindViews;
@@ -29,12 +27,19 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * 快速登录界面
+ * 这是一个功能型界面
+ * 里面包含了,  快捷登录   注册账号  忘记密码
+ * <p>
  * <p>
  * Created by GYH on 2017/6/29.
  */
-@Route(path = "/test/QuickLoginActivity")
-public class QuickLoginActivity extends BaseActivity {
+@Route(path = "/test/UserFunctionActivity")
+public class UserFunctionActivity extends BaseActivity {
+
+    public static final int QUICKLY_LOGIN = 20001;//快捷登录
+    public static final int FORGET_PASSWORD = 20002;//忘记密码
+    public static final int REGISTERED_ACCOUNT = 20003;//注册账号
+
     @BindView(R.id.vv_background)
     VideoView vvBackground;  //背景视频
     @BindView(R.id.et_verification_code)
@@ -51,17 +56,46 @@ public class QuickLoginActivity extends BaseActivity {
     LinearLayout llCodeContainer;  //验证码容器
     @BindView(R.id.tv_get_code)
     TextView tvGetCode;   //获取验证码
+    @BindView(R.id.tv_title)
+    TextView tvTitle; //大标题,根据不同来源,设置对应的标题
+    @BindView(R.id.btn_login)
+    Button btnLogin;  //登录或者设置密码的大按钮
 
     private int mPreNumberLength;//电话号码变化之前的长度
+    private int mflag;//当前页面属于哪个页面的标志
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_quick_login);
+        setContentView(R.layout.activity_user_function);
         ButterKnife.bind(this);
+
+        //根据不同的界面做不同的文字设置
+        init();
         phoneNumberSetting();
         verificationCodeSetting();
 
+    }
+
+    /**
+     * 根据不同的界面做不同的文字设置
+     */
+    private void init() {
+        mflag = getIntent().getIntExtra("flag", 0);
+        switch (mflag) {
+            case QUICKLY_LOGIN:
+                tvTitle.setText(R.string.quick_login);
+                btnLogin.setText(R.string.login);
+                break;
+            case FORGET_PASSWORD:
+                tvTitle.setText(R.string.forget_password);
+                btnLogin.setText(R.string.set_password);
+                break;
+            case REGISTERED_ACCOUNT:
+                tvTitle.setText(R.string.registered_account);
+                btnLogin.setText(R.string.set_password);
+                break;
+        }
     }
 
     /**
@@ -125,7 +159,7 @@ public class QuickLoginActivity extends BaseActivity {
                 } else {//失去焦点的时候,判断有没有文字
                     if (etVerificationCode.getText().toString().equals("")) {
                         llCodeContainer.setVisibility(View.INVISIBLE);
-                        etVerificationCode.setHint("输入验证码");
+                        etVerificationCode.setHint(R.string.input_validation_code);
                     }
                 }
             }
@@ -144,10 +178,10 @@ public class QuickLoginActivity extends BaseActivity {
                 for (int i = 0; i < 6; i++) {
                     if (i > chars.length - 1) {
                         tvCodes[i].setText(null);
-                        vCodeLines[i].setBackgroundColor(0x55ffffff);
+                        vCodeLines[i].setBackgroundResource(R.color.white_50);
                     } else {
                         tvCodes[i].setText(chars[i] + "");
-                        vCodeLines[i].setBackgroundColor(0xffffffff);
+                        vCodeLines[i].setBackgroundResource(R.color.white);
                     }
                 }
 
@@ -191,11 +225,12 @@ public class QuickLoginActivity extends BaseActivity {
     public void getCode() {
         //当前显示的文字
         String disText = tvGetCode.getText().toString();
-        if(!"获取验证码".equals(disText)){
+        if (!"获取验证码".equals(disText)) {
             return;
         }
         handler.postDelayed(runnable, 0);
     }
+
     //下面的handler是玩倒计时的
     private int mTime = 60;
     Handler handler = new Handler();
@@ -206,18 +241,18 @@ public class QuickLoginActivity extends BaseActivity {
             if (mTime > 0) {
                 handler.postDelayed(this, 1000);
             }
-            if(mTime == 0){
-                tvGetCode.setText("获取验证码");
+            if (mTime == 0) {
+                tvGetCode.setText(R.string.get_validation_code);
                 mTime = 60;
-            }else {
-                tvGetCode.setText(mTime + "s后重发");
+            } else {
+                tvGetCode.setText(mTime + getResources().getString(R.string.re_send));
             }
         }
     };
 
     //下面的的大按钮的点击事件
     @OnClick(R.id.btn_login)
-    public void onButtonClick(){
+    public void onButtonClick() {
         ARouter.getInstance().build("/test/SetPasswordActivity").navigation();
     }
 
@@ -226,5 +261,11 @@ public class QuickLoginActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         handler.removeCallbacksAndMessages(null);
+    }
+
+    //点击清除电话号码
+    @OnClick(R.id.iv_clean_number)
+    public void onViewClicked() {
+        etPhoneNumber.setText(null);
     }
 }

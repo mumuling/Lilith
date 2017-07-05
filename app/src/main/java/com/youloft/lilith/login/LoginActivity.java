@@ -160,14 +160,9 @@ public class LoginActivity extends BaseActivity {
         Toast.makeText(this, "登录", Toast.LENGTH_SHORT).show();
     }
 
-    //服务条款
-    @OnClick(R.id.tv_service_terms)
-    public void servicTerms(View view) {
-        Toast.makeText(this, "服务条款", Toast.LENGTH_SHORT).show();
-    }
 
     //隐私条款
-    @OnClick(R.id.tv_privacy_terms)
+    @OnClick(R.id.ll_privacy_terms)
     public void privacyTerms(View view) {
         Toast.makeText(this, "隐私条款", Toast.LENGTH_SHORT).show();
     }
@@ -175,19 +170,28 @@ public class LoginActivity extends BaseActivity {
     //忘记密码
     @OnClick(R.id.tv_forget_password)
     public void forgetPassword(View view) {
-        Toast.makeText(this, "忘记密码", Toast.LENGTH_SHORT).show();
+        ARouter.getInstance()
+                .build("/test/UserFunctionActivity")
+                .withInt("flag",20002)
+                .navigation();
     }
 
     //注册
     @OnClick(R.id.tv_register)
     public void register(View view) {
-        Toast.makeText(this, "注册账号", Toast.LENGTH_SHORT).show();
+        ARouter.getInstance()
+                .build("/test/UserFunctionActivity")
+                .withInt("flag",20003)
+                .navigation();
     }
 
     //快捷登录
     @OnClick(R.id.ll_quick_login)
     public void quickLogin(View view) {
-        ARouter.getInstance().build("/test/QuickLoginActivity").navigation();
+        ARouter.getInstance()
+                .build("/test/UserFunctionActivity")
+                .withInt("flag",20001)
+                .navigation();
     }
 
     //微信登录

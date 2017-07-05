@@ -37,5 +37,7 @@
     <color name="theme_background">#282142</color>
     <color name="cons_detail_content_bg_color">#433d5f</color>
     <color name="cons_detail_text_color">#f5f0e9</color>
+    <color name="existing_number_text_color">#bb66d6</color>
+    <color name="login_register_text_color">#bc67d7</color>
 </resources>
 

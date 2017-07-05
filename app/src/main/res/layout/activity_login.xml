@@ -25,7 +25,7 @@
             <View
                 android:layout_width="50dp"
                 android:layout_height="1dp"
-                android:background="#22ffffff" />
+                android:background="@color/white_20" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -33,13 +33,13 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:text="其他登录方式"
-                android:textColor="#ffffff"
+                android:textColor="@color/white"
                 android:textSize="13dp" />
 
             <View
                 android:layout_width="50dp"
                 android:layout_height="1dp"
-                android:background="#22ffffff" />
+                android:background="@color/white_20" />
         </LinearLayout>
         <!--其他登录方式的icon与文字-->
         <LinearLayout
@@ -67,8 +67,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="7.7dp"
-                    android:text="快捷登录"
-                    android:textColor="#ffffff"
+                    android:text="@string/quick_login"
+                    android:textColor="@color/white"
                     android:textSize="13dp" />
             </LinearLayout>
             <!--微信登录-->
@@ -91,8 +91,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="7.7dp"
-                    android:text="微信"
-                    android:textColor="#ffffff"
+                    android:text="@string/wechat"
+                    android:textColor="@color/white"
                     android:textSize="13dp" />
             </LinearLayout>
             <!--QQ登录,暂未启用-->
@@ -168,7 +168,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:text="莉莉丝"
-            android:textColor="#bc67d7"
+            android:textColor="@color/login_register_text_color"
             android:textSize="19dp" />
 
         <!--莉莉丝下面  手机号码模块-->
@@ -194,11 +194,11 @@
                     android:layout_weight="1"
                     android:background="@null"
                     android:digits="0123456789"
-                    android:hint="手机号"
+                    android:hint="@string/phone_number"
                     android:inputType="number"
                     android:maxLines="1"
-                    android:textColor="#ffffff"
-                    android:textColorHint="#66ffffff"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white_50"
                     android:textSize="20dp" />
 
                 <ImageView
@@ -239,11 +239,11 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:hint="密码"
+                    android:hint="@string/password"
                     android:inputType="textPassword"
                     android:maxLines="1"
-                    android:textColor="#ffffff"
-                    android:textColorHint="#66ffffff"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white_50"
                     android:textSize="20dp" />
 
                 <ImageView
@@ -267,7 +267,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="8dp"
-                android:background="#22ffffff" />
+                android:background="@color/white_20" />
         </LinearLayout>
 
         <!--登录按钮-->
@@ -282,13 +282,14 @@
             android:gravity="center"
             android:paddingBottom="8dp"
             android:paddingTop="8dp"
-            android:text="登录"
-            android:textColor="#ffffff"
+            android:text="@string/login"
+            android:textColor="@color/white"
             android:textSize="17dp" />
 
         <!--隐私条款-->
         <LinearLayout
-            android:layout_width="match_parent"
+            android:id="@+id/ll_privacy_terms"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:gravity="center"
@@ -297,31 +298,16 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="登录代表你同意星座的"
-                android:textColor="#55ffffff"
+                android:text="@string/clause_description"
+                android:textColor="@color/white_50"
                 android:textSize="13dp" />
 
             <TextView
-                android:id="@+id/tv_service_terms"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="服务条款"
-                android:textColor="#bb66d6"
-                android:textSize="13dp" />
 
-            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="及"
-                android:textColor="#55ffffff"
-                android:textSize="13dp" />
-
-            <TextView
-                android:id="@+id/tv_privacy_terms"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="隐私条款"
-                android:textColor="#bb66d6"
+                android:text="@string/privacy_terms"
+                android:textColor="@color/existing_number_text_color"
                 android:textSize="13dp" />
 
         </LinearLayout>
@@ -332,23 +318,29 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
             android:layout_marginRight="50dp"
-            android:layout_marginTop="22dp">
+            android:layout_marginTop="12dp">
 
             <TextView
                 android:id="@+id/tv_forget_password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="忘记密码？"
-                android:textColor="#bc67d7"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/forget_password_01"
+                android:textColor="@color/login_register_text_color"
                 android:textSize="15dp" />
 
             <TextView
                 android:id="@+id/tv_register"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:text="注册"
-                android:textColor="#bc67d7"
+                android:text="@string/register"
+                android:textColor="@color/login_register_text_color"
                 android:textSize="15dp" />
         </RelativeLayout>
 
