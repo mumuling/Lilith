@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="match_parent"
-    android:background="#4c12456"
+    android:background="#4c000000"
     android:id="@+id/fl_root"
     android:orientation="vertical">
 
