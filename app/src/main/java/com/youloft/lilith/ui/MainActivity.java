@@ -1,7 +1,9 @@
 package com.youloft.lilith.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -11,6 +13,10 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.trello.rxlifecycle2.RxLifecycle;
 import com.trello.rxlifecycle2.android.RxLifecycleAndroid;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.youloft.lilith.LLApplication;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
@@ -26,6 +32,7 @@ import com.youloft.lilith.common.utils.LogUtil;
 import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.cons.ConsRepo;
 import com.youloft.lilith.info.UserRepo;
+import com.youloft.lilith.share.CustomShareActivity;
 import com.youloft.lilith.share.ShareEventListener;
 import com.youloft.lilith.ui.view.NavBarLayout;
 import com.youloft.socialize.SocializeAction;
@@ -47,6 +54,7 @@ import java.util.logging.LogManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.FlowableSubscriber;
@@ -80,6 +88,8 @@ public class MainActivity extends BaseActivity {
     FrameLayout mContent;
     @BindView(R.id.main_nav_bar)
     NavBarLayout mNavBar;
+    @BindView(R.id.share)
+    Button mBtn;
 
     @BindView(R.id.main_content_tv)
     TextView tv;
@@ -95,6 +105,7 @@ public class MainActivity extends BaseActivity {
         //更新配置项
         OnlineConfigAgent.getInstance().onAppStart(getApplicationContext());
         mMainTabManager = new TabManager(this);
+
     }
 
     @Override
@@ -110,4 +121,11 @@ public class MainActivity extends BaseActivity {
             mMainTabManager.selectChange(selectTab);
         }
     }
+
+    @OnClick(R.id.share)
+    public void share(){
+        Intent intent = new Intent(this, CustomShareActivity.class);
+        startActivity(intent);
+    }
+
 }

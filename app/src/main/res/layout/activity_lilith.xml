@@ -39,7 +39,12 @@
     <!--app:layout_constraintLeft_toLeftOf="parent"-->
     <!--app:layout_constraintRight_toRightOf="parent"-->
     <!--app:layout_constraintTop_toTopOf="parent" />-->
-
+    <Button
+        android:id="@+id/share"
+        android:layout_marginTop="100dp"
+        android:text="分享"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
     <com.youloft.lilith.ui.view.NavBarLayout
         android:id="@+id/main_nav_bar"
         android:layout_width="0dp"

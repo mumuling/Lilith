@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/share_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <RelativeLayout
+        android:id="@+id/share_bottom_group"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:layout_gravity="bottom"
+        android:background="@color/constellation_week_color">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="6dp"
+            android:text="@string/share_activity_title"
+            android:textColor="@color/white"
+            android:textSize="15dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true">
+
+            <LinearLayout
+                android:id="@+id/share_wx_hy"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <com.youloft.lilith.common.widgets.view.RoundImageView
+                    android:layout_width="49dp"
+                    android:layout_height="49dp"
+                    android:background="@color/share_wx_bg_color"
+                    android:padding="8dp"
+                    app:radius="49dp"
+                    android:src="@drawable/share_wxhy_icon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="@string/share_wxhy"
+                    android:textColor="@color/white"
+                    android:textSize="13dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/share_wx_pyq"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <com.youloft.lilith.common.widgets.view.RoundImageView
+                    android:layout_width="49dp"
+                    android:layout_height="49dp"
+                    android:background="@color/share_wxcc_bg_color"
+                    android:padding="8dp"
+                    app:radius="49dp"
+                    android:src="@drawable/share_wxpyq_icon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="@string/share_wxcc"
+                    android:textColor="@color/white"
+                    android:textSize="13dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_above="@+id/share_cancel"
+            android:background="@color/white_20" />
+
+        <TextView
+            android:id="@+id/share_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="@string/share_activity_cancel"
+            android:textColor="@color/white"
+            android:textSize="15dp" />
+    </RelativeLayout>
+</FrameLayout>

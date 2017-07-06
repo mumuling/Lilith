@@ -1,1 +1,1 @@
-include ':app', ':statistics', ':umeng-push', ':umeng-socialize'
+include ':app', ':statistics', ':umeng-socialize'
