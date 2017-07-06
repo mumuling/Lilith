@@ -31,6 +31,7 @@ public class ConsManager {
      */
     private static synchronized void initConsMap() {
         if (mConsImg.isEmpty()) {
+            mConsImg.put("0",   new ConsInfo("双鱼座", "2.19-3.20",    R.drawable.constellation_pisces_pic,        new float[]{344 / 386f, 190.5f / 232f, 111 / 386f, 189.5f / 232f, 85 / 386f, 40.5f / 232f}));
             mConsImg.put("1",   new ConsInfo("水瓶座", "1.20-2.18",    R.drawable.constellation_aquarius_pic,      new float[]{224 / 386f, 131.5f / 232f, 312 / 386f, 128.5f / 232f, 45.5f / 386f, 87.5f / 232f}));
             mConsImg.put("2",   new ConsInfo("双鱼座", "2.19-3.20",    R.drawable.constellation_pisces_pic,        new float[]{344 / 386f, 190.5f / 232f, 111 / 386f, 189.5f / 232f, 85 / 386f, 40.5f / 232f}));
             mConsImg.put("3",   new ConsInfo("白羊座", "3.21-4.19",    R.drawable.constellation_aries_pic,         new float[]{211 / 386f, 92.5f / 232f, 314 / 386f, 189.5f / 232f, 71 / 386f, 42.5f / 232f}));

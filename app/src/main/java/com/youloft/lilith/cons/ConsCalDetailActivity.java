@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
+import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.CalendarHelper;
 import com.youloft.lilith.common.utils.SafeUtil;
 import com.youloft.lilith.cons.bean.ConsPredictsBean;
@@ -34,6 +36,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
@@ -44,6 +47,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 public class ConsCalDetailActivity extends BaseActivity {
+    private static final String TAG = "ConsCalDetailActivity";
     public static Bitmap mBg = null;
     @BindView(R.id.cons_detail_bg_img)
     ImageView mConsDetailBgImg;
@@ -97,15 +101,18 @@ public class ConsCalDetailActivity extends BaseActivity {
         if (mData != null) {
             bindData(mData);
         } else {
-            ConsRepo.getConsPredicts("1989-11-11", "", "", "").subscribeOn(Schedulers.newThread())
+            ConsRepo.getConsPredicts("1989-11-11","","29.35","106.33")
+                    .subscribeOn(Schedulers.newThread())
+                    .toObservable()
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Consumer<ConsPredictsBean>() {
+                    .subscribe(new RxObserver<ConsPredictsBean>() {
                         @Override
-                        public void accept(@NonNull ConsPredictsBean consPredictsBean) throws Exception {
-                            if (consPredictsBean != null) {
-                                mData = consPredictsBean;
+                        public void onDataSuccess(ConsPredictsBean bean) {
+                            if (bean != null) {
+                                mData = bean;
                                 bindData(mData);
                             }
+                            Log.d(TAG, "onDataSuccess() called with: bean = [" + bean + "]");
                         }
                     });
         }
@@ -145,8 +152,10 @@ public class ConsCalDetailActivity extends BaseActivity {
                 mConsDetailTitle.setText(titleString);
             }
             mConsDetailCalView.setData(data);
+
         }
 
+        //数据绑定完后才执行动画。防止出现闪现
         mRoot.post(new Runnable() {
             @Override
             public void run() {

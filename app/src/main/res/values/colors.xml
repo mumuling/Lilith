@@ -25,6 +25,7 @@
     <color name="white_20">#33ffffff</color>
     <!--10%透明度白色  透明了90%-->
     <color name="white_10">#21ffffff</color>
+    <color name="topic_user_img_err">#d8d8d8</color>
 
     <!--运势颜色-->
     <color name="constellation_luck_color">#0fde5deb</color>

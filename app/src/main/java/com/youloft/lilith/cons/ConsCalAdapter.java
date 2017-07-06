@@ -53,7 +53,7 @@ public class ConsCalAdapter extends RecyclerView.Adapter<ConsCalAdapter.ConsCalI
      * @param bean
      */
     public void setConsData(ConsPredictsBean.DataBean bean) {
-        if (bean == null && bean.predicts.isEmpty()) {
+        if (bean == null || bean.predicts == null || bean.predicts.isEmpty()) {
             return;
         }
         mPredicts.clear();

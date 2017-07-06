@@ -4,7 +4,10 @@
     <!--权限Label-->
     <string name="lilith_permission_label">允许读取和更新丽丽丝设置</string>
     <string name="master_measure">大师亲算</string>
-    <string name="cons_share_text">工作运势上升</string>
+    <string name="cons_share_text">分享我的运势</string>
+    <string name="cons_love_text">感情运势上升</string>
+    <string name="cons_money_text">财富运势上升</string>
+    <string name="cons_work_text">工作运势上升</string>
     <string name="nick_name">昵称</string>
     <string name="sex">性别</string>
     <string name="date_birth">出生日期</string>
@@ -42,6 +45,9 @@
     <string name="new_password">输入新密码</string>
     <string name="confirm_new_password">确认新密码</string>
     <string name="confirm">确认</string>
+    <string name="cons_hot_topic_card_title">热门话题</string>
+    <string name="cons_hot_topic_card_more">查看全部</string>
+    <string name="topic_card_show_detail">立即查看</string>
 
     <string-array name="cons_luck_line_color">
         <item>#de5deb,#99de5deb,#0fde5deb</item>

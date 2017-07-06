@@ -7,6 +7,7 @@ import android.location.LocationManager;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.youloft.lilith.LLApplication;
 import com.youloft.lilith.common.AbstractDataRepo;
+import com.youloft.lilith.common.net.Urls;
 import com.youloft.lilith.common.utils.LocationUtil;
 import com.youloft.lilith.common.utils.Utils;
 import com.youloft.lilith.cons.bean.ConsPredictsBean;
@@ -45,7 +46,7 @@ public class ConsRepo extends AbstractDataRepo {
             param.put("curlongi", location[0]);
             param.put("curlati", location[1]);
         }
-        return unionFlow("http://*****" + "/GetPredicts", null, param, true, ConsPredictsBean.class, "cons_predicts", 10 * 60 * 1000);
+        return httpFlow(Urls.CONS_PREDICTS, null, param, true, ConsPredictsBean.class, "cons_predicts", 1);
     }
 
 

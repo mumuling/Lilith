@@ -5,6 +5,8 @@
     android:background="@drawable/cons_bottom_bg"
     android:paddingBottom="18dp"
     android:paddingTop="20dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
     android:id="@+id/cons_share_root"
     android:orientation="vertical">
     <TextView

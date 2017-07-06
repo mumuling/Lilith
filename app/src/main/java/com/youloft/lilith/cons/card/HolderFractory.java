@@ -42,7 +42,7 @@ public class HolderFractory {
             case CARD_TYPE_SHARE:
                 return new ConsShareHolder(context, parent);
             case CARD_TYPE_HOT_TOPIC:
-                return new ConsYSHolder(context, parent, ConsYSHolder.CONS_YS);
+                return new ConsHotTopicHolder(context, parent);
             case CARD_TYPE_BOTTOM_EMPTY:
                 return new ConsBottomEmptyHolder(context, parent);
             default:

@@ -1,5 +1,6 @@
 package com.youloft.lilith.cons.bean;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.youloft.lilith.common.net.AbsResponse;
 
 import java.io.Serializable;
@@ -24,15 +25,23 @@ public class ConsPredictsBean extends AbsResponse<ConsPredictsBean.DataBean> imp
          * msgwealth : null
          * predicts : 详情
          */
-
+        @JSONField(name = "bgImg")
         public String bgImg;
+        @JSONField(name = "msg")
         public String msg;
+        @JSONField(name = "eMsg")
         public String eMsg;
+        @JSONField(name = "signs")
         public int signs;
+        @JSONField(name = "msgAvg")
         public String msgAvg;
+        @JSONField(name = "msglove")
         public String msglove;
+        @JSONField(name = "msgcareer")
         public String msgcareer;
+        @JSONField(name = "msgwealth")
         public String msgwealth;
+        @JSONField(name = "predicts")
         public List<PredictsBean> predicts;
 
         public static class PredictsBean implements Serializable {
@@ -44,10 +53,15 @@ public class ConsPredictsBean extends AbsResponse<ConsPredictsBean.DataBean> imp
              * ptwealth : 5
              */
 
+            @JSONField(name = "avg")
             public int avg;
+            @JSONField(name = "date")
             public String date;
+            @JSONField(name = "ptlove")
             public int ptlove;
+            @JSONField(name = "ptcareer")
             public int ptcareer;
+            @JSONField(name = "ptwealth")
             public int ptwealth;
 
         }

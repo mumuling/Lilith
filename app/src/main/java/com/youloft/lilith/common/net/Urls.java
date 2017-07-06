@@ -12,6 +12,7 @@ package com.youloft.lilith.common.net;
 public class Urls {
 
     public static final String CONFIG = "http://cfg.51wnl.com/api/getallconfig.ashx?";
+    public static final String CONS_PREDICTS = "http://lilith.51wnl.com/GetPredicts";   //星座数据
     public static final String TOPIC_INFO = "http://lilith.51wnl.com/GetTopicsInfo";
     public static final String TOPIC_LIST = "http://lilith.51wnl.com/GetTopicsList";
     public static final String REPLY_LIST = "http://lilith.51wnl.com/GetReplyList";
