@@ -12,14 +12,17 @@ import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.ViewUtil;
 import com.youloft.lilith.cons.ConsRepo;
 import com.youloft.lilith.topic.adapter.PointAnswerAdapter;
+import com.youloft.lilith.topic.bean.PointBean;
 import com.youloft.lilith.topic.bean.ReplyBean;
 import com.youloft.lilith.topic.bean.TopicBean;
+import com.youloft.lilith.topic.bean.TopicDetailBean;
 import com.youloft.lilith.topic.widget.ScrollFrameLayout;
 import com.youloft.lilith.topic.widget.SoftInputLayout;
 
@@ -56,8 +59,10 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
     ScrollFrameLayout rvCommentAnswer;
     @BindView(R.id.comment_edit)
     EditText commentEdit;
-    @Autowired(name = "/repo/topic")
-    TopicRepo mTopicRepo;
+    @Autowired
+    public PointBean.DataBean point;
+    @Autowired
+    public TopicDetailBean.DataBean topic;
     private LinearLayoutManager mLayoutManager;
     private PointAnswerAdapter adapter;
     private List<ReplyBean.DataBean> replyBeanList = new ArrayList<>();//回复的列表
@@ -71,12 +76,15 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
         setContentView(R.layout.activity_point_detail);
         overridePendingTransition(R.anim.slide_in_bottom, 0);
         ButterKnife.bind(this);
+        ARouter.getInstance().inject(this);
         initView();
+        PointBean.DataBean point1 = point;
         initReplyData();
+
     }
 
     public void initReplyData() {
-        mTopicRepo.getPointReply("1",null,"5")
+        TopicRepo.getPointReply(String.valueOf(point.id),null,"10",null,true)
                 .compose(this.<ReplyBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
@@ -106,6 +114,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
         mLayoutManager = new LinearLayoutManager(this);
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         adapter = new PointAnswerAdapter(this);
+        adapter.setPointAndTopic(point,topic.option);
         rvCommentAnswer.setLayoutManager(mLayoutManager);
         rvCommentAnswer.setAdapter(adapter);
 

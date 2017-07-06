@@ -31,12 +31,13 @@ public class TopicRepo extends AbstractDataRepo {
      * @param limit  请求条数
      * @return
      */
-    public static Flowable<ReplyBean> getPointReply(String vid,String uid,String limit) {
+    public static Flowable<ReplyBean> getPointReply(String vid,String uid,String limit,String skip,boolean needCache) {
         HashMap<String, String> param = new HashMap();
         param.clear();
         param.put("vid",vid);
         if (uid != null)  param.put("uid",uid);
-        param.put("limit",limit);
+        if (limit!=null)param.put("limit",limit);
+        if (skip!= null)param.put("skip",skip);
         return unionFlow(Urls.REPLY_LIST, null, param, true, ReplyBean.class, "point_reply", 2*60*1000);
     }
 
@@ -62,11 +63,12 @@ public class TopicRepo extends AbstractDataRepo {
      * @param needCache  是否需要缓存
      * @return
      */
-    public static Flowable<TopicBean> getTopicListBottom(String limit,boolean needCache) {
+    public static Flowable<TopicBean> getTopicListBottom(String limit,String skip,boolean needCache) {
         String cacheKey = "topic_list_bottom";
         long cacheDuration = 2 * 1000;
         HashMap<String, String> param = new HashMap();
         if (limit != null)param.put("limit",limit);
+        if (skip != null)param.put("skip",skip);
         if (needCache) {
             if (!LLApplication.getApiCache().isExpired(cacheKey,cacheDuration)) {
                 return LLApplication.getApiCache().readCache(cacheKey,TopicBean.class);

@@ -1,7 +1,11 @@
 package com.youloft.lilith.topic.holder;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -10,16 +14,23 @@ import android.widget.TextView;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
+import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.cons.consmanager.ConsManager;
+import com.youloft.lilith.topic.PointDetailActivity;
+import com.youloft.lilith.topic.TopicDetailActivity;
+import com.youloft.lilith.topic.TopicRepo;
 import com.youloft.lilith.topic.bean.PointBean;
 import com.youloft.lilith.topic.bean.TopicBean;
 import com.youloft.lilith.topic.bean.TopicDetailBean;
 import com.youloft.lilith.ui.GlideCircleTransform;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**     话题观点的holder
  *version
@@ -63,7 +74,12 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
     View commentDividerBottom;
     @BindView(R.id.ll_load_more)
     FrameLayout llLoadMore;
+    @BindView(R.id.text_load_more)
+    TextView textLoadMore;
+    @BindView(R.id.image_loading)
+    ImageView imageLoading;
     private TextView[] replyTextArray = new TextView[3];
+    private Animation loadAnimation;
 
     public PointHolder(View itemView) {
         super(itemView);
@@ -76,6 +92,8 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
         replyTextArray[1] = textAnswer2;
         replyTextArray[2] = textAnswer3;
         imageZan.setOnClickListener(this);
+        llLoadMore.setOnClickListener(this);
+        loadAnimation = AnimationUtils.loadAnimation(itemView.getContext(),R.anim.rotate_animation);
     }
 
     @Override
@@ -84,18 +102,44 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
             case R.id.image_zan:
                 imageZan.setImageResource(R.drawable.topic_like_icon);
                 break;
+            case R.id.ll_load_more:
+                imageLoading.setVisibility(View.VISIBLE);
+                textLoadMore.setVisibility(View.GONE);
+                imageLoading.startAnimation(loadAnimation);
+                getMorePiont();
+                break;
+        }
+    }
+    public void getMorePiont() {
+        if (itemView.getContext() instanceof TopicDetailActivity) {
+           if (((TopicDetailActivity) itemView.getContext()).loadMorePiont()){
+               textLoadMore.setVisibility(View.VISIBLE);
+               textLoadMore.setText("展开更多");
+               imageLoading.setVisibility(View.GONE);
+               imageLoading.clearAnimation();
+           } else {
+               textLoadMore.setVisibility(View.VISIBLE);
+               textLoadMore.setText("没有数据了..");
+               imageLoading.setVisibility(View.GONE);
+               imageLoading.clearAnimation();
+           }
         }
     }
 
-    public void bindNormal(PointBean.DataBean point, List<TopicDetailBean.DataBean.OptionBean> topic,boolean isLast) {
-        if (point == null || topic == null)return;
+    public void bindNormal(final PointBean.DataBean point, final TopicDetailBean.DataBean option, boolean isLast) {
+        if (point == null || option == null)return;
+        ArrayList<TopicDetailBean.DataBean.OptionBean> topic = option.option;
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ARouter.getInstance().build("/test/PointDetailActivity").navigation();
+                ARouter.getInstance().build("/test/PointDetailActivity")
+                        .withObject("point",point)
+                        .withObject("topic",option)
+                .navigation();
             }
         });
         //头像
+
         GlideApp.with(itemView)
                 .asBitmap().
                 transform(new GlideCircleTransform(itemView.getContext()))

@@ -1,18 +1,14 @@
 package com.youloft.lilith.topic;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.R;
-import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.topic.adapter.TopicDetailAdapter;
@@ -20,7 +16,6 @@ import com.youloft.lilith.topic.bean.PointBean;
 import com.youloft.lilith.topic.bean.TopicBean;
 import com.youloft.lilith.topic.bean.TopicDetailBean;
 import com.youloft.lilith.topic.widget.VoteDialog;
-import com.youloft.lilith.ui.GlideCircleTransform;
 import com.youloft.lilith.ui.view.BaseToolBar;
 
 import java.util.ArrayList;
@@ -53,6 +48,9 @@ public class TopicDetailActivity extends BaseActivity {
     private TopicDetailBean.DataBean topicDtailInfo;
     private List<PointBean.DataBean> pointList = new ArrayList<>();
     private List<TopicBean.DataBean> otherTopicList = new ArrayList<>();
+    public int totalPoint = 0;
+    public int totalTopic = 0;
+    private boolean isMorePoint = true;
     @Autowired
     public int tid;
 
@@ -65,12 +63,16 @@ public class TopicDetailActivity extends BaseActivity {
         ARouter.getInstance().inject(this);
         initView();
         requestTopicDetail();
+        int i = tid;
         requestPointList();
         requestOtherTopicList();
     }
 
+    /**
+     *  第一次请求其他话题列表
+     */
     private void requestOtherTopicList() {
-        TopicRepo.getTopicListBottom(null,true)
+        TopicRepo.getTopicListBottom("5",null,true)
                 .compose(this.<TopicBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
@@ -81,6 +83,7 @@ public class TopicDetailActivity extends BaseActivity {
                         if (topicBean.data != null) {
                             otherTopicList.addAll(topicBean.data);
                             adapter.setOtherTopicList(topicBean.data);
+                            totalTopic = topicBean.data.size();
                         }
                     }
 
@@ -91,8 +94,11 @@ public class TopicDetailActivity extends BaseActivity {
                 });
     }
 
+    /**
+     *   第一次请求观点列表
+     */
     private void requestPointList() {
-        TopicRepo.getPointList(String.valueOf(tid),null,"10",null,true)
+        TopicRepo.getPointList(String.valueOf(tid),null,"1",null,true)
                 .compose(this.<PointBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
@@ -103,6 +109,7 @@ public class TopicDetailActivity extends BaseActivity {
                         if (pointBean.data == null)return;
                         pointList.addAll(pointBean.data);
                         adapter.setPointBeanList(pointList);
+                        totalPoint = pointBean.data.size();
                     }
 
                     @Override
@@ -112,6 +119,9 @@ public class TopicDetailActivity extends BaseActivity {
                 });
     }
 
+    /**
+     *   请求观点详细信息
+     */
     private void requestTopicDetail() {
         TopicRepo.getTopicDetail(String.valueOf(tid))
                 .compose(this.<TopicDetailBean>bindToLifecycle())
@@ -125,9 +135,7 @@ public class TopicDetailActivity extends BaseActivity {
                         if (data == null )return;
                         topicDtailInfo= data;
                         adapter.setTopicInfo(topicDtailInfo);
-
                     }
-
                     @Override
                     protected void onFailed(Throwable e) {
                         super.onFailed(e);
@@ -159,5 +167,90 @@ public class TopicDetailActivity extends BaseActivity {
 
             }
         });
+
+        rvTopicDetail.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                LinearLayoutManager lm = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int totalItemCount = recyclerView.getAdapter().getItemCount();
+                int lastVisibleItemPosition = lm.findLastVisibleItemPosition();
+                int visibleItemCount = recyclerView.getChildCount();
+
+                if (newState == RecyclerView.SCROLL_STATE_IDLE
+                        && lastVisibleItemPosition == totalItemCount - 1
+                        && visibleItemCount > 0) {
+                    if (otherTopicList!= null && otherTopicList.size() != 0) {
+                        loadMoreTopic();
+                    }
+                }
+            }
+        });
+    }
+
+    /**
+     *  加载更多其他话题
+     */
+    public void loadMoreTopic() {
+        TopicRepo.getTopicListBottom("1",String.valueOf(totalTopic),false)
+                .compose(this.<TopicBean>bindToLifecycle())
+                .subscribeOn(Schedulers.newThread())
+                .toObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new RxObserver<TopicBean>() {
+                    @Override
+                    public void onDataSuccess(TopicBean topicBean) {
+                        if (topicBean.data != null) {
+                            otherTopicList.addAll(topicBean.data);
+                            adapter.setOtherTopicList(topicBean.data);
+                            totalTopic = totalTopic + topicBean.data.size();
+                        }
+                    }
+
+                    @Override
+                    protected void onFailed(Throwable e) {
+                        super.onFailed(e);
+                    }
+                });
+    }
+
+    /**
+     *   加载更多观点
+     */
+
+    public boolean loadMorePiont() {
+
+        TopicRepo.getPointList(String.valueOf(tid),null,"1",String.valueOf(totalPoint),false)
+                .compose(this.<PointBean>bindToLifecycle())
+                .subscribeOn(Schedulers.newThread())
+                .toObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new RxObserver<PointBean>() {
+                    @Override
+                    public void onDataSuccess(PointBean pointBean) {
+                        if (pointBean.data == null || pointBean.data.size() == 0 ) {
+                            isMorePoint = false;
+                            return;
+                        }
+                        pointList.addAll(pointBean.data);
+                        adapter.setPointBeanList(pointBean.data);
+                        totalPoint = totalPoint + pointList.size();
+                        isMorePoint = true;
+                    }
+
+                    @Override
+                    protected void onFailed(Throwable e) {
+
+                        super.onFailed(e);
+                        isMorePoint = false;
+
+                    }
+                });
+        return isMorePoint;
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }
