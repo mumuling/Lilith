@@ -8,145 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <!--最下面的其他登录方式-->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"
-        android:layout_marginBottom="12.3dp"
-        android:orientation="vertical">
-        <!--其他登录方式文字-->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
 
-            <View
-                android:layout_width="50dp"
-                android:layout_height="1dp"
-                android:background="@color/white_20" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:text="其他登录方式"
-                android:textColor="@color/white"
-                android:textSize="13dp" />
-
-            <View
-                android:layout_width="50dp"
-                android:layout_height="1dp"
-                android:background="@color/white_20" />
-        </LinearLayout>
-        <!--其他登录方式的icon与文字-->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="15dp"
-            android:orientation="horizontal">
-            <!--快捷登录-->
-            <LinearLayout
-                android:id="@+id/ll_quick_login"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/div" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="7.7dp"
-                    android:text="@string/quick_login"
-                    android:textColor="@color/white"
-                    android:textSize="13dp" />
-            </LinearLayout>
-            <!--微信登录-->
-            <LinearLayout
-                android:id="@+id/ll_wechat_login"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="56dp"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/div" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="7.7dp"
-                    android:text="@string/wechat"
-                    android:textColor="@color/white"
-                    android:textSize="13dp" />
-            </LinearLayout>
-            <!--QQ登录,暂未启用-->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="56dp"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/div" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="7.7dp"
-                    android:text="快捷登录"
-                    android:textColor="#ffffff"
-                    android:textSize="13dp" />
-            </LinearLayout>
-            <!--微博登录,暂未启用-->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="56dp"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/div" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="7.7dp"
-                    android:text="快捷登录"
-                    android:textColor="#ffffff"
-                    android:textSize="13dp" />
-            </LinearLayout>
-
-        </LinearLayout>
-    </LinearLayout>
     <!--其他登录方式上面的部分-->
     <LinearLayout
         android:layout_width="match_parent"
@@ -161,7 +23,7 @@
             android:layout_height="@dimen/head_portrait"
             android:layout_marginTop="68dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/div" />
+            android:src="@mipmap/icon_launcher" />
 
         <!--名称-->
         <TextView
@@ -355,4 +217,143 @@
         android:layout_marginTop="23dp"
         android:padding="10dp"
         android:src="@drawable/back_icon" />
+    <!--最下面的其他登录方式-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="12.3dp"
+        android:orientation="vertical">
+        <!--其他登录方式文字-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="50dp"
+                android:layout_height="1dp"
+                android:background="@color/white_20" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:text="其他登录方式"
+                android:textColor="@color/white"
+                android:textSize="13dp" />
+
+            <View
+                android:layout_width="50dp"
+                android:layout_height="1dp"
+                android:background="@color/white_20" />
+        </LinearLayout>
+        <!--其他登录方式的icon与文字-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal">
+            <!--快捷登录-->
+            <LinearLayout
+                android:id="@+id/ll_quick_login"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/login_phone_icon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7.7dp"
+                    android:text="@string/quick_login"
+                    android:textColor="@color/white"
+                    android:textSize="13dp" />
+            </LinearLayout>
+            <!--微信登录-->
+            <LinearLayout
+                android:id="@+id/ll_wechat_login"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="56dp"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/login_weixin_icon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7.7dp"
+                    android:text="@string/wechat"
+                    android:textColor="@color/white"
+                    android:textSize="13dp" />
+            </LinearLayout>
+            <!--QQ登录,暂未启用-->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="56dp"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/login_qq_icon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7.7dp"
+                    android:text="快捷登录"
+                    android:textColor="@color/white"
+                    android:textSize="13dp" />
+            </LinearLayout>
+            <!--微博登录,暂未启用-->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="56dp"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/login_weibo_icon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7.7dp"
+                    android:text="快捷登录"
+                    android:textColor="@color/white"
+                    android:textSize="13dp" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
 </FrameLayout>

@@ -1,6 +1,5 @@
 package com.youloft.lilith.measure;
 
-import com.alibaba.android.arouter.facade.annotation.Route;
 import com.youloft.lilith.common.AbstractDataRepo;
 import com.youloft.lilith.common.net.Urls;
 import com.youloft.lilith.measure.bean.MeasureBean;
