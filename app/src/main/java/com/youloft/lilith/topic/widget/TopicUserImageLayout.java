@@ -12,7 +12,7 @@ import com.youloft.lilith.topic.bean.TopicBean;
 import java.util.List;
 
 /**
- *
+ * 话题list的view封装
  */
 
 public class TopicUserImageLayout extends FrameLayout implements TopicUserDataBind{

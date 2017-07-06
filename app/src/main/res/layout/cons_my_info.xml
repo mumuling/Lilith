@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cons_my_info_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
     android:background="@drawable/cons_top_bg">
@@ -15,7 +15,7 @@
         android:layout_gravity="center_horizontal"
         android:scaleType="centerCrop"
         app:radius_left_top="5dp"
-        app:radius_right_top="5dp"/>
+        app:radius_right_top="5dp" />
 
     <LinearLayout
         android:id="@+id/cons_my_info_content_root"
@@ -67,9 +67,10 @@
 
         <ImageView
             android:id="@+id/cons_my_info_cons_img"
-            android:layout_gravity="center_horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/constellation_pisces_pic" />
 
         <TextView
             android:id="@+id/cons_my_info_xz"

@@ -16,6 +16,7 @@ import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.cache.CacheObj;
 import com.youloft.lilith.common.cache.CacheStore;
+import com.youloft.lilith.common.event.TabChangeEvent;
 import com.youloft.lilith.common.net.OkHttpUtils;
 import com.youloft.lilith.common.net.OnlineConfigAgent;
 import com.youloft.lilith.common.rx.RxFlowableUtil;
@@ -32,6 +33,9 @@ import com.youloft.socialize.SocializePlatform;
 import com.youloft.socialize.media.ShareWeb;
 import com.youloft.socialize.wrapper.ShareListener;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
@@ -86,48 +90,24 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lilith);
         ARouter.getInstance().inject(this);
+        EventBus.getDefault().register(this);
         ButterKnife.bind(this);
         //更新配置项
         OnlineConfigAgent.getInstance().onAppStart(getApplicationContext());
         mMainTabManager = new TabManager(this);
-
-//        mUserRepo.loginWithPhone("aa")
-//                .compose(this.<HashMap>bindToLifecycle())
-//                .toObservable()
-//                .subscribe(new RxObserver<HashMap>() {
-//                    @Override
-//                    public void onDataSuccess(HashMap hashMap) {
-//
-//                    }
-//                });
-
-//        Toaster.showShort("Fuck");
-//
-//        Toaster.showShort("Fuck1");
-//
-//        Toaster.showShort("Fuck2");
-
-//        ARouter.getInstance().build("/ui/web")
-//                .withString("url", "http://www.tudou.com")
-//                .navigation();
-
-
-//        LLApplication
-//                .getLilithApi()
-//                .getBaiduContent()
-//                .<String>toFlowable(BackpressureStrategy.DROP)
-//                .compose(RxFlowableUtil.<String>applyNetIoSchedulers())
-//                .compose(LLApplication.getApiCache().<String>cacheTransform("baidu"))
-//                .toObservable()
-//                .compose(this.<String>bindToLifecycle())
-//                .compose(RxObservableUtil.<String>applyIOSchedulers())
-//                .subscribe(new RxObserver<String>() {
-//                    @Override
-//                    public void onDataSuccess(String s) {
-//                        Toaster.showShort("Content:" + s);
-//                    }
-//                });
-
     }
 
+    @Override
+    protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
+    public void onDataSynEvent(TabChangeEvent event) {
+        int selectTab = event.selectTab;
+        if (mMainTabManager != null) {
+            mMainTabManager.selectChange(selectTab);
+        }
+    }
 }

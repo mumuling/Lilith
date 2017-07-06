@@ -7,10 +7,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.youloft.lilith.R;
+import com.youloft.lilith.common.event.TabChangeEvent;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.topic.TopicRepo;
 import com.youloft.lilith.topic.adapter.TopicAdapter;
 import com.youloft.lilith.topic.bean.TopicBean;
+import com.youloft.lilith.ui.TabManager;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -65,7 +69,7 @@ public class ConsHotTopicHolder extends CardHolder {
 
     @OnClick(R.id.cons_hot_topic_card_more)
     public void showMore() {
-
+        EventBus.getDefault().post(new TabChangeEvent(TabManager.TAB_INDEX_HT));
     }
 
     @Override

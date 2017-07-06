@@ -33,6 +33,11 @@ public class TabManager implements NavBarLayout.OnTabChangeListener {
     private HashMap<String, Fragment> mFragmentsCache = new HashMap<>();
     private static int FRAGMENT_CONTAINER = R.id.main_content;
 
+    public static final int TAB_INDEX_XZ = 0;
+    public static final int TAB_INDEX_HT = 1;
+    public static final int TAB_INDEX_CC = 2;
+    public static final int TAB_INDEX_SZ = 3;
+
     public TabManager(MainActivity mainActivity) {
         this.mMainActivity = mainActivity;
         mFragmentManager = mainActivity.getSupportFragmentManager();
@@ -69,11 +74,12 @@ public class TabManager implements NavBarLayout.OnTabChangeListener {
             }
         }
         bindTabFragment();
-        setTabIndex(0);
+        setTabIndex(TAB_INDEX_XZ);
     }
 
     /**
      * 创建Fragment
+     *
      * @param tag
      * @return
      */
@@ -104,16 +110,22 @@ public class TabManager implements NavBarLayout.OnTabChangeListener {
 
     /**
      * 设置显示的fragment
+     *
      * @param index
      */
     private void setTabIndex(int index) {
         FragmentTransaction ft = mFragmentManager.beginTransaction();
+        Fragment safeData = SafeUtil.getSafeData(mFragments, index);
+        if (safeData == null) {
+            return;
+        }
         if (mCurrentFragment != null) {
             ft.hide(mCurrentFragment);
         }
-        mCurrentFragment = SafeUtil.getSafeData(mFragments, index);
+        mCurrentFragment = safeData;
         if (mCurrentFragment != null) {
             ft.show(mCurrentFragment);
+            mNavBar.setSelectTab(index);
         }
         ft.commit();
     }

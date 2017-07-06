@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * 首页热门话题list的view封装
  */
 
 public class HotUserImageStackViewGroup extends FrameLayout implements TopicUserDataBind{

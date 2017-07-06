@@ -14,6 +14,7 @@ import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.topic.bean.TopicBean;
 import com.youloft.lilith.topic.widget.TopicUserDataBind;
 import com.youloft.lilith.topic.widget.UserImageStackViewGroup;
+import com.youloft.lilith.ui.GlideBlurTransform;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -119,6 +120,7 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             GlideApp.with(itemView)
                     .asBitmap()
                     .load(topic.backImg)
+//                    .transform(new GlideBlurTransform(mContext))
                     .into(mTopicImage);
             mUserImageStackViewGroup.bindData(topic.voteUser, topic.totalVote);
         }
@@ -132,6 +134,15 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             super(itemView);
         }
 
+        @Override
+        public void bind(TopicBean.DataBean topic) {
+            mTopicContent.setText(topic.title);
+            GlideApp.with(itemView)
+                    .asBitmap()
+                    .load(topic.backImg)
+                    .into(mTopicImage);
+            mUserImageStackViewGroup.bindData(topic.voteUser, topic.totalVote);
+        }
     }
 
     /**
