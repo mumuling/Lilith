@@ -1,6 +1,7 @@
 package com.youloft.lilith.topic.bean;
 
-import java.util.ArrayList;
+import com.youloft.lilith.common.net.AbsResponse;
+
 import java.util.List;
 
 /**         话题详情对象
@@ -10,77 +11,42 @@ import java.util.List;
  *@class   TopicDetailBean
  */
 
-public class TopicDetailBean extends Object {
-
-    public int mId;
-    public String mTitle;//标题
-    public String mBackImg;// 话题背景图
-    public int mCollection;// 收藏数
-    public int mTotalVote;// 总投票数
-    public int mIsClose;//是否关闭 0 否 1是
-    public List<TopicOptionBean> mOptions = new ArrayList<>();//话题对应的选项，正方和反方
+public class TopicDetailBean extends AbsResponse<TopicDetailBean.DataBean> {
 
 
+    public static class DataBean {
+        /**
+         * id : 10000
+         * title : 爱情，究竟应该是互补还是相似的两个人在一起呢？
+         * backImg : http://b.zol-img.com.cn/sjbizhi/images/9/320x510/1457593726716.jpg
+         * collection : 0
+         * totalVote : 2
+         * isClose : 0
+         * option : [{"id":1,"shortTitle":"相识","title":"相似更好，因为可以更好的理解对方","vote":2,"buildDate":"2017-06-27 20:48:43"},{"id":3,"shortTitle":"互补","title":"互补更好，不说了","vote":0,"buildDate":"2017-06-27 20:49:07"}]
+         */
 
-    public TopicDetailBean() {}
+        public int id;
+        public String title;
+        public String backImg;
+        public int collection;
+        public int totalVote;
+        public int isClose;
+        public List<OptionBean> option;
 
-    public int getmId() {
-        return mId;
+        public static class OptionBean {
+            /**
+             * id : 1
+             * shortTitle : 相识
+             * title : 相似更好，因为可以更好的理解对方
+             * vote : 2
+             * buildDate : 2017-06-27 20:48:43
+             */
+
+            public int id;
+            public String shortTitle;
+            public String title;
+            public int vote;
+            public String buildDate;
+        }
     }
-
-    public void setmId(int mId) {
-        this.mId = mId;
-    }
-
-    public String getmTitle() {
-        return mTitle;
-    }
-
-    public void setmTitle(String mTitle) {
-        this.mTitle = mTitle;
-    }
-
-    public String getmBackImg() {
-        return mBackImg;
-    }
-
-    public void setmBackImg(String mBackImg) {
-        this.mBackImg = mBackImg;
-    }
-
-    public int getmColletion() {
-        return mCollection;
-    }
-
-    public void setmColletion(int mColletion) {
-        this.mCollection = mColletion;
-    }
-
-    public int getmTotalVote() {
-        return mTotalVote;
-    }
-
-    public void setmTotalVote(int mTotalVote) {
-        this.mTotalVote = mTotalVote;
-    }
-
-    public int getmIsClose() {
-        return mIsClose;
-    }
-
-    public void setmIsClose(int mIsClose) {
-        this.mIsClose = mIsClose;
-    }
-
-    public List<TopicOptionBean> getmOptions() {
-        return mOptions;
-    }
-
-    public void setmOptions(List<TopicOptionBean> mOptions) {
-        this.mOptions = mOptions;
-    }
-
-
-
-
 }

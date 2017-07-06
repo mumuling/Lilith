@@ -10,6 +10,9 @@ import com.youloft.lilith.R;
 import com.youloft.lilith.cons.consmanager.ConsManager;
 import com.youloft.lilith.topic.bean.PointBean;
 import com.youloft.lilith.topic.bean.TopicBean;
+import com.youloft.lilith.topic.bean.TopicDetailBean;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -74,16 +77,23 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
         }
     }
 
-    public void bind(PointBean point) {
-        textUserName.setText(point.mName);
-        textZanCount.setText(String.valueOf(point.mZanCount));//点赞数
-        if (point.mSex == 1) {                               //性别
+    public void bind(PointBean.DataBean point, List<TopicDetailBean.DataBean.OptionBean> topic) {
+        textUserName.setText(point.nickName);
+        textZanCount.setText(String.valueOf(point.zan));//点赞数
+        if (point.sex == 1) {                               //性别
             imageUserSex.setImageResource(R.drawable.topic_female_icon);
         } else {
             imageUserSex.setImageResource(R.drawable.topic_male_icon);
         }
+        for (int i = 0; i < topic.size();i ++) {
+            TopicDetailBean.DataBean.OptionBean optionBean = topic.get(i);
+            if (optionBean.id == point.topicOptionId) {
+                textVoteResult.setText("投票给" + optionBean.title);//观点
+            }
+        }
+
         //textUserConstellation.setText(ConsManager.CONS[point.mSigns]);//星座
-        textVoteResult.setText(point.mViewPoint);//观点
+        textCommentContent.setText( point.viewpoint);//观点
 
     }
 }

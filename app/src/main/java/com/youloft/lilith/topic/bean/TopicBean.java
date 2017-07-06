@@ -1,8 +1,7 @@
 package com.youloft.lilith.topic.bean;
 
-import com.alibaba.android.arouter.facade.annotation.Autowired;
+import com.youloft.lilith.common.net.AbsResponse;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**    话题对象
@@ -12,73 +11,41 @@ import java.util.List;
  *@class   TopicBean
  */
 
-public class TopicBean extends Object {
+public class TopicBean extends AbsResponse<List<TopicBean.DataBean>> {
 
-    public int mId;
-    public String mTitle;//
-    public String mBackImg;//背景图地址
-    public int mTotalVote;//总的参与数
-    public List<VoteUserBean> mVoteUserList = new ArrayList<>();//参与用户信息，主要取里面的用户头像
+    /**
+     * data : [{"id":10000,"title":"爱情，究竟应该是互补还是相似的两个人在一起呢？","backImg":"http://b.zol-img.com.cn/sjbizhi/images/9/320x510/1457593726716.jpg","totalVote":3,"voteUser":[{"id":10001,"sex":1,"signs":1,"headImg":"http://b.zol-img.com.cn/sjbizhi/images/9/320x510/1457593726716.jpg"},{"id":10000,"sex":2,"signs":1,"headImg":"http://b.zol-img.com.cn/sjbizhi/images/9/320x510/1457593726716.jpg"}]},{"id":10001,"title":"基情，究竟应该是互补还是相似的两个人在一起呢？","backImg":"http://b.zol-img.com.cn/sjbizhi/images/9/320x510/1457593726716.jpg","totalVote":3,"voteUser":[{"id":10001,"sex":1,"signs":1,"headImg":"http://b.zol-img.com.cn/sjbizhi/images/9/320x510/1457593726716.jpg"}]}]
+     * sign : 4f1fca460ee3286a60b4b2803958888e
+     */
 
-    public TopicBean(){}
+    public static class DataBean {
+        /**
+         * id : 10000
+         * title : 爱情，究竟应该是互补还是相似的两个人在一起呢？
+         * backImg : http://b.zol-img.com.cn/sjbizhi/images/9/320x510/1457593726716.jpg
+         * totalVote : 3
+         * voteUser : [{"id":10001,"sex":1,"signs":1,"headImg":"http://b.zol-img.com.cn/sjbizhi/images/9/320x510/1457593726716.jpg"},{"id":10000,"sex":2,"signs":1,"headImg":"http://b.zol-img.com.cn/sjbizhi/images/9/320x510/1457593726716.jpg"}]
+         */
 
-    public static List<TopicBean> getTopicListDefault() {
-        List<TopicBean> topicBeanList = new ArrayList<>();
-        for (int i = 0 ;i < 10; i ++) {
-            TopicBean topicBean = new TopicBean();
-            VoteUserBean voteUserBean = new VoteUserBean();
-            topicBean.mId = i;
-            topicBean.mTitle = "话题" + i;
-            topicBean.mBackImg = "http://b.zol-img.com.cn/sjbizhi/images/9/320x510/1457593726716.jpg";
-            topicBean.mTotalVote = 999;
-            voteUserBean.mHeadImg = "http://b.zol-img.com.cn/sjbizhi/images/9/320x510/1457593726716.jpg";
-            topicBean.mVoteUserList.add(voteUserBean);
-            topicBeanList.add(topicBean);
+        public int id;
+        public String title;
+        public String backImg;
+        public int totalVote;
+        public List<VoteUserBean> voteUser;
+
+        public static class VoteUserBean {
+            /**
+             * id : 10001
+             * sex : 1
+             * signs : 1
+             * headImg : http://b.zol-img.com.cn/sjbizhi/images/9/320x510/1457593726716.jpg
+             */
+
+            public int id;
+            public int sex;
+            public int signs;
+            public String headImg;
         }
-        return topicBeanList;
     }
-
-    public int getmId() {
-        return mId;
-    }
-
-    public void setmId(int mId) {
-        this.mId = mId;
-    }
-
-    public String getmTitle() {
-        return mTitle;
-    }
-
-    public void setmTitle(String mTitle) {
-        this.mTitle = mTitle;
-    }
-
-    public String getmBackImg() {
-        return mBackImg;
-    }
-
-    public void setmBackImg(String mBackImg) {
-        this.mBackImg = mBackImg;
-    }
-
-    public int getmTotalVote() {
-        return mTotalVote;
-    }
-
-    public void setmTotalVote(int mTotalVote) {
-        this.mTotalVote = mTotalVote;
-    }
-
-    public List<VoteUserBean> getmVoteUserList() {
-        return mVoteUserList;
-    }
-
-    public void setmVoteUserList(List<VoteUserBean> mVoteUserList) {
-        this.mVoteUserList = mVoteUserList;
-    }
-
-
-
 }
 

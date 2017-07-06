@@ -15,6 +15,7 @@
             android:id="@+id/iv_icon"
             android:layout_width="80dp"
             android:layout_height="80dp"
+            android:scaleType="centerCrop"
             android:layout_gravity="center_vertical"
             android:background="#d8d8d8" />
 
@@ -27,6 +28,7 @@
             android:layout_toEndOf="@+id/iv_icon">
 
             <TextView
+                android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="我是测算名字"
@@ -34,6 +36,7 @@
                 android:textSize="17dp" />
 
             <TextView
+                android:id="@+id/tv_desc"
                 android:layout_width="154dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
@@ -45,6 +48,7 @@
         </LinearLayout>
 
         <Button
+            android:id="@+id/bt_measure"
             android:layout_width="80dp"
             android:layout_height="30dp"
             android:layout_alignParentRight="true"
