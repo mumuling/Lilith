@@ -20,5 +20,7 @@ public class Urls {
 
     //测测的url
     public static final String MEASURE_URL = "http://lilith.51wnl.com/GetCeceAd";
+    //短信验证码
+    public static final String VERIFICATIONCODE_URL = "http://lilith.51wnl.com/GetSmsCode";
 
 }

@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
@@ -20,11 +21,16 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
+import com.youloft.lilith.common.rx.RxObserver;
+import com.youloft.lilith.login.bean.SmsCodeBean;
+import com.youloft.lilith.login.repo.SmsCodeRepo;
 
 import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * 这是一个功能型界面
@@ -60,9 +66,16 @@ public class UserFunctionActivity extends BaseActivity {
     TextView tvTitle; //大标题,根据不同来源,设置对应的标题
     @BindView(R.id.btn_login)
     Button btnLogin;  //登录或者设置密码的大按钮
+    @BindView(R.id.iv_code_right)
+    ImageView ivCodeRight; //验证码正确
+    @BindView(R.id.iv_code_error)
+    ImageView ivCodeError;  //验证码错误
 
     private int mPreNumberLength;//电话号码变化之前的长度
     private int mflag;//当前页面属于哪个页面的标志
+    private boolean isSuccess; //手机号码与验证码通过了服务器的请求的标识
+    private SmsCodeBean mSmsCodeBean; //获取到的验证码的数据模型
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -129,18 +142,42 @@ public class UserFunctionActivity extends BaseActivity {
                     etPhoneNumber.setText(result);
                     etPhoneNumber.setSelection(etPhoneNumber.getText().toString().length());
                 }
+                //当电话号码已经11位数之后做一系列校验
+                if (etPhoneNumber.getText().toString().length() == 13) {
+                    checkNumber();
+                }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                //变化之后如果有字符串 就显示叉叉, 如果没有就隐藏叉叉
-                if (etPhoneNumber.getText().toString().length() != 0) {
-                    ivCleanNumber.setVisibility(View.VISIBLE);
-                } else {
-                    ivCleanNumber.setVisibility(View.INVISIBLE);
+                if (mflag != REGISTERED_ACCOUNT) {//判断是否是注册
+
+                    //变化之后如果有字符串 就显示叉叉, 如果没有就隐藏叉叉
+                    if (etPhoneNumber.getText().toString().length() != 0) {
+                        ivCleanNumber.setVisibility(View.VISIBLE);
+                    } else {
+                        ivCleanNumber.setVisibility(View.INVISIBLE);
+                    }
                 }
+
             }
         });
+    }
+
+
+    /**
+     * 对电话号码做校验
+     */
+    private void checkNumber() {
+        String number = etPhoneNumber.getText().toString().replaceAll("-", "");
+        // TODO: 2017/7/6  这里需要对手机号码正则校验
+        //校验之后分情况,如果是忘记密码和快捷登录  不需要向服务器发起请求
+        //如果是注册账号,那么需要向服务器发起请求,验证手机号码是否已经注册
+        if (mflag == REGISTERED_ACCOUNT) {
+            //验证手机号码是否已经注册
+
+        }
+
     }
 
     /**
@@ -175,6 +212,7 @@ public class UserFunctionActivity extends BaseActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String content = s.toString();
                 char[] chars = content.toCharArray();
+                //把输入框的验证码 显示到textview上面
                 for (int i = 0; i < 6; i++) {
                     if (i > chars.length - 1) {
                         tvCodes[i].setText(null);
@@ -184,7 +222,12 @@ public class UserFunctionActivity extends BaseActivity {
                         vCodeLines[i].setBackgroundResource(R.color.white);
                     }
                 }
-
+                if (s.toString().length() == 6) {//验证码6位的时候
+                    checkSmsCode();
+                } else { //验证码不到6位的时候  一律隐藏验证码后面的小图标
+                    ivCodeRight.setVisibility(View.INVISIBLE);
+                    ivCodeError.setVisibility(View.INVISIBLE);
+                }
             }
 
             @Override
@@ -192,6 +235,28 @@ public class UserFunctionActivity extends BaseActivity {
 
             }
         });
+    }
+
+    /**
+     * 查看验证码是否正确,来决定验证码后面的小图标显示哪一个
+     */
+    private void checkSmsCode() {
+        String smsCode = etVerificationCode.getText().toString();
+        if (TextUtils.isEmpty(smsCode)) {
+            return;
+        }
+        if (mSmsCodeBean == null) {
+            ivCodeRight.setVisibility(View.INVISIBLE);
+            ivCodeError.setVisibility(View.VISIBLE);
+            return;
+        }
+        if (smsCode.equals(mSmsCodeBean.data.code + "")) {//验证码正确
+            ivCodeRight.setVisibility(View.VISIBLE);
+            ivCodeError.setVisibility(View.INVISIBLE);
+        } else {//验证码错误
+            ivCodeRight.setVisibility(View.INVISIBLE);
+            ivCodeError.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -225,9 +290,26 @@ public class UserFunctionActivity extends BaseActivity {
     public void getCode() {
         //当前显示的文字
         String disText = tvGetCode.getText().toString();
-        if (!"获取验证码".equals(disText)) {
+        if (!getResources().getString(R.string.get_validation_code).equals(disText)) {
             return;
         }
+        //发起获取验证码的请求
+        SmsCodeRepo.getSmsCode(etPhoneNumber.getText().toString().replaceAll("-", ""))
+                .compose(this.<SmsCodeBean>bindToLifecycle())
+                .subscribeOn(Schedulers.newThread())
+                .toObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new RxObserver<SmsCodeBean>() {
+                    @Override
+                    public void onDataSuccess(SmsCodeBean smsCodeBean) {
+                        mSmsCodeBean = smsCodeBean;
+                    }
+
+                    @Override
+                    protected void onFailed(Throwable e) {
+                        super.onFailed(e);
+                    }
+                });
         handler.postDelayed(runnable, 0);
     }
 

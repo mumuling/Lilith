@@ -137,6 +137,11 @@ public class ViewUtil {
     }
 
 
+    public static Bitmap blurBitmap(Bitmap bitmap) {
+        return blurBitmap(bitmap, Utils.getContext());
+    }
+
+
     public static Bitmap blurBitmap(Bitmap bitmap, Context context) {
 
         // 用需要创建高斯模糊bitmap创建一个空的bitmap
