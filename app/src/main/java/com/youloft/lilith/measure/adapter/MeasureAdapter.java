@@ -91,7 +91,7 @@ public class MeasureAdapter extends RecyclerView.Adapter<BaseMeasureHolder> {
     public int getItemCount() {
         //这里的长度需要计算一下  当最后一个的location为四的时候 需要加上一个长度
         MeasureBean.DataBean dataBean = mMeasureData.get(mMeasureData.size() - 1);
-        if (dataBean.loction == 4) {
+        if (dataBean.location == 4) {
             return mMeasureData.size() + dataBean.ads.size() - 1;
         } else {
             return mMeasureData.size();

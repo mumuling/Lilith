@@ -23,7 +23,7 @@
     <application
         android:name=".LLApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/icon_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
@@ -99,6 +99,7 @@
             android:value="5126ff896c738f2bfa000438" />
         <!-- share end -->
         <activity android:name=".login.LoginActivity"
+            android:windowSoftInputMode="stateVisible|adjustResize"
             android:screenOrientation="portrait"/>
         <activity android:name=".login.UserFunctionActivity"
             android:screenOrientation="portrait"/>

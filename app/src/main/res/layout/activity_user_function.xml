@@ -61,18 +61,20 @@
                     android:layout_marginLeft="15dp">
                     <!--已注册账号-->
                     <TextView
-                        android:visibility="invisible"
-                        android:text="@string/existing_number"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical|right"
+                        android:text="@string/existing_number"
                         android:textColor="@color/existing_number_text_color"
-                        android:textSize="14dp" />
+                        android:textSize="14dp"
+                        android:visibility="invisible" />
 
                     <!--手机没被注册时显示的钩钩-->
                     <ImageView
                         android:id="@+id/iv_number_right"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical|right"
                         android:src="@drawable/login_right_icon"
                         android:visibility="invisible" />
 
@@ -81,6 +83,7 @@
                         android:id="@+id/iv_number_loading"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical|right"
                         android:src="@drawable/login_loading_icon"
                         android:visibility="invisible" />
 
@@ -89,7 +92,7 @@
                         android:id="@+id/iv_clean_number"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:layout_gravity="center"
+                        android:layout_gravity="center_vertical|right"
                         android:src="@drawable/login_password_delete_icon"
                         android:visibility="invisible" />
                 </FrameLayout>
@@ -280,6 +283,7 @@
                             android:id="@+id/iv_code_right"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
                             android:src="@drawable/login_right_icon"
                             android:visibility="invisible" />
 
@@ -287,7 +291,9 @@
                             android:id="@+id/iv_code_error"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/mine_tips_icon" />
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/mine_tips_icon"
+                            android:visibility="invisible" />
                     </FrameLayout>
 
                 </LinearLayout>

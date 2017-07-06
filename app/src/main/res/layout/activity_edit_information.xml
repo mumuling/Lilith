@@ -8,22 +8,19 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.youloft.lilith.ui.view.BaseToolBar
-            android:id="@+id/btl_edit_information"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="190dp"
-            android:background="#4c2c4b">
+            android:layout_height="270dp"
+            android:background="@drawable/shp_me_bg">
             <!--用户头像-->
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/iv_header"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="100dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/div" />
             <!--用户昵称-->
@@ -36,7 +33,10 @@
                 android:text="Easter Roob"
                 android:textColor="#ffffff"
                 android:textSize="16dp" />
-
+            <com.youloft.lilith.ui.view.BaseToolBar
+            android:id="@+id/btl_edit_information"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
         </FrameLayout>
 
         <LinearLayout
@@ -91,6 +91,7 @@
                     android:background="@color/white_10" />
 
                 <FrameLayout
+                    android:id="@+id/fl_sex"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
@@ -107,6 +108,7 @@
                         android:textSize="16dp" />
 
                     <TextView
+                        android:id="@+id/tv_sex"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
@@ -125,6 +127,7 @@
                     android:background="@color/white_10" />
 
                 <FrameLayout
+                    android:id="@+id/fl_date_birth"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
@@ -141,6 +144,7 @@
                         android:textSize="16dp" />
 
                     <TextView
+                        android:id="@+id/tv_date_birth"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
@@ -159,6 +163,7 @@
                     android:background="@color/white_10" />
 
                 <FrameLayout
+                    android:id="@+id/fl_time_birth"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
@@ -175,6 +180,7 @@
                         android:textSize="16dp" />
 
                     <TextView
+                        android:id="@+id/tv_time_birth"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
@@ -193,6 +199,7 @@
                     android:background="@color/white_10" />
 
                 <FrameLayout
+                    android:id="@+id/fl_place_birth"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
@@ -209,6 +216,7 @@
                         android:textSize="16dp" />
 
                     <TextView
+                        android:id="@+id/tv_place_birth"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
@@ -227,7 +235,7 @@
                     android:background="@color/white_10" />
 
                 <FrameLayout
-                    android:id="@+id/fl"
+                    android:id="@+id/fl_place_now"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
@@ -244,7 +252,7 @@
                         android:textSize="16dp" />
 
                     <TextView
-                        android:id="@+id/tv_test"
+                        android:id="@+id/tv_place_now"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
