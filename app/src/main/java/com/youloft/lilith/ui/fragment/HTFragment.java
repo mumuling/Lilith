@@ -9,9 +9,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseFragment;
+import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.topic.TopicDetailActivity;
+import com.youloft.lilith.topic.TopicRepo;
 import com.youloft.lilith.topic.adapter.TopicAdapter;
 import com.youloft.lilith.topic.bean.TopicBean;
 import com.youloft.lilith.ui.WebActivity;
@@ -20,7 +23,9 @@ import com.youloft.lilith.ui.view.BaseToolBar;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.internal.schedulers.RxThreadFactory;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by zchao on 2017/6/27.
@@ -33,16 +38,40 @@ public class HTFragment extends BaseFragment{
     private RecyclerView mTopicRv;
     private TopicAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
-    private List<TopicBean> topicBeanList = new ArrayList<>();
+    private List<TopicBean.DataBean> topicBeanList = new ArrayList<>();
     public HTFragment() {
         super(R.layout.fragment_ht);
     }
+    @Autowired(name = "/repo/topic")
+    TopicRepo mTopicRepo;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView();
+        requestTopic();
 
+    }
+
+    private void requestTopic() {
+        TopicRepo.getTopicList("0","10")
+                .compose(this.<TopicBean>bindToLifecycle())
+                .subscribeOn(Schedulers.newThread())
+                .toObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new RxObserver<TopicBean>() {
+                    @Override
+                    public void onDataSuccess(TopicBean topicBean) {
+                        if (topicBean.data == null) return;
+                        topicBeanList.addAll(topicBean.data);
+                        mAdapter.setData(topicBeanList);
+                    }
+
+                    @Override
+                    protected void onFailed(Throwable e) {
+                        super.onFailed(e);
+                    }
+                });
     }
 
     private void initView() {
@@ -53,9 +82,7 @@ public class HTFragment extends BaseFragment{
         mLayoutManager = new LinearLayoutManager(getContext());
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mTopicRv.setLayoutManager(mLayoutManager);
-        topicBeanList.addAll(TopicBean.getTopicListDefault());
         mAdapter = new TopicAdapter(getContext());
-        mAdapter.setData(topicBeanList);
         mTopicRv.setAdapter(mAdapter);
     }
 

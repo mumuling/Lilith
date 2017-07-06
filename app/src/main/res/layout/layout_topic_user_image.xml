@@ -1,72 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/rl_image_root"
-        android:layout_alignParentLeft="true">
-    <ImageView
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:id="@+id/user_image6"
-        android:layout_toRightOf="@+id/user_image5"
-        android:layout_marginLeft="-16dp"
-        android:src="@drawable/div1"
-        android:visibility="gone"/>
-    <ImageView
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:id="@+id/user_image5"
-        android:layout_toRightOf="@+id/user_image4"
-        android:layout_marginLeft="-11dp"
-        android:src="@drawable/div2"
-        android:visibility="gone"/>
-    <ImageView
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:id="@+id/user_image4"
-        android:layout_toRightOf="@+id/user_image3"
-        android:layout_marginLeft="5dp"
-        android:src="@drawable/div"
-        android:visibility="gone"/>
-    <ImageView
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:id="@+id/user_image3"
-        android:layout_toRightOf="@+id/user_image2"
-        android:layout_marginLeft="5dp"
-        android:src="@drawable/div"
-        android:visibility="gone"/>
-    <ImageView
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:id="@+id/user_image2"
-        android:layout_toRightOf="@+id/user_image1"
-        android:layout_marginLeft="5dp"
-        android:src="@drawable/div"
-        android:visibility="gone"/>
-    <ImageView
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:id="@+id/user_image1"
-        android:layout_alignParentLeft="true"
-        android:src="@drawable/div"
-        android:visibility="gone"/>
-    </RelativeLayout>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:gravity="center"
-        android:id="@+id/user_number"
-        android:layout_toRightOf="@+id/rl_image_root"
-        android:layout_marginLeft="10dp"
-        android:text="6666"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="立即查看"
-        android:layout_alignParentRight="true"/>
-</RelativeLayout>
+
+    <!--<RelativeLayout-->
+        <!--android:id="@+id/rl_image_root"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentLeft="true">-->
+
+        <ImageView
+            android:id="@+id/user_image6"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="-16dp"
+            android:layout_toRightOf="@+id/user_image5"
+            android:src="@drawable/div1"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/user_image5"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="-11dp"
+            android:layout_toRightOf="@+id/user_image4"
+            android:src="@drawable/div2"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/user_image4"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/user_image3"
+            android:src="@drawable/div"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/user_image3"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/user_image2"
+            android:src="@drawable/div"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/user_image2"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/user_image1"
+            android:src="@drawable/div"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/user_image1"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/div"
+            android:visibility="gone" />
+    <!--</RelativeLayout>-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/user_number"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center_vertical"-->
+        <!--android:layout_marginLeft="10dp"-->
+        <!--android:layout_toRightOf="@+id/rl_image_root"-->
+        <!--android:gravity="center"-->
+        <!--android:text="6666" />-->
+
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:drawablePadding="4dp"-->
+        <!--android:drawableRight="@drawable/constellation_more_icon"-->
+        <!--android:text="立即查看" />-->
+</merge>

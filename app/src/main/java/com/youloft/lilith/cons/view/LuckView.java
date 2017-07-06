@@ -23,6 +23,7 @@ import com.youloft.lilith.common.utils.LogUtil;
 import com.youloft.lilith.common.utils.SafeUtil;
 import com.youloft.lilith.common.utils.ViewUtil;
 import com.youloft.lilith.cons.bean.LuckData;
+import com.youloft.lilith.cons.card.ConsYSHolder;
 import com.youloft.lilith.cons.consmanager.ConsDrawableManager;
 
 import java.util.ArrayList;
@@ -65,6 +66,7 @@ public class LuckView extends View {
     //顶部左右线
     private static Drawable mLeftConsLine;
     private static Drawable mRightConsLine;
+    private int mType = ConsYSHolder.CONS_YS;
 
     public LuckView(Context context) {
         this(context, null);
@@ -77,6 +79,7 @@ public class LuckView extends View {
     public LuckView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
+        initTitle();
     }
 
     private void init() {
@@ -116,10 +119,17 @@ public class LuckView extends View {
         readyData();
     }
 
+    public void setType(int type){
+        mType = type;
+        initTitle();
+        postInvalidate();
+    }
+
     private void readyData() {
         if (mData == null) {
             return;
         }
+        mType = mData.type;
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -180,6 +190,7 @@ public class LuckView extends View {
     private void fixPath() {
         mLinePath.rewind();
         mShaderPath.rewind();
+        mCirclePath.rewind();
         mPositions.clear();
         for (int i = 0; i < mPathY.length; i++) {
             mPositions.add(new Point(i * mItemWidth, mPathY[i]));
@@ -219,7 +230,7 @@ public class LuckView extends View {
      */
     private void initTitle() {
         int iconRes = 0;
-        switch (mData.type) {
+        switch (mType) {
             case 1:
                 mTitle = "运势概括";
                 iconRes = R.drawable.constellation_luck_icon;
@@ -241,8 +252,8 @@ public class LuckView extends View {
                 iconRes = R.drawable.constellation_luck_icon;
         }
 
-        mColor = getColor(mData.type, 0);
-        mShader = new LinearGradient(0, -mBsLineWidth, 0, mPathRectHeight, getColor(mData.type, 1), getColor(mData.type, 2), Shader.TileMode.REPEAT);
+        mColor = getColor(mType, 0);
+        mShader = new LinearGradient(0, -mBsLineWidth, 0, mPathRectHeight, getColor(mType, 1), getColor(mType, 2), Shader.TileMode.REPEAT);
 
         mIconRes = getResources().getDrawable(iconRes);
 

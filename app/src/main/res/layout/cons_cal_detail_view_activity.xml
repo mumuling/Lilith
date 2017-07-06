@@ -31,7 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="47dp"
                 android:gravity="center"
-                android:text="6月-7月运势日历"
+                tools:text="@string/cons_cal_title"
                 android:textColor="@color/cons_detail_text_color" />
         </LinearLayout>
 
@@ -71,7 +71,7 @@
                         android:gravity="center_vertical"
                         android:textColor="@color/cons_detail_text_color"
                         android:textSize="15dp"
-                        tools:text="感情运势上升" />
+                        android:text="@string/cons_love_text" />
 
                     <TextView
                         android:id="@+id/cons_detail_cons_money_tendency"
@@ -83,7 +83,7 @@
                         android:gravity="center_vertical"
                         android:textColor="@color/cons_detail_text_color"
                         android:textSize="15dp"
-                        tools:text="财富运势上升" />
+                        android:text="@string/cons_money_text" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -105,7 +105,7 @@
                         android:gravity="center_vertical"
                         android:textColor="@color/cons_detail_text_color"
                         android:textSize="15dp"
-                        tools:text="工作运势上升" />
+                        android:text="@string/cons_work_text" />
 
                 </LinearLayout>
 

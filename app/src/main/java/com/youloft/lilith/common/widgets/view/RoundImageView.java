@@ -1,4 +1,4 @@
-package com.youloft.lilith.cons.view;
+package com.youloft.lilith.common.widgets.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;

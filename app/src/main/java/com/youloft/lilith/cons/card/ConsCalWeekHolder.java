@@ -11,8 +11,6 @@ import com.youloft.lilith.cons.bean.ConsPredictsBean;
 import com.youloft.lilith.cons.view.ConsCalendar;
 import com.youloft.lilith.ui.MainActivity;
 
-import java.io.ByteArrayOutputStream;
-
 /**
  * Created by zchao on 2017/7/5.
  * desc:
@@ -23,6 +21,7 @@ public class ConsCalWeekHolder extends ConsBaseHolder implements ConsCalendar.On
 
 
     private final ConsCalendar mWeekView;
+    private ConsPredictsBean mData;
 
     public ConsCalWeekHolder(Context context, ViewGroup parent) {
         super(context, parent, R.layout.cons_week_holder);
@@ -34,6 +33,7 @@ public class ConsCalWeekHolder extends ConsBaseHolder implements ConsCalendar.On
     @Override
     public void bindData(ConsPredictsBean data) {
         super.bindData(data);
+        mData = data;
         mWeekView.setData(data);
     }
 
@@ -45,9 +45,9 @@ public class ConsCalWeekHolder extends ConsBaseHolder implements ConsCalendar.On
             Bitmap screenShort = ((MainActivity) mContext).takeScreenShot(false);
             screenShort = ViewUtil.blurBitmap(screenShort, mContext);
 
-            ConsCalDetailActivity.startConsCalDetailActivity(mContext, local, screenShort);
+            ConsCalDetailActivity.startConsCalDetailActivity(mContext, local, screenShort, mData);
         } else {
-            ConsCalDetailActivity.startConsCalDetailActivity(mContext, local, null);
+            ConsCalDetailActivity.startConsCalDetailActivity(mContext, local, null, mData);
         }
     }
 }

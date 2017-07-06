@@ -4,6 +4,8 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:paddingBottom="37dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
     android:id="@+id/cons_title_root"
     android:paddingTop="58dp">
 

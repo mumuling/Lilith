@@ -2,11 +2,13 @@ package com.youloft.lilith.common.net;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
+import java.io.Serializable;
+
 /**
  * 抽象响应类
  * Created by coder on 2017/6/26.
  */
-public abstract class AbsResponse<T> {
+public abstract class AbsResponse<T> implements Serializable {
 
     @JSONField(name = "status")
     public int status;

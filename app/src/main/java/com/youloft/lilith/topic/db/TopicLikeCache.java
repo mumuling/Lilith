@@ -56,9 +56,10 @@ public class TopicLikeCache {
      * 通过城市uid删除点赞信息
      * @param uid
      */
-    public void deleteData(String uid) {
+    public void deleteData(int uid,String type) {
         SQLiteDatabase db = TopicLikingHelper.getInstance(mContext).getWritableDatabase();
-        db.delete(TopicLikingTable.TABLE_NAME, TopicLikingTable.Columns.UID + "=? ", new String[]{uid});
+        db.delete(TopicLikingTable.TABLE_NAME, TopicLikingTable.Columns.UID + "=? and " + TopicLikingTable.Columns.TYPE
+                 + "=? ", new String[]{String.valueOf(uid),type});
     }
 
 
@@ -67,20 +68,20 @@ public class TopicLikeCache {
      * @param id
      * @return
      */
-    public TopicLikingTable getWeatherByCode(String id,String type) {
+    public TopicLikingTable getInforByCode(int id,String type) {
         SQLiteDatabase db = TopicLikingHelper.getInstance(mContext).getReadableDatabase();
         Cursor cursor = db.query(TopicLikingTable.TABLE_NAME, null, TopicLikingTable.Columns.UID + " =? and "
                         + TopicLikingTable.Columns.TYPE + " =? ",
-                new String[]{id,type}, null, null, null);
+                new String[]{String.valueOf(id),type}, null, null, null);
         if (cursor == null) {
             return null;
         }
-        TopicLikingTable weatherTable = null;
+        TopicLikingTable topicLikingTable = null;
         if (cursor.moveToNext()) {
-            weatherTable = new TopicLikingTable().fromCursor(cursor);
+            topicLikingTable = new TopicLikingTable().fromCursor(cursor);
         }
 
         cursor.close();
-        return weatherTable;
+        return topicLikingTable;
     }
 }

@@ -45,6 +45,7 @@ public class ConsYSHolder extends ConsBaseHolder {
         this.type = type;
         ButterKnife.bind(this, itemView);
         format = new SimpleDateFormat(formatDate);
+        mConsLuckView.setType(type);
     }
 
 

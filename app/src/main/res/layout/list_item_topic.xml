@@ -2,10 +2,17 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="150dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:minHeight="150dp"
     android:layout_marginBottom="15dp"
     android:background="@drawable/item_topic_box"
     android:orientation="vertical">
+        <com.youloft.lilith.common.widgets.view.RoundImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/image_topic_bg"
+            android:scaleType="centerCrop"
+            app:radius="5dp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -13,18 +20,21 @@
             android:text="#电话等级划分和技术开发和价格的守空房几点开始几号放假的"
             android:maxLines="2"
             android:gravity="center"
+            android:textSize="20dp"
+            android:textColor="@color/white"
             android:layout_marginLeft="28dp"
             android:layout_marginRight="28dp"
             android:layout_gravity="top|center"
             android:layout_marginTop="23dp"/>
         <com.youloft.lilith.topic.widget.TopicUserImageLayout
             android:id="@+id/layout_user_image"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="20dp"
             android:layout_gravity="bottom"
             android:layout_marginLeft="28dp"
             android:layout_marginRight="28dp"
-            android:layout_marginBottom="23dp"/>
+            android:layout_marginBottom="23dp"
+            />
 
 
 </FrameLayout>

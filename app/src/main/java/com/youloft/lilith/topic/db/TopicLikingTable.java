@@ -37,7 +37,7 @@ public class TopicLikingTable implements Serializable {
         db.execSQL("CREATE TABLE " + TABLE_NAME + "(" + Columns._ID + " INTEGER PRIMARY KEY,"
                 + Columns.UID + " INTEGER,"
                 + Columns.ISLIKE + " INTEGER,"
-                + Columns.TYPE + " TEXT," + ");");
+                + Columns.TYPE + " TEXT" + ");");
     }
 
     /**
