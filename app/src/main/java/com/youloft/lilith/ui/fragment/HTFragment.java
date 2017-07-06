@@ -64,7 +64,7 @@ public class HTFragment extends BaseFragment{
                     public void onDataSuccess(TopicBean topicBean) {
                         if (topicBean.data == null) return;
                         topicBeanList.addAll(topicBean.data);
-                        mAdapter.setData(topicBeanList);
+                        mAdapter.setData(topicBean.data);
                     }
 
                     @Override

@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.utils.ViewUtil;
+import com.youloft.lilith.topic.bean.TopicBean;
 import com.youloft.lilith.topic.bean.TopicDetailBean;
 import com.youloft.lilith.topic.widget.VoteDialog;
 import com.youloft.lilith.topic.widget.VoteView;
@@ -31,28 +32,15 @@ public class VoteHolder extends RecyclerView.ViewHolder {
     VoteView voteView;
 
     private TopicDetailBean.DataBean topicInfo;
+    private VoteDialog voteDialog ;
+    private ValueAnimator firstAnimation;
+    private ValueAnimator secondAnimation;
+    private ValueAnimator thirdAnimation;
 
     public VoteHolder(View itemView) {
         super(itemView);
         initView();
-        final VoteDialog voteDialog = new VoteDialog(itemView.getContext());
-        voteView.setInterface(new VoteView.OnItemClickListener() {
-            @Override
-            public void clickLeft() {
-                voteDialog.show();
-                voteDialog.setTitle("正方");
-            }
-
-            @Override
-            public void clickRight() {
-                voteDialog.show();
-                voteDialog.setTitle("反方");
-            }
-        });
-
-
-
-        ValueAnimator firstAnimation = new ValueAnimator();
+         firstAnimation = new ValueAnimator();
         firstAnimation.setFloatValues(0.0f, 1.0f);
         firstAnimation.setDuration(4000);
         firstAnimation.setRepeatMode(ValueAnimator.RESTART);
@@ -67,7 +55,7 @@ public class VoteHolder extends RecyclerView.ViewHolder {
             }
         });
 
-        ValueAnimator secondAnimation = new ValueAnimator();
+         secondAnimation = new ValueAnimator();
         secondAnimation.setFloatValues(0.0f, 1.0f);
         secondAnimation.setDuration(4000);
         secondAnimation.setRepeatMode(ValueAnimator.RESTART);
@@ -87,7 +75,7 @@ public class VoteHolder extends RecyclerView.ViewHolder {
                 voteView.setChangeValue2(changeWidth * value * 2, (int) (255 * (1 - value)));
             }
         });
-        ValueAnimator thirdAnimation = new ValueAnimator();
+         thirdAnimation = new ValueAnimator();
         thirdAnimation.setFloatValues(0.0f, 1.0f);
         thirdAnimation.setDuration(4000);
         thirdAnimation.setRepeatMode(ValueAnimator.RESTART);
@@ -114,15 +102,63 @@ public class VoteHolder extends RecyclerView.ViewHolder {
 
     }
 
+    private void voteAniamtion(final float scale) {
+        firstAnimation.cancel();
+        secondAnimation.cancel();
+        thirdAnimation.cancel();
+        ValueAnimator rectAnimater = new ValueAnimator();
+        rectAnimater.setDuration(2000);
+        rectAnimater.setFloatValues(0.0f,1.0f);
+        rectAnimater.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float value = (float) animation.getAnimatedValue();
+                voteView.setRectProportion(value,scale);
+
+
+            }
+        });
+        rectAnimater.start();
+    }
+
     private void initView() {
+        voteDialog = new VoteDialog(itemView.getContext());
+        voteDialog.setListener(new VoteDialog.OnClickConfirmListener() {
+            @Override
+            public void clickConfirm(String msg,int id) {
+                topicInfo.totalVote++;
+                addOptionVote(id);
+                voteAniamtion((float) topicInfo.option.get(0).vote/topicInfo.totalVote);
+            }
+        });
         imageTop = (ImageView) itemView.findViewById(R.id.image_top);
         textTopicTitle = (TextView) itemView.findViewById(R.id.text_topic_title);
         voteView = (VoteView) itemView.findViewById(R.id.vote_view);
     }
-
-    public void bindView(TopicDetailBean.DataBean topicInfo) {
+    public void addOptionVote(int id) {
+        if (topicInfo.option == null || topicInfo.option.size() == 0 )return;
+        for (int i =0; i < topicInfo.option.size();i ++) {
+            if (id == topicInfo.option.get(i).id) {
+                topicInfo.option.get(i).vote++;
+            }
+        }
+    }
+    public void bindView(final TopicDetailBean.DataBean topicInfo) {
         if (topicInfo == null)return;
         this.topicInfo = topicInfo;
+        voteView.setInterface(new VoteView.OnItemClickListener() {
+            @Override
+            public void clickLeft() {
+                voteDialog.show();
+                voteDialog.setTitle(topicInfo.option.get(0).shortTitle,topicInfo.option.get(0).id);
+            }
+
+            @Override
+            public void clickRight() {
+                voteDialog.show();
+                voteDialog.setTitle(topicInfo.option.get(1).shortTitle,topicInfo.option.get(1).id);
+            }
+        });
         GlideApp.with(itemView.getContext())
                 .asBitmap()
                 .load(topicInfo.backImg)

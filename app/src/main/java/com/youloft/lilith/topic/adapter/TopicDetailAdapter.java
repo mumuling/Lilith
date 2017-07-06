@@ -17,7 +17,9 @@ import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.common.utils.ViewUtil;
 import com.youloft.lilith.topic.PointDetailActivity;
 import com.youloft.lilith.topic.bean.PointBean;
+import com.youloft.lilith.topic.bean.TopicBean;
 import com.youloft.lilith.topic.bean.TopicDetailBean;
+import com.youloft.lilith.topic.holder.OtherTopicHolder;
 import com.youloft.lilith.topic.holder.PointHolder;
 import com.youloft.lilith.topic.holder.VoteHolder;
 import com.youloft.lilith.topic.widget.VoteDialog;
@@ -36,10 +38,11 @@ import java.util.List;
 public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context mContext;
     private LayoutInflater mInflater;
-    private static int ITEM_TYPE_HEADER = 1000;//顶部header
+    private static int ITEM_TYPE_OTHER = 1000;//顶部header
     private static int ITEM_TYPE_VOTE_VIEW = 2000;//投票的view
     private static int ITEM_TYPE_COMMENT = 3000;//评论item
     private List<PointBean.DataBean> pointBeanList = new ArrayList<>();
+    private List<TopicBean.DataBean> otherTopicList = new ArrayList<>();
     private TopicDetailBean.DataBean topicInfo = null;
     public TopicDetailAdapter (Context context) {
         this.mContext = context;
@@ -51,7 +54,14 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
      * @param list
      */
     public void setPointBeanList(List<PointBean.DataBean> list) {
+        if (list == null)return;
         pointBeanList.addAll(list);
+        notifyDataSetChanged();
+    }
+
+    public void setOtherTopicList(List<TopicBean.DataBean> otherTopicList) {
+        if (otherTopicList == null) return;
+        this.otherTopicList.addAll(otherTopicList);
         notifyDataSetChanged();
     }
 
@@ -69,15 +79,12 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         RecyclerView.ViewHolder holder;
       if (viewType == ITEM_TYPE_VOTE_VIEW){
             holder = new VoteHolder(mInflater.inflate(R.layout.item_topic_detail_vote,parent,false));
-        } else {
+        } else if (viewType == ITEM_TYPE_COMMENT){
             holder = new PointHolder(mInflater.inflate(R.layout.item_topic_detail_comment,parent,false));
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ARouter.getInstance().build("/test/PointDetailActivity").navigation();
-                }
-            });
-        }
+        }else {
+          holder = new OtherTopicHolder(mInflater.inflate(R.layout.item_other_topic_layout,parent,false));
+
+      }
         return holder;
     }
 
@@ -85,8 +92,20 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof VoteHolder) {
                 ((VoteHolder) holder).bindView(topicInfo);
-        } else if (holder instanceof PointHolder) {
-                ((PointHolder) holder).bind(pointBeanList.get(position-1),topicInfo.option);
+        }
+        if (holder instanceof PointHolder) {
+            if (position == pointBeanList.size()) {
+                ((PointHolder) holder).bindNormal(pointBeanList.get(position - 1), topicInfo.option,true);
+            } else {
+                ((PointHolder) holder).bindNormal(pointBeanList.get(position - 1), topicInfo.option,false);
+            }
+        }
+        if (holder instanceof OtherTopicHolder) {
+            if (position == pointBeanList.size() + 1) {
+                ((OtherTopicHolder) holder).bind(otherTopicList.get(position - pointBeanList.size() -1),true);
+            } else {
+                ((OtherTopicHolder) holder).bind(otherTopicList.get(position - pointBeanList.size() -1),false);
+            }
         }
     }
 
@@ -94,14 +113,16 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public int getItemViewType(int position) {
         if (position == 0) {
             return ITEM_TYPE_VOTE_VIEW;
-        } else {
+        } else if (position >= pointBeanList.size() + 1) {
+            return ITEM_TYPE_OTHER;
+        }else {
             return ITEM_TYPE_COMMENT;
         }
     }
 
     @Override
     public int getItemCount() {
-        return pointBeanList.size() + 1;
+        return pointBeanList.size() + otherTopicList.size() + 1;
     }
 
 

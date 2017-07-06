@@ -31,6 +31,8 @@ public class VoteDialog extends BaseDialog implements View.OnClickListener {
     private LinearLayout llBottomRoot;
 
     private EditText editVote;
+    public OnClickConfirmListener onClickConfirmListener;
+    private int voteId;
 
     public VoteDialog(@NonNull Context context) {
         super(context);
@@ -40,6 +42,9 @@ public class VoteDialog extends BaseDialog implements View.OnClickListener {
 
     public VoteDialog(@NonNull Context context, @StyleRes int themeResId) {
         super(context, themeResId);
+    }
+    public void setListener(OnClickConfirmListener listener) {
+        this.onClickConfirmListener = listener;
     }
 
     public void init() {
@@ -60,7 +65,8 @@ public class VoteDialog extends BaseDialog implements View.OnClickListener {
 
     }
 
-    public void setTitle(String title) {
+    public void setTitle(String title,int id) {
+        voteId = id;
         textPointVote.setText(title);
     }
 
@@ -71,10 +77,16 @@ public class VoteDialog extends BaseDialog implements View.OnClickListener {
                 this.dismiss();
                 break;
             case R.id.report_confirm:
-
+                this.dismiss();
+                if (onClickConfirmListener != null) {
+                    onClickConfirmListener.clickConfirm(editVote.getText().toString(),voteId);
+                }
                 break;
             default:
                 break;
         }
+    }
+    public interface  OnClickConfirmListener {
+        void clickConfirm(String msg,int id);
     }
 }
