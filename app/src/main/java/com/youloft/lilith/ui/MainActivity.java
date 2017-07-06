@@ -1,6 +1,5 @@
 package com.youloft.lilith.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -14,6 +13,7 @@ import com.youloft.lilith.common.event.TabChangeEvent;
 import com.youloft.lilith.common.net.OnlineConfigAgent;
 import com.youloft.lilith.cons.ConsRepo;
 import com.youloft.lilith.share.CustomShareActivity;
+import com.youloft.lilith.share.ShareBuilder;
 import com.youloft.lilith.ui.view.NavBarLayout;
 
 import org.greenrobot.eventbus.EventBus;
@@ -75,8 +75,7 @@ public class MainActivity extends BaseActivity {
 
     @OnClick(R.id.share)
     public void share(){
-        Intent intent = new Intent(this, CustomShareActivity.class);
-        startActivity(intent);
+        new ShareBuilder(this).withIcon().withUrl("http://www.baidu.com").withTitle("标题").withContent("内容来了").share();
     }
 
 }

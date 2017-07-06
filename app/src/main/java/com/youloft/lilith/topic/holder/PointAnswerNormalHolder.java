@@ -1,10 +1,12 @@
 package com.youloft.lilith.topic.holder;
 
 import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,6 +16,7 @@ import com.youloft.lilith.topic.PointDetailActivity;
 import com.youloft.lilith.topic.bean.ReplyBean;
 import com.youloft.lilith.topic.db.TopicLikeCache;
 import com.youloft.lilith.topic.db.TopicLikingTable;
+import com.youloft.lilith.topic.widget.Rotate3dAnimation;
 import com.youloft.lilith.ui.GlideCircleTransform;
 
 import butterknife.BindView;
@@ -61,7 +64,6 @@ public class PointAnswerNormalHolder extends RecyclerView.ViewHolder implements 
         this.mData = dataBean;
         textUserName.setText(dataBean.nickName);
         textAnswerContent.setText(dataBean.contents);
-        textZanCount.setText(String.valueOf(dataBean.zan));
         if (dataBean.sex == 1) {
             imageUserSex.setImageResource(R.drawable.topic_female_icon);
         } else {
@@ -86,11 +88,13 @@ public class PointAnswerNormalHolder extends RecyclerView.ViewHolder implements 
         int id = dataBean.id;
         TopicLikingTable table = TopicLikeCache.getIns(mContext).getInforByCode(id,PointDetailActivity.TYPE_ANSWER);
         if (table == null) {
-            isZan = mData.zan;
+            isZan = dataBean.isclick;
         } else {
             isZan = table.mIsLike;
             if (table.mIsLike == dataBean.isclick) {
                 TopicLikeCache.getIns(mContext).deleteData(id,PointDetailActivity.TYPE_ANSWER);
+            } else if (table.mIsLike == 1) {
+                mData.zan++;
             }
         }
         if (isZan == 1) {
@@ -98,23 +102,56 @@ public class PointAnswerNormalHolder extends RecyclerView.ViewHolder implements 
         } else {
             imageZan.setImageResource(R.drawable.topic_like_icon);
         }
+        textZanCount.setText(String.valueOf(mData.zan));
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.image_zan:
-                TopicLikingTable topicLikingTable;
+            case R.id.text_zan_count:
+
+                ((BitmapDrawable) imageZan.getDrawable()).setAntiAlias(true);
+                Rotate3dAnimation m3DAnimation;
                 if (isZan == 1) {
-                    imageZan.setImageResource(R.drawable.topic_like_icon);
-                    topicLikingTable = new TopicLikingTable(mData.id,0, PointDetailActivity.TYPE_ANSWER);
-                    isZan =0;
+                    m3DAnimation = new Rotate3dAnimation(0, 180,
+                            imageZan.getWidth() / 2, imageZan.getHeight() / 2);
                 } else {
-                    imageZan.setImageResource(R.drawable.topic_liking_icon);
-                     topicLikingTable = new TopicLikingTable(mData.id,1,PointDetailActivity.TYPE_ANSWER);
-                    isZan = 1;
+                    m3DAnimation = new Rotate3dAnimation(180, 0,
+                            imageZan.getWidth() / 2, imageZan.getHeight() / 2);
                 }
-                TopicLikeCache.getIns(itemView.getContext()).insertData(topicLikingTable);
+                m3DAnimation.setDuration(300);
+                imageZan.startAnimation(m3DAnimation);
+                m3DAnimation.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        TopicLikingTable topicLikingTable;
+                        if (isZan == 1) {
+                            imageZan.setImageResource(R.drawable.topic_like_icon);
+                            mData.zan--;
+                            textZanCount.setText(String.valueOf(mData.zan));
+                            topicLikingTable = new TopicLikingTable(mData.id,0, PointDetailActivity.TYPE_ANSWER);
+                            isZan =0;
+                        } else {
+                            imageZan.setImageResource(R.drawable.topic_liking_icon);
+                            mData.zan++;
+                            textZanCount.setText(String.valueOf(mData.zan));
+                            topicLikingTable = new TopicLikingTable(mData.id,1,PointDetailActivity.TYPE_ANSWER);
+                            isZan = 1;
+                        }
+                        TopicLikeCache.getIns(itemView.getContext()).insertData(topicLikingTable);
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+
                 break;
             case R.id.text_reply:
                 break;

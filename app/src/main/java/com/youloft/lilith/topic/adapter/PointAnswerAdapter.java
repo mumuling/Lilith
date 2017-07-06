@@ -8,7 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.youloft.lilith.R;
+import com.youloft.lilith.topic.bean.PointBean;
 import com.youloft.lilith.topic.bean.ReplyBean;
+import com.youloft.lilith.topic.bean.TopicDetailBean;
+import com.youloft.lilith.topic.holder.AuthorPointHolder;
 import com.youloft.lilith.topic.holder.PointAnswerNormalHolder;
 
 import java.util.ArrayList;
@@ -24,6 +27,8 @@ public class PointAnswerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private static int ITEM_TYPE_NONE= 1000;//无评论
     private static int ITEM_TYPE_NORMAL = 2000;//普通item
     private static int ITEM_TYPE_AUTHOR = 3000;//作者的item
+    private PointBean.DataBean point;
+    private  ArrayList<TopicDetailBean.DataBean.OptionBean> topic;
 
     private List<ReplyBean.DataBean> replyList = new ArrayList<>();
     public PointAnswerAdapter(Context context) {
@@ -37,13 +42,18 @@ public class PointAnswerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             this.replyList.addAll(replyList);
             notifyDataSetChanged();
         }
+    }
 
+    public void setPointAndTopic(PointBean.DataBean point,ArrayList<TopicDetailBean.DataBean.OptionBean> topic)  {
+        this.point = point;
+        this.topic = topic;
+        notifyDataSetChanged();
     }
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder holder;
         if (viewType == ITEM_TYPE_AUTHOR) {
-            holder = new HeadHolder(mInflater.inflate(R.layout.item_point_head,parent,false));
+            holder = new AuthorPointHolder(mInflater.inflate(R.layout.item_point_head,parent,false));
         } else if (viewType == ITEM_TYPE_NONE) {
             holder = new NoAnswerHolder(mInflater.inflate(R.layout.item_point_no_anwser,parent,false));
         } else {
@@ -57,6 +67,10 @@ public class PointAnswerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         if (holder instanceof PointAnswerNormalHolder) {
             if (replyList.size() == 0)return;
             ((PointAnswerNormalHolder)holder).bindView(replyList.get(position- 1));
+        }
+        if (holder instanceof AuthorPointHolder) {
+            if (point == null || topic == null)return;
+            ((AuthorPointHolder) holder).bindView(point,topic);
         }
     }
 

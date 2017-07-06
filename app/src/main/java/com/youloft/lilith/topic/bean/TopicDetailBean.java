@@ -2,6 +2,7 @@ package com.youloft.lilith.topic.bean;
 
 import com.youloft.lilith.common.net.AbsResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**         话题详情对象
@@ -31,7 +32,7 @@ public class TopicDetailBean extends AbsResponse<TopicDetailBean.DataBean> {
         public int collection;
         public int totalVote;
         public int isClose;
-        public List<OptionBean> option;
+        public ArrayList<OptionBean> option;
 
         public static class OptionBean {
             /**

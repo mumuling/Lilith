@@ -93,7 +93,7 @@ public class ConsCalAdapter extends RecyclerView.Adapter<ConsCalAdapter.ConsCalI
             word = String.valueOf(mIndexCal.get(Calendar.DAY_OF_MONTH));
         }
         holder.mDayText.setText(word);
-
+        holder.mStack.removeAllViews();
         if (predicts.ptcareer >= 8) {
             ImageView imageView = new ImageView(mContext);
             imageView.setImageResource(R.drawable.calendar_work_icon);

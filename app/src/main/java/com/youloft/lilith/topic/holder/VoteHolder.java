@@ -159,6 +159,9 @@ public class VoteHolder extends RecyclerView.ViewHolder {
                 voteDialog.setTitle(topicInfo.option.get(1).shortTitle,topicInfo.option.get(1).id);
             }
         });
+        if (true) {
+            voteAniamtion((float) topicInfo.option.get(0).vote/topicInfo.totalVote);
+        }
         GlideApp.with(itemView.getContext())
                 .asBitmap()
                 .load(topicInfo.backImg)
