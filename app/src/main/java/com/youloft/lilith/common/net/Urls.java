@@ -22,5 +22,8 @@ public class Urls {
     public static final String MEASURE_URL = "http://lilith.51wnl.com/GetCeceAd";
     //短信验证码
     public static final String VERIFICATIONCODE_URL = "http://lilith.51wnl.com/GetSmsCode";
-
+    //发送短信
+    public static final String SEND_SMS_URL = "http://lilith.51wnl.com/SendsSms";
+    //登录
+    public static final String LOGIN_URL = "http://lilith.51wnl.com/PhoneLogin";
 }

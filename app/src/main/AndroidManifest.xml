@@ -99,7 +99,6 @@
             android:value="595de80bf43e487e8300177e" />
         <!-- share end -->
         <activity android:name=".login.LoginActivity"
-            android:windowSoftInputMode="stateVisible|adjustResize"
             android:screenOrientation="portrait"/>
         <activity android:name=".login.UserFunctionActivity"
             android:screenOrientation="portrait"/>
@@ -120,6 +119,10 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".cons.ConsCalDetailActivity" android:theme="@style/TranslucentThem"/>
         <activity android:name=".setting.ModifyPasswordActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".login.RegisterActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".login.ForgetPasswordActivity"
             android:screenOrientation="portrait"/>
     </application>
 
