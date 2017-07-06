@@ -2,6 +2,7 @@ package com.youloft.lilith.topic.bean;
 
 import com.youloft.lilith.common.net.AbsResponse;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**    观点对象
@@ -11,10 +12,10 @@ import java.util.List;
  *@class   PointBean
  */
 
-public class PointBean extends AbsResponse<List<PointBean.DataBean>> {
+public class PointBean extends AbsResponse<List<PointBean.DataBean>> implements Serializable{
 
 
-    public static class DataBean {
+    public static class DataBean implements Serializable{
         /**
          * id : 2
          * topicId : 10000
@@ -45,7 +46,7 @@ public class PointBean extends AbsResponse<List<PointBean.DataBean>> {
         public String nickName;
         public List<ReplyListBean> replyList;
 
-        public static class ReplyListBean {
+        public static class ReplyListBean implements Serializable{
             /**
              * uid : 10000
              * nickName : 小虎儿

@@ -95,9 +95,9 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
         if (holder instanceof PointHolder) {
             if (position == pointBeanList.size()) {
-                ((PointHolder) holder).bindNormal(pointBeanList.get(position - 1), topicInfo.option,true);
+                ((PointHolder) holder).bindNormal(pointBeanList.get(position - 1), topicInfo,true);
             } else {
-                ((PointHolder) holder).bindNormal(pointBeanList.get(position - 1), topicInfo.option,false);
+                ((PointHolder) holder).bindNormal(pointBeanList.get(position - 1), topicInfo,false);
             }
         }
         if (holder instanceof OtherTopicHolder) {
