@@ -49,10 +49,11 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     public void setData(List<TopicBean.DataBean> data) {
+        if (data == null )return;
+        topicBeanList.clear();
         topicBeanList.addAll(data);
         notifyDataSetChanged();
     }
-
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

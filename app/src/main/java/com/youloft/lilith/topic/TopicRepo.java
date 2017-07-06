@@ -1,6 +1,7 @@
 package com.youloft.lilith.topic;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.youloft.lilith.LLApplication;
 import com.youloft.lilith.common.AbstractDataRepo;
 import com.youloft.lilith.common.net.Urls;
 import com.youloft.lilith.topic.bean.PointBean;
@@ -21,7 +22,7 @@ import io.reactivex.Flowable;
  */
 @Route(path = "/repo/topic", name = "话题数据中心")
 public class TopicRepo extends AbstractDataRepo {
-    static HashMap<String, String> param = new HashMap();
+
 
     /**
      *     请求观点的评论信息
@@ -31,6 +32,7 @@ public class TopicRepo extends AbstractDataRepo {
      * @return
      */
     public static Flowable<ReplyBean> getPointReply(String vid,String uid,String limit) {
+        HashMap<String, String> param = new HashMap();
         param.clear();
         param.put("vid",vid);
         if (uid != null)  param.put("uid",uid);
@@ -45,10 +47,35 @@ public class TopicRepo extends AbstractDataRepo {
      * @return
      */
     public static  Flowable<TopicBean> getTopicList(String sortby,String limit) {
+        String cacheKey = "topic_list";
+        long cacheDuration = 2 * 1000;
+        HashMap<String, String> param = new HashMap();
         param.clear();
         param.put("sortby",sortby);
-        param.put("limit",limit);
-        return unionFlow(Urls.TOPIC_LIST,null,param,true,TopicBean.class,"topic_list",5 * 60 * 1000);
+        if (limit != null)param.put("limit",limit);
+        return unionFlow(Urls.TOPIC_LIST,null,param,true,TopicBean.class,cacheKey,cacheDuration);
+    }
+
+    /**  底部其他话题推荐请求
+     *
+     * @param limit   请求条数
+     * @param needCache  是否需要缓存
+     * @return
+     */
+    public static Flowable<TopicBean> getTopicListBottom(String limit,boolean needCache) {
+        String cacheKey = "topic_list_bottom";
+        long cacheDuration = 2 * 1000;
+        HashMap<String, String> param = new HashMap();
+        if (limit != null)param.put("limit",limit);
+        if (needCache) {
+            if (!LLApplication.getApiCache().isExpired(cacheKey,cacheDuration)) {
+                return LLApplication.getApiCache().readCache(cacheKey,TopicBean.class);
+            } else {
+                return httpFlow(Urls.TOPIC_LIST, null, param, true, TopicBean.class, cacheKey, cacheDuration);
+            }
+        } else {
+            return httpFlow(Urls.TOPIC_LIST, null, param, true, TopicBean.class, null, 0);
+        }
     }
 
     /**   请求话题详情
@@ -57,16 +84,30 @@ public class TopicRepo extends AbstractDataRepo {
      * @return
      */
     public static Flowable<TopicDetailBean> getTopicDetail(String tid) {
+        HashMap<String, String> param = new HashMap();
         param.clear();
         param.put("tid",tid);
-        return unionFlow(Urls.TOPIC_INFO,null,param,true,TopicDetailBean.class,"topic_detail" + tid,5 * 60 * 1000);
+        return unionFlow(Urls.TOPIC_INFO,null,param,true,TopicDetailBean.class,"topic_detail" + tid,2 * 60 * 1000);
     }
 
-    public static Flowable<PointBean> getPointList(String tid,String uid) {
+    public static Flowable<PointBean> getPointList(String tid,String uid,String limit,String skip,boolean needCache) {
+        HashMap<String, String> param = new HashMap();
         param.clear();
         param.put("tid",tid);
         if (uid != null)param.put("uid",uid);
-        return unionFlow(Urls.VOTE_LIST,null,param,true,PointBean.class,"point_list" + tid,5 * 60 * 1000);
+        if (limit!=null)param.put("limit",limit);
+        if (skip!=null)param.put("skip",skip);
+        String cacheKey = "point_list" + tid;
+        long duration = 2 * 60 * 1000;
+        if (needCache) {
+            if (!LLApplication.getApiCache().isExpired(cacheKey,duration)) {
+                return LLApplication.getApiCache().readCache(cacheKey,PointBean.class);
+            } else {
+                return httpFlow(Urls.VOTE_LIST, null, param, true, PointBean.class, cacheKey, duration);
+            }
+        } else {
+            return httpFlow(Urls.VOTE_LIST, null, param, true, PointBean.class, null, 0);
+        }
     }
 
 }

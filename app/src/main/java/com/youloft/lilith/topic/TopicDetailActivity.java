@@ -17,6 +17,7 @@ import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.topic.adapter.TopicDetailAdapter;
 import com.youloft.lilith.topic.bean.PointBean;
+import com.youloft.lilith.topic.bean.TopicBean;
 import com.youloft.lilith.topic.bean.TopicDetailBean;
 import com.youloft.lilith.topic.widget.VoteDialog;
 import com.youloft.lilith.ui.GlideCircleTransform;
@@ -51,6 +52,7 @@ public class TopicDetailActivity extends BaseActivity {
     private VoteDialog voteDialog;
     private TopicDetailBean.DataBean topicDtailInfo;
     private List<PointBean.DataBean> pointList = new ArrayList<>();
+    private List<TopicBean.DataBean> otherTopicList = new ArrayList<>();
     @Autowired
     public int tid;
 
@@ -64,10 +66,33 @@ public class TopicDetailActivity extends BaseActivity {
         initView();
         requestTopicDetail();
         requestPointList();
+        requestOtherTopicList();
+    }
+
+    private void requestOtherTopicList() {
+        TopicRepo.getTopicListBottom(null,true)
+                .compose(this.<TopicBean>bindToLifecycle())
+                .subscribeOn(Schedulers.newThread())
+                .toObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new RxObserver<TopicBean>() {
+                    @Override
+                    public void onDataSuccess(TopicBean topicBean) {
+                        if (topicBean.data != null) {
+                            otherTopicList.addAll(topicBean.data);
+                            adapter.setOtherTopicList(topicBean.data);
+                        }
+                    }
+
+                    @Override
+                    protected void onFailed(Throwable e) {
+                        super.onFailed(e);
+                    }
+                });
     }
 
     private void requestPointList() {
-        TopicRepo.getPointList(String.valueOf(tid),null)
+        TopicRepo.getPointList(String.valueOf(tid),null,"10",null,true)
                 .compose(this.<PointBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()

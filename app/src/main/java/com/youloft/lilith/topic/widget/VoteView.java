@@ -37,6 +37,8 @@ public class VoteView extends View {
     private Paint textPaint;
     private Paint leftCirclePaint;
     private Paint rightCirclePaint;
+    private Paint leftRectPaint;
+    private Paint rightRectPaint;
     private  Bitmap mPointBg;
     private  Bitmap leftCircle;
     private  Bitmap rightCircle;
@@ -50,6 +52,11 @@ public class VoteView extends View {
     private int rightDistance;
     private int leftCenterX;
     private int rightCenterX;
+    private int rectHeight;
+    private float leftRectScale;
+    private int totalRectLengh;
+    private float rectProportion;
+    private boolean needDrawRect = false;
 
 
     private float changeRadius1 = 00;
@@ -80,12 +87,22 @@ public class VoteView extends View {
         textPaint = new Paint();
         leftCirclePaint = new Paint();
         rightCirclePaint = new Paint();
+        leftRectPaint = new Paint();
+        rightRectPaint = new Paint();
         textPaint.setColor(Color.parseColor("#ffffff"));
         textPaint.setTextSize(ViewUtil.sp2px(20));
         textPaint.setTextAlign(Paint.Align.CENTER);
         leftCirclePaint.setColor(Color.parseColor("#df815b"));
         leftCirclePaint.setAntiAlias(true);
         leftCirclePaint.setStyle(Paint.Style.FILL);
+
+        leftRectPaint.setColor(Color.parseColor("#c26b57"));
+        leftRectPaint.setAntiAlias(true);
+        leftRectPaint.setStyle(Paint.Style.FILL);
+
+        rightRectPaint.setColor(Color.parseColor("#357faa"));
+        rightRectPaint.setAntiAlias(true);
+        rightRectPaint.setStyle(Paint.Style.FILL);
 
         rightCirclePaint.setColor(Color.parseColor("#3470b4"));
         rightCirclePaint.setAntiAlias(true);
@@ -102,26 +119,28 @@ public class VoteView extends View {
         mCenterY = getHeight()/2;
     }
 
+
+    int startX = 0;
+    int startY = 0;
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        int startX = 0;
-        int startY = 0;
+
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 startX = (int) event.getX();
                 startY = (int) event.getY();
-            case MotionEvent.ACTION_MOVE:
-            case MotionEvent.ACTION_CANCEL:
+                break;
+            case MotionEvent.ACTION_UP:
                 if (mItemClickListener == null) {
                     return false;
                 }
                 int endX = (int) event.getX();
                 int endY = (int) event.getY();
-                if (startX == endX && startY == endY && startX < leftCircleWidth + ViewUtil.dp2px(19) ) {
+                if (startX == endX && startY == endY && startX < mCenterX - bgWidth/2 + leftCircleWidth  && startX >mCenterX - bgWidth/2 ) {
                     mItemClickListener.clickLeft();
                     return true;
                 }
-                if (startX == endX && startY == endY && startX > bgWidth - rightCircleWidth + ViewUtil.dp2px(19)) {
+                if (startX == endX && startY == endY && startX > mCenterX + bgWidth/2 - rightCircleWidth && startX <=mCenterX + bgWidth/2 ) {
                     mItemClickListener.clickRight();
                     return true;
                 }
@@ -144,10 +163,14 @@ public class VoteView extends View {
          rightDistance = (bgHeight - rightCircleHeight) / 2;
          leftCenterX = mCenterX-bgWidth/2 + leftDistance + leftCircleWidth/2;
          rightCenterX = mCenterX + bgWidth/2 - rightDistance - rightCircleWidth/2;
+        rectHeight = (int) ViewUtil.dp2px(10);
+        totalRectLengh = (rightCenterX - leftCenterX) - leftCircleWidth/2 - rightCircleWidth/2;
         canvas.drawBitmap(mPointBg,mCenterX - bgWidth/2,mCenterY - bgHeight/2,bgPaint);
-        drawFirstCircle(canvas);
-        drawSecondCircle(canvas);
-        drawThirdCircle(canvas);
+        if (!needDrawRect) {
+            drawFirstCircle(canvas);
+            drawSecondCircle(canvas);
+            drawThirdCircle(canvas);
+        }
         canvas.drawBitmap(leftCircle,mCenterX-bgWidth/2 + leftDistance,mCenterY - bgHeight/2 + leftDistance,bgPaint);
         canvas.drawBitmap(rightCircle,rightCenterX - rightCircleWidth/2,mCenterY - rightCircleHeight/2,bgPaint);
         Paint.FontMetrics fontMetrics = textPaint.getFontMetrics();
@@ -155,6 +178,10 @@ public class VoteView extends View {
         float bottom = fontMetrics.bottom;//为基线到字体下边框的距离,即上图中的bott
         canvas.drawText("相似",leftCenterX,mCenterY-top/2-bottom/2,textPaint);
         canvas.drawText("互补",rightCenterX,mCenterY-top/2-bottom/2,textPaint);
+        if (needDrawRect) {
+            drawLeftRect(canvas);
+            drawRightRect(canvas);
+        }
     }
     private void drawFirstCircle(Canvas canvas) {
         leftCirclePaint.setAlpha(alpha1);
@@ -177,6 +204,28 @@ public class VoteView extends View {
         canvas.drawCircle(rightCenterX,mCenterY,rightCircleWidth/2 + changeRadius3,rightCirclePaint);
     }
 
+    private void drawLeftRect(Canvas canvas) {
+        float left = leftCenterX + leftCircleWidth/2;
+        float top = mCenterY - rectHeight/2;
+        float right = left + totalRectLengh * leftRectScale * rectProportion;
+        float bottom = mCenterY + rectHeight/2;
+        canvas.drawRect(left,top,right,bottom,leftRectPaint);
+    }
+
+    private void drawRightRect(Canvas canvas) {
+        float right = rightCenterX  - rightCircleWidth/2;
+        float top = mCenterY - rectHeight/2;
+        float left = right - totalRectLengh * (1 - leftRectScale) * rectProportion ;
+        float bottom = mCenterY + rectHeight/2;
+        canvas.drawRect(left,top,right,bottom,rightRectPaint);
+    }
+
+    public void setRectProportion(float proportion,float scale) {
+        this.rectProportion = proportion;
+        this.needDrawRect = true;
+        this.leftRectScale = scale;
+        invalidate();
+    }
 
     public void setChangeValue1(float radius1,int alpha1) {
         this.changeRadius1 = radius1;
