@@ -77,7 +77,12 @@ public class MainActivity extends BaseActivity {
 
     @OnClick(R.id.share)
     public void share(){
-        new ShareBuilder(this).withIcon().withUrl("http://www.baidu.com").withTitle("标题").withContent("内容来了").share();
+        new ShareBuilder(this)
+                .withTitle("title")
+                .withUrl("https://www.baidu.com")
+                .withImg(null)
+                .withContent("内容")
+                .share();
     }
 
 }
