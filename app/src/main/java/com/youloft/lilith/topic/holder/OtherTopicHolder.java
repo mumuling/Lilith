@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.widgets.view.RoundImageView;
@@ -44,6 +45,7 @@ public class OtherTopicHolder extends RecyclerView.ViewHolder {
         GlideApp.with(itemView)
                 .asBitmap()
                 .load(topic.backImg)
+                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                 .into(mTopicImage);
         mTopicUserImageLayout.bindData(topic.voteUser,topic.totalVote);
         if (first) {

@@ -66,11 +66,15 @@ public class PointAnswerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof PointAnswerNormalHolder) {
             if (replyList.size() == 0)return;
-            ((PointAnswerNormalHolder)holder).bindView(replyList.get(position- 1));
+            if (position==1) {
+                ((PointAnswerNormalHolder) holder).bindView(replyList.get(position - 1),true);
+            }else {
+                ((PointAnswerNormalHolder) holder).bindView(replyList.get(position - 1),false);
+            }
         }
         if (holder instanceof AuthorPointHolder) {
             if (point == null || topic == null)return;
-            ((AuthorPointHolder) holder).bindView(point,topic);
+                ((AuthorPointHolder) holder).bindView(point, topic);
         }
     }
 

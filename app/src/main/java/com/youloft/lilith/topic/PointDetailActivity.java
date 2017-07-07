@@ -78,7 +78,6 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
         ButterKnife.bind(this);
         ARouter.getInstance().inject(this);
         initView();
-        PointBean.DataBean point1 = point;
         initReplyData();
 
     }
