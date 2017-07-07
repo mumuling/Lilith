@@ -46,4 +46,20 @@ public class AppSetting {
         return did;
     }
 
+    /**
+     * 登录成功之后 存入返回的user 信息
+     * @param userInfo
+     */
+    public static void saveUserInfo(String userInfo){
+        SettingProvider.save(sContext,"user_login_info",userInfo);
+    }
+
+    /**
+     * 获取登录成功后的信息
+     * @return
+     */
+    public static String getUserInfo(){
+        return SettingProvider.getString(sContext,"user_login_info",null);
+    }
+
 }

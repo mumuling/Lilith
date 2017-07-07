@@ -12,7 +12,6 @@ import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.event.TabChangeEvent;
 import com.youloft.lilith.common.net.OnlineConfigAgent;
 import com.youloft.lilith.cons.ConsRepo;
-import com.youloft.lilith.info.UserRepo;
 import com.youloft.lilith.share.CustomShareActivity;
 import com.youloft.lilith.share.ShareBuilder;
 import com.youloft.lilith.ui.view.NavBarLayout;
@@ -30,8 +29,7 @@ import butterknife.OnClick;
  */
 public class MainActivity extends BaseActivity {
 
-    @Autowired(name = "/repo/user")
-    UserRepo mUserRepo;
+
 
     @Autowired(name = "/repo/cons")
     ConsRepo mConsRepo;
