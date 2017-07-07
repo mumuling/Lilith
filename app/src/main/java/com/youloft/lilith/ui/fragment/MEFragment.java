@@ -2,34 +2,31 @@ package com.youloft.lilith.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.R;
+import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.base.BaseFragment;
 import com.youloft.lilith.login.LoginActivity;
-import com.youloft.lilith.router.AppRouter;
-import com.youloft.lilith.setting.EditInformationActivity;
-import com.youloft.lilith.setting.SettingActivity;
+import com.youloft.lilith.login.event.LoginEvent;
 
-import java.io.File;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnItemClick;
 import butterknife.Unbinder;
 import de.hdodenhof.circleimageview.CircleImageView;
-import okhttp3.Call;
-import okhttp3.Request;
-import okhttp3.RequestBody;
 
 /**
  * Created by zchao on 2017/6/27.
@@ -54,12 +51,35 @@ public class MEFragment extends BaseFragment {
     CircleImageView ivSun; //太阳星座
     @BindView(R.id.iv_moon)
     CircleImageView ivMoon; //月亮星座
+    @BindView(R.id.iv_blur_bg)
+    ImageView ivBlurBg; //模糊背景
 
 
     public MEFragment() {
         super(R.layout.fragment_me);
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(LoginEvent loginEvent) {
+        //登录成功了,图片,昵称
+        String headImgUrl = loginEvent.mUserBean.data.userInfo.headImg;
+        String nickName = loginEvent.mUserBean.data.userInfo.nickName;
+        tvNickName.setText(nickName);
+        GlideApp.with(mContext).load(headImgUrl).into(ivHeader);
+//        GlideApp.with(mContext).load(headImgUrl).transform(new BlurTransformatio).into(ivBlurBg);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -78,11 +98,11 @@ public class MEFragment extends BaseFragment {
 
 
     //话题  资料  设置  的点击事件
-    @OnClick({R.id.rl_topic,R.id.rl_personal_data,R.id.rl_setting})
-    public void clickMyItem(View view){
+    @OnClick({R.id.rl_topic, R.id.rl_personal_data, R.id.rl_setting})
+    public void clickMyItem(View view) {
         switch (view.getId()) {
             case R.id.rl_topic:
-                Toast.makeText(getActivity(),"话题",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "话题", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.rl_personal_data:
                 ARouter.getInstance().build("/test/EditInformationActivity").navigation();
@@ -93,7 +113,6 @@ public class MEFragment extends BaseFragment {
 
         }
     }
-
 
 
     @Override

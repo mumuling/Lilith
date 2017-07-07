@@ -1,5 +1,6 @@
 package com.youloft.lilith.login;
 
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -14,8 +16,13 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.umeng.socialize.UMAuthListener;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
+
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,6 +34,8 @@ import butterknife.OnClick;
  * Created by GYH on 2017/6/29.
  */
 public class LoginActivity extends BaseActivity {
+
+    private static final String TAG = "LoginActivity";
 
     @BindView(R.id.vv_background)
     VideoView vvBackground;//背景视频
@@ -123,12 +132,42 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
+    private UMAuthListener umAuthListener = new UMAuthListener() {
+        @Override
+        public void onStart(SHARE_MEDIA platform) {
+            //授权开始的回调
+        }
+
+        @Override
+        public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
+            Toast.makeText(getApplicationContext(), "Authorize succeed", Toast.LENGTH_SHORT).show();
+
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA platform, int action, Throwable t) {
+            Toast.makeText(getApplicationContext(), "Authorize fail", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA platform, int action) {
+            Toast.makeText(getApplicationContext(), "Authorize cancel", Toast.LENGTH_SHORT).show();
+        }
+    };
 
     @Override
     protected void onResume() {
         super.onResume();
         initBackgroundVedio();
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG, "onActivityResult() called with: requestCode = [" + requestCode + "], resultCode = [" + resultCode + "], data = [" + data + "]");
+    }
+
 
     /**
      * 背景视频设置
@@ -165,8 +204,7 @@ public class LoginActivity extends BaseActivity {
     @OnClick(R.id.tv_forget_password)
     public void forgetPassword(View view) {
         ARouter.getInstance()
-                .build("/test/UserFunctionActivity")
-                .withInt("flag", 20002)
+                .build("/test/ForgetPasswordActivity")
                 .navigation();
     }
 
@@ -174,8 +212,7 @@ public class LoginActivity extends BaseActivity {
     @OnClick(R.id.tv_register)
     public void register(View view) {
         ARouter.getInstance()
-                .build("/test/UserFunctionActivity")
-                .withInt("flag", 20003)
+                .build("/test/RegisterActivity")
                 .navigation();
     }
 
@@ -191,7 +228,8 @@ public class LoginActivity extends BaseActivity {
     //微信登录
     @OnClick(R.id.ll_wechat_login)
     public void wechatLogin(View view) {
-        Toast.makeText(this, "微信登录", Toast.LENGTH_SHORT).show();
+        UMShareAPI.get(this).getPlatformInfo(LoginActivity.this, SHARE_MEDIA.WEIXIN, umAuthListener);
+
     }
 
     private boolean isShowPassword = true;//是否显示密码的标识
@@ -221,7 +259,6 @@ public class LoginActivity extends BaseActivity {
                 break;
         }
     }
-
 
 
     @OnClick(R.id.iv_back)
