@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
+import com.youloft.lilith.common.net.AbsResponse;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.CalendarHelper;
 import com.youloft.lilith.cons.consmanager.ConsManager;
@@ -156,6 +157,7 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
 
                     }
                 });
+                clickLike();
                 break;
             case R.id.ll_load_more:
                 imageLoading.setVisibility(View.VISIBLE);
@@ -165,22 +167,7 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
                 break;
         }
     }
-    public void getMorePiont() {
-        if (itemView.getContext() instanceof TopicDetailActivity) {
-           if (((TopicDetailActivity) itemView.getContext()).loadMorePiont()){
-               textLoadMore.setVisibility(View.VISIBLE);
-               textLoadMore.setText("展开更多");
-               imageLoading.setVisibility(View.GONE);
-               imageLoading.clearAnimation();
-           } else {
-               textLoadMore.setVisibility(View.VISIBLE);
-               textLoadMore.setText("没有数据了..");
-               imageLoading.setVisibility(View.GONE);
-               imageLoading.clearAnimation();
 
-           }
-        }
-    }
     /**
      *   加载更多观点
      */
@@ -315,8 +302,12 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
             isZan = table.mIsLike;
             if (table.mIsLike == dataBean.isclick) {
                 TopicLikeCache.getIns(mContext).deleteData(id,PointDetailActivity.TYPE_POINT);
-            } else if (table.mIsLike == 1 && dataBean.zan == 0) {
-                dataBean.zan++;
+            } else{
+                dataBean.isclick = table.mIsLike;
+                clickLike();
+                if (table.mIsLike == 1) {
+                  dataBean.zan++;
+              }
             }
         }
         point.zan = dataBean.zan;
@@ -328,6 +319,26 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
         textZanCount.setText(String.valueOf(dataBean.zan));
     }
 
+    public void clickLike() {
+        TopicRepo.likePoint(String.valueOf(point.id),"10000")
+                .subscribeOn(Schedulers.newThread())
+                .toObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new RxObserver<AbsResponse>() {
+                    @Override
+                    public void onDataSuccess(AbsResponse s) {
+                        if ((Boolean) s.data) {
 
+                        } else {
+
+                        }
+                    }
+
+                    @Override
+                    protected void onFailed(Throwable e) {
+                        super.onFailed(e);
+                    }
+                });
+    }
 
 }

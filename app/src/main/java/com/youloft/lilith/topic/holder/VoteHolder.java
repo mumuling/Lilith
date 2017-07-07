@@ -127,7 +127,7 @@ public class VoteHolder extends RecyclerView.ViewHolder {
         voteDialog.setListener(new VoteDialog.OnClickConfirmListener() {
             @Override
             public void clickConfirm(String msg,int id) {
-                TopicRepo.postVote(String.valueOf(topicInfo.id),String.valueOf(id),"1",msg)
+                TopicRepo.postVote(String.valueOf(topicInfo.id),String.valueOf(id),"10000",msg)
                         .subscribeOn(Schedulers.newThread())
                         .toObservable()
                         .observeOn(AndroidSchedulers.mainThread())
@@ -160,7 +160,7 @@ public class VoteHolder extends RecyclerView.ViewHolder {
         }
     }
     public void bindView(final TopicDetailBean.DataBean topicInfo) {
-        if (topicInfo == null)return;
+        if (topicInfo == null || topicInfo.option == null)return;
         this.topicInfo = topicInfo;
         voteView.setInterface(new VoteView.OnItemClickListener() {
             @Override

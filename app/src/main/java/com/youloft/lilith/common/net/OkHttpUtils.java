@@ -129,7 +129,7 @@ public class OkHttpUtils {
         HashMap<String, String> params = obtainPublicParams();
         if (params != null) {
             for (Map.Entry<String, String> param : params.entrySet()) {
-                builder.addFormDataPart(param.getKey(), param.getValue());
+                builder.addFormDataPart(param.getKey(), TextUtils.isEmpty(param.getValue())? "" : param.getValue());
             }
         }
         builder.addPart(body);
@@ -141,7 +141,7 @@ public class OkHttpUtils {
         HashMap<String, String> params = obtainPublicParams();
         if (params != null) {
             for (Map.Entry<String, String> param : params.entrySet()) {
-                builder.add(param.getKey(), param.getValue());
+                builder.add(param.getKey(), TextUtils.isEmpty(param.getValue())? "" : param.getValue());
             }
         }
         for (int i = 0; i < body.size(); i++) {
