@@ -15,8 +15,10 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.base.BaseFragment;
-import com.youloft.lilith.login.LoginActivity;
+import com.youloft.lilith.login.activity.LoginActivity;
 import com.youloft.lilith.login.event.LoginEvent;
+import com.youloft.lilith.login.event.LoginWithPwdEvent;
+import com.youloft.lilith.register.event.RegisterEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -65,6 +67,7 @@ public class MEFragment extends BaseFragment {
         EventBus.getDefault().register(this);
     }
 
+    //这个是从快捷登录那边发过来的
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(LoginEvent loginEvent) {
         //登录成功了,图片,昵称
@@ -75,6 +78,17 @@ public class MEFragment extends BaseFragment {
 //        GlideApp.with(mContext).load(headImgUrl).transform(new BlurTransformatio).into(ivBlurBg);
     }
 
+    //这个是注册成功后,设置完密码 发过来的
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onRegisterEvent(RegisterEvent registerEvent){
+
+    }
+
+    //这个是手机号码+密码登录,发过来的
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onLoginWithPwdEvent(LoginWithPwdEvent loginWithPwdEvent){
+
+    }
     @Override
     public void onDestroy() {
         super.onDestroy();

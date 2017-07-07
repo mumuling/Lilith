@@ -97,9 +97,9 @@
             android:name="UMENG_APPKEY"
             android:value="595de80bf43e487e8300177e" />
         <!-- share end -->
-        <activity android:name=".login.LoginActivity"
+        <activity android:name=".login.activity.LoginActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".login.UserFunctionActivity"
+        <activity android:name=".login.activity.UserFunctionActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".setting.SettingActivity"
             android:screenOrientation="portrait"/>
@@ -109,7 +109,7 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".setting.BindAccountActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".login.SetPasswordActivity"
+        <activity android:name=".register.activity.SetPasswordActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".share.CustomShareActivity"
             android:theme="@style/TranslucentThem"
@@ -119,9 +119,9 @@
         <activity android:name=".cons.ConsCalDetailActivity" android:theme="@style/TranslucentThem"/>
         <activity android:name=".setting.ModifyPasswordActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".login.RegisterActivity"
+        <activity android:name=".register.activity.RegisterActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".login.ForgetPasswordActivity"
+        <activity android:name=".login.activity.ForgetPasswordActivity"
             android:screenOrientation="portrait"/>
     </application>
 

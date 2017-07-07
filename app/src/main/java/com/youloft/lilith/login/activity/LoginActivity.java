@@ -1,4 +1,4 @@
-package com.youloft.lilith.login;
+package com.youloft.lilith.login.activity;
 
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -16,17 +16,28 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.alibaba.android.arouter.utils.TextUtils;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
+import com.youloft.lilith.common.rx.RxObserver;
+import com.youloft.lilith.common.utils.Toaster;
+import com.youloft.lilith.login.bean.LoginUserInfoBean;
+import com.youloft.lilith.login.event.LoginWithPwdEvent;
+import com.youloft.lilith.login.repo.LoginUserRepo;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * 登录界面
@@ -190,7 +201,31 @@ public class LoginActivity extends BaseActivity {
     //登录按钮
     @OnClick(R.id.btn_login)
     public void login(View view) {
-        Toast.makeText(this, "登录", Toast.LENGTH_SHORT).show();
+        //1.判断手机号 和 密码是否为空
+        //2.判断手机号码的位数
+        //3.发起登录请求
+        String phoneNumber = etPhoneNumber.getText().toString().replaceAll("-", "");
+        String password = etPassword.getText().toString();
+        if(TextUtils.isEmpty(phoneNumber) || TextUtils.isEmpty(password)){
+            Toaster.showShort("手机号码或者密码不能为空");
+            return;
+        }
+        if(phoneNumber.length() != 11){
+            Toaster.showShort("手机号码不正确");
+            return;
+        }
+        LoginUserRepo.loginWithPassword(phoneNumber,password)
+                .compose(this.<LoginUserInfoBean>bindToLifecycle())
+                .subscribeOn(Schedulers.newThread())
+                .toObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new RxObserver<LoginUserInfoBean>() {
+                    @Override
+                    public void onDataSuccess(LoginUserInfoBean loginUserInfoBean) {
+                        // TODO: 2017/7/7 需要存储用户信息
+                        EventBus.getDefault().post(new LoginWithPwdEvent(loginUserInfoBean));
+                    }
+                });
     }
 
 

@@ -12,13 +12,14 @@ import com.youloft.lilith.common.net.AbsResponse;
 public class SmsCodeBean extends AbsResponse<SmsCodeBean.DataBean>{
 
 
+
     public static class DataBean {
         /**
-         * code : 476716
+         * result : true
          * msg : null
          */
-        @JSONField(name = "code")
-        public int code;
+        @JSONField(name = "result")
+        public boolean result;
         @JSONField(name = "msg")
         public Object msg;
     }

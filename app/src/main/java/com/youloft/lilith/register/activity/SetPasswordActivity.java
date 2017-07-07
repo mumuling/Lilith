@@ -1,4 +1,4 @@
-package com.youloft.lilith.login;
+package com.youloft.lilith.register.activity;
 
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -15,12 +15,23 @@ import android.widget.ImageView;
 import android.widget.VideoView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.utils.TextUtils;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
+import com.youloft.lilith.common.rx.RxObserver;
+import com.youloft.lilith.common.utils.Toaster;
+import com.youloft.lilith.register.bean.RegisterUserBean;
+import com.youloft.lilith.register.event.RegisterEvent;
+import com.youloft.lilith.register.repo.RegisterUserRepo;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * 设置密码界面
@@ -44,13 +55,17 @@ public class SetPasswordActivity extends BaseActivity {
     ImageView ivIsShowPwd02;    //确认密码是否明文显示
     @BindView(R.id.iv_clean_password02)
     ImageView ivCleanPassword02;  //清除确认密码
-    @BindView(R.id.btn_login)
-    Button btnLogin;  //登录按钮
+    private String phoneNumber; //上个页面传来的手机号码
+    private String smsCode;  //上个页面传来的验证码
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_password);
+        //获取上个页面传过来的手机号码和验证码
+        phoneNumber = getIntent().getStringExtra("phoneNumber");
+        smsCode = getIntent().getStringExtra("smsCode");
+
         ButterKnife.bind(this);
         editTextSetting();
     }
@@ -137,7 +152,8 @@ public class SetPasswordActivity extends BaseActivity {
 
     private boolean isShowPassword01 = false;//是否显示密码的标识
     private boolean isShowPassword02 = false;//是否显示密码的标识
-    @OnClick({R.id.iv_is_show_pwd01, R.id.iv_clean_password01,R.id.iv_is_show_pwd02, R.id.iv_clean_password02})
+
+    @OnClick({R.id.iv_is_show_pwd01, R.id.iv_clean_password01, R.id.iv_is_show_pwd02, R.id.iv_clean_password02})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_is_show_pwd01:
@@ -155,7 +171,6 @@ public class SetPasswordActivity extends BaseActivity {
             case R.id.iv_clean_password01:
                 etPassword.setText(null);
                 break;
-
 
 
             case R.id.iv_is_show_pwd02:
@@ -178,8 +193,38 @@ public class SetPasswordActivity extends BaseActivity {
         }
     }
 
+    //返回按钮
     @OnClick(R.id.fl_back)
-    public void onViewClicked() {
+    public void onBackClicked() {
         onBackPressed();
+    }
+
+    //登录按钮
+    @OnClick(R.id.btn_login)
+    public void onButtonClicked() {
+        //1.获取两个输入的密码,做非空校验,做比对
+        //2.手机号码,验证码,密码一起请求注册接口
+        String password = etPassword.getText().toString();
+        String confirmPwd = etConfirmPassword.getText().toString();
+        if(TextUtils.isEmpty(password) || TextUtils.isEmpty(confirmPwd)){
+            return;
+        }
+        if(!password.equals(confirmPwd)){
+            Toaster.showShort("密码不一致");
+            return;
+        }
+        RegisterUserRepo.registerUser(phoneNumber,smsCode,password)
+                .compose(this.<RegisterUserBean>bindToLifecycle())
+                .subscribeOn(Schedulers.newThread())
+                .toObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new RxObserver<RegisterUserBean>() {
+                    @Override
+                    public void onDataSuccess(RegisterUserBean registerUserBean) {
+                        //这里代表注册成功,并且也登录了
+                        // TODO: 2017/7/7 这里也需要存这个用户信息
+                        EventBus.getDefault().post(new RegisterEvent(registerUserBean));
+                    }
+                });
     }
 }

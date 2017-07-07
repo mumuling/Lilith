@@ -17,9 +17,9 @@ import io.reactivex.Flowable;
 public class SendSmsRepo extends AbstractDataRepo{
     static HashMap<String,String> params = new HashMap();
 
-    public static Flowable<SendSmsBean> sendSms(String phone) {
+    public static Flowable<SendSmsBean> sendSms(String phone,String smsType) {
         params.put("Phone",phone);
-        params.put("SmsType","Login");
+        params.put("SmsType",smsType);
         return unionFlow(Urls.SEND_SMS_URL, null, params, true, SendSmsBean.class, "send_sms", 1);
     }
 }
