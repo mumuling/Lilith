@@ -8,10 +8,15 @@ import android.widget.TextView;
 
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
+import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.ViewUtil;
+import com.youloft.lilith.topic.TopicRepo;
 import com.youloft.lilith.topic.bean.TopicDetailBean;
 import com.youloft.lilith.topic.widget.VoteDialog;
 import com.youloft.lilith.topic.widget.VoteView;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  *
@@ -122,6 +127,21 @@ public class VoteHolder extends RecyclerView.ViewHolder {
         voteDialog.setListener(new VoteDialog.OnClickConfirmListener() {
             @Override
             public void clickConfirm(String msg,int id) {
+                TopicRepo.postVote(String.valueOf(topicInfo.id),String.valueOf(id),"1",msg)
+                        .subscribeOn(Schedulers.newThread())
+                        .toObservable()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new RxObserver<String>() {
+                            @Override
+                            public void onDataSuccess(String s) {
+                                String ms =s;
+                            }
+
+                            @Override
+                            protected void onFailed(Throwable e) {
+                                super.onFailed(e);
+                            }
+                        });
                 topicInfo.totalVote++;
                 addOptionVote(id);
                 voteAniamtion((float) topicInfo.option.get(0).vote/topicInfo.totalVote);

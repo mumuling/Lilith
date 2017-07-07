@@ -122,4 +122,14 @@ public class TopicRepo extends AbstractDataRepo {
         }
     }
 
+    public static Flowable<String> postVote(String tid,String oid,String uid, String viewpoint) {
+        HashMap<String, String> param = new HashMap();
+        param.clear();
+        param.put("tid",tid);
+        param.put("uid",uid);
+        param.put("oid",oid);
+        param.put("Viewpoint",viewpoint);
+        return post(Urls.POST_VOTE,null,param,true,String.class,null,0,null);
+    }
+
 }

@@ -17,6 +17,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.rx.RxObserver;
+import com.youloft.lilith.common.utils.CalendarHelper;
 import com.youloft.lilith.cons.consmanager.ConsManager;
 import com.youloft.lilith.topic.PointDetailActivity;
 import com.youloft.lilith.topic.TopicDetailActivity;
@@ -247,6 +248,7 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
         textUserName.setText(point.nickName);
         //点赞数
        bindZan(point);
+        bindTime(point);
 
         //性别
         if (point.sex == 1) {
@@ -297,6 +299,11 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
             llCommentAnswerRoot.setVisibility(View.GONE);
         }
 
+    }
+
+    private void bindTime(PointBean.DataBean point) {
+        long time = CalendarHelper.getTimeMillisByString(point.buildDate);
+        textCommentTime.setText(CalendarHelper.getInterValTime(time));
     }
 
     private void bindZan(PointBean.DataBean dataBean) {
