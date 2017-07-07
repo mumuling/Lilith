@@ -15,6 +15,7 @@ import com.youloft.lilith.common.utils.NetUtil;
 
 import org.reactivestreams.Publisher;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -88,6 +89,7 @@ public abstract class AbstractDataRepo implements IProvider {
                         wrapCacheObservable(observable, cacheKey, duration)
                 );
     }
+
 
     /**
      * 包
@@ -165,6 +167,78 @@ public abstract class AbstractDataRepo implements IProvider {
         }
         return LLApplication.getApiCache().readCache(key, clz);
 
+    }
+
+    /**
+     * post请求
+     * @param url
+     * @param header
+     * @param params
+     * @param usePublic
+     * @param clz
+     * @param cacheKey
+     * @param cacheDuration
+     * @param files 上传的文件
+     * @param <T>
+     * @return
+     */
+    public static <T> Flowable<T> post(final String url,
+                                       final Map<String, String> header,
+                                       final Map<String, String> params,
+                                       final boolean usePublic,
+                                       final Class<T> clz,
+                                       final String cacheKey,
+                                       final long cacheDuration,
+                                       final File...files) {
+        Flowable<T> compose = Flowable.just(url)
+                .filter(new Predicate<String>() {
+                    @Override
+                    public boolean test(@NonNull String s) throws Exception {
+                        if (TextUtils.isEmpty(cacheKey)) {
+                            return true;
+                        }
+                        if (!NetUtil.isNetOK()) {
+                            throw new RuntimeException("Not Network");
+                        }
+                        return LLApplication.getApiCache().isExpired(cacheKey, cacheDuration);
+                    }
+                })
+                .map(new Function<String, Response>() {
+                    @Override
+                    public Response apply(@NonNull String s) throws Exception {
+                        return OkHttpUtils.getInstance().post(url, header, params, usePublic, files);
+                    }
+                })
+                .compose(RxFlowableUtil.<Response>applyNetIoSchedulers())//线程切换
+                .map(new Function<Response, T>() {
+                    @Override
+                    public T apply(@NonNull Response response) throws Exception {
+                        if (response.code() == 200) {
+                            String string = response.body().string();
+                            return JSON.parseObject(string, clz);
+                        } else {
+                            throw new RuntimeException("No Content");
+                        }
+                    }
+                })
+                .compose(LLApplication.getApiCache().<T>cacheTransform(cacheKey));
+        if (TextUtils.isEmpty(cacheKey)
+                || !LLApplication.getApiCache().hasCache(cacheKey)) {
+            return compose;
+        } else {
+            return compose.compose(new FlowableTransformer<T, T>() {
+                @Override
+                public Publisher<T> apply(@NonNull Flowable<T> upstream) {
+                    return upstream.onErrorResumeNext(new Function<Throwable, Publisher<? extends T>>() {
+                        @Override
+                        public Publisher<? extends T> apply(@NonNull Throwable throwable) throws Exception {
+                            Log.e(TAG, "rrr", throwable);
+                            return Flowable.empty();
+                        }
+                    });
+                }
+            });
+        }
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.youloft.lilith.common.net;
 
 
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
@@ -9,11 +10,12 @@ import com.alibaba.fastjson.JSON;
 import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.common.utils.DeviceUtil;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
-import java.util.Locale;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -22,6 +24,8 @@ import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -90,15 +94,61 @@ public class OkHttpUtils {
     Interceptor publicInterceptor = new Interceptor() {
         @Override
         public Response intercept(Chain chain) throws IOException {
+
             Request request = chain.request();
-            if (!(request.tag() != null && (request.tag() instanceof Boolean) && !(boolean) request.tag())) {
-                request = addPublicParam(request);
+            String method = request.method();
+            //不需要公共参数
+            if (request.tag() != null && (request.tag() instanceof Boolean) && !(boolean) request.tag()) {
+                return chain.proceed(request);
             }
+
+            //针对post请求
+            if (method.equalsIgnoreCase("post")) {
+                RequestBody body = request.body();
+                if (body instanceof MultipartBody) {
+                    MultipartBody requestBody = createdNewMultipartBody((MultipartBody) body);
+                    request = new Request.Builder().url(request.url()).post(requestBody).build();
+                } else if (body instanceof FormBody) {
+                    FormBody formBody = createdFormBody((FormBody) body);
+                    request = new Request.Builder().url(request.url()).post(formBody).build();
+                }
+            } else if (method.equalsIgnoreCase("get")) {       //针对get请求
+
+                request = addPublicParam(request);
+
+            }
+
             Response response = null;
             response = chain.proceed(request);
             return response;
         }
     };
+
+    private MultipartBody createdNewMultipartBody(MultipartBody body) {
+        MultipartBody.Builder builder = new MultipartBody.Builder();
+        HashMap<String, String> params = obtainPublicParams();
+        if (params != null) {
+            for (Map.Entry<String, String> param : params.entrySet()) {
+                builder.addFormDataPart(param.getKey(), param.getValue());
+            }
+        }
+        builder.addPart(body);
+        return builder.build();
+    }
+
+    private FormBody createdFormBody(FormBody body) {
+        FormBody.Builder builder = new FormBody.Builder();
+        HashMap<String, String> params = obtainPublicParams();
+        if (params != null) {
+            for (Map.Entry<String, String> param : params.entrySet()) {
+                builder.add(param.getKey(), param.getValue());
+            }
+        }
+        for (int i = 0; i < body.size(); i++) {
+            builder.addEncoded(body.encodedName(i), body.encodedValue(i));
+        }
+        return builder.build();
+    }
 
     /**
      * 添加公共参数,返回一个新的请求Request
@@ -255,7 +305,7 @@ public class OkHttpUtils {
         }
         for (Map.Entry<String, String> param : params.entrySet()) {
             try {
-                if (TextUtils.isEmpty(param.getValue()))continue;
+                if (TextUtils.isEmpty(param.getValue())) continue;
                 sb.append(URLEncoder.encode(param.getKey(), "UTF-8"))
                         .append('=')
                         .append(URLEncoder.encode(param.getValue(), "UTF-8"))
@@ -266,6 +316,50 @@ public class OkHttpUtils {
         }
 
         return sb.substring(0, sb.length() - 1);
+    }
+
+    /**
+     * post方法请求
+     *
+     * @param baseUrl
+     * @param params         表单参数
+     * @param usePublicParam 是否需要添加公共参数
+     * @param files          需要上传的文件
+     * @return
+     * @throws IOException
+     */
+    public Response post(String baseUrl, Map<String, String> headers, Map<String, String> params, boolean usePublicParam, File... files) throws IOException {
+
+        RequestBody mBody = null;
+        if (files.length > 0) {
+            MultipartBody.Builder bodyBulider = new MultipartBody.Builder().setType(MultipartBody.FORM);
+
+            for (String key : params.keySet()) {
+                bodyBulider.addFormDataPart(key, params.get(key));
+            }
+            for (File file : files) {
+                RequestBody fileBody = RequestBody.create(MediaType.parse("application/octet-stream"), file);
+                bodyBulider.addFormDataPart("file", file.getName(), fileBody);
+            }
+            mBody = bodyBulider.build();
+        } else {
+            FormBody.Builder builder = new FormBody.Builder();
+            for (String key : params.keySet()) {
+                builder.add(key, params.get(key));
+            }
+            mBody = builder.build();
+        }
+
+        Request.Builder builder = new Request.Builder().url(baseUrl).post(mBody);
+
+        if (headers != null) {
+            for (Map.Entry<String, String> header : headers.entrySet()) {
+                builder.addHeader(header.getKey(), header.getValue());
+            }
+        }
+        builder.tag(usePublicParam);
+        Request request = builder.build();
+        return client.newCall(request).execute();
     }
 
 
