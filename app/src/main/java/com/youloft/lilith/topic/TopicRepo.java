@@ -32,13 +32,23 @@ public class TopicRepo extends AbstractDataRepo {
      * @return
      */
     public static Flowable<ReplyBean> getPointReply(String vid,String uid,String limit,String skip,boolean needCache) {
+        String cacheKey = "point_reply" + vid;
+        long cacheDuration = 2 * 1000;
         HashMap<String, String> param = new HashMap();
         param.clear();
         param.put("vid",vid);
         if (uid != null)  param.put("uid",uid);
         if (limit!=null)param.put("limit",limit);
         if (skip!= null)param.put("skip",skip);
-        return unionFlow(Urls.REPLY_LIST, null, param, true, ReplyBean.class, "point_reply", 2*60*1000);
+        if (needCache) {
+            if (!LLApplication.getApiCache().isExpired(cacheKey,cacheDuration)) {
+                return LLApplication.getApiCache().readCache(cacheKey,ReplyBean.class);
+            } else {
+                return httpFlow(Urls.REPLY_LIST, null, param, true, ReplyBean.class, cacheKey, cacheDuration);
+            }
+        } else {
+            return httpFlow(Urls.REPLY_LIST, null, param, true, ReplyBean.class, null, 0);
+        }
     }
 
     /**

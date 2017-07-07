@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.topic.bean.TopicBean;
@@ -78,6 +79,8 @@ public class UserImageStackViewGroup extends RelativeLayout {
                     .error(R.drawable.topic_user_img_er)
                     .transform(new GlideCircleTransform(getContext()))
                     .load(imageList.get(i).headImg)
+                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                    .skipMemoryCache(false)
                     .into(mUserImageList.get(i));
         }
     }

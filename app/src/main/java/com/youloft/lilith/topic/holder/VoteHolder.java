@@ -36,11 +36,12 @@ public class VoteHolder extends RecyclerView.ViewHolder {
     private ValueAnimator firstAnimation;
     private ValueAnimator secondAnimation;
     private ValueAnimator thirdAnimation;
+    private boolean needVoteAnimation = true;
 
     public VoteHolder(View itemView) {
         super(itemView);
         initView();
-         firstAnimation = new ValueAnimator();
+        firstAnimation = new ValueAnimator();
         firstAnimation.setFloatValues(0.0f, 1.0f);
         firstAnimation.setDuration(4000);
         firstAnimation.setRepeatMode(ValueAnimator.RESTART);
@@ -159,8 +160,9 @@ public class VoteHolder extends RecyclerView.ViewHolder {
                 voteDialog.setTitle(topicInfo.option.get(1).shortTitle,topicInfo.option.get(1).id);
             }
         });
-        if (true) {
+        if (needVoteAnimation) {
             voteAniamtion((float) topicInfo.option.get(0).vote/topicInfo.totalVote);
+            needVoteAnimation = false;
         }
         GlideApp.with(itemView.getContext())
                 .asBitmap()

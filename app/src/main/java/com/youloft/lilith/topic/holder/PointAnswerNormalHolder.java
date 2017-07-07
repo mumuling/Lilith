@@ -59,9 +59,14 @@ public class PointAnswerNormalHolder extends RecyclerView.ViewHolder implements 
         this.mContext = itemView.getContext();
     }
 
-    public void bindView(ReplyBean.DataBean dataBean) {
+    public void bindView(ReplyBean.DataBean dataBean,boolean isFirst) {
         if (dataBean == null)return;
         this.mData = dataBean;
+        if (isFirst) {
+            textCommentHot.setVisibility(View.VISIBLE);
+        } else {
+            textCommentHot.setVisibility(View.GONE);
+        }
         textUserName.setText(dataBean.nickName);
         textAnswerContent.setText(dataBean.contents);
         if (dataBean.sex == 1) {
