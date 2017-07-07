@@ -41,7 +41,7 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private static int ITEM_TYPE_OTHER = 1000;//顶部header
     private static int ITEM_TYPE_VOTE_VIEW = 2000;//投票的view
     private static int ITEM_TYPE_COMMENT = 3000;//评论item
-    private List<PointBean.DataBean> pointBeanList = new ArrayList<>();
+    public List<PointBean.DataBean> pointBeanList = new ArrayList<>();
     private List<TopicBean.DataBean> otherTopicList = new ArrayList<>();
     private TopicDetailBean.DataBean topicInfo = null;
     public TopicDetailAdapter (Context context) {
@@ -80,7 +80,7 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
       if (viewType == ITEM_TYPE_VOTE_VIEW){
             holder = new VoteHolder(mInflater.inflate(R.layout.item_topic_detail_vote,parent,false));
         } else if (viewType == ITEM_TYPE_COMMENT){
-            holder = new PointHolder(mInflater.inflate(R.layout.item_topic_detail_comment,parent,false));
+            holder = new PointHolder(mInflater.inflate(R.layout.item_topic_detail_comment,parent,false),this);
         }else {
           holder = new OtherTopicHolder(mInflater.inflate(R.layout.item_other_topic_layout,parent,false));
 

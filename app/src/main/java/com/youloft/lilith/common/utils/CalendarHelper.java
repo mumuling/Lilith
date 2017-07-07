@@ -54,4 +54,28 @@ public class CalendarHelper {
     public static int getUTCOffset(Calendar calendar) {
         return calendar.get(Calendar.ZONE_OFFSET) + calendar.get(Calendar.DST_OFFSET);
     }
+
+    public static String getInterValTime(long times) {
+        long interval = System.currentTimeMillis();
+        if ((interval-times)/(1000*60*60*24) >= 1) {
+            return (int)((interval-times)/(1000*60*60*24)) + "天前";
+        } else if ((interval-times)/(1000*60*60) >=1) {
+            return (int)((interval-times)/(1000*60*60)) + "小时前";
+        } else {
+            return (int)((interval-times)/(1000*60)) + "分钟前";
+        }
+    }
+
+    public static long getTimeMillisByString(String time) {
+        SimpleDateFormat formatAll = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            Date date = formatAll.parse(time);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            return calendar.getTimeInMillis();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return Calendar.getInstance().getTimeInMillis();
+    }
 }

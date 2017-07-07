@@ -29,18 +29,23 @@ public class LuckData extends Object{
         public int luckLevel;
 
         public String getDayString(){
-            long intervalDays = CalendarHelper.getIntervalDays(new GregorianCalendar(), day);
-            if (intervalDays < 0) {
-                return "昨天";
-            } else if (intervalDays == 0) {
-                return "今天";
-            } else if (intervalDays == 1){
-                return "明天";
-            } else if (intervalDays == 2) {
-                return "后天";
-            } else {
-                return String.valueOf(day.get(Calendar.DAY_OF_MONTH));
-            }
+            return getString(day);
+        }
+
+
+    }
+    public static String getString(GregorianCalendar day){
+        long intervalDays = CalendarHelper.getIntervalDays(new GregorianCalendar(), day);
+        if (intervalDays < 0) {
+            return "昨天";
+        } else if (intervalDays == 0) {
+            return "今天";
+        } else if (intervalDays == 1){
+            return "明天";
+        } else if (intervalDays == 2) {
+            return "后天";
+        } else {
+            return String.valueOf(day.get(Calendar.DAY_OF_MONTH));
         }
     }
 }

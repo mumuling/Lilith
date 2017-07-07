@@ -2,21 +2,21 @@ package com.youloft.lilith.topic.holder;
 
 import android.animation.ValueAnimator;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
+import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.ViewUtil;
-import com.youloft.lilith.topic.bean.TopicBean;
+import com.youloft.lilith.topic.TopicRepo;
 import com.youloft.lilith.topic.bean.TopicDetailBean;
 import com.youloft.lilith.topic.widget.VoteDialog;
 import com.youloft.lilith.topic.widget.VoteView;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  *
@@ -36,11 +36,12 @@ public class VoteHolder extends RecyclerView.ViewHolder {
     private ValueAnimator firstAnimation;
     private ValueAnimator secondAnimation;
     private ValueAnimator thirdAnimation;
+    private boolean needVoteAnimation = true;
 
     public VoteHolder(View itemView) {
         super(itemView);
         initView();
-         firstAnimation = new ValueAnimator();
+        firstAnimation = new ValueAnimator();
         firstAnimation.setFloatValues(0.0f, 1.0f);
         firstAnimation.setDuration(4000);
         firstAnimation.setRepeatMode(ValueAnimator.RESTART);
@@ -126,6 +127,21 @@ public class VoteHolder extends RecyclerView.ViewHolder {
         voteDialog.setListener(new VoteDialog.OnClickConfirmListener() {
             @Override
             public void clickConfirm(String msg,int id) {
+                TopicRepo.postVote(String.valueOf(topicInfo.id),String.valueOf(id),"10000",msg)
+                        .subscribeOn(Schedulers.newThread())
+                        .toObservable()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new RxObserver<String>() {
+                            @Override
+                            public void onDataSuccess(String s) {
+                                String ms =s;
+                            }
+
+                            @Override
+                            protected void onFailed(Throwable e) {
+                                super.onFailed(e);
+                            }
+                        });
                 topicInfo.totalVote++;
                 addOptionVote(id);
                 voteAniamtion((float) topicInfo.option.get(0).vote/topicInfo.totalVote);
@@ -144,7 +160,7 @@ public class VoteHolder extends RecyclerView.ViewHolder {
         }
     }
     public void bindView(final TopicDetailBean.DataBean topicInfo) {
-        if (topicInfo == null)return;
+        if (topicInfo == null || topicInfo.option == null)return;
         this.topicInfo = topicInfo;
         voteView.setInterface(new VoteView.OnItemClickListener() {
             @Override
@@ -159,8 +175,9 @@ public class VoteHolder extends RecyclerView.ViewHolder {
                 voteDialog.setTitle(topicInfo.option.get(1).shortTitle,topicInfo.option.get(1).id);
             }
         });
-        if (true) {
+        if (needVoteAnimation) {
             voteAniamtion((float) topicInfo.option.get(0).vote/topicInfo.totalVote);
+            needVoteAnimation = false;
         }
         GlideApp.with(itemView.getContext())
                 .asBitmap()

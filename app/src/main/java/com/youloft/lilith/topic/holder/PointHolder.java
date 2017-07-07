@@ -1,7 +1,9 @@
 package com.youloft.lilith.topic.holder;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.animation.Animation;
@@ -14,14 +16,20 @@ import android.widget.TextView;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
+import com.youloft.lilith.common.net.AbsResponse;
 import com.youloft.lilith.common.rx.RxObserver;
+import com.youloft.lilith.common.utils.CalendarHelper;
 import com.youloft.lilith.cons.consmanager.ConsManager;
 import com.youloft.lilith.topic.PointDetailActivity;
 import com.youloft.lilith.topic.TopicDetailActivity;
 import com.youloft.lilith.topic.TopicRepo;
+import com.youloft.lilith.topic.adapter.TopicDetailAdapter;
 import com.youloft.lilith.topic.bean.PointBean;
 import com.youloft.lilith.topic.bean.TopicBean;
 import com.youloft.lilith.topic.bean.TopicDetailBean;
+import com.youloft.lilith.topic.db.TopicLikeCache;
+import com.youloft.lilith.topic.db.TopicLikingTable;
+import com.youloft.lilith.topic.widget.Rotate3dAnimation;
 import com.youloft.lilith.ui.GlideCircleTransform;
 
 import java.util.ArrayList;
@@ -80,10 +88,17 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
     ImageView imageLoading;
     private TextView[] replyTextArray = new TextView[3];
     private Animation loadAnimation;
+    private int isZan;
+    private PointBean.DataBean point;
+    private Context mContext;
+    private TopicDetailAdapter adapter;
+    private  int totalPoint;
 
-    public PointHolder(View itemView) {
+    public PointHolder(View itemView, TopicDetailAdapter adapter) {
         super(itemView);
         ButterKnife.bind(this,itemView);
+        this.adapter = adapter;
+        this.mContext = itemView.getContext();
         initView();
     }
 
@@ -92,6 +107,7 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
         replyTextArray[1] = textAnswer2;
         replyTextArray[2] = textAnswer3;
         imageZan.setOnClickListener(this);
+        textZanCount.setOnClickListener(this);
         llLoadMore.setOnClickListener(this);
         loadAnimation = AnimationUtils.loadAnimation(itemView.getContext(),R.anim.rotate_animation);
     }
@@ -100,34 +116,104 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.image_zan:
-                imageZan.setImageResource(R.drawable.topic_like_icon);
+            case R.id.text_zan_count:
+                ((BitmapDrawable) imageZan.getDrawable()).setAntiAlias(true);
+                Rotate3dAnimation m3DAnimation;
+                if (isZan == 1) {
+                    m3DAnimation = new Rotate3dAnimation(0, 180,
+                            imageZan.getWidth() / 2, imageZan.getHeight() / 2);
+                } else {
+                    m3DAnimation = new Rotate3dAnimation(180, 0,
+                            imageZan.getWidth() / 2, imageZan.getHeight() / 2);
+                }
+                m3DAnimation.setDuration(300);
+                imageZan.startAnimation(m3DAnimation);
+                m3DAnimation.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+
+                    }
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        TopicLikingTable topicLikingTable;
+                        if (isZan == 1) {
+                            imageZan.setImageResource(R.drawable.topic_like_icon);
+                            point.zan--;
+                            textZanCount.setText(String.valueOf(point.zan));
+                            topicLikingTable = new TopicLikingTable(point.id,0, PointDetailActivity.TYPE_POINT);
+                            isZan =0;
+                        } else {
+                            imageZan.setImageResource(R.drawable.topic_liking_icon);
+                            point.zan++;
+                            textZanCount.setText(String.valueOf(point.zan));
+                            topicLikingTable = new TopicLikingTable(point.id,1,PointDetailActivity.TYPE_POINT);
+                            isZan = 1;
+                        }
+                        TopicLikeCache.getIns(itemView.getContext()).insertData(topicLikingTable);
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+                clickLike();
                 break;
             case R.id.ll_load_more:
                 imageLoading.setVisibility(View.VISIBLE);
                 textLoadMore.setVisibility(View.GONE);
                 imageLoading.startAnimation(loadAnimation);
-                getMorePiont();
+                loadMorePiont();
                 break;
         }
     }
-    public void getMorePiont() {
-        if (itemView.getContext() instanceof TopicDetailActivity) {
-           if (((TopicDetailActivity) itemView.getContext()).loadMorePiont()){
-               textLoadMore.setVisibility(View.VISIBLE);
-               textLoadMore.setText("展开更多");
-               imageLoading.setVisibility(View.GONE);
-               imageLoading.clearAnimation();
-           } else {
-               textLoadMore.setVisibility(View.VISIBLE);
-               textLoadMore.setText("没有数据了..");
-               imageLoading.setVisibility(View.GONE);
-               imageLoading.clearAnimation();
-           }
-        }
+
+    /**
+     *   加载更多观点
+     */
+
+    public void loadMorePiont() {
+
+        TopicRepo.getPointList(String.valueOf(point.id),null,"1","",false)
+                .subscribeOn(Schedulers.newThread())
+                .toObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new RxObserver<PointBean>() {
+                    @Override
+                    public void onDataSuccess(PointBean pointBean) {
+                        if (pointBean.data == null || pointBean.data.size() == 0 ) {
+                            textLoadMore.setVisibility(View.VISIBLE);
+                            textLoadMore.setText("没有数据了..");
+                            imageLoading.setVisibility(View.GONE);
+                            imageLoading.clearAnimation();
+                            return;
+                        }
+                        adapter.setPointBeanList(pointBean.data);
+                        totalPoint = adapter.pointBeanList.size();
+                        textLoadMore.setVisibility(View.VISIBLE);
+                        textLoadMore.setText("展开更多");
+                        imageLoading.setVisibility(View.GONE);
+                        imageLoading.clearAnimation();
+                    }
+
+                    @Override
+                    protected void onFailed(Throwable e) {
+
+                        super.onFailed(e);
+                        textLoadMore.setVisibility(View.VISIBLE);
+                        textLoadMore.setText("没有数据了..");
+                        imageLoading.setVisibility(View.GONE);
+                        imageLoading.clearAnimation();
+
+                    }
+                });
+
+
     }
 
     public void bindNormal(final PointBean.DataBean point, final TopicDetailBean.DataBean option, boolean isLast) {
         if (point == null || option == null)return;
+        this.point = point;
         ArrayList<TopicDetailBean.DataBean.OptionBean> topic = option.option;
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,7 +234,9 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
         //用户名字
         textUserName.setText(point.nickName);
         //点赞数
-        textZanCount.setText(String.valueOf(point.zan));
+       bindZan(point);
+        bindTime(point);
+
         //性别
         if (point.sex == 1) {
             imageUserSex.setImageResource(R.drawable.topic_female_icon);
@@ -200,5 +288,57 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
 
     }
 
+    private void bindTime(PointBean.DataBean point) {
+        long time = CalendarHelper.getTimeMillisByString(point.buildDate);
+        textCommentTime.setText(CalendarHelper.getInterValTime(time));
+    }
+
+    private void bindZan(PointBean.DataBean dataBean) {
+        int id = dataBean.id;
+        TopicLikingTable table = TopicLikeCache.getIns(mContext).getInforByCode(id,PointDetailActivity.TYPE_POINT);
+        if (table == null) {
+            isZan = dataBean.isclick;
+        } else {
+            isZan = table.mIsLike;
+            if (table.mIsLike == dataBean.isclick) {
+                TopicLikeCache.getIns(mContext).deleteData(id,PointDetailActivity.TYPE_POINT);
+            } else{
+                dataBean.isclick = table.mIsLike;
+                clickLike();
+                if (table.mIsLike == 1) {
+                  dataBean.zan++;
+              }
+            }
+        }
+        point.zan = dataBean.zan;
+        if (isZan == 1) {
+            imageZan.setImageResource(R.drawable.topic_liking_icon);
+        } else {
+            imageZan.setImageResource(R.drawable.topic_like_icon);
+        }
+        textZanCount.setText(String.valueOf(dataBean.zan));
+    }
+
+    public void clickLike() {
+        TopicRepo.likePoint(String.valueOf(point.id),"10000")
+                .subscribeOn(Schedulers.newThread())
+                .toObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new RxObserver<AbsResponse>() {
+                    @Override
+                    public void onDataSuccess(AbsResponse s) {
+                        if ((Boolean) s.data) {
+
+                        } else {
+
+                        }
+                    }
+
+                    @Override
+                    protected void onFailed(Throwable e) {
+                        super.onFailed(e);
+                    }
+                });
+    }
 
 }

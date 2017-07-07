@@ -27,6 +27,8 @@ import com.youloft.lilith.cons.card.ConsYSHolder;
 import com.youloft.lilith.cons.consmanager.ConsDrawableManager;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 /**
  * Created by zchao on 2017/6/30.
@@ -80,6 +82,23 @@ public class LuckView extends View {
         super(context, attrs, defStyleAttr);
         init();
         initTitle();
+        initDateStr();
+    }
+
+    /**
+     * 没数据日期显示。设计需求大爷
+     */
+    private void initDateStr() {
+        mDateStr.clear();
+        GregorianCalendar gc = new GregorianCalendar();
+        gc.add(Calendar.DAY_OF_YEAR, -1);
+        for (int i = 0; i < 9; i++) {
+            String string = LuckData.getString(gc);
+            if (!TextUtils.isEmpty(string)) {
+                mDateStr.add(string);
+            }
+            gc.add(Calendar.DAY_OF_YEAR, 1);
+        }
     }
 
     private void init() {
@@ -119,7 +138,7 @@ public class LuckView extends View {
         readyData();
     }
 
-    public void setType(int type){
+    public void setType(int type) {
         mType = type;
         initTitle();
         postInvalidate();
@@ -193,16 +212,18 @@ public class LuckView extends View {
         mCirclePath.rewind();
         mPositions.clear();
         for (int i = 0; i < mPathY.length; i++) {
-            mPositions.add(new Point(i * mItemWidth, mPathY[i]));
-            mCirclePath.addCircle(i * mItemWidth, mPathY[i], mCircleRadius, Path.Direction.CCW);
+            mPositions.add(new Point(i * mItemWidth, mData == null ? (int)(mPathRectHeight / 2) : mPathY[i]));
+            mCirclePath.addCircle(i * mItemWidth, mData == null ? mPathRectHeight / 2 : mPathY[i], mCircleRadius, Path.Direction.CCW);
         }
-        mLinePath = ViewUtil.createBezierPath(mLinePath, mPositions, 0.2f);
-        mShaderPath.addPath(mLinePath);
+        if (mData != null) {
+            mLinePath = ViewUtil.createBezierPath(mLinePath, mPositions, 0.2f);
 
-        mShaderPath.lineTo(mPathY.length * mItemWidth, mPathRectHeight);
-        mShaderPath.lineTo(0, mPathRectHeight);
-        mShaderPath.lineTo(mPositions.get(0).x, mPositions.get(0).y);
-        mShaderPath.close();
+            mShaderPath.addPath(mLinePath);
+            mShaderPath.lineTo(mPathY.length * mItemWidth, mPathRectHeight);
+            mShaderPath.lineTo(0, mPathRectHeight);
+            mShaderPath.lineTo(mPositions.get(0).x, mPositions.get(0).y);
+            mShaderPath.close();
+        }
 
         //处理小icon
         mCurPosition = SafeUtil.getSafeData(mPositions, 1);

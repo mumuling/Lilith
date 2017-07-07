@@ -42,6 +42,7 @@ public class PointBean extends AbsResponse<List<PointBean.DataBean>> implements 
         public int sex;
         public int signs;
         public String headImg;
+        public String buildDate;
         public int isclick;
         public String nickName;
         public List<ReplyListBean> replyList;
