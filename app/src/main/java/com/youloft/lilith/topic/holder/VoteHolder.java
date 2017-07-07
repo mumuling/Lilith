@@ -2,7 +2,6 @@ package com.youloft.lilith.topic.holder;
 
 import android.animation.ValueAnimator;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -10,13 +9,9 @@ import android.widget.TextView;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.utils.ViewUtil;
-import com.youloft.lilith.topic.bean.TopicBean;
 import com.youloft.lilith.topic.bean.TopicDetailBean;
 import com.youloft.lilith.topic.widget.VoteDialog;
 import com.youloft.lilith.topic.widget.VoteView;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  *

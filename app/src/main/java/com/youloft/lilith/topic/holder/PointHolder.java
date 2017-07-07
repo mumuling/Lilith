@@ -1,7 +1,5 @@
 package com.youloft.lilith.topic.holder;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.animation.Animation;
@@ -14,23 +12,16 @@ import android.widget.TextView;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
-import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.cons.consmanager.ConsManager;
-import com.youloft.lilith.topic.PointDetailActivity;
 import com.youloft.lilith.topic.TopicDetailActivity;
-import com.youloft.lilith.topic.TopicRepo;
 import com.youloft.lilith.topic.bean.PointBean;
-import com.youloft.lilith.topic.bean.TopicBean;
 import com.youloft.lilith.topic.bean.TopicDetailBean;
 import com.youloft.lilith.ui.GlideCircleTransform;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 /**     话题观点的holder
  *version
