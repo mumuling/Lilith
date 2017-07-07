@@ -3,8 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
     android:clipChildren="false"
     android:clipToPadding="false"
     android:paddingTop="30dp">
@@ -38,6 +36,8 @@
         android:id="@+id/cons_hot_topic_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:clipToPadding="false"
         android:layout_marginBottom="20dp"
         android:overScrollMode="never"
         android:layout_marginTop="14dp" />

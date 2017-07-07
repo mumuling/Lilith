@@ -46,7 +46,7 @@ public class ConsRepo extends AbstractDataRepo {
             param.put("curlongi", location[0]);
             param.put("curlati", location[1]);
         }
-        return httpFlow(Urls.CONS_PREDICTS, null, param, true, ConsPredictsBean.class, "cons_predicts", 1);
+        return unionFlow(Urls.CONS_PREDICTS, null, param, true, ConsPredictsBean.class, "cons_predicts", 1);
     }
 
 

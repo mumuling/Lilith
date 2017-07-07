@@ -2,6 +2,7 @@ package com.youloft.lilith.cons.card;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -54,6 +55,7 @@ public class ConsMyInfoHolder extends ConsBaseHolder {
     private final GregorianCalendar pCalendar;
 
     private int a = 0;
+
     @OnClick(R.id.cons_my_info_cons_img)
     public void change() {
         if (detailInfo != null) {
@@ -70,6 +72,12 @@ public class ConsMyInfoHolder extends ConsBaseHolder {
     public ConsMyInfoHolder(Context context, ViewGroup parent) {
         super(context, parent, R.layout.cons_my_info);
         ButterKnife.bind(this, itemView);
+        Typeface num = Typeface.createFromAsset(mContext.getAssets(), "fonts/lilisi_number.ttf");
+        Typeface en = Typeface.createFromAsset(mContext.getAssets(), "fonts/lilisi_english.ttf");
+        mConsMyInfoDate.setTypeface(num);
+        mConsMyInfoWeek.setTypeface(en);
+        mConsMyInfoEnWord.setTypeface(en);
+
         pCalendar = new GregorianCalendar();
     }
 
@@ -77,6 +85,9 @@ public class ConsMyInfoHolder extends ConsBaseHolder {
     public void bindData(ConsPredictsBean data) {
         super.bindData(data);
         if (data == null || data.data == null) {
+            return;
+        }
+        if (data.data == detailInfo) {
             return;
         }
         detailInfo = data.data;
@@ -105,7 +116,6 @@ public class ConsMyInfoHolder extends ConsBaseHolder {
 
         mConsMyInfoEnWord.setText(detailInfo.eMsg);
         mConsMyInfoCnWord.setText(detailInfo.msg);
-
         GlideApp.with(mContext).load(detailInfo.bgImg).into(mConsMyInfoBg);
         mConsMyInfoContentRoot.post(new Runnable() {
             @Override
@@ -117,4 +127,5 @@ public class ConsMyInfoHolder extends ConsBaseHolder {
             }
         });
     }
+
 }

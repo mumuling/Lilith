@@ -2,8 +2,6 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
     android:orientation="vertical">
     <com.youloft.lilith.cons.view.ConsCalendar
         android:id="@+id/cons_week_view"

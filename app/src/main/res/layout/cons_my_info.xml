@@ -3,19 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cons_my_info_root"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp"
-    android:background="@drawable/cons_top_bg">
+    android:background="@drawable/cons_detail_content_bg_top"
+    android:layout_height="wrap_content">
 
-    <com.youloft.lilith.common.widgets.view.RoundImageView
+    <ImageView
         android:id="@+id/cons_my_info_bg"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
-        android:scaleType="centerCrop"
-        app:radius_left_top="5dp"
-        app:radius_right_top="5dp" />
+        android:scaleType="centerCrop" />
 
     <LinearLayout
         android:id="@+id/cons_my_info_content_root"
