@@ -1,4 +1,4 @@
-package com.youloft.lilith.login;
+package com.youloft.lilith.login.activity;
 
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -179,7 +179,7 @@ public class ForgetPasswordActivity extends BaseActivity{
                     }
                 }
                 if (s.toString().length() == 6) {//验证码6位的时候
-                    checkSmsCode();
+//                    checkSmsCode();
                 } else { //验证码不到6位的时候  一律隐藏验证码后面的小图标
                     ivCodeRight.setVisibility(View.INVISIBLE);
                     ivCodeError.setVisibility(View.INVISIBLE);
@@ -206,7 +206,7 @@ public class ForgetPasswordActivity extends BaseActivity{
             ivCodeError.setVisibility(View.VISIBLE);
             return;
         }
-        if (smsCode.equals(mSmsCodeBean.data.code + "")) {//验证码正确
+        if (mSmsCodeBean.data.result) {//验证码正确
             ivCodeRight.setVisibility(View.VISIBLE);
             ivCodeError.setVisibility(View.INVISIBLE);
             isCodeRight = true;

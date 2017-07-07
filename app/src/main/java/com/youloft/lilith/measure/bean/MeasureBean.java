@@ -38,6 +38,8 @@ public class MeasureBean extends AbsResponse<List<MeasureBean.DataBean>>{
             public String title;
             @JSONField(name = "image")
             public String image;
+            @JSONField(name = "infos")
+            public String infos;
             @JSONField(name = "url")
             public String url;
             @JSONField(name = "sort")

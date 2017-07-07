@@ -41,6 +41,8 @@ public class ImmediatelyMeasureHolder extends BaseMeasureHolder {
         this.mMeasureData = mMeasureData;
         mIndex = position - 3;
         GlideApp.with(mContext).load(mMeasureData.ads.get(mIndex).image).into(ivIcon);
+        tvTitle.setText(mMeasureData.ads.get(mIndex).title);
+        tvDesc.setText(mMeasureData.ads.get(mIndex).infos);
     }
 
     @OnClick(R.id.bt_measure)

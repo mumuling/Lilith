@@ -17,9 +17,10 @@ import io.reactivex.Flowable;
 public class SmsCodeRepo extends AbstractDataRepo{
     static HashMap<String,String> params = new HashMap();
 
-    public static Flowable<SmsCodeBean> getSmsCode(String phone) {
+    public static Flowable<SmsCodeBean> getSmsCode(String phone,String smsType,String smsCode) {
         params.put("Phone",phone);
-        params.put("SmsType","Login");
-        return unionFlow(Urls.VERIFICATIONCODE_URL, null, params, true, SmsCodeBean.class, "sms_code", 1);
+        params.put("SmsType",smsType);
+        params.put("code",smsCode);
+        return unionFlow(Urls.VERIFICATIONCODE_URL, null, params, true, SmsCodeBean.class, "sms_code", 0);
     }
 }

@@ -30,6 +30,12 @@ public class Urls {
     public static final String VERIFICATIONCODE_URL = "http://lilith.51wnl.com/GetSmsCode";
     //发送短信
     public static final String SEND_SMS_URL = "http://lilith.51wnl.com/SendsSms";
-    //登录
-    public static final String LOGIN_URL = "http://lilith.51wnl.com/PhoneLogin";
+    //快捷登录
+    public static final String QUICKLY_LOGIN_URL = "http://lilith.51wnl.com/PhoneLogin";
+    //验证手机号码
+    public static final String CHECK_PHONE_NUMBER = "http://lilith.51wnl.com/CheckPhone";
+    //注册
+    public static final String REGISTER_URL = "http://lilith.51wnl.com/PhoneRegist";
+    //手机号码+密码登录
+    public static final String LOGIN_URL = "http://lilith.51wnl.com/PwdLogin";
 }

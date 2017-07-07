@@ -1,4 +1,4 @@
-package com.youloft.lilith.login;
+package com.youloft.lilith.login.activity;
 
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -10,7 +10,6 @@ import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -18,22 +17,36 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.fastjson.JSON;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
+import com.youloft.lilith.common.rx.RxObserver;
+import com.youloft.lilith.login.bean.SendSmsBean;
 import com.youloft.lilith.login.bean.SmsCodeBean;
+import com.youloft.lilith.login.bean.UserBean;
+import com.youloft.lilith.login.event.LoginEvent;
+import com.youloft.lilith.login.repo.SendSmsRepo;
+import com.youloft.lilith.login.repo.SmsCodeRepo;
+import com.youloft.lilith.login.repo.UserRepo;
+import com.youloft.lilith.setting.AppSetting;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
- * 注册界面
+ * 快捷登录
  * <p>
- * Created by GYH on 2017/7/6.
+ * <p>
+ * Created by GYH on 2017/6/29.
  */
-@Route(path = "/test/RegisterActivity")
-public class RegisterActivity extends BaseActivity {
+@Route(path = "/test/UserFunctionActivity")
+public class UserFunctionActivity extends BaseActivity {
 
 
     @BindView(R.id.vv_background)
@@ -52,10 +65,6 @@ public class RegisterActivity extends BaseActivity {
     LinearLayout llCodeContainer;  //验证码容器
     @BindView(R.id.tv_get_code)
     TextView tvGetCode;   //获取验证码
-    @BindView(R.id.tv_title)
-    TextView tvTitle; //大标题
-    @BindView(R.id.btn_login)
-    Button btnLogin;  //登录或者设置密码的大按钮
     @BindView(R.id.iv_code_right)
     ImageView ivCodeRight; //验证码正确
     @BindView(R.id.iv_code_error)
@@ -69,13 +78,22 @@ public class RegisterActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_user_function);
         ButterKnife.bind(this);
+
+        //根据不同的界面做不同的文字设置
+        init();
         phoneNumberSetting();
         verificationCodeSetting();
 
     }
 
+    /**
+     * 根据不同的界面做不同的文字设置
+     */
+    private void init() {
+
+    }
 
     /**
      * 号码输入框的设定
@@ -117,6 +135,7 @@ public class RegisterActivity extends BaseActivity {
             @Override
             public void afterTextChanged(Editable s) {
 
+
                 //变化之后如果有字符串 就显示叉叉, 如果没有就隐藏叉叉
                 if (etPhoneNumber.getText().toString().length() != 0) {
                     ivCleanNumber.setVisibility(View.VISIBLE);
@@ -134,6 +153,8 @@ public class RegisterActivity extends BaseActivity {
      * 对电话号码做校验
      */
     private void checkNumber() {
+        String number = etPhoneNumber.getText().toString().replaceAll("-", "");
+        // TODO: 2017/7/6  这里需要对手机号码正则校验
 
 
     }
@@ -181,7 +202,7 @@ public class RegisterActivity extends BaseActivity {
                     }
                 }
                 if (s.toString().length() == 6) {//验证码6位的时候
-                    checkSmsCode();
+                    getSmsCode();
                 } else { //验证码不到6位的时候  一律隐藏验证码后面的小图标
                     ivCodeRight.setVisibility(View.INVISIBLE);
                     ivCodeError.setVisibility(View.INVISIBLE);
@@ -208,7 +229,7 @@ public class RegisterActivity extends BaseActivity {
             ivCodeError.setVisibility(View.VISIBLE);
             return;
         }
-        if (smsCode.equals(mSmsCodeBean.data.code + "")) {//验证码正确
+        if (mSmsCodeBean.data.result) {//验证码正确
             ivCodeRight.setVisibility(View.VISIBLE);
             ivCodeError.setVisibility(View.INVISIBLE);
             isCodeRight = true;
@@ -253,11 +274,44 @@ public class RegisterActivity extends BaseActivity {
         if (!getResources().getString(R.string.get_validation_code).equals(disText)) {
             return;
         }
+        String phoneNumber = etPhoneNumber.getText().toString().replaceAll("-", "");
+        //发送短信
+        SendSmsRepo.sendSms(phoneNumber,"Login")
+                .compose(this.<SendSmsBean>bindToLifecycle())
+                .subscribeOn(Schedulers.newThread())
+                .toObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new RxObserver<SendSmsBean>() {
+                    @Override
+                    public void onDataSuccess(SendSmsBean sendSmsBean) {
+                        //确认短信发送成功了  才去获取验证码
+
+                    }
+                });
+
 
         handler.postDelayed(runnable, 0);
     }
 
-
+    /**
+     * 获取验证码是否正确的请求
+     */
+    private void getSmsCode() {
+        String smsCode = etVerificationCode.getText().toString();
+        SmsCodeRepo.getSmsCode(etPhoneNumber.getText().toString().replaceAll("-", ""),"Login",smsCode)
+                .compose(this.<SmsCodeBean>bindToLifecycle())
+                .subscribeOn(Schedulers.newThread())
+                .toObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new RxObserver<SmsCodeBean>() {
+                    @Override
+                    public void onDataSuccess(SmsCodeBean smsCodeBean) {
+                        mSmsCodeBean = smsCodeBean;
+                        //这里拿回了验证码的相关信息, 在验证码输入框的监听里面验证用户的验证码是否正确
+                        checkSmsCode();
+                    }
+                });
+    }
 
     //下面的handler是玩倒计时的
     private int mTime = 60;
@@ -285,10 +339,37 @@ public class RegisterActivity extends BaseActivity {
         String phoneNumber = etPhoneNumber.getText().toString().replaceAll("-", "");
         String smsCode = etVerificationCode.getText().toString();
         // TODO: 2017/7/6  这里需要对两个数据进行非空校验
+        if(isCodeRight){  //这里的变量是验证了验证码之后  正确的时候才为true
+            quicklyLogin(phoneNumber, smsCode);
+        }
 
     }
 
+    /**
+     * 发起登录请求
+     * @param phoneNumber  电话号码
+     * @param smsCode      验证码
+     */
+    private void quicklyLogin(String phoneNumber, String smsCode) {
+        UserRepo.loginForUserInfo(phoneNumber, smsCode)
+                .compose(this.<UserBean>bindToLifecycle())
+                .subscribeOn(Schedulers.newThread())
+                .toObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new RxObserver<UserBean>() {
+                    @Override
+                    public void onDataSuccess(UserBean userBean) {
 
+                        boolean success = userBean.isSuccess();
+                        if (success) {
+                            //这里需要将用户信息存起来
+                            String userInfoJson = JSON.toJSONString(userBean);
+                            AppSetting.saveUserInfo(userInfoJson);
+                            EventBus.getDefault().post(new LoginEvent(userBean));
+                        }
+                    }
+                });
+    }
 
     //离开时移除活动中的handler
     @Override
