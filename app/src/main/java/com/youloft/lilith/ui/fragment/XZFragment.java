@@ -80,10 +80,10 @@ public class XZFragment extends BaseFragment {
         viewById.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bitmap bitmap = MainActivity.shotRecyclerView(mConsWeek);
-                if (bitmap != null && !bitmap.isRecycled()) {
-                    viewById1.setImageBitmap(bitmap);
-                }
+//                Bitmap bitmap = MainActivity.shotRecyclerView(mConsWeek);
+//                if (bitmap != null && !bitmap.isRecycled()) {
+//                    viewById1.setImageBitmap(bitmap);
+//                }
             }
         });
     }

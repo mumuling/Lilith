@@ -102,9 +102,11 @@ public class MainActivity extends BaseActivity {
             for (int i = 1; i < size; i++) {
 
                 RecyclerView.ViewHolder holder = recycledViewPool.getRecycledView(adapter.getItemViewType(i));
-                if(i==1) {
+                if(holder != null && i==1) {
+
+                } else if (holder == null && i == 1) {
                     holder = view.getChildViewHolder(view.getChildAt(1));
-                }else {
+                } else {
                     holder = adapter.createViewHolder(view, adapter.getItemViewType(i));
                     adapter.onBindViewHolder(holder, i);
                     holder.itemView.measure(

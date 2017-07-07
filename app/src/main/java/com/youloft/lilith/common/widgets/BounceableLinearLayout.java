@@ -49,6 +49,7 @@ public class BounceableLinearLayout extends LinearLayout {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
+        mGestureDetector.onTouchEvent(event);
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 touchDownY = event.getY();
@@ -58,6 +59,7 @@ public class BounceableLinearLayout extends LinearLayout {
                 if (Math.abs(touchDownY - event.getY()) >= ViewConfiguration.get(
                         getContext()).getScaledTouchSlop()) {
                     mScrolling = true;
+                    getParent().requestDisallowInterceptTouchEvent(true);
                 } else {
                     mScrolling = false;
                 }

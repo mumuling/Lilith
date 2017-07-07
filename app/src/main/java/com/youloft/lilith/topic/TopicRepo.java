@@ -3,6 +3,7 @@ package com.youloft.lilith.topic;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.youloft.lilith.LLApplication;
 import com.youloft.lilith.common.AbstractDataRepo;
+import com.youloft.lilith.common.net.AbsResponse;
 import com.youloft.lilith.common.net.Urls;
 import com.youloft.lilith.topic.bean.PointBean;
 import com.youloft.lilith.topic.bean.ReplyBean;
@@ -120,6 +121,38 @@ public class TopicRepo extends AbstractDataRepo {
         } else {
             return httpFlow(Urls.VOTE_LIST, null, param, true, PointBean.class, null, 0);
         }
+    }
+
+    public static Flowable<String> postVote(String tid,String oid,String uid, String viewpoint) {
+        HashMap<String, String> param = new HashMap();
+        param.clear();
+        param.put("tid",tid);
+        param.put("uid",uid);
+        param.put("oid",oid);
+        param.put("Viewpoint",viewpoint);
+        return post(Urls.POST_VOTE,null,param,true,String.class,"awoiegewg",0);
+    }
+
+    /**     观点点赞
+     *
+     * @param vid  观点编号
+     * @param uid   点赞人
+     * @return
+     */
+    public static Flowable<AbsResponse> likePoint(String vid, String uid) {
+        HashMap<String, String> param = new HashMap();
+        param.clear();
+        param.put("vid",vid);
+        param.put("uid",uid);
+        return httpFlow(Urls.LIKE_POINT,null,param,true,AbsResponse.class,null,0);
+    }
+
+    public static Flowable<AbsResponse> likeReply(String rid,String uid) {
+        HashMap<String, String> param = new HashMap();
+        param.clear();
+        param.put("rid",rid);
+        param.put("uid",uid);
+        return httpFlow(Urls.LIKE_REPLY,null,param,true,AbsResponse.class,null,0);
     }
 
 }

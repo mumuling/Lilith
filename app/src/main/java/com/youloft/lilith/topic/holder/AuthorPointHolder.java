@@ -11,8 +11,11 @@ import android.widget.TextView;
 
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
+import com.youloft.lilith.common.net.AbsResponse;
+import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.cons.consmanager.ConsManager;
 import com.youloft.lilith.topic.PointDetailActivity;
+import com.youloft.lilith.topic.TopicRepo;
 import com.youloft.lilith.topic.bean.PointBean;
 import com.youloft.lilith.topic.bean.TopicDetailBean;
 import com.youloft.lilith.topic.db.TopicLikeCache;
@@ -24,6 +27,8 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * 作者观点的holder
@@ -61,6 +66,7 @@ public class AuthorPointHolder extends RecyclerView.ViewHolder implements View.O
     private Context mContext;
     private int zanCount;
     private int anthorId;
+    private PointBean.DataBean point;
 
     public AuthorPointHolder(View itemView) {
         super(itemView);
@@ -75,6 +81,7 @@ public class AuthorPointHolder extends RecyclerView.ViewHolder implements View.O
 
     public void bindView(PointBean.DataBean point, ArrayList<TopicDetailBean.DataBean.OptionBean> topic) {
         if (point == null || topic == null )return;
+        this.point = point;
         anthorId = point.id;
         //头像
         GlideApp.with(itemView)
@@ -119,8 +126,11 @@ public class AuthorPointHolder extends RecyclerView.ViewHolder implements View.O
             isZan = table.mIsLike;
             if (table.mIsLike == dataBean.isclick) {
                 TopicLikeCache.getIns(mContext).deleteData(id,PointDetailActivity.TYPE_POINT);
-            } else if (table.mIsLike == 1 && dataBean.zan == 0) {
-                dataBean.zan++;
+            } else {
+                clickLike();
+                if (table.mIsLike == 1) {
+                    dataBean.zan++;
+                }
             }
         }
         zanCount = dataBean.zan;
@@ -177,7 +187,31 @@ public class AuthorPointHolder extends RecyclerView.ViewHolder implements View.O
 
                     }
                 });
+                clickLike();
                 break;
         }
     }
+
+    public void clickLike() {
+        TopicRepo.likePoint(String.valueOf(point.id),"10000")
+                .subscribeOn(Schedulers.newThread())
+                .toObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new RxObserver<AbsResponse>() {
+                    @Override
+                    public void onDataSuccess(AbsResponse s) {
+                        if ((Boolean) s.data) {
+
+                        } else {
+
+                        }
+                    }
+
+                    @Override
+                    protected void onFailed(Throwable e) {
+                        super.onFailed(e);
+                    }
+                });
+    }
+
 }
