@@ -111,7 +111,7 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".register.activity.SetPasswordActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".share.CustomShareActivity"
+        <activity android:name=".share.ShareActivity"
             android:theme="@style/TranslucentThem"
             android:screenOrientation="portrait"/>
         <activity android:name=".setting.EditInformationActivity"

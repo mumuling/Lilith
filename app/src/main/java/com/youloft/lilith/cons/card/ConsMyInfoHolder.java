@@ -15,7 +15,10 @@ import com.youloft.lilith.common.utils.CalendarHelper;
 import com.youloft.lilith.common.utils.SafeUtil;
 import com.youloft.lilith.cons.bean.ConsPredictsBean;
 import com.youloft.lilith.cons.consmanager.ConsManager;
+import com.youloft.lilith.cons.consmanager.ShareConsEvent;
 import com.youloft.lilith.cons.view.ConstellationViewFactory;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.GregorianCalendar;
 
@@ -54,16 +57,13 @@ public class ConsMyInfoHolder extends ConsBaseHolder {
     ImageView mConsMyInfoShareIcon;
     private final GregorianCalendar pCalendar;
 
-    private int a = 0;
 
-    @OnClick(R.id.cons_my_info_cons_img)
-    public void change() {
-        if (detailInfo != null) {
-            a++;
-            a %= 12;
-            detailInfo.signs = a + 1;
-            bind();
-        }
+    /**
+     * 分享运势，订阅在XZFragment中
+     */
+    @OnClick(R.id.cons_my_info_share_icon)
+    public void shareCons() {
+        EventBus.getDefault().post(new ShareConsEvent("1"));
     }
 
     String formatDate = "dd.MM.yyyy";
@@ -85,9 +85,6 @@ public class ConsMyInfoHolder extends ConsBaseHolder {
     public void bindData(ConsPredictsBean data) {
         super.bindData(data);
         if (data == null || data.data == null) {
-            return;
-        }
-        if (data.data == detailInfo) {
             return;
         }
         detailInfo = data.data;

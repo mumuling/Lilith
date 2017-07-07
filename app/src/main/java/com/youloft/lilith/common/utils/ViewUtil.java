@@ -4,7 +4,9 @@ package com.youloft.lilith.common.utils;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
@@ -12,9 +14,13 @@ import android.renderscript.Allocation;
 import android.renderscript.Element;
 import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
+import android.support.v4.util.LruCache;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerViewEx;
 import android.text.TextUtils;
+import android.view.View;
 
-import com.youloft.lilith.LLApplication;
+import com.youloft.lilith.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -214,5 +220,84 @@ public class ViewUtil {
                     (cur.y - curDy), cur.x, cur.y);
         }
         return path;
+    }
+
+    /**
+     * recyclerview截图
+     * @param view
+     * @return
+     */
+    public static Bitmap shotRecyclerView(RecyclerViewEx view) {
+        RecyclerView.Adapter adapter = view.getAdapter();
+        Bitmap bigBitmap = null;
+        if (adapter != null) {
+            int size = adapter.getItemCount() - 3;
+            int height = 0;
+            Paint paint = new Paint();
+            paint.setTextSize(ViewUtil.dp2px(10));
+            paint.setColor(Color.WHITE);
+            int iHeight = 0;
+            final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+            final int cacheSize = maxMemory / 8;
+            LruCache<String, Bitmap> bitmapCache = new LruCache<>(cacheSize);
+            for (int i = 1; i < size; i++) {
+                View itemView = null;
+                RecyclerView.ViewHolder holder = view.findViewHolderForAdapterPosition(i);
+                if(holder!=null){
+                    itemView = holder.itemView;
+                }else if(i==1){
+                    holder = view.getRecycledViewPool().getRecycledView(view.getAdapter().getItemViewType(i));
+                    if(holder!=null){
+                        itemView = holder.itemView;
+                    }
+                }
+                if(itemView==null){
+                    itemView = view.getCachedViewForPosition(i);
+                }
+                if(itemView == null){
+                   break;
+                }
+
+                if(itemView.getWidth()==0||itemView.getHeight()==0){
+                    itemView.measure(
+                            View.MeasureSpec.makeMeasureSpec(view.getWidth() - view.getPaddingLeft() - view.getPaddingRight(), View.MeasureSpec.EXACTLY),
+                            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+                    itemView.layout(0, 0, itemView.getMeasuredWidth(),
+                            itemView.getMeasuredHeight());
+                }
+
+                itemView.setDrawingCacheEnabled(true);
+                itemView.buildDrawingCache();
+                Bitmap drawingCache = itemView.getDrawingCache();
+                if (drawingCache != null) {
+                    bitmapCache.put(String.valueOf(i), drawingCache);
+                }
+                height += itemView.getMeasuredHeight();
+            }
+
+            height += ViewUtil.dp2px(122);
+
+            bigBitmap = Bitmap.createBitmap(view.getMeasuredWidth(), height, Bitmap.Config.ARGB_8888);
+            Canvas bigCanvas = new Canvas(bigBitmap);
+
+            bigCanvas.drawColor(view.getResources().getColor(R.color.tab_share_color));
+
+            for (int i = 0; i < size; i++) {
+                Bitmap bitmap = bitmapCache.get(String.valueOf(i));
+                if (bitmap == null || bitmap.isRecycled()) {
+                    continue;
+                }
+                bigCanvas.drawBitmap(bitmap, 0f, iHeight, paint);
+                iHeight += bitmap.getHeight();
+//                bitmap.recycle();
+            }
+            //二维码
+            Bitmap bitmap = BitmapFactory.decodeResource(view.getResources(), R.drawable.login_phone_icon);
+            if (bitmap != null && !bitmap.isRecycled()) {
+                bigCanvas.drawBitmap(bitmap, (view.getWidth() - bitmap.getWidth())/2, iHeight + ViewUtil.dp2px(16), paint);
+            }
+            bigCanvas.drawText("定制我的运势", (view.getWidth() - paint.measureText("定制我的运势"))/2, height - ViewUtil.dp2px(17), paint);
+        }
+        return bigBitmap;
     }
 }

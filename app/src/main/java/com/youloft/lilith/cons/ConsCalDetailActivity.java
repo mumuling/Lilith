@@ -8,6 +8,11 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -23,8 +28,10 @@ import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.CalendarHelper;
 import com.youloft.lilith.common.utils.SafeUtil;
+import com.youloft.lilith.common.utils.ViewUtil;
 import com.youloft.lilith.cons.bean.ConsPredictsBean;
 import com.youloft.lilith.cons.view.ConsCalendar;
+import com.youloft.lilith.share.ShareBuilder;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -85,6 +92,14 @@ public class ConsCalDetailActivity extends BaseActivity {
         openAnim(false, distance);
     }
 
+    /**
+     * 关闭
+     */
+    @OnClick(R.id.cons_detail_share_root)
+    public void shareCons() {
+        share();
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,7 +116,7 @@ public class ConsCalDetailActivity extends BaseActivity {
         if (mData != null) {
             bindData(mData);
         } else {
-            ConsRepo.getConsPredicts("1989-11-11","","29.35","106.33")
+            ConsRepo.getConsPredicts("1989-11-11", "", "29.35", "106.33")
                     .subscribeOn(Schedulers.newThread())
                     .toObservable()
                     .observeOn(AndroidSchedulers.mainThread())
@@ -226,6 +241,44 @@ public class ConsCalDetailActivity extends BaseActivity {
         set.start();
     }
 
+    private void share() {
+        mConsDetailCalView.setDrawingCacheEnabled(true);
+        Bitmap drawingCache = mConsDetailCalView.getDrawingCache();
+        if (drawingCache != null && !drawingCache.isRecycled()) {
+            int height = drawingCache.getHeight();
+            int width = drawingCache.getWidth();
+            Paint paint = new Paint();
+            Bitmap shareBit = Bitmap.createBitmap(width, height + (int) ViewUtil.dp2px(167), Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(shareBit);
+            canvas.drawColor(Color.YELLOW);
+            ViewUtil.renderTextByCenter(canvas, mConsDetailTitle.getText().toString(), width / 2, ViewUtil.dp2px(23.5f), mConsDetailTitle.getPaint());
+            canvas.drawBitmap(drawingCache, 0, ViewUtil.dp2px(47), paint);
+
+            Drawable[] loveDrawables = mConsDetailConsLoveTendency.getCompoundDrawables();
+            Drawable[] moneyDrawables = mConsDetailConsMoneyTendency.getCompoundDrawables();
+            Drawable[] workDrawables = mConsDetailConsWorkTendency.getCompoundDrawables();
+            int v = (int) ViewUtil.dp2px(15);
+            int wordY = (int) ViewUtil.dp2px(10);
+            int v1 = (int) ViewUtil.dp2px(327);
+            int v2 = (int) ViewUtil.dp2px(20);
+            int space = (int) ViewUtil.dp2px(35);
+            int word = (int) ViewUtil.dp2px(88);
+            loveDrawables[0].setBounds(v, v1, v + v2, v1 + v2);
+            moneyDrawables[0].setBounds(v, v1 + space, v + v2, v1 + +space + v2);
+            workDrawables[0].setBounds(v, v1 + space + space, v + v2, v1 + space + space + v2);
+
+            loveDrawables[0].draw(canvas);
+            moneyDrawables[0].draw(canvas);
+            workDrawables[0].draw(canvas);
+
+
+            ViewUtil.renderTextByCenter(canvas, mConsDetailConsLoveTendency.getText().toString(), word, v1 + wordY, mConsDetailConsLoveTendency.getPaint());
+            ViewUtil.renderTextByCenter(canvas, mConsDetailConsMoneyTendency.getText().toString(), word, v1 + wordY + space, mConsDetailConsMoneyTendency.getPaint());
+            ViewUtil.renderTextByCenter(canvas, mConsDetailConsWorkTendency.getText().toString(), word, v1 + wordY + space + space, mConsDetailConsWorkTendency.getPaint());
+
+            new ShareBuilder(this).withImg(shareBit).share();
+        }
+    }
 
     public static void startConsCalDetailActivity(Context context, int[] local, Bitmap bitmapByte, ConsPredictsBean bean) {
         Intent intent = new Intent(context, ConsCalDetailActivity.class);

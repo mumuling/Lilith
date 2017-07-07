@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -21,15 +20,13 @@ import android.widget.TextView;
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.umeng.socialize.ShareAction;
-import com.umeng.socialize.UMShareAPI;
-import com.umeng.socialize.UMShareListener;
-import com.umeng.socialize.bean.SHARE_MEDIA;
-import com.umeng.socialize.media.UMImage;
-import com.umeng.socialize.media.UMWeb;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
-import com.youloft.lilith.common.utils.Toaster;
+import com.youloft.socialize.SocializeAction;
+import com.youloft.socialize.SocializeApp;
+import com.youloft.socialize.SocializePlatform;
+import com.youloft.socialize.media.ShareImage;
+import com.youloft.socialize.media.ShareWeb;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,8 +38,8 @@ import butterknife.OnClick;
  * version:
  */
 
-@Route(path = "/share/CustomShareActivity")
-public class CustomShareActivity extends BaseActivity {
+@Route(path = "/ui/share")
+public class ShareActivity extends BaseActivity {
     @BindView(R.id.share_root)
     FrameLayout mShareRoot;
     @BindView(R.id.share_bg)
@@ -56,17 +53,17 @@ public class CustomShareActivity extends BaseActivity {
     @BindView(R.id.share_bottom_group)
     RelativeLayout mShareBottomGroup;
 
-    @Autowired
+    @Autowired(name = "title")
     public String mShareTitle;
-    @Autowired
+    @Autowired(name="content")
     public String mShareContent;
-    @Autowired(name = "mShareUrl") // 通过name来映射URL中的不同参数
+    @Autowired(name = "url") // 通过name来映射URL中的不同参数
     public String mShareUrl;
-    public static UMImage mShareBitmap = null;
     public static Bitmap mBGBitmap = null;
 
-    private UMWeb mWeb;
-    private ShareAction mShareAction;
+    private SocializeAction mShareAction;
+
+    public static ShareImage mShareBitmap;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,10 +77,10 @@ public class CustomShareActivity extends BaseActivity {
             mShareBg.setBackgroundColor(getResources().getColor(R.color.black_70));
         }
 
-        mShareAction = new ShareAction(this);
+        mShareAction = new SocializeAction(this);
         //Media只能设置一个，后边的会覆盖前面的
         if (!TextUtils.isEmpty(mShareUrl)) {
-            UMWeb web = new UMWeb(mShareUrl);
+            ShareWeb web = new ShareWeb(mShareUrl);
             if (mShareBitmap != null) {
                 web.setThumb(mShareBitmap);
             }
@@ -143,8 +140,8 @@ public class CustomShareActivity extends BaseActivity {
      */
     @OnClick(R.id.share_wx_hy)
     public void shareHY() {
-        mShareAction.setPlatform(SHARE_MEDIA.WEIXIN.toSnsPlatform().mPlatform)
-                .setCallback(listener).share();
+        mShareAction.setPlatform(SocializePlatform.WEIXIN)
+                .setCallback(new ShareEventListener("xxx")).share();
     }
 
     /**
@@ -152,9 +149,8 @@ public class CustomShareActivity extends BaseActivity {
      */
     @OnClick(R.id.share_wx_pyq)
     public void sharePYQ() {
-        mShareAction.setPlatform(SHARE_MEDIA.WEIXIN_CIRCLE.toSnsPlatform().mPlatform)
-                .setCallback(listener).share();
-
+        mShareAction.setPlatform(SocializePlatform.WEIXIN_CIRCLE)
+                .setCallback(new ShareEventListener("xxx")).share();
     }
 
     /**
@@ -177,35 +173,14 @@ public class CustomShareActivity extends BaseActivity {
         startAnim(false);
     }
 
-    UMShareListener listener = new UMShareListener() {
-        @Override
-        public void onStart(SHARE_MEDIA share_media) {
-        }
 
-        @Override
-        public void onResult(SHARE_MEDIA share_media) {
-            Toaster.showLong("分享成功");
-            cancel();
-        }
-
-        @Override
-        public void onError(SHARE_MEDIA share_media, Throwable throwable) {
-            Toaster.showLong("分享失败");
-            cancel();
-        }
-
-        @Override
-        public void onCancel(SHARE_MEDIA share_media) {
-            Toaster.showLong("分享取消");
-            cancel();
-        }
-    };
-    private static final String TAG = "CustomShareActivity";
+    private static final String TAG = "ShareActivity";
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+//        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+        SocializeApp.get(this).onActivityResult(requestCode,resultCode,data);
     }
 
     @Override
@@ -213,7 +188,7 @@ public class CustomShareActivity extends BaseActivity {
         super.onDestroy();
         mShareBitmap = null;
         mBGBitmap = null;
-        UMShareAPI.get(this).release();
+        SocializeApp.get(this).release();
     }
 
     @Override
