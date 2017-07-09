@@ -400,6 +400,7 @@ public class RegisterActivity extends BaseActivity {
                 .build("/test/SetPasswordActivity")
                 .withString("phoneNumber",phoneNumber)
                 .withString("smsCode",smsCode)
+                .withString("source","20001")
                 .navigation();
         //关掉本页面
         finish();

@@ -3,6 +3,7 @@ package com.youloft.lilith.common.widgets.dialog;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.StyleRes;
 import android.view.View;
@@ -26,6 +27,7 @@ public class PhotoSelectDialog extends BaseDialog {
 
     public PhotoSelectDialog(@NonNull Context context) {
         super(context);
+        mContext = (Activity) context;
         initView();
     }
 
@@ -46,9 +48,14 @@ public class PhotoSelectDialog extends BaseDialog {
         switch (view.getId()) {
             case R.id.take_photo:
                 Toaster.showShort("拍照");
+                Intent getImageByCamera = new Intent("android.media.action.IMAGE_CAPTURE");
+                mContext.startActivityForResult(getImageByCamera, EditInformationActivity.CODE_CAMERA);
                 break;
             case R.id.photo_select:
-                Toaster.showShort("相册");
+                Intent albumIntent = new Intent(Intent.ACTION_PICK);
+                albumIntent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+                mContext.startActivityForResult(albumIntent, EditInformationActivity.CODE_PICK_IMAGE);
+                dismiss();
                 break;
             case R.id.cancel:
                 dismiss();

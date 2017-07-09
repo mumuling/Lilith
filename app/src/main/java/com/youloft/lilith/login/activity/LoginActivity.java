@@ -15,11 +15,13 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.alibaba.android.arouter.utils.TextUtils;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.net.analytics.SocialAnalytics;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.rx.RxObserver;
@@ -27,6 +29,9 @@ import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.login.bean.LoginUserInfoBean;
 import com.youloft.lilith.login.event.LoginWithPwdEvent;
 import com.youloft.lilith.login.repo.LoginUserRepo;
+import com.youloft.socialize.SocializeApp;
+import com.youloft.socialize.SocializePlatform;
+import com.youloft.socialize.wrapper.AuthListener;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -44,6 +49,7 @@ import io.reactivex.schedulers.Schedulers;
  * <p>
  * Created by GYH on 2017/6/29.
  */
+@Route(path = "/test/LoginActivity")
 public class LoginActivity extends BaseActivity {
 
     private static final String TAG = "LoginActivity";
@@ -143,28 +149,6 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-    private UMAuthListener umAuthListener = new UMAuthListener() {
-        @Override
-        public void onStart(SHARE_MEDIA platform) {
-            //授权开始的回调
-        }
-
-        @Override
-        public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
-            Toast.makeText(getApplicationContext(), "Authorize succeed", Toast.LENGTH_SHORT).show();
-
-        }
-
-        @Override
-        public void onError(SHARE_MEDIA platform, int action, Throwable t) {
-            Toast.makeText(getApplicationContext(), "Authorize fail", Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onCancel(SHARE_MEDIA platform, int action) {
-            Toast.makeText(getApplicationContext(), "Authorize cancel", Toast.LENGTH_SHORT).show();
-        }
-    };
 
     @Override
     protected void onResume() {
@@ -175,8 +159,7 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
-        Log.d(TAG, "onActivityResult() called with: requestCode = [" + requestCode + "], resultCode = [" + resultCode + "], data = [" + data + "]");
+        SocializeApp.get(this).onActivityResult(requestCode,resultCode,data);
     }
 
 
@@ -241,6 +224,7 @@ public class LoginActivity extends BaseActivity {
         ARouter.getInstance()
                 .build("/test/ForgetPasswordActivity")
                 .navigation();
+        finish();
     }
 
     //注册
@@ -249,6 +233,7 @@ public class LoginActivity extends BaseActivity {
         ARouter.getInstance()
                 .build("/test/RegisterActivity")
                 .navigation();
+        finish();
     }
 
     //快捷登录
@@ -256,15 +241,34 @@ public class LoginActivity extends BaseActivity {
     public void quickLogin(View view) {
         ARouter.getInstance()
                 .build("/test/UserFunctionActivity")
-                .withInt("flag", 20001)
                 .navigation();
+        finish();
     }
 
     //微信登录
     @OnClick(R.id.ll_wechat_login)
     public void wechatLogin(View view) {
-        UMShareAPI.get(this).getPlatformInfo(LoginActivity.this, SHARE_MEDIA.WEIXIN, umAuthListener);
+        SocializeApp.get(this).getPlatformInfo(this, SocializePlatform.WEIXIN, new AuthListener() {
+            @Override
+            public void onStart(SocializePlatform platform) {
 
+            }
+
+            @Override
+            public void onComplete(SocializePlatform platform, int code, Map<String, String> data) {
+
+            }
+
+            @Override
+            public void onError(SocializePlatform platform, int code, Throwable err) {
+
+            }
+
+            @Override
+            public void onCancel(SocializePlatform platform, int code) {
+
+            }
+        });
     }
 
     private boolean isShowPassword = true;//是否显示密码的标识

@@ -15,11 +15,14 @@ import android.widget.ImageView;
 import android.widget.VideoView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.alibaba.android.arouter.utils.TextUtils;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.Toaster;
+import com.youloft.lilith.login.bean.ModifyPasswordBean;
+import com.youloft.lilith.login.repo.ModifyPasswordRepo;
 import com.youloft.lilith.register.bean.RegisterUserBean;
 import com.youloft.lilith.register.event.RegisterEvent;
 import com.youloft.lilith.register.repo.RegisterUserRepo;
@@ -57,6 +60,7 @@ public class SetPasswordActivity extends BaseActivity {
     ImageView ivCleanPassword02;  //清除确认密码
     private String phoneNumber; //上个页面传来的手机号码
     private String smsCode;  //上个页面传来的验证码
+    private String source;  //从哪个页面来的,用于区分,最后该发起哪个请求   20001:注册页面   20002:忘记密码页面
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,7 +69,8 @@ public class SetPasswordActivity extends BaseActivity {
         //获取上个页面传过来的手机号码和验证码
         phoneNumber = getIntent().getStringExtra("phoneNumber");
         smsCode = getIntent().getStringExtra("smsCode");
-
+        //从哪个界面来的
+        source = getIntent().getStringExtra("source");
         ButterKnife.bind(this);
         editTextSetting();
     }
@@ -213,18 +218,39 @@ public class SetPasswordActivity extends BaseActivity {
             Toaster.showShort("密码不一致");
             return;
         }
-        RegisterUserRepo.registerUser(phoneNumber,smsCode,password)
-                .compose(this.<RegisterUserBean>bindToLifecycle())
-                .subscribeOn(Schedulers.newThread())
-                .toObservable()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new RxObserver<RegisterUserBean>() {
-                    @Override
-                    public void onDataSuccess(RegisterUserBean registerUserBean) {
-                        //这里代表注册成功,并且也登录了
-                        // TODO: 2017/7/7 这里也需要存这个用户信息
-                        EventBus.getDefault().post(new RegisterEvent(registerUserBean));
-                    }
-                });
+        if(source.equals("20001")){
+            RegisterUserRepo.registerUser(phoneNumber,smsCode,password)
+                    .compose(this.<RegisterUserBean>bindToLifecycle())
+                    .subscribeOn(Schedulers.newThread())
+                    .toObservable()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new RxObserver<RegisterUserBean>() {
+                        @Override
+                        public void onDataSuccess(RegisterUserBean registerUserBean) {
+                            //这里代表注册成功,并且也登录了
+                            // TODO: 2017/7/7 这里也需要存这个用户信息
+                            EventBus.getDefault().post(new RegisterEvent(registerUserBean));
+                        }
+                    });
+        } else  {
+            ModifyPasswordRepo.modifyPassword(phoneNumber,smsCode,password)
+                    .compose(this.<ModifyPasswordBean>bindToLifecycle())
+                    .subscribeOn(Schedulers.newThread())
+                    .toObservable()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new RxObserver<ModifyPasswordBean>() {
+                        @Override
+                        public void onDataSuccess(ModifyPasswordBean modifyPasswordBean) {
+
+
+                            if(modifyPasswordBean.data.result == 0){//修改密码成功  打开登录页面
+                                ARouter.getInstance().build("/test/LoginActivity").navigation();
+                            }else {//失败
+                                Toaster.showShort("修改密码失败");
+                            }
+                        }
+                    });
+        }
+
     }
 }

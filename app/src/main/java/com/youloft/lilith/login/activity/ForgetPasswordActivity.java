@@ -18,22 +18,31 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
+import com.youloft.lilith.common.rx.RxObserver;
+import com.youloft.lilith.common.utils.Toaster;
+import com.youloft.lilith.login.bean.SendSmsBean;
 import com.youloft.lilith.login.bean.SmsCodeBean;
+import com.youloft.lilith.login.repo.SendSmsRepo;
+import com.youloft.lilith.login.repo.SmsCodeRepo;
 
 import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * 忘记密码界面
- *
+ * <p>
  * Created by GYH on 2017/7/6.
  */
 @Route(path = "/test/ForgetPasswordActivity")
-public class ForgetPasswordActivity extends BaseActivity{
+public class ForgetPasswordActivity extends BaseActivity {
     @BindView(R.id.vv_background)
     VideoView vvBackground;  //背景视频
     @BindView(R.id.et_verification_code)
@@ -179,7 +188,8 @@ public class ForgetPasswordActivity extends BaseActivity{
                     }
                 }
                 if (s.toString().length() == 6) {//验证码6位的时候
-//                    checkSmsCode();
+                    //检验验证码是否正确
+                    getSmsCode();
                 } else { //验证码不到6位的时候  一律隐藏验证码后面的小图标
                     ivCodeRight.setVisibility(View.INVISIBLE);
                     ivCodeError.setVisibility(View.INVISIBLE);
@@ -191,6 +201,26 @@ public class ForgetPasswordActivity extends BaseActivity{
 
             }
         });
+    }
+
+    /**
+     * 获取验证码是否正确的请求
+     */
+    private void getSmsCode() {
+        String smsCode = etVerificationCode.getText().toString();
+        SmsCodeRepo.getSmsCode(etPhoneNumber.getText().toString().replaceAll("-", ""),"FindPwd",smsCode)
+                .compose(this.<SmsCodeBean>bindToLifecycle())
+                .subscribeOn(Schedulers.newThread())
+                .toObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new RxObserver<SmsCodeBean>() {
+                    @Override
+                    public void onDataSuccess(SmsCodeBean smsCodeBean) {
+                        mSmsCodeBean = smsCodeBean;
+                        //这里拿回了验证码的相关信息, 在验证码输入框的监听里面验证用户的验证码是否正确
+                        checkSmsCode();
+                    }
+                });
     }
 
     /**
@@ -246,15 +276,34 @@ public class ForgetPasswordActivity extends BaseActivity{
      */
     @OnClick(R.id.tv_get_code)
     public void getCode() {
-        //如果是注册账号界面,需要在账号是否存在判断之后才
         String disText = tvGetCode.getText().toString();
         if (!getResources().getString(R.string.get_validation_code).equals(disText)) {
             return;
         }
-
+        //1.检验手机号码长度
+        String phoneNumber = etPhoneNumber.getText().toString().replaceAll("-", "");
+        if (TextUtils.isEmpty(phoneNumber)) {
+            Toaster.showShort("手机号码不能为空");
+            return;
+        }
+        if (phoneNumber.length() != 11) {
+            Toaster.showShort("手机号码错误");
+            return;
+        }
+        //2.发起发送验证码的请求
+        SendSmsRepo.sendSms(phoneNumber,"FindPwd")
+                .compose(this.<SendSmsBean>bindToLifecycle())
+                .subscribeOn(Schedulers.newThread())
+                .toObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new RxObserver<SendSmsBean>() {
+                    @Override
+                    public void onDataSuccess(SendSmsBean sendSmsBean) {
+                        //证明验证码一件发送到手机了
+                    }
+                });
         handler.postDelayed(runnable, 0);
     }
-
 
 
     //下面的handler是玩倒计时的
@@ -279,13 +328,34 @@ public class ForgetPasswordActivity extends BaseActivity{
     //下面的的大按钮的点击事件
     @OnClick(R.id.btn_login)
     public void onButtonClick() {
-        //这里做出判断,是哪个界面,做出对应的请求
         String phoneNumber = etPhoneNumber.getText().toString().replaceAll("-", "");
         String smsCode = etVerificationCode.getText().toString();
-        // TODO: 2017/7/6  这里需要对两个数据进行非空校验
+        //1. 手机号码和验证是否为空,长度是否正确
+        //2. isCodeRight 是否为true
+        //3. 跳转设置密码界面
 
+        if(TextUtils.isEmpty(phoneNumber)||TextUtils.isEmpty(smsCode)){
+            Toaster.showShort("手机号码或者验证码不能为空");
+            return;
+        }
+        if(phoneNumber.length() != 11 || smsCode.length()!= 6){
+            Toaster.showShort("请检查手机号码或者验证码");
+            return;
+        }
+        if(!isCodeRight){
+            Toaster.showShort("验证码错误");
+            return;
+        }
+        //这些条件都满足后,带着手机号码和验证码到设置密码界面
+        ARouter.getInstance()
+                .build("/test/SetPasswordActivity")
+                .withString("phoneNumber",phoneNumber)
+                .withString("smsCode",smsCode)
+                .withString("source","20002")
+                .navigation();
+        //关掉本页面
+        finish();
     }
-
 
 
     //离开时移除活动中的handler

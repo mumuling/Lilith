@@ -38,4 +38,8 @@ public class Urls {
     public static final String REGISTER_URL = "http://lilith.51wnl.com/PhoneRegist";
     //手机号码+密码登录
     public static final String LOGIN_URL = "http://lilith.51wnl.com/PwdLogin";
+    //修改密码
+    public static final String MODIFY_PASSWORD = "http://lilith.51wnl.com/ChangePwd";
+    //验证老密码的接口
+    public static final String CHECK_OLD_PASSWORD = "http://lilith.51wnl.com/CheckPwd";
 }
