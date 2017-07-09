@@ -9,11 +9,16 @@
         android:orientation="vertical">
 
 
-
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="270dp"
             android:background="@drawable/shp_me_bg">
+
+            <ImageView
+                android:id="@+id/iv_blur_bg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop" />
             <!--用户头像-->
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/iv_header"
@@ -33,10 +38,11 @@
                 android:text="Easter Roob"
                 android:textColor="#ffffff"
                 android:textSize="16dp" />
+
             <com.youloft.lilith.ui.view.BaseToolBar
-            android:id="@+id/btl_edit_information"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+                android:id="@+id/btl_edit_information"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </FrameLayout>
 
         <LinearLayout
@@ -74,13 +80,18 @@
                         android:textColor="@color/white"
                         android:textSize="16dp" />
 
-                    <TextView
+                    <EditText
+                        android:id="@+id/et_nick_name"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="114dp"
+                        android:background="@null"
+                        android:cursorVisible="false"
+                        android:hint="请输入昵称"
+                        android:textColorHint="@color/white_50"
                         android:text="Easter Roob"
-                        android:textColor="#ffffff"
+                        android:textColor="@color/white"
                         android:textSize="16dp" />
                 </FrameLayout>
                 <!--分割线-->
@@ -281,5 +292,6 @@
 
         </LinearLayout>
     </LinearLayout>
+
 
 </FrameLayout>

@@ -117,7 +117,7 @@
         <activity android:name=".setting.EditInformationActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".cons.ConsCalDetailActivity" android:theme="@style/TranslucentThem"/>
-        <activity android:name=".setting.ModifyPasswordActivity"
+        <activity android:name=".info.activity.ModifyPasswordActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".register.activity.RegisterActivity"
             android:screenOrientation="portrait"/>
