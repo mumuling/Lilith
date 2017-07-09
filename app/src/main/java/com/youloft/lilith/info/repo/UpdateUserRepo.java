@@ -61,4 +61,11 @@ public class UpdateUserRepo extends AbstractDataRepo{
         paramsCheckLoginStatus.put("uid",uid);
         return unionFlow(Urls.CHECK_LOGIN_STATUS, null, paramsCheckLoginStatus, true, CheckLoginBean.class, "check_login", 0);
     }
+
+    public static Flowable<String> updateImg(String imgBase64, String nameEx){
+        HashMap<String, String> param = new HashMap<>();
+        param.put("data", imgBase64);
+        param.put("ext", nameEx);
+        return post(Urls.UPLOAD_FILE, null, param, true, String.class, "img_user_info", 0);
+    }
 }

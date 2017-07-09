@@ -52,4 +52,6 @@ public class Urls {
     public static final String LOGOUT_URL = "http://lilith.51wnl.com/OpenLogin";
     //检查更新
     public static final String CHECK_VERSION = "http://lilith.51wnl.com/GetSysVersion";
+    //上传图片
+    public static final String UPLOAD_FILE = "http://lilith.51wnl.com/UpToQiNiu";
 }

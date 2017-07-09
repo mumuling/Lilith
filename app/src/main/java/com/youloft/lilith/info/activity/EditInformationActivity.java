@@ -9,6 +9,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -36,8 +38,10 @@ import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.ui.view.BaseToolBar;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Date;
@@ -47,7 +51,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -82,6 +89,7 @@ public class EditInformationActivity extends BaseActivity {
     @BindView(R.id.et_nick_name)
     EditText etNickName;  //下面的可编辑昵称
     private String sex;
+    private String mBitBase64;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -121,7 +129,7 @@ public class EditInformationActivity extends BaseActivity {
                 if (hasFocus) {
                     etNickName.setCursorVisible(true);
                     etNickName.setSelection(etNickName.length());
-                }else {
+                } else {
                     etNickName.setCursorVisible(false);
                 }
             }
@@ -143,7 +151,7 @@ public class EditInformationActivity extends BaseActivity {
             GlideApp.with(this).load(detail.headImg).into(ivHeader);
             tvNickName.setText(detail.nickName);
             etNickName.setText(detail.nickName);
-            tvSex.setText(detail.sex+"");
+            tvSex.setText(detail.sex + "");
             String birthDay = detail.birthDay;
             Date date = CalendarHelper.parseDate(birthDay, DATE_FORMAT);
             mCal.setTime(date);
@@ -219,33 +227,36 @@ public class EditInformationActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Uri uri = data.getData();
-//        File file = new File(String.valueOf(uri));
+
         Bitmap photo = null;
         switch (requestCode) {
             case CODE_CAMERA:
-//                if (data.getData() != null || data.getExtras() != null) { //防止没有返回结果
-//
-//                    if (uri != null) {
-//                        photo = BitmapFactory.decodeFile(uri.getPath()); //拿到图片
-//                    }
-//                    if (photo == null) {
-//                        Bundle bundle = data.getExtras();
-//                        if (bundle != null) {
-//                            photo = (Bitmap) bundle.get("data");
-//                        }
-//                    }
-//                }
+                if (data.getData() != null || data.getExtras() != null) { //防止没有返回结果
+
+                    if (uri != null) {
+                        photo = BitmapFactory.decodeFile(uri.getPath()); //拿到图片
+                    }
+                    if (photo == null) {
+                        Bundle bundle = data.getExtras();
+                        if (bundle != null) {
+                            photo = (Bitmap) bundle.get("data");
+                        }
+                    }
+                }
+                break;
             case CODE_PICK_IMAGE:
                 ContentResolver resolver = getContentResolver();
                 try {
-                    InputStream inputStream = resolver.openInputStream(data.getData());
-                    Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-
+                    InputStream inputStream = resolver.openInputStream(uri);
+                    byte[] bytes = getBytes(inputStream);
+                    mBitBase64 = Base64.encodeToString(bytes, Base64.DEFAULT);
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    String host = uri.getEncodedPath();
+                    String nameEx = host.substring(host.lastIndexOf(".") + 1, host.length());
                     ivHeader.setImageBitmap(bitmap);
                     ivBlurBg.setImageBitmap(ViewUtil.blurBitmap(bitmap));
 
-
-//                    String realPathFromUri = getRealPathFromUri(this, uri);
+                    updateUserImg(nameEx);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -255,6 +266,71 @@ public class EditInformationActivity extends BaseActivity {
         }
     }
 
+    private void updateUserImg(String nameEx) {
+        UpdateUserRepo.updateImg(mBitBase64, nameEx).compose(this.<String>bindToLifecycle())
+                .subscribeOn(Schedulers.newThread())
+                .toObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new RxObserver<String>() {
+                               @Override
+                               public void onDataSuccess(String s) {
+                                   Log.d(TAG, "onDataSuccess() called with: s = [" + s + "]");
+                               }
+
+                               @Override
+                               public void onSubscribe(@NonNull Disposable d) {
+                                   Log.d(TAG, "onSubscribe() called with: d = [" + d + "]");
+                                   super.onSubscribe(d);
+                               }
+
+                               @Override
+                               public void onNext(@NonNull String s) {
+                                   Log.d(TAG, "onNext() called with: s = [" + s + "]");
+                                   super.onNext(s);
+                               }
+
+                               @Override
+                               public void onError(@NonNull Throwable e) {
+                                   Log.d(TAG, "onError() called with: e = [" + e + "]");
+                                   super.onError(e);
+                               }
+
+                               @Override
+                               protected void onFailed(Throwable e) {
+                                   Log.d(TAG, "onFailed() called with: e = [" + e + "]");
+                                   super.onFailed(e);
+                               }
+
+                               @Override
+                               public void onComplete() {
+                                   Log.d(TAG, "onComplete() called");
+                                   super.onComplete();
+                               }
+                           }
+                );
+    }
+
+    private static final String TAG = "EditInformationActivity";
+
+    private byte[] getBytes(InputStream filePath) {
+        byte[] buffer = null;
+        try {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream(1000);
+            byte[] b = new byte[1000];
+            int n;
+            while ((n = filePath.read(b)) != -1) {
+                bos.write(b, 0, n);
+            }
+            filePath.close();
+            bos.close();
+            buffer = bos.toByteArray();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return buffer;
+    }
 
     @OnClick({R.id.fl_sex, R.id.fl_date_birth, R.id.fl_time_birth, R.id.fl_place_birth, R.id.fl_place_now})
     public void onViewClicked(View view) {
