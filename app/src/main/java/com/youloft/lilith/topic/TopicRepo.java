@@ -9,6 +9,7 @@ import com.youloft.lilith.topic.bean.PointBean;
 import com.youloft.lilith.topic.bean.ReplyBean;
 import com.youloft.lilith.topic.bean.TopicBean;
 import com.youloft.lilith.topic.bean.TopicDetailBean;
+import com.youloft.lilith.topic.bean.VoteBean;
 
 import java.util.HashMap;
 import java.util.List;
@@ -59,12 +60,13 @@ public class TopicRepo extends AbstractDataRepo {
      * @return
      */
     public static  Flowable<TopicBean> getTopicList(String sortby,String limit) {
-        String cacheKey = "topic_list";
+        String cacheKey = "topic_list" + sortby;
         long cacheDuration = 2 * 1000;
         HashMap<String, String> param = new HashMap();
         param.clear();
         param.put("sortby",sortby);
         if (limit != null)param.put("limit",limit);
+
         return unionFlow(Urls.TOPIC_LIST,null,param,true,TopicBean.class,cacheKey,cacheDuration);
     }
 
@@ -100,7 +102,7 @@ public class TopicRepo extends AbstractDataRepo {
         HashMap<String, String> param = new HashMap();
         param.clear();
         param.put("tid",tid);
-        return unionFlow(Urls.TOPIC_INFO,null,param,true,TopicDetailBean.class,"topic_detail" + tid,2 * 60 * 1000);
+        return unionFlow(Urls.TOPIC_INFO,null,param,true,TopicDetailBean.class,null,0);
     }
 
     public static Flowable<PointBean> getPointList(String tid,String uid,String limit,String skip,boolean needCache) {
@@ -123,14 +125,14 @@ public class TopicRepo extends AbstractDataRepo {
         }
     }
 
-    public static Flowable<String> postVote(String tid,String oid,String uid, String viewpoint) {
+    public static Flowable<VoteBean> postVote(String tid,String oid,String uid, String viewpoint) {
         HashMap<String, String> param = new HashMap();
         param.clear();
         param.put("tid",tid);
         param.put("uid",uid);
         param.put("oid",oid);
         param.put("Viewpoint",viewpoint);
-        return post(Urls.POST_VOTE,null,param,true,String.class,"awoiegewg",0);
+        return post(Urls.POST_VOTE,null,param,true,VoteBean.class,"awoiegewg",0);
     }
 
     /**     观点点赞
@@ -147,12 +149,12 @@ public class TopicRepo extends AbstractDataRepo {
         return httpFlow(Urls.LIKE_POINT,null,param,true,AbsResponse.class,null,0);
     }
 
-    public static Flowable<AbsResponse> likeReply(String rid,String uid) {
+    public static Flowable<VoteBean> likeReply(String rid,String uid) {
         HashMap<String, String> param = new HashMap();
         param.clear();
         param.put("rid",rid);
         param.put("uid",uid);
-        return httpFlow(Urls.LIKE_REPLY,null,param,true,AbsResponse.class,null,0);
+        return httpFlow(Urls.LIKE_REPLY,null,param,true,VoteBean.class,null,0);
     }
 
 }

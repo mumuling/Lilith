@@ -32,6 +32,7 @@ public class TopicDetailBean extends AbsResponse<TopicDetailBean.DataBean> {
         public int collection;
         public int totalVote;
         public int isClose;
+        public int isVote;
         public ArrayList<OptionBean> option;
 
         public static class OptionBean {

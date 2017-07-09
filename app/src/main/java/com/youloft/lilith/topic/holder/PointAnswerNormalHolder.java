@@ -12,8 +12,11 @@ import android.widget.TextView;
 
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
+import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.topic.PointDetailActivity;
+import com.youloft.lilith.topic.TopicRepo;
 import com.youloft.lilith.topic.bean.ReplyBean;
+import com.youloft.lilith.topic.bean.VoteBean;
 import com.youloft.lilith.topic.db.TopicLikeCache;
 import com.youloft.lilith.topic.db.TopicLikingTable;
 import com.youloft.lilith.topic.widget.Rotate3dAnimation;
@@ -21,6 +24,8 @@ import com.youloft.lilith.ui.GlideCircleTransform;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  *
@@ -53,6 +58,7 @@ public class PointAnswerNormalHolder extends RecyclerView.ViewHolder implements 
     private int isZan;
     private ReplyBean.DataBean mData;
     private Context mContext;
+    private int zanZount;
     public PointAnswerNormalHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
@@ -92,14 +98,18 @@ public class PointAnswerNormalHolder extends RecyclerView.ViewHolder implements 
     private void bindZan(ReplyBean.DataBean dataBean) {
         int id = dataBean.id;
         TopicLikingTable table = TopicLikeCache.getIns(mContext).getInforByCode(id,PointDetailActivity.TYPE_ANSWER);
+        zanZount = dataBean.zan;
         if (table == null) {
             isZan = dataBean.isclick;
         } else {
             isZan = table.mIsLike;
             if (table.mIsLike == dataBean.isclick) {
                 TopicLikeCache.getIns(mContext).deleteData(id,PointDetailActivity.TYPE_ANSWER);
-            } else if (table.mIsLike == 1) {
-                mData.zan++;
+            } else {
+                if (table.mIsPost != 1)clickLike();
+                if (table.mIsLike == 1) {
+                zanZount++;
+                }
             }
         }
         if (isZan == 1) {
@@ -107,7 +117,7 @@ public class PointAnswerNormalHolder extends RecyclerView.ViewHolder implements 
         } else {
             imageZan.setImageResource(R.drawable.topic_like_icon);
         }
-        textZanCount.setText(String.valueOf(mData.zan));
+        textZanCount.setText(String.valueOf(zanZount));
     }
 
     @Override
@@ -121,9 +131,12 @@ public class PointAnswerNormalHolder extends RecyclerView.ViewHolder implements 
                 if (isZan == 1) {
                     m3DAnimation = new Rotate3dAnimation(0, 180,
                             imageZan.getWidth() / 2, imageZan.getHeight() / 2);
+                    isZan =0;
+
                 } else {
                     m3DAnimation = new Rotate3dAnimation(180, 0,
                             imageZan.getWidth() / 2, imageZan.getHeight() / 2);
+                    isZan = 1;
                 }
                 m3DAnimation.setDuration(300);
                 imageZan.startAnimation(m3DAnimation);
@@ -134,21 +147,16 @@ public class PointAnswerNormalHolder extends RecyclerView.ViewHolder implements 
                     }
                     @Override
                     public void onAnimationEnd(Animation animation) {
-                        TopicLikingTable topicLikingTable;
-                        if (isZan == 1) {
+                        if (isZan == 0) {
                             imageZan.setImageResource(R.drawable.topic_like_icon);
-                            mData.zan--;
-                            textZanCount.setText(String.valueOf(mData.zan));
-                            topicLikingTable = new TopicLikingTable(mData.id,0, PointDetailActivity.TYPE_ANSWER);
-                            isZan =0;
+                            zanZount--;
+                            textZanCount.setText(String.valueOf(zanZount));
                         } else {
                             imageZan.setImageResource(R.drawable.topic_liking_icon);
-                            mData.zan++;
-                            textZanCount.setText(String.valueOf(mData.zan));
-                            topicLikingTable = new TopicLikingTable(mData.id,1,PointDetailActivity.TYPE_ANSWER);
-                            isZan = 1;
+                            zanZount++;
+                            textZanCount.setText(String.valueOf(zanZount));
                         }
-                        TopicLikeCache.getIns(itemView.getContext()).insertData(topicLikingTable);
+                        clickLike();
                     }
 
                     @Override
@@ -157,9 +165,46 @@ public class PointAnswerNormalHolder extends RecyclerView.ViewHolder implements 
                     }
                 });
 
+
                 break;
             case R.id.text_reply:
                 break;
         }
+    }
+
+    private void clickLike() {
+        TopicRepo.likeReply(String.valueOf(mData.id),"10000")
+                .subscribeOn(Schedulers.newThread())
+                .toObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new RxObserver<VoteBean>() {
+                    @Override
+                    public void onDataSuccess(VoteBean s) {
+                        if ( (Boolean) s.data) {
+                            updateLikeTable(1);
+                        } else {
+                            updateLikeTable(0);
+                        }
+                    }
+
+                    @Override
+                    protected void onFailed(Throwable e) {
+                        super.onFailed(e);
+                        updateLikeTable(0);
+                    }
+                });
+    }
+
+    private void updateLikeTable(int ispost) {
+        TopicLikingTable topicLikingTable;
+        if (isZan == 0) {
+            topicLikingTable = new TopicLikingTable(mData.id,0, PointDetailActivity.TYPE_ANSWER,ispost);
+
+        } else {
+            topicLikingTable = new TopicLikingTable(mData.id,1,PointDetailActivity.TYPE_ANSWER,ispost);
+
+        }
+        TopicLikeCache.getIns(itemView.getContext()).insertData(topicLikingTable);
+
     }
 }

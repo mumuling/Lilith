@@ -59,6 +59,11 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         notifyDataSetChanged();
     }
 
+    public void setPointOnFirst(PointBean.DataBean pointOnFirst) {
+        pointBeanList.add(0,pointOnFirst);
+        notifyDataSetChanged();
+    }
+
     public void setOtherTopicList(List<TopicBean.DataBean> otherTopicList) {
         if (otherTopicList == null) return;
         this.otherTopicList.addAll(otherTopicList);
@@ -78,7 +83,7 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         RecyclerView.ViewHolder holder;
       if (viewType == ITEM_TYPE_VOTE_VIEW){
-            holder = new VoteHolder(mInflater.inflate(R.layout.item_topic_detail_vote,parent,false));
+            holder = new VoteHolder(mInflater.inflate(R.layout.item_topic_detail_vote,parent,false),this);
         } else if (viewType == ITEM_TYPE_COMMENT){
             holder = new PointHolder(mInflater.inflate(R.layout.item_topic_detail_comment,parent,false),this);
         }else {

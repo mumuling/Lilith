@@ -18,6 +18,7 @@ import com.youloft.lilith.topic.PointDetailActivity;
 import com.youloft.lilith.topic.TopicRepo;
 import com.youloft.lilith.topic.bean.PointBean;
 import com.youloft.lilith.topic.bean.TopicDetailBean;
+import com.youloft.lilith.topic.bean.VoteBean;
 import com.youloft.lilith.topic.db.TopicLikeCache;
 import com.youloft.lilith.topic.db.TopicLikingTable;
 import com.youloft.lilith.topic.widget.Rotate3dAnimation;
@@ -64,9 +65,9 @@ public class AuthorPointHolder extends RecyclerView.ViewHolder implements View.O
     private TextView textCommentHot;
     private int isZan;
     private Context mContext;
-    private int zanCount;
     private int anthorId;
     private PointBean.DataBean point;
+    private int zanCount = 0;
 
     public AuthorPointHolder(View itemView) {
         super(itemView);
@@ -119,6 +120,7 @@ public class AuthorPointHolder extends RecyclerView.ViewHolder implements View.O
 
     private void bindZan(PointBean.DataBean dataBean) {
         int id = dataBean.id;
+        zanCount = dataBean.zan;
         TopicLikingTable table = TopicLikeCache.getIns(mContext).getInforByCode(id,PointDetailActivity.TYPE_POINT);
         if (table == null) {
             isZan = dataBean.isclick;
@@ -127,19 +129,18 @@ public class AuthorPointHolder extends RecyclerView.ViewHolder implements View.O
             if (table.mIsLike == dataBean.isclick) {
                 TopicLikeCache.getIns(mContext).deleteData(id,PointDetailActivity.TYPE_POINT);
             } else {
-                clickLike();
+                if (table.mIsPost != 1)clickLike();
                 if (table.mIsLike == 1) {
-                    dataBean.zan++;
+                    zanCount++;
                 }
             }
         }
-        zanCount = dataBean.zan;
         if (isZan == 1) {
             imageZan.setImageResource(R.drawable.topic_liking_icon);
         } else {
             imageZan.setImageResource(R.drawable.topic_like_icon);
         }
-        textZanCount.setText(String.valueOf(dataBean.zan));
+        textZanCount.setText(String.valueOf(zanCount));
     }
 
     @Override
@@ -152,9 +153,11 @@ public class AuthorPointHolder extends RecyclerView.ViewHolder implements View.O
                 if (isZan == 1) {
                     m3DAnimation = new Rotate3dAnimation(0, 180,
                             imageZan.getWidth() / 2, imageZan.getHeight() / 2);
+                    isZan = 0;
                 } else {
                     m3DAnimation = new Rotate3dAnimation(180, 0,
                             imageZan.getWidth() / 2, imageZan.getHeight() / 2);
+                    isZan = 1;
                 }
                 m3DAnimation.setDuration(300);
                 imageZan.startAnimation(m3DAnimation);
@@ -165,21 +168,16 @@ public class AuthorPointHolder extends RecyclerView.ViewHolder implements View.O
                     }
                     @Override
                     public void onAnimationEnd(Animation animation) {
-                        TopicLikingTable topicLikingTable;
-                        if (isZan == 1) {
+                        if (isZan == 0) {
                             imageZan.setImageResource(R.drawable.topic_like_icon);
                             zanCount--;
                             textZanCount.setText(String.valueOf(zanCount));
-                            topicLikingTable = new TopicLikingTable(anthorId,0, PointDetailActivity.TYPE_POINT);
-                            isZan =0;
                         } else {
                             imageZan.setImageResource(R.drawable.topic_liking_icon);
                             zanCount++;
                             textZanCount.setText(String.valueOf(zanCount));
-                            topicLikingTable = new TopicLikingTable(anthorId,1,PointDetailActivity.TYPE_POINT);
-                            isZan = 1;
                         }
-                        TopicLikeCache.getIns(itemView.getContext()).insertData(topicLikingTable);
+                        clickLike();
                     }
 
                     @Override
@@ -187,7 +185,7 @@ public class AuthorPointHolder extends RecyclerView.ViewHolder implements View.O
 
                     }
                 });
-                clickLike();
+
                 break;
         }
     }
@@ -200,18 +198,33 @@ public class AuthorPointHolder extends RecyclerView.ViewHolder implements View.O
                 .subscribe(new RxObserver<AbsResponse>() {
                     @Override
                     public void onDataSuccess(AbsResponse s) {
-                        if ((Boolean) s.data) {
-
+                        if ( (Boolean) s.data) {
+                            updateClickTable(1);
                         } else {
-
+                            updateClickTable(0);
                         }
                     }
 
                     @Override
                     protected void onFailed(Throwable e) {
                         super.onFailed(e);
+                        updateClickTable(0);
                     }
                 });
+    }
+
+    public void updateClickTable(int ispost) {
+        TopicLikingTable topicLikingTable;
+        if (isZan == 1) {
+
+            topicLikingTable = new TopicLikingTable(anthorId,0, PointDetailActivity.TYPE_POINT,ispost);
+
+        } else {
+
+            topicLikingTable = new TopicLikingTable(anthorId,1,PointDetailActivity.TYPE_POINT,ispost);
+
+        }
+        TopicLikeCache.getIns(itemView.getContext()).insertData(topicLikingTable);
     }
 
 }
