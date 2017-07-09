@@ -168,10 +168,10 @@ public class ConsCalDetailActivity extends BaseActivity {
             int todayMonth = -1;
             int nextMonth = -1;
             if (today != null) {
-                todayMonth = getMonth(today.date);
+                todayMonth = getMonth(today.date) + 1; //index是从0开始的，所以+1
             }
             if (dataEnd != null) {
-                nextMonth = getMonth(dataEnd.date);
+                nextMonth = getMonth(dataEnd.date) + 1;
             }
             String titleString = getResources().getString(R.string.cons_cal_title);
             if (nextMonth > 0 && todayMonth > 0) {
@@ -260,28 +260,33 @@ public class ConsCalDetailActivity extends BaseActivity {
         set.start();
     }
 
+    /**
+     * 分享周视图
+     */
     private void share() {
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final View shareview = inflater.inflate(R.layout.cons_detail_share_view, null);
+        final View shareView = inflater.inflate(R.layout.cons_detail_share_view, null); //分享出去的布局跟界面布局不一样，单独构造一个布局
 
-        TextView mShareTitle = (TextView) shareview.findViewById(R.id.cons_detail_title_share);
-        ConsCalendar mShareCal = (ConsCalendar) shareview.findViewById(R.id.cons_detail_cal_view_share);
-        final ImageView mShareBg = (ImageView) shareview.findViewById(R.id.share_bg_img);
+        TextView mShareTitle = (TextView) shareView.findViewById(R.id.cons_detail_title_share);
+        ConsCalendar mShareCal = (ConsCalendar) shareView.findViewById(R.id.cons_detail_cal_view_share);
+        final ImageView mShareBg = (ImageView) shareView.findViewById(R.id.share_bg_img);
         mShareTitle.setText(mConsDetailTitle.getText().toString());
         mShareCal.setData(data);
-        GlideApp.with(shareview).asBitmap().load(data.data.bgImg).into(new SimpleTarget<Bitmap>() {
+
+        //不能直接使用glide加载到imageView里边
+        GlideApp.with(shareView).asBitmap().load(data.data.bgImg).into(new SimpleTarget<Bitmap>() {
             @Override
             public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
                 mShareBg.setImageBitmap(resource);
-                shareview.measure(
+                shareView.measure(
                         View.MeasureSpec.makeMeasureSpec(mConsDetailContentTop.getWidth(), View.MeasureSpec.EXACTLY),
                         View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-                shareview.layout(0, 0, shareview.getMeasuredWidth(),
-                        shareview.getMeasuredHeight());
+                shareView.layout(0, 0, shareView.getMeasuredWidth(),
+                        shareView.getMeasuredHeight());
 
-                Bitmap b = Bitmap.createBitmap(shareview.getMeasuredWidth(), shareview.getMeasuredHeight(), Bitmap.Config.RGB_565);
+                Bitmap b = Bitmap.createBitmap(shareView.getMeasuredWidth(), shareView.getMeasuredHeight(), Bitmap.Config.RGB_565);
                 Canvas canvas = new Canvas(b);
-                shareview.draw(canvas);
+                shareView.draw(canvas);
 
                 new ShareBuilder(ConsCalDetailActivity.this).withImg(b).share();
             }
