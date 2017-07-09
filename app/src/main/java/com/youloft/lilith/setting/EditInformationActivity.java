@@ -168,14 +168,13 @@ public class EditInformationActivity extends BaseActivity {
         CityPicker.getDefCityPicker(this)
                 .setOnCityItemClickListener(new OnPickerSelectListener<CityInfo>() {
                     @Override
-                    public void onSelected(CityInfo citySelected) {
-//                        StringBuilder builder = new StringBuilder("");
-//                        for (int i = 0; i < citySelected.length; i++) {
-//                            builder.append(citySelected[i]);
-//                        }
-//                        String content = builder.toString();
-//                        tv.setText(content);
-//                        tv.setCompoundDrawables(null,null,null,null);
+                    public void onSelected(CityInfo data) {
+
+                        StringBuilder builder = new StringBuilder("");
+                        builder.append(data.pProvice).append(data.pCity).append(data.pDistrict);
+                        String content = builder.toString();
+                        tv.setText(content);
+                        tv.setCompoundDrawables(null,null,null,null);
                     }
 
                     @Override

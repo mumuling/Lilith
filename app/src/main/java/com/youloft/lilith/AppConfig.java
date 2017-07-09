@@ -27,6 +27,8 @@ public class AppConfig {
     public static final String UMENG_APPKEY = "";//umeng
     public static final String UMENG_PUSH_SECRET = "";//推送
 
+    public static boolean LOGIN_STATUS ; //false代表未登录,  true代表登录了
+
     /**
      * 服务器相关
      */

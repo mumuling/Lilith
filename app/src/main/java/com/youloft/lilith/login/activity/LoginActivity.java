@@ -8,7 +8,6 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -18,17 +17,15 @@ import android.widget.VideoView;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.alibaba.android.arouter.utils.TextUtils;
-import com.umeng.socialize.UMAuthListener;
-import com.umeng.socialize.UMShareAPI;
-import com.umeng.socialize.bean.SHARE_MEDIA;
-import com.umeng.socialize.net.analytics.SocialAnalytics;
+import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.Toaster;
-import com.youloft.lilith.login.bean.LoginUserInfoBean;
-import com.youloft.lilith.login.event.LoginWithPwdEvent;
+import com.youloft.lilith.login.bean.UserBean;
+import com.youloft.lilith.login.event.LoginEvent;
 import com.youloft.lilith.login.repo.LoginUserRepo;
+import com.youloft.lilith.setting.AppSetting;
 import com.youloft.socialize.SocializeApp;
 import com.youloft.socialize.SocializePlatform;
 import com.youloft.socialize.wrapper.AuthListener;
@@ -40,7 +37,6 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -198,15 +194,17 @@ public class LoginActivity extends BaseActivity {
             return;
         }
         LoginUserRepo.loginWithPassword(phoneNumber,password)
-                .compose(this.<LoginUserInfoBean>bindToLifecycle())
+                .compose(this.<UserBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new RxObserver<LoginUserInfoBean>() {
+                .subscribe(new RxObserver<UserBean>() {
                     @Override
-                    public void onDataSuccess(LoginUserInfoBean loginUserInfoBean) {
-                        // TODO: 2017/7/7 需要存储用户信息
-                        EventBus.getDefault().post(new LoginWithPwdEvent(loginUserInfoBean));
+                    public void onDataSuccess(UserBean userBean) {
+                        AppSetting.saveUserInfo(userBean); //保存用户信息
+                        AppConfig.LOGIN_STATUS = true; //设置登录标识
+                        EventBus.getDefault().post(new LoginEvent());//发送登录事件
+                        finish();
                     }
                 });
     }

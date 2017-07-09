@@ -1,7 +1,5 @@
 package com.youloft.lilith.login.event;
 
-import com.youloft.lilith.login.bean.UserBean;
-
 /**
  * 登录成功后的EventBus时间
  *
@@ -9,8 +7,5 @@ import com.youloft.lilith.login.bean.UserBean;
  */
 
 public class LoginEvent {
-    public UserBean mUserBean;
-    public LoginEvent(UserBean userBean) {
-        mUserBean = userBean;
-    }
+
 }

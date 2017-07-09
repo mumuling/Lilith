@@ -9,7 +9,6 @@ import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.VideoView;
@@ -17,22 +16,23 @@ import android.widget.VideoView;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.alibaba.android.arouter.utils.TextUtils;
+import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.login.bean.ModifyPasswordBean;
+import com.youloft.lilith.login.bean.UserBean;
+import com.youloft.lilith.login.event.LoginEvent;
 import com.youloft.lilith.login.repo.ModifyPasswordRepo;
-import com.youloft.lilith.register.bean.RegisterUserBean;
-import com.youloft.lilith.register.event.RegisterEvent;
 import com.youloft.lilith.register.repo.RegisterUserRepo;
+import com.youloft.lilith.setting.AppSetting;
 
 import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -211,29 +211,31 @@ public class SetPasswordActivity extends BaseActivity {
         //2.手机号码,验证码,密码一起请求注册接口
         String password = etPassword.getText().toString();
         String confirmPwd = etConfirmPassword.getText().toString();
-        if(TextUtils.isEmpty(password) || TextUtils.isEmpty(confirmPwd)){
+        if (TextUtils.isEmpty(password) || TextUtils.isEmpty(confirmPwd)) {
             return;
         }
-        if(!password.equals(confirmPwd)){
+        if (!password.equals(confirmPwd)) {
             Toaster.showShort("密码不一致");
             return;
         }
-        if(source.equals("20001")){
-            RegisterUserRepo.registerUser(phoneNumber,smsCode,password)
-                    .compose(this.<RegisterUserBean>bindToLifecycle())
+        if (source.equals("20001")) {//注册账号
+            RegisterUserRepo.registerUser(phoneNumber, smsCode, password)
+                    .compose(this.<UserBean>bindToLifecycle())
                     .subscribeOn(Schedulers.newThread())
                     .toObservable()
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new RxObserver<RegisterUserBean>() {
+                    .subscribe(new RxObserver<UserBean>() {
                         @Override
-                        public void onDataSuccess(RegisterUserBean registerUserBean) {
+                        public void onDataSuccess(UserBean userBean) {
                             //这里代表注册成功,并且也登录了
-                            // TODO: 2017/7/7 这里也需要存这个用户信息
-                            EventBus.getDefault().post(new RegisterEvent(registerUserBean));
+                            AppSetting.saveUserInfo(userBean); //保存用户信息
+                            AppConfig.LOGIN_STATUS = true; //设置登录标识
+                            EventBus.getDefault().post(new LoginEvent());//发送登录事件
+                            finish();
                         }
                     });
-        } else  {
-            ModifyPasswordRepo.modifyPassword(phoneNumber,smsCode,password)
+        } else { //修改密码
+            ModifyPasswordRepo.modifyPassword(phoneNumber, smsCode, password)
                     .compose(this.<ModifyPasswordBean>bindToLifecycle())
                     .subscribeOn(Schedulers.newThread())
                     .toObservable()
@@ -242,10 +244,9 @@ public class SetPasswordActivity extends BaseActivity {
                         @Override
                         public void onDataSuccess(ModifyPasswordBean modifyPasswordBean) {
 
-
-                            if(modifyPasswordBean.data.result == 0){//修改密码成功  打开登录页面
+                            if (modifyPasswordBean.data.result == 0) {//修改密码成功  打开登录页面
                                 ARouter.getInstance().build("/test/LoginActivity").navigation();
-                            }else {//失败
+                            } else {//失败
                                 Toaster.showShort("修改密码失败");
                             }
                         }

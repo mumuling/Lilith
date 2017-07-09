@@ -2,7 +2,7 @@ package com.youloft.lilith.login.repo;
 
 import com.youloft.lilith.common.AbstractDataRepo;
 import com.youloft.lilith.common.net.Urls;
-import com.youloft.lilith.login.bean.LoginUserInfoBean;
+import com.youloft.lilith.login.bean.UserBean;
 
 import java.util.HashMap;
 
@@ -17,9 +17,9 @@ import io.reactivex.Flowable;
 public class LoginUserRepo extends AbstractDataRepo{
     static HashMap<String,String> params = new HashMap();
 
-    public static Flowable<LoginUserInfoBean> loginWithPassword(String phone, String password) {
+    public static Flowable<UserBean> loginWithPassword(String phone, String password) {
         params.put("phone",phone);
         params.put("pwd",password);
-        return unionFlow(Urls.LOGIN_URL, null, params, true, LoginUserInfoBean.class, "login_user_info", 1);
+        return unionFlow(Urls.LOGIN_URL, null, params, true, UserBean.class, "login_user_info", 1);
     }
 }

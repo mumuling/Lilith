@@ -18,6 +18,7 @@ import android.widget.VideoView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.fastjson.JSON;
+import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.rx.RxObserver;
@@ -126,15 +127,11 @@ public class UserFunctionActivity extends BaseActivity {
                     etPhoneNumber.setText(result);
                     etPhoneNumber.setSelection(etPhoneNumber.getText().toString().length());
                 }
-                //当电话号码已经11位数之后做一系列校验
-                if (etPhoneNumber.getText().toString().length() == 13) {
-                    checkNumber();
-                }
+
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
 
                 //变化之后如果有字符串 就显示叉叉, 如果没有就隐藏叉叉
                 if (etPhoneNumber.getText().toString().length() != 0) {
@@ -148,16 +145,6 @@ public class UserFunctionActivity extends BaseActivity {
         });
     }
 
-
-    /**
-     * 对电话号码做校验
-     */
-    private void checkNumber() {
-        String number = etPhoneNumber.getText().toString().replaceAll("-", "");
-        // TODO: 2017/7/6  这里需要对手机号码正则校验
-
-
-    }
 
     /**
      * 验证码输入相关
@@ -276,7 +263,7 @@ public class UserFunctionActivity extends BaseActivity {
         }
         String phoneNumber = etPhoneNumber.getText().toString().replaceAll("-", "");
         //发送短信
-        SendSmsRepo.sendSms(phoneNumber,"Login")
+        SendSmsRepo.sendSms(phoneNumber, "Login")
                 .compose(this.<SendSmsBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
@@ -284,7 +271,7 @@ public class UserFunctionActivity extends BaseActivity {
                 .subscribe(new RxObserver<SendSmsBean>() {
                     @Override
                     public void onDataSuccess(SendSmsBean sendSmsBean) {
-                        //确认短信发送成功了  才去获取验证码
+                        //确认短信发送成功了
 
                     }
                 });
@@ -298,7 +285,7 @@ public class UserFunctionActivity extends BaseActivity {
      */
     private void getSmsCode() {
         String smsCode = etVerificationCode.getText().toString();
-        SmsCodeRepo.getSmsCode(etPhoneNumber.getText().toString().replaceAll("-", ""),"Login",smsCode)
+        SmsCodeRepo.getSmsCode(etPhoneNumber.getText().toString().replaceAll("-", ""), "Login", smsCode)
                 .compose(this.<SmsCodeBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
@@ -339,7 +326,7 @@ public class UserFunctionActivity extends BaseActivity {
         String phoneNumber = etPhoneNumber.getText().toString().replaceAll("-", "");
         String smsCode = etVerificationCode.getText().toString();
         // TODO: 2017/7/6  这里需要对两个数据进行非空校验
-        if(isCodeRight){  //这里的变量是验证了验证码之后  正确的时候才为true
+        if (isCodeRight) {  //这里的变量是验证了验证码之后  正确的时候才为true
             quicklyLogin(phoneNumber, smsCode);
         }
 
@@ -347,8 +334,9 @@ public class UserFunctionActivity extends BaseActivity {
 
     /**
      * 发起登录请求
-     * @param phoneNumber  电话号码
-     * @param smsCode      验证码
+     *
+     * @param phoneNumber 电话号码
+     * @param smsCode     验证码
      */
     private void quicklyLogin(String phoneNumber, String smsCode) {
         UserRepo.loginForUserInfo(phoneNumber, smsCode)
@@ -360,13 +348,11 @@ public class UserFunctionActivity extends BaseActivity {
                     @Override
                     public void onDataSuccess(UserBean userBean) {
 
-                        boolean success = userBean.isSuccess();
-                        if (success) {
-                            //这里需要将用户信息存起来
-                            String userInfoJson = JSON.toJSONString(userBean);
-                            AppSetting.saveUserInfo(userInfoJson);
-                            EventBus.getDefault().post(new LoginEvent(userBean));
-                        }
+                        AppSetting.saveUserInfo(userBean); //保存用户信息
+                        AppConfig.LOGIN_STATUS = true; //设置登录标识
+                        EventBus.getDefault().post(new LoginEvent());//发送登录事件
+                        finish();
+
                     }
                 });
     }
