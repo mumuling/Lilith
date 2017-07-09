@@ -155,8 +155,8 @@ public class EditInformationActivity extends BaseActivity {
             String birthDay = detail.birthDay;
             Date date = CalendarHelper.parseDate(birthDay, DATE_FORMAT);
             mCal.setTime(date);
-            tvDateBirth.setText(CalendarHelper.format(mCal, "yyyy-MM-dd"));
-            tvTimeBirth.setText(CalendarHelper.format(mCal, "HH:mm"));
+            tvDateBirth.setText(CalendarHelper.format(mCal.getTime(), "yyyy-MM-dd"));
+            tvTimeBirth.setText(CalendarHelper.format(mCal.getTime(), "HH:mm"));
             tvPlaceBirth.setText(detail.birthPlace);
             tvPlaceNow.setText(detail.livePlace);
         }
@@ -183,7 +183,7 @@ public class EditInformationActivity extends BaseActivity {
         String userId = String.valueOf(AppSetting.getUserInfo().data.userInfo.id);
         // TODO: 2017/7/9 需要拿到上传头像后的url
         String headImg = "";
-        final String time = CalendarHelper.format(mCal, DATE_FORMAT);
+        final String time = CalendarHelper.format(mCal.getTime(), DATE_FORMAT);
         String birthLongi = "";//出生经度
         String birthLati = "";//出生纬度
         String liveLongi = " ";//现居地经度
@@ -361,7 +361,7 @@ public class EditInformationActivity extends BaseActivity {
                                 mCal.set(Calendar.YEAR, data.get(Calendar.YEAR));
                                 mCal.set(Calendar.MONTH, data.get(Calendar.MONTH));
                                 mCal.set(Calendar.DAY_OF_MONTH, data.get(Calendar.DAY_OF_MONTH));
-                                tvDateBirth.setText(CalendarHelper.format(mCal, "yyyy-MM-dd"));
+                                tvDateBirth.setText(CalendarHelper.format(mCal.getTime(), "yyyy-MM-dd"));
                                 deleteTextDrawable(tvDateBirth);
                             }
 
@@ -380,7 +380,7 @@ public class EditInformationActivity extends BaseActivity {
                             public void onSelected(GregorianCalendar data) {
                                 mCal.set(Calendar.HOUR_OF_DAY, data.get(Calendar.HOUR_OF_DAY));
                                 mCal.set(Calendar.MINUTE, data.get(Calendar.MINUTE));
-                                tvTimeBirth.setText(CalendarHelper.format(mCal, "HH:mm"));
+                                tvTimeBirth.setText(CalendarHelper.format(mCal.getTime(), "HH:mm"));
                                 deleteTextDrawable(tvTimeBirth);
                             }
 

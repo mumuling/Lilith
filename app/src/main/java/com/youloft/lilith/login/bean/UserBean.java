@@ -60,5 +60,7 @@ public class UserBean extends AbsResponse<UserBean.DataBean> {
             @JSONField(name = "liveLati")
             public String liveLati;
         }
+
+
     }
 }

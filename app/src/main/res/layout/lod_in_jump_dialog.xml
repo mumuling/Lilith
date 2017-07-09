@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/login_jump_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <FrameLayout
+        android:id="@+id/login_jump_dialog_group"
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="37dp"
+        android:layout_marginRight="37dp"
+        android:background="@drawable/login_jump_dialog_bg">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.youloft.lilith.common.widgets.view.RoundImageView
+                android:id="@+id/login_jump_dialog_icon"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="22dp"
+                app:radius="80dp" />
+            <TextView
+                android:id="@+id/login_jump_dialog_nickname"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="4dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="19dp"
+                android:text="莉莉斯"/>
+
+            <TextView
+                android:id="@+id/login_jump_dialog_description"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="32dp"
+                android:textSize="19dp"
+                android:textColor="@color/white"
+                android:layout_marginLeft="22dp"
+                android:layout_marginRight="22dp"
+                android:gravity="center_horizontal"
+                android:text="查看专属运势，请登陆后填写资料！"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/login_jump_dialog_btn"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:text="登录查看"
+                android:textColor="@color/white"
+                android:background="@drawable/login_jump_dialog_bnt_bg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </FrameLayout>
+</FrameLayout>

@@ -78,6 +78,8 @@ public class ConsMyInfoHolder extends ConsBaseHolder {
         mConsMyInfoWeek.setTypeface(en);
         mConsMyInfoEnWord.setTypeface(en);
 
+        bindDefault();
+
         pCalendar = new GregorianCalendar();
     }
 
@@ -92,9 +94,7 @@ public class ConsMyInfoHolder extends ConsBaseHolder {
     }
 
     private void bind() {
-        GregorianCalendar date = new GregorianCalendar();
-        mConsMyInfoDate.setText(CalendarHelper.format(date, formatDate));
-        mConsMyInfoWeek.setText(CalendarHelper.getWeekInEN(date));
+        bindDefault();
 
         ConsPredictsBean.DataBean.PredictsBean todayCons = SafeUtil.getSafeData(detailInfo.predicts, 1);
         Bitmap consImg = null;
@@ -123,6 +123,12 @@ public class ConsMyInfoHolder extends ConsBaseHolder {
 
             }
         });
+    }
+
+    private void bindDefault() {
+        GregorianCalendar date = new GregorianCalendar();
+        mConsMyInfoDate.setText(CalendarHelper.format(date.getTime(), formatDate));
+        mConsMyInfoWeek.setText(CalendarHelper.getWeekInEN(date));
     }
 
 }

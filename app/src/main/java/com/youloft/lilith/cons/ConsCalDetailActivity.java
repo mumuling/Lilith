@@ -131,24 +131,7 @@ public class ConsCalDetailActivity extends BaseActivity {
 
         if (mData != null) {
             bindData(mData);
-        } else {
-            ConsRepo.getConsPredicts("1989-11-11", "", "29.35", "106.33")
-                    .subscribeOn(Schedulers.newThread())
-                    .toObservable()
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new RxObserver<ConsPredictsBean>() {
-                        @Override
-                        public void onDataSuccess(ConsPredictsBean bean) {
-                            if (bean != null) {
-                                mData = bean;
-                                bindData(mData);
-                            }
-                            Log.d(TAG, "onDataSuccess() called with: bean = [" + bean + "]");
-                        }
-                    });
         }
-
-
     }
 
     /**

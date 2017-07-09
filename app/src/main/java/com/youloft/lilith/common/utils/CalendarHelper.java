@@ -14,9 +14,9 @@ import java.util.Date;
 
 public class CalendarHelper {
 public  static  SimpleDateFormat formatAll = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    public static String format(Calendar date, String formatString){
+    public static String format(Date date, String formatString){
         SimpleDateFormat format = new SimpleDateFormat(formatString);
-        String format1 = format.format(date.getTime());
+        String format1 = format.format(date);
         return format1;
     }
 
