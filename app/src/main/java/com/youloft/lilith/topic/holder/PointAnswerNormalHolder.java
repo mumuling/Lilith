@@ -15,6 +15,7 @@ import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.topic.PointDetailActivity;
 import com.youloft.lilith.topic.TopicRepo;
+import com.youloft.lilith.topic.adapter.PointAnswerAdapter;
 import com.youloft.lilith.topic.bean.ReplyBean;
 import com.youloft.lilith.topic.bean.VoteBean;
 import com.youloft.lilith.topic.db.TopicLikeCache;
@@ -59,10 +60,25 @@ public class PointAnswerNormalHolder extends RecyclerView.ViewHolder implements 
     private ReplyBean.DataBean mData;
     private Context mContext;
     private int zanZount;
-    public PointAnswerNormalHolder(View itemView) {
+    private PointAnswerAdapter adpter;
+    private ReplyBean.DataBean replyInfo;
+    public PointAnswerNormalHolder(View itemView, PointAnswerAdapter adpter) {
         super(itemView);
         ButterKnife.bind(this, itemView);
         this.mContext = itemView.getContext();
+        this.adpter =adpter;
+        initView();
+    }
+
+    private void initView() {
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (itemView.getContext() instanceof PointDetailActivity) {
+                    ((PointDetailActivity) itemView.getContext()).clickReply(mData.uid,mData.nickName);
+                }
+            }
+        });
     }
 
     public void bindView(ReplyBean.DataBean dataBean,boolean isFirst) {

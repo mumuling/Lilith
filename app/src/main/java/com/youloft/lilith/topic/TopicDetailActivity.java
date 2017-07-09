@@ -150,7 +150,7 @@ public class TopicDetailActivity extends BaseActivity {
             dataBean.topicOptionId = pointTable.oid;
             dataBean.topicId = pointTable.tid;
             dataBean.viewpoint = pointTable.viewPoint;
-
+            dataBean.id = pointTable.pid;
             pointList.add(dataBean);
         }
         for (int i = 0; i < data.size(); i ++) {
@@ -228,6 +228,8 @@ public class TopicDetailActivity extends BaseActivity {
 
             }
         });
+
+
 
         rvTopicDetail.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override

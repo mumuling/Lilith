@@ -38,7 +38,6 @@ public class PointAnswerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     public void setReplyList(List<ReplyBean.DataBean> replyList) {
         if (replyList != null ) {
-            this.replyList.clear();
             this.replyList.addAll(replyList);
             notifyDataSetChanged();
         }
@@ -49,6 +48,11 @@ public class PointAnswerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         this.topic = topic;
         notifyDataSetChanged();
     }
+
+    public void setAnswerTop(ReplyBean.DataBean data) {
+        replyList.add(0,data);
+        notifyDataSetChanged();
+    }
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder holder;
@@ -57,7 +61,7 @@ public class PointAnswerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         } else if (viewType == ITEM_TYPE_NONE) {
             holder = new NoAnswerHolder(mInflater.inflate(R.layout.item_point_no_anwser,parent,false));
         } else {
-            holder = new PointAnswerNormalHolder(mInflater.inflate(R.layout.item_point_answer_normal,parent,false));
+            holder = new PointAnswerNormalHolder(mInflater.inflate(R.layout.item_point_answer_normal,parent,false),this);
         }
         return holder;
     }
@@ -71,6 +75,7 @@ public class PointAnswerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             }else {
                 ((PointAnswerNormalHolder) holder).bindView(replyList.get(position - 1),false);
             }
+
         }
         if (holder instanceof AuthorPointHolder) {
             if (point == null || topic == null)return;
