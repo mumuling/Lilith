@@ -13,7 +13,7 @@ import java.util.Date;
  */
 
 public class CalendarHelper {
-
+public  static  SimpleDateFormat formatAll = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     public static String format(Calendar date, String formatString){
         SimpleDateFormat format = new SimpleDateFormat(formatString);
         String format1 = format.format(date.getTime());
@@ -67,7 +67,6 @@ public class CalendarHelper {
     }
 
     public static long getTimeMillisByString(String time) {
-        SimpleDateFormat formatAll = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
             Date date = formatAll.parse(time);
             Calendar calendar = Calendar.getInstance();
@@ -77,5 +76,12 @@ public class CalendarHelper {
             e.printStackTrace();
         }
         return Calendar.getInstance().getTimeInMillis();
+    }
+
+    public static String getNowTimeString() {
+
+        Calendar calendar = Calendar.getInstance();
+        return formatAll.format(calendar.getTime());
+
     }
 }

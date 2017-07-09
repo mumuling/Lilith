@@ -24,6 +24,8 @@ public class OtherTopicHolder extends RecyclerView.ViewHolder {
     public TopicUserImageLayout mTopicUserImageLayout;
     public RoundImageView mTopicImage;
     private TextView mOtherTopicText;
+    private TopicBean.DataBean topic;
+
     public OtherTopicHolder(View itemView) {
         super(itemView);
         mTopicContent = (TextView) itemView.findViewById(R.id.topic_content);
@@ -33,6 +35,10 @@ public class OtherTopicHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(final TopicBean.DataBean topic, boolean first) {
+        if (topic == null) {
+            return;
+        }
+        this.topic = topic;
        itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

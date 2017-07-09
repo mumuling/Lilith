@@ -58,5 +58,10 @@ public class PointBean extends AbsResponse<List<PointBean.DataBean>> implements 
             public String nickName;
             public String contents;
         }
+
+//        public PointBean.DataBean setData(PointBean.DataBean data) {
+//            PointBean.DataBean point = new PointBean.DataBean();
+//            point.isclick
+//        }
     }
 }

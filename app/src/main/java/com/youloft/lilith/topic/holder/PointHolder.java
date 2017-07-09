@@ -27,6 +27,7 @@ import com.youloft.lilith.topic.adapter.TopicDetailAdapter;
 import com.youloft.lilith.topic.bean.PointBean;
 import com.youloft.lilith.topic.bean.TopicBean;
 import com.youloft.lilith.topic.bean.TopicDetailBean;
+import com.youloft.lilith.topic.bean.VoteBean;
 import com.youloft.lilith.topic.db.TopicLikeCache;
 import com.youloft.lilith.topic.db.TopicLikingTable;
 import com.youloft.lilith.topic.widget.Rotate3dAnimation;
@@ -92,7 +93,9 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
     private PointBean.DataBean point;
     private Context mContext;
     private TopicDetailAdapter adapter;
+    private TopicDetailBean.DataBean topic;
     private  int totalPoint;
+    private  int zanCount =0;
 
     public PointHolder(View itemView, TopicDetailAdapter adapter) {
         super(itemView);
@@ -122,9 +125,11 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
                 if (isZan == 1) {
                     m3DAnimation = new Rotate3dAnimation(0, 180,
                             imageZan.getWidth() / 2, imageZan.getHeight() / 2);
+                    isZan = 0;
                 } else {
                     m3DAnimation = new Rotate3dAnimation(180, 0,
                             imageZan.getWidth() / 2, imageZan.getHeight() / 2);
+                    isZan = 1;
                 }
                 m3DAnimation.setDuration(300);
                 imageZan.startAnimation(m3DAnimation);
@@ -135,21 +140,17 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
                     }
                     @Override
                     public void onAnimationEnd(Animation animation) {
-                        TopicLikingTable topicLikingTable;
-                        if (isZan == 1) {
+                        if (isZan == 0) {
                             imageZan.setImageResource(R.drawable.topic_like_icon);
-                            point.zan--;
-                            textZanCount.setText(String.valueOf(point.zan));
-                            topicLikingTable = new TopicLikingTable(point.id,0, PointDetailActivity.TYPE_POINT);
-                            isZan =0;
+                            zanCount--;
+                            textZanCount.setText(String.valueOf(zanCount));
                         } else {
                             imageZan.setImageResource(R.drawable.topic_liking_icon);
-                            point.zan++;
-                            textZanCount.setText(String.valueOf(point.zan));
-                            topicLikingTable = new TopicLikingTable(point.id,1,PointDetailActivity.TYPE_POINT);
-                            isZan = 1;
+                            zanCount++;
+                            textZanCount.setText(String.valueOf(zanCount));
+
                         }
-                        TopicLikeCache.getIns(itemView.getContext()).insertData(topicLikingTable);
+                        clickLike();
                     }
 
                     @Override
@@ -157,7 +158,7 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
 
                     }
                 });
-                clickLike();
+
                 break;
             case R.id.ll_load_more:
                 imageLoading.setVisibility(View.VISIBLE);
@@ -174,7 +175,7 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
 
     public void loadMorePiont() {
 
-        TopicRepo.getPointList(String.valueOf(point.id),null,"1","",false)
+        TopicRepo.getPointList(String.valueOf(topic.id),null,"1",String.valueOf(totalPoint),false)
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -213,7 +214,9 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
 
     public void bindNormal(final PointBean.DataBean point, final TopicDetailBean.DataBean option, boolean isLast) {
         if (point == null || option == null)return;
+        this.topic = option;
         this.point = point;
+        this.totalPoint = adapter.pointBeanList.size();
         ArrayList<TopicDetailBean.DataBean.OptionBean> topic = option.option;
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -294,8 +297,12 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
     }
 
     private void bindZan(PointBean.DataBean dataBean) {
+
+        PointBean.DataBean point = new PointBean.DataBean();
+
         int id = dataBean.id;
         TopicLikingTable table = TopicLikeCache.getIns(mContext).getInforByCode(id,PointDetailActivity.TYPE_POINT);
+        zanCount = dataBean.zan;
         if (table == null) {
             isZan = dataBean.isclick;
         } else {
@@ -303,10 +310,10 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
             if (table.mIsLike == dataBean.isclick) {
                 TopicLikeCache.getIns(mContext).deleteData(id,PointDetailActivity.TYPE_POINT);
             } else{
-                dataBean.isclick = table.mIsLike;
-                clickLike();
+                if (table.mIsPost != 1)clickLike();
+               // dataBean.isclick = table.mIsLike;
                 if (table.mIsLike == 1) {
-                  dataBean.zan++;
+                  zanCount = dataBean.zan +1;
               }
             }
         }
@@ -316,7 +323,7 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
         } else {
             imageZan.setImageResource(R.drawable.topic_like_icon);
         }
-        textZanCount.setText(String.valueOf(dataBean.zan));
+        textZanCount.setText(String.valueOf(zanCount));
     }
 
     public void clickLike() {
@@ -328,17 +335,28 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
                     @Override
                     public void onDataSuccess(AbsResponse s) {
                         if ((Boolean) s.data) {
-
+                            updateClickTable(1);
                         } else {
-
+                            updateClickTable(0);
                         }
                     }
 
                     @Override
                     protected void onFailed(Throwable e) {
                         super.onFailed(e);
+                        updateClickTable(0);
                     }
                 });
     }
+public void updateClickTable(int ispost) {
+    TopicLikingTable topicLikingTable;
+    if (isZan == 0) {
+        topicLikingTable = new TopicLikingTable(point.id,0, PointDetailActivity.TYPE_POINT,ispost);
+    } else {
 
+        topicLikingTable = new TopicLikingTable(point.id,1,PointDetailActivity.TYPE_POINT,ispost);
+
+    }
+    TopicLikeCache.getIns(itemView.getContext()).insertData(topicLikingTable);
+}
 }

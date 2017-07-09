@@ -21,12 +21,14 @@ public class TopicLikingTable implements Serializable {
     public int mId = -1;
     public int mIsLike;
     public String mType;
+    public int mIsPost;
 
     public TopicLikingTable(){}
-    public TopicLikingTable(int uid,int isLike,String type) {
+    public TopicLikingTable(int uid,int isLike,String type,int post) {
         this.mId = uid;
         this.mIsLike = isLike;
         this.mType = type;
+        this.mIsPost = post;
     }
 
     /**
@@ -37,6 +39,7 @@ public class TopicLikingTable implements Serializable {
         db.execSQL("CREATE TABLE " + TABLE_NAME + "(" + Columns._ID + " INTEGER PRIMARY KEY,"
                 + Columns.UID + " INTEGER,"
                 + Columns.ISLIKE + " INTEGER,"
+                +Columns.ISPOST + " INTEGER,"
                 + Columns.TYPE + " TEXT" + ");");
     }
 
@@ -49,17 +52,21 @@ public class TopicLikingTable implements Serializable {
         contentValues.put(Columns.UID, mId);
         contentValues.put(Columns.ISLIKE, mIsLike);
         contentValues.put(Columns.TYPE, mType);
+        contentValues.put(Columns.ISPOST,mIsPost);
         return contentValues;
     }
     public TopicLikingTable fromCursor(Cursor cursor) {
         this.mId = cursor.getInt(cursor.getColumnIndex(Columns.UID));
         this.mIsLike = cursor.getInt(cursor.getColumnIndex(Columns.ISLIKE));
         this.mType = cursor.getString(cursor.getColumnIndex(Columns.TYPE));
+        this.mIsPost = cursor.getInt(cursor.getColumnIndex(Columns.ISPOST));
+
         return this;
     }
     public interface Columns extends BaseColumns {
          String UID = "uid";  //点赞对象的ID
         String ISLIKE = "like";//点赞状态
         String TYPE = "type";//点赞的是观点还是回复
+        String ISPOST = "post";//是否提交成功
     }
 }

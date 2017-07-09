@@ -1,6 +1,7 @@
 package com.youloft.lilith.topic.holder;
 
 import android.animation.ValueAnimator;
+import android.content.ContentValues;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -8,12 +9,26 @@ import android.widget.TextView;
 
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
+import com.youloft.lilith.common.net.AbsResponse;
 import com.youloft.lilith.common.rx.RxObserver;
+import com.youloft.lilith.common.utils.CalendarHelper;
 import com.youloft.lilith.common.utils.ViewUtil;
+import com.youloft.lilith.login.bean.UserBean;
+import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.topic.TopicRepo;
+import com.youloft.lilith.topic.adapter.TopicDetailAdapter;
+import com.youloft.lilith.topic.bean.PointBean;
 import com.youloft.lilith.topic.bean.TopicDetailBean;
+import com.youloft.lilith.topic.bean.VoteBean;
+import com.youloft.lilith.topic.db.PointCache;
+import com.youloft.lilith.topic.db.PointTable;
+import com.youloft.lilith.topic.db.TopicInfoCache;
+import com.youloft.lilith.topic.db.TopicTable;
 import com.youloft.lilith.topic.widget.VoteDialog;
 import com.youloft.lilith.topic.widget.VoteView;
+
+import java.util.ArrayList;
+import java.util.Calendar;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -25,11 +40,11 @@ import io.reactivex.schedulers.Schedulers;
 
 public class VoteHolder extends RecyclerView.ViewHolder {
 
-    ImageView imageTop;
+    private ImageView imageTop;
 
-    TextView textTopicTitle;
+    private TextView textTopicTitle;
 
-    VoteView voteView;
+    private VoteView voteView;
 
     private TopicDetailBean.DataBean topicInfo;
     private VoteDialog voteDialog ;
@@ -37,10 +52,13 @@ public class VoteHolder extends RecyclerView.ViewHolder {
     private ValueAnimator secondAnimation;
     private ValueAnimator thirdAnimation;
     private boolean needVoteAnimation = true;
+    private int isVote = 0;
+    private TopicDetailAdapter adapter;
 
-    public VoteHolder(View itemView) {
+    public VoteHolder(View itemView,TopicDetailAdapter adapter) {
         super(itemView);
         initView();
+        this.adapter =  adapter;
         firstAnimation = new ValueAnimator();
         firstAnimation.setFloatValues(0.0f, 1.0f);
         firstAnimation.setDuration(4000);
@@ -126,32 +144,73 @@ public class VoteHolder extends RecyclerView.ViewHolder {
         voteDialog = new VoteDialog(itemView.getContext());
         voteDialog.setListener(new VoteDialog.OnClickConfirmListener() {
             @Override
-            public void clickConfirm(String msg,int id) {
-                TopicRepo.postVote(String.valueOf(topicInfo.id),String.valueOf(id),"10000",msg)
+            public void clickConfirm(final String msg, final int id) {
+                if (topicInfo !=null && topicInfo.isVote ==1)return;
+                if (topicInfo == null) return;
+                if (isVote == 1 )return;
+                TopicRepo.postVote(String.valueOf(topicInfo.id),String.valueOf(id),"10018",msg)
                         .subscribeOn(Schedulers.newThread())
                         .toObservable()
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new RxObserver<String>() {
+                        .subscribe(new RxObserver<VoteBean>() {
                             @Override
-                            public void onDataSuccess(String s) {
-                                String ms =s;
+                            public void onDataSuccess(VoteBean s) {
+                                int poitnID = (int) s.data;
+                                if (poitnID!= -1) {
+                                    String time = CalendarHelper.getNowTimeString();
+                                    updatePointDb(id,topicInfo.id,poitnID,msg,time);
+
+                                    isVote = 1;
+                                    topicInfo.totalVote++;
+                                    addOptionVote(id);
+                                    voteAniamtion((float) topicInfo.option.get(0).vote/topicInfo.totalVote);
+                                    needVoteAnimation = false;
+                                    addToDb(topicInfo,id);
+                                }
                             }
 
                             @Override
                             protected void onFailed(Throwable e) {
+
                                 super.onFailed(e);
                             }
                         });
-                topicInfo.totalVote++;
-                addOptionVote(id);
-                voteAniamtion((float) topicInfo.option.get(0).vote/topicInfo.totalVote);
+
             }
         });
         imageTop = (ImageView) itemView.findViewById(R.id.image_top);
         textTopicTitle = (TextView) itemView.findViewById(R.id.text_topic_title);
         voteView = (VoteView) itemView.findViewById(R.id.vote_view);
     }
-    public void addOptionVote(int id) {
+
+    private void updatePointDb(int oid ,int tid, int poitnID, String msg,String time) {
+        PointTable pointTable = new PointTable(oid,tid,poitnID,msg,time);
+        PointCache.getIns(itemView.getContext()).insertData(pointTable);
+        UserBean.DataBean.UserInfoBean userInfo = AppSetting.getUserInfo().data.userInfo;
+        PointBean.DataBean dataBean = new PointBean.DataBean();
+        dataBean.userId =  userInfo.id;
+        dataBean.isclick = 0;
+        dataBean.zan = 0;
+        dataBean.buildDate = time;
+        dataBean.nickName = userInfo.nickName;
+        dataBean.reply = 0;
+        dataBean.headImg = userInfo.headImg;
+        dataBean.replyList = new ArrayList<>();
+        dataBean.sex = userInfo.sex;
+        dataBean.signs = userInfo.signs;
+        dataBean.topicOptionId = oid;
+        dataBean.topicId = tid;
+        dataBean.viewpoint = msg;
+        adapter.setPointOnFirst(dataBean);
+
+    }
+
+    private void addToDb(TopicDetailBean.DataBean info,int id) {
+        TopicTable table = new TopicTable(info,id);
+        TopicInfoCache.getIns(itemView.getContext()).insertData(table);
+
+    }
+    private void addOptionVote(int id) {
         if (topicInfo.option == null || topicInfo.option.size() == 0 )return;
         for (int i =0; i < topicInfo.option.size();i ++) {
             if (id == topicInfo.option.get(i).id) {
@@ -160,22 +219,24 @@ public class VoteHolder extends RecyclerView.ViewHolder {
         }
     }
     public void bindView(final TopicDetailBean.DataBean topicInfo) {
-        if (topicInfo == null || topicInfo.option == null)return;
+        if (topicInfo == null || topicInfo.option == null )return;
         this.topicInfo = topicInfo;
         voteView.setInterface(new VoteView.OnItemClickListener() {
             @Override
             public void clickLeft() {
+                if (topicInfo.isVote == 1|| isVote == 1)return;
                 voteDialog.show();
                 voteDialog.setTitle(topicInfo.option.get(0).shortTitle,topicInfo.option.get(0).id);
             }
 
             @Override
             public void clickRight() {
+                if (topicInfo.isVote == 1|| isVote == 1)return;
                 voteDialog.show();
                 voteDialog.setTitle(topicInfo.option.get(1).shortTitle,topicInfo.option.get(1).id);
             }
         });
-        if (needVoteAnimation) {
+        if (topicInfo.isVote ==1 && needVoteAnimation) {
             voteAniamtion((float) topicInfo.option.get(0).vote/topicInfo.totalVote);
             needVoteAnimation = false;
         }
@@ -185,4 +246,6 @@ public class VoteHolder extends RecyclerView.ViewHolder {
                 .into(imageTop);
         textTopicTitle.setText("#" + topicInfo.title);
     }
+
+
 }
