@@ -26,7 +26,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.youloft.lilith.R;
+import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.CalendarHelper;
@@ -92,8 +95,6 @@ public class ConsCalDetailActivity extends BaseActivity {
     LinearLayout mConsDetailContentRoot;
     @BindView(R.id.root)
     FrameLayout mRoot;
-    @BindView(R.id.share_content)
-    FrameLayout mShareContent;
     private int[] week_locals;
     private int distance;
     private ConsPredictsBean mData;
@@ -167,10 +168,10 @@ public class ConsCalDetailActivity extends BaseActivity {
             int todayMonth = -1;
             int nextMonth = -1;
             if (today != null) {
-                todayMonth = getMonth(today.date);
+                todayMonth = getMonth(today.date) + 1; //index是从0开始的，所以+1
             }
             if (dataEnd != null) {
-                nextMonth = getMonth(dataEnd.date);
+                nextMonth = getMonth(dataEnd.date) + 1;
             }
             String titleString = getResources().getString(R.string.cons_cal_title);
             if (nextMonth > 0 && todayMonth > 0) {
@@ -259,38 +260,38 @@ public class ConsCalDetailActivity extends BaseActivity {
         set.start();
     }
 
+    /**
+     * 分享周视图
+     */
     private void share() {
-        CityPicker.getDefCityPicker(this).setOnCityItemClickListener(new OnPickerSelectListener<CityInfo>() {
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final View shareView = inflater.inflate(R.layout.cons_detail_share_view, null); //分享出去的布局跟界面布局不一样，单独构造一个布局
+
+        TextView mShareTitle = (TextView) shareView.findViewById(R.id.cons_detail_title_share);
+        ConsCalendar mShareCal = (ConsCalendar) shareView.findViewById(R.id.cons_detail_cal_view_share);
+        final ImageView mShareBg = (ImageView) shareView.findViewById(R.id.share_bg_img);
+        mShareTitle.setText(mConsDetailTitle.getText().toString());
+        mShareCal.setData(data);
+
+        //不能直接使用glide加载到imageView里边
+        GlideApp.with(shareView).asBitmap().load(data.data.bgImg).into(new SimpleTarget<Bitmap>() {
             @Override
-            public void onSelected(CityInfo data) {
-                Log.d(TAG, "onSelected: " + data.pProvice + data.pCity + data.pDistrict);
+            public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                mShareBg.setImageBitmap(resource);
+                shareView.measure(
+                        View.MeasureSpec.makeMeasureSpec(mConsDetailContentTop.getWidth(), View.MeasureSpec.EXACTLY),
+                        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+                shareView.layout(0, 0, shareView.getMeasuredWidth(),
+                        shareView.getMeasuredHeight());
+
+                Bitmap b = Bitmap.createBitmap(shareView.getMeasuredWidth(), shareView.getMeasuredHeight(), Bitmap.Config.RGB_565);
+                Canvas canvas = new Canvas(b);
+                shareView.draw(canvas);
+
+                new ShareBuilder(ConsCalDetailActivity.this).withImg(b).share();
             }
+        });
 
-            @Override
-            public void onCancel() {
-
-            }
-        }).show();
-//        LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        View shareview = inflater.inflate(R.layout.cons_detail_share_view, null);
-//        mShareContent.addView(shareview);
-//
-//        TextView mShareTitle = (TextView) shareview.findViewById(R.id.cons_detail_title_share);
-//        ConsCalendar mShareCal = (ConsCalendar) shareview.findViewById(R.id.cons_detail_cal_view_share);
-//        mShareTitle.setText(mConsDetailTitle.getText().toString());
-//        mShareCal.setData(data);
-//
-//        mShareContent.setDrawingCacheEnabled(true);
-//        Bitmap drawingCache = mShareContent.getDrawingCache();
-////        mShareContent.setDrawingCacheEnabled(false);
-//        if (drawingCache != null && !drawingCache.isRecycled()) {
-//            new ShareBuilder(this).withImg(drawingCache).share();
-//        }
-//        Bitmap b = Bitmap.createBitmap((int)ViewUtil.dp2px(355),(int)ViewUtil.dp2px(432),Bitmap.Config.RGB_565);
-//        Canvas canvas = new Canvas(b);
-//        shareview.draw(canvas);
-
-//        share1();
     }
 
     private void share1() {
