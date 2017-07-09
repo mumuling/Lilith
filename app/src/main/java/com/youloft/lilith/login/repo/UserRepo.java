@@ -15,6 +15,7 @@ import io.reactivex.Flowable;
  */
 
 public class UserRepo extends AbstractDataRepo{
+    //快捷登录
     static HashMap<String,String> params = new HashMap();
 
     public static Flowable<UserBean> loginForUserInfo(String phone, String code) {

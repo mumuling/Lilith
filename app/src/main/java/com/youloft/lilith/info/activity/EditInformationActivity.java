@@ -9,6 +9,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -30,14 +32,18 @@ import com.youloft.lilith.common.widgets.picker.DatePickerPop;
 import com.youloft.lilith.common.widgets.picker.GenderPickerPop;
 import com.youloft.lilith.common.widgets.picker.OnPickerSelectListener;
 import com.youloft.lilith.common.widgets.picker.TimePickerPop;
+import com.youloft.lilith.common.widgets.view.RoundImageView;
+import com.youloft.lilith.info.bean.UpLoadHeaderBean;
 import com.youloft.lilith.info.bean.UpdateUserInfoBean;
 import com.youloft.lilith.info.repo.UpdateUserRepo;
 import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.ui.view.BaseToolBar;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Date;
@@ -47,7 +53,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -64,7 +73,7 @@ public class EditInformationActivity extends BaseActivity {
     @BindView(R.id.btl_edit_information)
     BaseToolBar btlEditInformation; //标题栏
     @BindView(R.id.iv_header)
-    CircleImageView ivHeader;  //头像
+    ImageView ivHeader;  //头像
     @BindView(R.id.iv_blur_bg)
     ImageView ivBlurBg;  //背景
     @BindView(R.id.tv_nick_name)
@@ -82,6 +91,8 @@ public class EditInformationActivity extends BaseActivity {
     @BindView(R.id.et_nick_name)
     EditText etNickName;  //下面的可编辑昵称
     private String sex;
+    private String mBitBase64;
+    private String mHeaderImageUrl = ""; //头像上传后返回的链接
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -121,7 +132,7 @@ public class EditInformationActivity extends BaseActivity {
                 if (hasFocus) {
                     etNickName.setCursorVisible(true);
                     etNickName.setSelection(etNickName.length());
-                }else {
+                } else {
                     etNickName.setCursorVisible(false);
                 }
             }
@@ -140,17 +151,32 @@ public class EditInformationActivity extends BaseActivity {
                 return;
             }
             UserBean.DataBean.UserInfoBean detail = userInfo.data.userInfo;
-            GlideApp.with(this).load(detail.headImg).into(ivHeader);
+            if(!TextUtils.isEmpty(detail.headImg)){
+                GlideApp.with(this).load(detail.headImg).into(ivHeader);
+            }
             tvNickName.setText(detail.nickName);
             etNickName.setText(detail.nickName);
-            tvSex.setText(detail.sex+"");
+
+            if(detail.sex == 2){
+                tvSex.setText(R.string.man);
+            }else {
+                tvSex.setText(R.string.woman);
+            }
+
             String birthDay = detail.birthDay;
             Date date = CalendarHelper.parseDate(birthDay, DATE_FORMAT);
             mCal.setTime(date);
-            tvDateBirth.setText(CalendarHelper.format(mCal, "yyyy-MM-dd"));
-            tvTimeBirth.setText(CalendarHelper.format(mCal, "HH:mm"));
+            tvDateBirth.setText(CalendarHelper.format(mCal.getTime(), "yyyy-MM-dd"));
+            tvTimeBirth.setText(CalendarHelper.format(mCal.getTime(), "HH:mm"));
             tvPlaceBirth.setText(detail.birthPlace);
             tvPlaceNow.setText(detail.livePlace);
+
+            //去除感叹号
+            deleteTextDrawable(tvSex);
+            deleteTextDrawable(tvDateBirth);
+            deleteTextDrawable(tvTimeBirth);
+            deleteTextDrawable(tvPlaceBirth);
+            deleteTextDrawable(tvPlaceNow);
         }
     }
 
@@ -173,12 +199,11 @@ public class EditInformationActivity extends BaseActivity {
             sex = String.valueOf(2);
         }
         String userId = String.valueOf(AppSetting.getUserInfo().data.userInfo.id);
-        // TODO: 2017/7/9 需要拿到上传头像后的url
-        String headImg = "";
-        final String time = CalendarHelper.format(mCal, DATE_FORMAT);
+        String headImg = mHeaderImageUrl;
+        final String time = CalendarHelper.format(mCal.getTime(), DATE_FORMAT);
         String birthLongi = "";//出生经度
         String birthLati = "";//出生纬度
-        String liveLongi = " ";//现居地经度
+        String liveLongi = "";//现居地经度
         String liveLati = "";//现居地纬度
 
 
@@ -200,6 +225,8 @@ public class EditInformationActivity extends BaseActivity {
                             userInfoDetail.birthPlace = placeBirth;
                             userInfoDetail.livePlace = placeNow;
                             AppSetting.saveUserInfo(userInfo);
+                            //这里也需要发起一个修改用户信息的事件
+                            // TODO: 2017/7/9  发出修改用户信息的事件
                             Toaster.showShort("资料保存成功");
                         } else {
                             Toaster.showShort("资料保存失败");
@@ -219,33 +246,38 @@ public class EditInformationActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Uri uri = data.getData();
-//        File file = new File(String.valueOf(uri));
+
         Bitmap photo = null;
         switch (requestCode) {
             case CODE_CAMERA:
-//                if (data.getData() != null || data.getExtras() != null) { //防止没有返回结果
-//
-//                    if (uri != null) {
-//                        photo = BitmapFactory.decodeFile(uri.getPath()); //拿到图片
-//                    }
-//                    if (photo == null) {
-//                        Bundle bundle = data.getExtras();
-//                        if (bundle != null) {
-//                            photo = (Bitmap) bundle.get("data");
-//                        }
-//                    }
-//                }
+                if (data.getData() != null || data.getExtras() != null) { //防止没有返回结果
+
+                    if (uri != null) {
+                        photo = BitmapFactory.decodeFile(uri.getPath()); //拿到图片
+                    }
+                    if (photo == null) {
+                        Bundle bundle = data.getExtras();
+                        if (bundle != null) {
+                            photo = (Bitmap) bundle.get("data");
+                        }
+                    }
+                }
+                break;
             case CODE_PICK_IMAGE:
                 ContentResolver resolver = getContentResolver();
                 try {
-                    InputStream inputStream = resolver.openInputStream(data.getData());
-                    Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                    InputStream inputStream = resolver.openInputStream(uri);
+                    byte[] bytes = getBytes(inputStream);
+                    mBitBase64 = Base64.encodeToString(bytes, Base64.DEFAULT);
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    String host = uri.getEncodedPath();
+                    String nameEx = host.substring(host.lastIndexOf(".") + 1, host.length());
+                    if (bitmap != null && !bitmap.isRecycled()) {
+                        ivHeader.setImageBitmap(bitmap);
+                        ivBlurBg.setImageBitmap(ViewUtil.blurBitmap(bitmap));
+                    }
 
-                    ivHeader.setImageBitmap(bitmap);
-                    ivBlurBg.setImageBitmap(ViewUtil.blurBitmap(bitmap));
-
-
-//                    String realPathFromUri = getRealPathFromUri(this, uri);
+                    updateUserImg(nameEx);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -255,6 +287,43 @@ public class EditInformationActivity extends BaseActivity {
         }
     }
 
+    private void updateUserImg(String nameEx) {
+        UpdateUserRepo.updateImg(mBitBase64, nameEx, String.valueOf(AppSetting.getUserInfo().data.userInfo.id))
+                .compose(this.<UpLoadHeaderBean>bindToLifecycle())
+                .subscribeOn(Schedulers.newThread())
+                .toObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new RxObserver<UpLoadHeaderBean>() {
+
+                    @Override
+                    public void onDataSuccess(UpLoadHeaderBean upLoadHeaderBean) {
+                        mHeaderImageUrl = upLoadHeaderBean.data;
+                    }
+
+                });
+    }
+
+    private static final String TAG = "EditInformationActivity";
+
+    private byte[] getBytes(InputStream filePath) {
+        byte[] buffer = null;
+        try {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream(1000);
+            byte[] b = new byte[1000];
+            int n;
+            while ((n = filePath.read(b)) != -1) {
+                bos.write(b, 0, n);
+            }
+            filePath.close();
+            bos.close();
+            buffer = bos.toByteArray();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return buffer;
+    }
 
     @OnClick({R.id.fl_sex, R.id.fl_date_birth, R.id.fl_time_birth, R.id.fl_place_birth, R.id.fl_place_now})
     public void onViewClicked(View view) {
@@ -285,7 +354,7 @@ public class EditInformationActivity extends BaseActivity {
                                 mCal.set(Calendar.YEAR, data.get(Calendar.YEAR));
                                 mCal.set(Calendar.MONTH, data.get(Calendar.MONTH));
                                 mCal.set(Calendar.DAY_OF_MONTH, data.get(Calendar.DAY_OF_MONTH));
-                                tvDateBirth.setText(CalendarHelper.format(mCal, "yyyy-MM-dd"));
+                                tvDateBirth.setText(CalendarHelper.format(mCal.getTime(), "yyyy-MM-dd"));
                                 deleteTextDrawable(tvDateBirth);
                             }
 
@@ -304,7 +373,7 @@ public class EditInformationActivity extends BaseActivity {
                             public void onSelected(GregorianCalendar data) {
                                 mCal.set(Calendar.HOUR_OF_DAY, data.get(Calendar.HOUR_OF_DAY));
                                 mCal.set(Calendar.MINUTE, data.get(Calendar.MINUTE));
-                                tvTimeBirth.setText(CalendarHelper.format(mCal, "HH:mm"));
+                                tvTimeBirth.setText(CalendarHelper.format(mCal.getTime(), "HH:mm"));
                                 deleteTextDrawable(tvTimeBirth);
                             }
 

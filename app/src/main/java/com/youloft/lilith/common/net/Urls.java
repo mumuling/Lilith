@@ -41,6 +41,10 @@ public class Urls {
     public static final String LOGIN_URL = "http://lilith.51wnl.com/PwdLogin";
     //修改密码
     public static final String MODIFY_PASSWORD = "http://lilith.51wnl.com/ChangePwd";
+
+    //老密码修改
+    public static final String MODIFY_PASSWORD_WITH_OLD = "http://lilith.51wnl.com/ChangeOldPwd";
+
     //验证老密码的接口
     public static final String CHECK_OLD_PASSWORD = "http://lilith.51wnl.com/CheckPwd";
     //修改用户信息
@@ -50,7 +54,11 @@ public class Urls {
     //意见反馈
     public static final String FEEDBACK = "http://lilith.51wnl.com/Feedback";
     //用户登出
-    public static final String LOGOUT_URL = "http://lilith.51wnl.com/OpenLogin";
+    public static final String LOGOUT_URL = "http://lilith.51wnl.com/DisableToken";
     //检查更新
     public static final String CHECK_VERSION = "http://lilith.51wnl.com/GetSysVersion";
+    //上传图片
+    public static final String UPLOAD_FILE = "http://lilith.51wnl.com/UploadHead";
+    //微信登录
+    public static final String WE_CHAT_LOGIN = "http://lilith.51wnl.com/OpenLogin";
 }

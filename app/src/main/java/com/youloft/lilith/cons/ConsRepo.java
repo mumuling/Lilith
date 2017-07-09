@@ -26,20 +26,20 @@ public class ConsRepo extends AbstractDataRepo {
     static HashMap<String, String> param = new HashMap();
 
     /**
-     * @param birdt    出生日期格式: yyyy-MM-dd
-     * @param birtm    出生时间格式: HH:mm:ss, 缺省: 12:00:00
+     * @param birdt    出生日期格式: yyyy-MM-dd HH:mm:ss
+     * @param birtm    出生时间格式: HH:mm:ss
      * @param birlongi 出生经度	选填, 缺省: 116.07 (北京)
      * @param birlati  出生纬度	选填, 缺省: 34.3 (北京)
      *                 curlongi 当时经度	选填, 缺省: 出生经度
      *                 curlati  当时经度	选填, 缺省: 出生经度
      * @return
      */
-    public static Flowable<ConsPredictsBean> getConsPredicts(String birdt, String birtm, String birlongi, String birlati) {
+    public static Flowable<ConsPredictsBean> getConsPredicts(String birdt, String birtm,String birlongi, String birlati) {
         param.clear();
         String[] location = LocationUtil.getLocation();
         param.put("days", "28");
         param.put("birdt", birdt);
-        param.put("birtm", birtm);
+        param.put("birtm", birdt);
         param.put("birlongi", birlongi);
         param.put("birlati", birlati);
         if (location != null) {

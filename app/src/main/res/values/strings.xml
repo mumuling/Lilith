@@ -54,6 +54,7 @@
     <string name="share_wxhy">微信好友</string>
     <string name="share_wxcc">朋友圈</string>
     <string name="man">男</string>
+    <string name="woman">女</string>
 
     <string-array name="cons_luck_line_color">
         <item>#de5deb,#99de5deb,#0fde5deb</item>

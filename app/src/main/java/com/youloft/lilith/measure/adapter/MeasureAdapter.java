@@ -77,7 +77,7 @@ public class MeasureAdapter extends RecyclerView.Adapter<BaseMeasureHolder> {
     @Override
     public void onBindViewHolder(BaseMeasureHolder holder, int position) {
 
-        if (holder instanceof MeasureCarouselHolder) {//轮播holder
+        if (holder instanceof MeasureCarouselHolder) {  //轮播holder
             holder.bindData(mMeasureData.get(0),position);
         } else if (holder instanceof MasterMeasureHolder) { //大师清算
             holder.bindData(mMeasureData.get(1),position);

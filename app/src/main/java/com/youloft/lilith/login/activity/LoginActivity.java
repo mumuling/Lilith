@@ -254,7 +254,7 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onComplete(SocializePlatform platform, int code, Map<String, String> data) {
-
+                System.out.println("5");
             }
 
             @Override

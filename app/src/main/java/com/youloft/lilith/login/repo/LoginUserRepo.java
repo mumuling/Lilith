@@ -9,17 +9,43 @@ import java.util.HashMap;
 import io.reactivex.Flowable;
 
 /**
- * 手机+密码登录的描述类
+ *
  *
  * Created by GYH on 2017/7/7.
  */
 
 public class LoginUserRepo extends AbstractDataRepo{
+
+
+    //手机加密码登录
     static HashMap<String,String> params = new HashMap();
 
     public static Flowable<UserBean> loginWithPassword(String phone, String password) {
         params.put("phone",phone);
         params.put("pwd",password);
-        return unionFlow(Urls.LOGIN_URL, null, params, true, UserBean.class, "login_user_info", 1);
+        return unionFlow(Urls.LOGIN_URL, null, params, true, UserBean.class, "login_user_info", 0);
+    }
+
+    //微信登录
+    static HashMap<String,String> paramsWeChatLogin = new HashMap();
+
+    /**
+     *
+     * @param nickName  昵称
+     * @param platform  来源
+     * @param headimgurl  头像地址
+     * @param did         设备ID
+     * @param openId      openid
+     * @param gender    性别
+     * @return
+     */
+    public static Flowable<UserBean> wechatLogin(String nickName, String platform,String headimgurl,String did,String openId,String gender) {
+        paramsWeChatLogin.put("NickName",nickName);
+        paramsWeChatLogin.put("platform",platform);
+        paramsWeChatLogin.put("headimgurl",headimgurl);
+        paramsWeChatLogin.put("did",did);
+        paramsWeChatLogin.put("openId",openId);
+        paramsWeChatLogin.put("gender",gender);
+        return unionFlow(Urls.WE_CHAT_LOGIN, null, paramsWeChatLogin, true, UserBean.class, "login_user_info_wechat", 0);
     }
 }

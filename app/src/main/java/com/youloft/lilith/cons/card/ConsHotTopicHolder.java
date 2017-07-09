@@ -43,7 +43,7 @@ public class ConsHotTopicHolder extends CardHolder {
 
         init();
 
-        TopicRepo.getTopicList("1", "10")
+        TopicRepo.getTopicList("2", "10")
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
                 .observeOn(AndroidSchedulers.mainThread())

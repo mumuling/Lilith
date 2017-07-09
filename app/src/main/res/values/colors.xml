@@ -47,6 +47,7 @@
     <color name="cons_detail_bg_color">#af000000</color>
     <!--!!!!!!!!!!!!!!!!!!!!!这个是整个项目基调主题背景色-->
     <color name="theme_background">#282142</color>
+    <color name="login_dialog_bg">#3b325b</color>
     <color name="cons_detail_content_bg_color">#433d5f</color>
     <color name="cons_detail_text_color">#f5f0e9</color>
     <color name="existing_number_text_color">#bb66d6</color>
