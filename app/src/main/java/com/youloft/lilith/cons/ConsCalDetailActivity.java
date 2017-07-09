@@ -35,9 +35,11 @@ import com.youloft.lilith.common.widgets.picker.CityInfo;
 import com.youloft.lilith.common.widgets.picker.CityPicker;
 import com.youloft.lilith.common.widgets.picker.DatePicker;
 import com.youloft.lilith.common.widgets.picker.DatePickerPop;
+import com.youloft.lilith.common.widgets.picker.GenderPickerPop;
 import com.youloft.lilith.common.widgets.picker.OnPickerSelectListener;
 import com.youloft.lilith.common.widgets.picker.TimePickerPop;
 import com.youloft.lilith.cons.bean.ConsPredictsBean;
+import com.youloft.lilith.cons.consmanager.ConsManager;
 import com.youloft.lilith.cons.view.ConsCalendar;
 import com.youloft.lilith.share.ShareBuilder;
 
@@ -257,35 +259,10 @@ public class ConsCalDetailActivity extends BaseActivity {
     }
 
     private void share() {
-//        CityPicker.getDefCityPicker(this).setOnCityItemClickListener(new OnPickerSelectListener<CityInfo>() {
-//            @Override
-//            public void onSelected(CityInfo citySelected) {
-//
-//            }
-//
-//            @Override
-//            public void onCancel() {
-//
-//            }
-//        }).show();
-
-//        TimePickerPop.getDefaultTimePicker(this).setOnSelectListener(new OnPickerSelectListener<String>() {
-//            @Override
-//            public void onSelected(String citySelected) {
-//                Log.d(TAG, "onSelected() called with: citySelected = [" + citySelected + "]");
-//            }
-//
-//            @Override
-//            public void onCancel() {
-//                Log.d(TAG, "onCancel() called");
-//            }
-//        }).show();
-        final java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyyMMdd");
-        DatePickerPop.getDefaultDatePicker(this).setOnSelectListener(new OnPickerSelectListener<Date>() {
+        GenderPickerPop.getDefaultDatePicker(this).setOnSelectListener(new OnPickerSelectListener<String>() {
             @Override
-            public void onSelected(Date data) {
-
-                Log.d(TAG, "onSelected() called with: data = [" + format.format(data) + "]");
+            public void onSelected(String data) {
+                Log.d(TAG, "onSelected() called with: data = [" + data + "]");
             }
 
             @Override
@@ -293,7 +270,6 @@ public class ConsCalDetailActivity extends BaseActivity {
 
             }
         }).show();
-
 //        LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 //        View shareview = inflater.inflate(R.layout.cons_detail_share_view, null);
 //        shareview.setLayoutParams(mShareContent.getLayoutParams());
