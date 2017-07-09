@@ -141,7 +141,13 @@ public class ShareActivity extends BaseActivity {
     @OnClick(R.id.share_wx_hy)
     public void shareHY() {
         mShareAction.setPlatform(SocializePlatform.WEIXIN)
-                .setCallback(new ShareEventListener("xxx")).share();
+                .setCallback(new ShareEventListener("xxx"){
+                    @Override
+                    public void onResult(SocializePlatform share_media) {
+                        super.onResult(share_media);
+                        cancel();
+                    }
+                }).share();
     }
 
     /**
@@ -150,7 +156,13 @@ public class ShareActivity extends BaseActivity {
     @OnClick(R.id.share_wx_pyq)
     public void sharePYQ() {
         mShareAction.setPlatform(SocializePlatform.WEIXIN_CIRCLE)
-                .setCallback(new ShareEventListener("xxx")).share();
+                .setCallback(new ShareEventListener("xxx"){
+                    @Override
+                    public void onResult(SocializePlatform share_media) {
+                        super.onResult(share_media);
+                        cancel();
+                    }
+                }).share();
     }
 
     /**

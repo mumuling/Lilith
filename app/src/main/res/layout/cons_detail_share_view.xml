@@ -1,100 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root_share"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/cons_detail_bg_color"
+    android:background="@color/cons_detail_content_bg_color"
     android:orientation="vertical">
-
-
-    <TextView
-        android:id="@+id/cons_detail_title_share"
+    <ImageView
+        android:id="@+id/share_bg_img"
         android:layout_width="match_parent"
-        android:layout_height="47dp"
-        android:gravity="center"
-        android:textColor="@color/cons_detail_text_color"
-        tools:text="@string/cons_cal_title" />
-
-    <com.youloft.lilith.cons.view.ConsCalendar
-        android:id="@+id/cons_detail_cal_view_share"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <FrameLayout
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
+        android:layout_alignTop="@+id/share_content"
+        android:layout_alignBottom="@+id/share_content"/>
+    <LinearLayout
+        android:id="@+id/share_content"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="14dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:paddingTop="14dp">
+        <TextView
+            android:id="@+id/cons_detail_title_share"
+            android:layout_width="match_parent"
+            android:layout_height="47dp"
+            android:gravity="center"
+            android:textColor="@color/cons_detail_text_color"
+            tools:text="@string/cons_cal_title" />
 
-            <TextView
+        <com.youloft.lilith.cons.view.ConsCalendar
+            android:id="@+id/cons_detail_cal_view_share"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:drawableLeft="@drawable/calendar_love_icon"
-                android:drawablePadding="8dp"
-                android:gravity="center_vertical"
-                android:text="@string/cons_love_text"
-                android:textColor="@color/cons_detail_text_color"
-                android:textSize="15dp" />
+                android:orientation="vertical"
+                android:paddingBottom="14dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingTop="14dp">
 
-            <TextView
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableLeft="@drawable/calendar_love_icon"
+                    android:drawablePadding="8dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/cons_love_text"
+                    android:textColor="@color/cons_detail_text_color"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableLeft="@drawable/calendar_money_icon"
+                    android:drawablePadding="8dp"
+                    android:gravity="center_vertical"
+                    android:paddingTop="14dp"
+                    android:text="@string/cons_money_text"
+                    android:textColor="@color/cons_detail_text_color"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/calendar_work_icon"
+                    android:drawablePadding="8dp"
+                    android:gravity="center_vertical"
+                    android:paddingTop="14dp"
+                    android:text="@string/cons_work_text"
+                    android:textColor="@color/cons_detail_text_color"
+                    android:textSize="15dp" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:drawableLeft="@drawable/calendar_money_icon"
-                android:drawablePadding="8dp"
-                android:gravity="center_vertical"
-                android:paddingTop="14dp"
-                android:text="@string/cons_money_text"
-                android:textColor="@color/cons_detail_text_color"
-                android:textSize="15dp" />
+                android:layout_gravity="right|center_vertical"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:paddingBottom="14dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="24dp"
+                android:paddingTop="7dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/calendar_work_icon"
-                android:drawablePadding="8dp"
-                android:gravity="center_vertical"
-                android:paddingTop="14dp"
-                android:text="@string/cons_work_text"
-                android:textColor="@color/cons_detail_text_color"
-                android:textSize="15dp" />
-        </LinearLayout>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/login_weixin_icon" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right|center_vertical"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:paddingBottom="14dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="24dp"
-            android:paddingTop="7dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:text="@string/cons_share_customization_text"
+                    android:textColor="@color/white"
+                    android:textSize="10dp" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/login_weixin_icon" />
+            </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
-                android:text="@string/cons_share_customization_text"
-                android:textColor="@color/white"
-                android:textSize="10dp" />
-
-        </LinearLayout>
-
-    </FrameLayout>
-
-</LinearLayout>
+        </FrameLayout>
+    </LinearLayout>
+</RelativeLayout>
