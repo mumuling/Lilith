@@ -689,7 +689,6 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
     private void updateAreas() {
         int pCurrent = mViewCity.getCurrentItem();
         mCurrentCityName = mCitisDatasMap.get(mCurrentProviceName)[pCurrent];
-        mCurrentCityInfo.pProvice = mCurrentCityName;
         String[] areas = mDistrictDatasMap.get(mCurrentCityName);
 
         if (areas == null) {
@@ -721,6 +720,8 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
             mCurrentDistrictName = mDistrictDatasMap.get(mCurrentCityName)[0];
 
         }
+        mCurrentCityInfo.pCity = mCurrentCityName;
+        mCurrentCityInfo.pDistrict = mCurrentDistrictName;
         districtWheel.setPadding(padding);
     }
 
@@ -730,7 +731,6 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
     private void updateCities() {
         int pCurrent = mViewProvince.getCurrentItem();
         mCurrentProviceName = mProvinceDatas[pCurrent];
-        mCurrentCityInfo.pProvice = mCurrentProviceName;
         String[] cities = mCitisDatasMap.get(mCurrentProviceName);
         if (cities == null) {
             cities = new String[]{""};
@@ -757,6 +757,7 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
             mViewCity.setCurrentItem(0);
         }
 
+        mCurrentCityInfo.pProvice = mCurrentProviceName;
         cityWheel.setPadding(padding);
         updateAreas();
     }

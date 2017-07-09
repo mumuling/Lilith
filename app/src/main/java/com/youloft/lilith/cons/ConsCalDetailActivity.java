@@ -20,6 +20,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -259,10 +260,10 @@ public class ConsCalDetailActivity extends BaseActivity {
     }
 
     private void share() {
-        GenderPickerPop.getDefaultDatePicker(this).setOnSelectListener(new OnPickerSelectListener<String>() {
+        CityPicker.getDefCityPicker(this).setOnCityItemClickListener(new OnPickerSelectListener<CityInfo>() {
             @Override
-            public void onSelected(String data) {
-                Log.d(TAG, "onSelected() called with: data = [" + data + "]");
+            public void onSelected(CityInfo data) {
+                Log.d(TAG, "onSelected: " + data.pProvice + data.pCity + data.pDistrict);
             }
 
             @Override
@@ -272,23 +273,23 @@ public class ConsCalDetailActivity extends BaseActivity {
         }).show();
 //        LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 //        View shareview = inflater.inflate(R.layout.cons_detail_share_view, null);
-//        shareview.setLayoutParams(mShareContent.getLayoutParams());
+//        mShareContent.addView(shareview);
+//
 //        TextView mShareTitle = (TextView) shareview.findViewById(R.id.cons_detail_title_share);
 //        ConsCalendar mShareCal = (ConsCalendar) shareview.findViewById(R.id.cons_detail_cal_view_share);
-//        mShareContent.addView(shareview);
 //        mShareTitle.setText(mConsDetailTitle.getText().toString());
 //        mShareCal.setData(data);
-//        mShareContent.postInvalidate();
-//        shareview.measure(
-//                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-//                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-//        shareview.layout(0, 0, shareview.getMeasuredWidth(), shareview.getMeasuredHeight());
-
-//        Bitmap b = Bitmap.createBitmap(shareview.getMeasuredWidth(), shareview.getMeasuredHeight(), Bitmap.Config.RGB_565);
+//
+//        mShareContent.setDrawingCacheEnabled(true);
+//        Bitmap drawingCache = mShareContent.getDrawingCache();
+////        mShareContent.setDrawingCacheEnabled(false);
+//        if (drawingCache != null && !drawingCache.isRecycled()) {
+//            new ShareBuilder(this).withImg(drawingCache).share();
+//        }
+//        Bitmap b = Bitmap.createBitmap((int)ViewUtil.dp2px(355),(int)ViewUtil.dp2px(432),Bitmap.Config.RGB_565);
 //        Canvas canvas = new Canvas(b);
 //        shareview.draw(canvas);
-//
-//        new ShareBuilder(this).withImg(b).share();
+
 //        share1();
     }
 

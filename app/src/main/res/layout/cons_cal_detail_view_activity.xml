@@ -4,13 +4,7 @@
     android:layout_width="match_parent"
     android:id="@+id/root"
     android:layout_height="match_parent">
-    <FrameLayout
-        android:id="@+id/share_content"
-        android:visibility="invisible"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
-    </FrameLayout>
     <ImageView
         android:id="@+id/cons_detail_bg_img"
         android:layout_width="match_parent"
@@ -155,5 +149,11 @@
         </LinearLayout>
     </LinearLayout>
 
+    <FrameLayout
+        android:id="@+id/share_content"
+        android:visibility="visible"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
+    </FrameLayout>
 </FrameLayout>

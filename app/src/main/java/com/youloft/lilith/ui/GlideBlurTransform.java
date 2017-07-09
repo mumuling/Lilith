@@ -13,6 +13,7 @@ import android.renderscript.ScriptIntrinsicBlur;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.youloft.lilith.common.utils.ViewUtil;
+import com.youloft.lilith.cons.consmanager.ConsManager;
 
 import java.security.MessageDigest;
 

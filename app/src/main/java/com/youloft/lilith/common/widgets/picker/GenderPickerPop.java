@@ -79,7 +79,6 @@ public class GenderPickerPop implements CanShow, OnWheelChangedListener{
         mCancel = popview.findViewById(R.id.tv_cancel);
         mGenderWheel = (WheelView) popview.findViewById(R.id.gender_wheel_view);
         mGenderWheel.addChangingListener(this);
-
         popwindow = new PopupWindow(popview, LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT);
         popwindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
