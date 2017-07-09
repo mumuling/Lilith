@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.youloft.lilith.R;
+import com.youloft.lilith.common.utils.SafeUtil;
 import com.youloft.lilith.measure.bean.MeasureBean;
 import com.youloft.lilith.measure.holder.BaseMeasureHolder;
 import com.youloft.lilith.measure.holder.ImmediatelyMeasureHolder;
@@ -90,6 +91,9 @@ public class MeasureAdapter extends RecyclerView.Adapter<BaseMeasureHolder> {
     @Override
     public int getItemCount() {
         //这里的长度需要计算一下  当最后一个的location为四的时候 需要加上一个长度
+        if(mMeasureData == null || mMeasureData.size() == 0){
+            return 0;
+        }
         MeasureBean.DataBean dataBean = mMeasureData.get(mMeasureData.size() - 1);
         if (dataBean.location == 4) {
             return mMeasureData.size() + dataBean.ads.size() - 1;

@@ -93,7 +93,7 @@ public class MainActivity extends BaseActivity {
                 .subscribe(new RxObserver<CheckLoginBean>() {
                     @Override
                     public void onDataSuccess(CheckLoginBean checkLoginBean) {
-                        String token = (String) checkLoginBean.data;
+                        String token = checkLoginBean.data;
                         String accessToken = userInfo.data.userInfo.accessToken;
                         if(token.equals(accessToken)){
                             AppConfig.LOGIN_STATUS = true;//登录状态设置为 登录

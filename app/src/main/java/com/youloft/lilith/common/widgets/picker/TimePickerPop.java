@@ -12,6 +12,7 @@ import android.widget.PopupWindow;
 import com.youloft.lilith.R;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
@@ -30,8 +31,8 @@ public class TimePickerPop implements CanShow, TimePicker.onTimeChangedListener 
     private final TimePicker mTimePicker;
     private int hour = 0;
     private int min = 0;
-
-    private OnPickerSelectListener listener;
+    private GregorianCalendar mCal = new GregorianCalendar();
+    private OnPickerSelectListener<GregorianCalendar> listener;
 
     public TimePickerPop(Context mContext) {
         this.mContext = mContext;
@@ -58,7 +59,7 @@ public class TimePickerPop implements CanShow, TimePicker.onTimeChangedListener 
             @Override
             public void onClick(View v) {
                 if (listener != null) {
-                    listener.onSelected(String.valueOf(hour) + ":" + String.valueOf(min));
+                    listener.onSelected(mCal);
                 }
                 hide();
             }
@@ -75,6 +76,11 @@ public class TimePickerPop implements CanShow, TimePicker.onTimeChangedListener 
         });
     }
 
+    public TimePickerPop setDate(Date date){
+        mCal.setTime(date);
+        setUpData();
+        return this;
+    }
     public TimePickerPop setOnSelectListener(OnPickerSelectListener listener) {
         this.listener = listener;
         return this;
@@ -99,9 +105,8 @@ public class TimePickerPop implements CanShow, TimePicker.onTimeChangedListener 
     }
 
     private void setUpData() {
-        GregorianCalendar cal = new GregorianCalendar();
-        hour = cal.get(Calendar.HOUR_OF_DAY);
-        min = cal.get(Calendar.MINUTE);
+        hour = mCal.get(Calendar.HOUR_OF_DAY);
+        min = mCal.get(Calendar.MINUTE);
         mTimePicker.setHourAndMin(hour, min);
     }
 
@@ -121,5 +126,7 @@ public class TimePickerPop implements CanShow, TimePicker.onTimeChangedListener 
     public void onDateChanged(int hour, int min, int amOrpm) {
         this.hour = hour;
         this.min = min;
+        mCal.set(Calendar.HOUR_OF_DAY, hour);
+        mCal.set(Calendar.MINUTE, min);
     }
 }

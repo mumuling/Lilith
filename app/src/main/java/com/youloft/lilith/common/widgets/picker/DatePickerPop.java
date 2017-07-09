@@ -30,7 +30,7 @@ public class DatePickerPop implements CanShow ,DatePicker.onDateChangedListener{
     private final DatePicker mDatePicker;
     private GregorianCalendar date = new GregorianCalendar();
 
-    private OnPickerSelectListener<Date> listener;
+    private OnPickerSelectListener<GregorianCalendar> listener;
     public DatePickerPop(Context mContext) {
         this.mContext = mContext;
 
@@ -55,7 +55,7 @@ public class DatePickerPop implements CanShow ,DatePicker.onDateChangedListener{
             @Override
             public void onClick(View v) {
                 if (listener != null) {
-                    listener.onSelected(date.getTime());
+                    listener.onSelected(date);
                 }
                 hide();
             }
@@ -74,6 +74,12 @@ public class DatePickerPop implements CanShow ,DatePicker.onDateChangedListener{
 
     public DatePickerPop setOnSelectListener(OnPickerSelectListener listener){
         this.listener = listener;
+        return this;
+    }
+
+    public DatePickerPop setDate(GregorianCalendar cal){
+        date.setTime(cal.getTime());
+        setUpData();
         return this;
     }
 

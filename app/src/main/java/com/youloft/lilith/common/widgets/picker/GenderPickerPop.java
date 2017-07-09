@@ -115,7 +115,7 @@ public class GenderPickerPop implements CanShow, OnWheelChangedListener{
         return this;
     }
 
-    public static GenderPickerPop getDefaultDatePicker(Context context) {
+    public static GenderPickerPop getDefaultGenderPicker(Context context) {
         return new GenderPickerPop(context);
     }
 

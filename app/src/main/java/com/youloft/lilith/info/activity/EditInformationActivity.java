@@ -20,6 +20,7 @@ import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.rx.RxObserver;
+import com.youloft.lilith.common.utils.CalendarHelper;
 import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.common.utils.ViewUtil;
 import com.youloft.lilith.common.widgets.dialog.PhotoSelectDialog;
@@ -35,10 +36,12 @@ import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.ui.view.BaseToolBar;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -56,7 +59,8 @@ import io.reactivex.schedulers.Schedulers;
 public class EditInformationActivity extends BaseActivity {
     public static final int CODE_PICK_IMAGE = 8;//打开相册的状态码
     public static final int CODE_CAMERA = 7;//打开相机
-
+    GregorianCalendar mCal = new GregorianCalendar();
+    public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
     @BindView(R.id.btl_edit_information)
     BaseToolBar btlEditInformation; //标题栏
     @BindView(R.id.iv_header)
@@ -141,11 +145,10 @@ public class EditInformationActivity extends BaseActivity {
             etNickName.setText(detail.nickName);
             tvSex.setText(detail.sex+"");
             String birthDay = detail.birthDay;
-            String[] split = birthDay.split(" ");
-            String dateBirth = split[0];
-            String timeBirth = split[1];
-            tvDateBirth.setText(dateBirth);
-            tvTimeBirth.setText(timeBirth);
+            Date date = CalendarHelper.parseDate(birthDay, DATE_FORMAT);
+            mCal.setTime(date);
+            tvDateBirth.setText(CalendarHelper.format(mCal, "yyyy-MM-dd"));
+            tvTimeBirth.setText(CalendarHelper.format(mCal, "HH:mm"));
             tvPlaceBirth.setText(detail.birthPlace);
             tvPlaceNow.setText(detail.livePlace);
         }
@@ -172,7 +175,7 @@ public class EditInformationActivity extends BaseActivity {
         String userId = String.valueOf(AppSetting.getUserInfo().data.userInfo.id);
         // TODO: 2017/7/9 需要拿到上传头像后的url
         String headImg = "";
-        final String time = dateBirth + " " + timeBirth + " :00";
+        final String time = CalendarHelper.format(mCal, DATE_FORMAT);
         String birthLongi = "";//出生经度
         String birthLati = "";//出生纬度
         String liveLongi = " ";//现居地经度
@@ -197,9 +200,9 @@ public class EditInformationActivity extends BaseActivity {
                             userInfoDetail.birthPlace = placeBirth;
                             userInfoDetail.livePlace = placeNow;
                             AppSetting.saveUserInfo(userInfo);
-                            finish();
+                            Toaster.showShort("资料保存成功");
                         } else {
-                            Toaster.showShort("保存数据失败");
+                            Toaster.showShort("资料保存失败");
                         }
 
                     }
@@ -216,6 +219,7 @@ public class EditInformationActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Uri uri = data.getData();
+//        File file = new File(String.valueOf(uri));
         Bitmap photo = null;
         switch (requestCode) {
             case CODE_CAMERA:
@@ -256,7 +260,7 @@ public class EditInformationActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.fl_sex:
-                GenderPickerPop.getDefaultDatePicker(this)
+                GenderPickerPop.getDefaultGenderPicker(this)
                         .setOnSelectListener(new OnPickerSelectListener() {
                             @Override
                             public void onSelected(Object data) {
@@ -274,13 +278,14 @@ public class EditInformationActivity extends BaseActivity {
                 break;
             case R.id.fl_date_birth:
                 DatePickerPop.getDefaultDatePicker(this)
-                        .setOnSelectListener(new OnPickerSelectListener() {
+                        .setDate(mCal)
+                        .setOnSelectListener(new OnPickerSelectListener<GregorianCalendar>() {
                             @Override
-                            public void onSelected(Object data) {
-                                Date date = (Date) data;
-                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                                String format = sdf.format(date);
-                                tvDateBirth.setText(format);
+                            public void onSelected(GregorianCalendar data) {
+                                mCal.set(Calendar.YEAR, data.get(Calendar.YEAR));
+                                mCal.set(Calendar.MONTH, data.get(Calendar.MONTH));
+                                mCal.set(Calendar.DAY_OF_MONTH, data.get(Calendar.DAY_OF_MONTH));
+                                tvDateBirth.setText(CalendarHelper.format(mCal, "yyyy-MM-dd"));
                                 deleteTextDrawable(tvDateBirth);
                             }
 
@@ -293,11 +298,13 @@ public class EditInformationActivity extends BaseActivity {
                 break;
             case R.id.fl_time_birth:
                 TimePickerPop.getDefaultTimePicker(this)
-                        .setOnSelectListener(new OnPickerSelectListener() {
+                        .setDate(mCal.getTime())
+                        .setOnSelectListener(new OnPickerSelectListener<GregorianCalendar>() {
                             @Override
-                            public void onSelected(Object data) {
-                                String time = (String) data;
-                                tvTimeBirth.setText(time);
+                            public void onSelected(GregorianCalendar data) {
+                                mCal.set(Calendar.HOUR_OF_DAY, data.get(Calendar.HOUR_OF_DAY));
+                                mCal.set(Calendar.MINUTE, data.get(Calendar.MINUTE));
+                                tvTimeBirth.setText(CalendarHelper.format(mCal, "HH:mm"));
                                 deleteTextDrawable(tvTimeBirth);
                             }
 

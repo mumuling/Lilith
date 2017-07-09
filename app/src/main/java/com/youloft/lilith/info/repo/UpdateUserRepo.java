@@ -51,7 +51,7 @@ public class UpdateUserRepo extends AbstractDataRepo{
         paramsUpdateUserInfo.put("LiveLongi",liveLongi);
         paramsUpdateUserInfo.put("LiveLati",liveLati);
 
-        return unionFlow(Urls.MODIFY_PASSWORD, null, paramsUpdateUserInfo, true, UpdateUserInfoBean.class, "update_user_info", 0);
+        return unionFlow(Urls.UPDATE_USER_INFO, null, paramsUpdateUserInfo, true, UpdateUserInfoBean.class, "update_user_info", 0);
     }
 
 
@@ -59,6 +59,6 @@ public class UpdateUserRepo extends AbstractDataRepo{
     static HashMap<String,String> paramsCheckLoginStatus = new HashMap();
     public static Flowable<CheckLoginBean> checkLoginStatus(String uid) {
         paramsCheckLoginStatus.put("uid",uid);
-        return unionFlow(Urls.MODIFY_PASSWORD, null, paramsCheckLoginStatus, true, CheckLoginBean.class, "check_login", 0);
+        return unionFlow(Urls.CHECK_LOGIN_STATUS, null, paramsCheckLoginStatus, true, CheckLoginBean.class, "check_login", 0);
     }
 }

@@ -42,4 +42,14 @@ public class Urls {
     public static final String MODIFY_PASSWORD = "http://lilith.51wnl.com/ChangePwd";
     //验证老密码的接口
     public static final String CHECK_OLD_PASSWORD = "http://lilith.51wnl.com/CheckPwd";
+    //修改用户信息
+    public static final String UPDATE_USER_INFO = "http://lilith.51wnl.com/ChangeUserInfo";
+    //检查登录
+    public static final String CHECK_LOGIN_STATUS = "http://lilith.51wnl.com/ValidToken";
+    //意见反馈
+    public static final String FEEDBACK = "http://lilith.51wnl.com/Feedback";
+    //用户登出
+    public static final String LOGOUT_URL = "http://lilith.51wnl.com/OpenLogin";
+    //检查更新
+    public static final String CHECK_VERSION = "http://lilith.51wnl.com/GetSysVersion";
 }
