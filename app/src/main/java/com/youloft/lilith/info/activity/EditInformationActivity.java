@@ -32,6 +32,8 @@ import com.youloft.lilith.common.widgets.picker.DatePickerPop;
 import com.youloft.lilith.common.widgets.picker.GenderPickerPop;
 import com.youloft.lilith.common.widgets.picker.OnPickerSelectListener;
 import com.youloft.lilith.common.widgets.picker.TimePickerPop;
+import com.youloft.lilith.common.widgets.view.RoundImageView;
+import com.youloft.lilith.info.bean.UpLoadHeaderBean;
 import com.youloft.lilith.info.bean.UpdateUserInfoBean;
 import com.youloft.lilith.info.repo.UpdateUserRepo;
 import com.youloft.lilith.login.bean.UserBean;
@@ -71,7 +73,7 @@ public class EditInformationActivity extends BaseActivity {
     @BindView(R.id.btl_edit_information)
     BaseToolBar btlEditInformation; //标题栏
     @BindView(R.id.iv_header)
-    CircleImageView ivHeader;  //头像
+    ImageView ivHeader;  //头像
     @BindView(R.id.iv_blur_bg)
     ImageView ivBlurBg;  //背景
     @BindView(R.id.tv_nick_name)
@@ -90,6 +92,7 @@ public class EditInformationActivity extends BaseActivity {
     EditText etNickName;  //下面的可编辑昵称
     private String sex;
     private String mBitBase64;
+    private String mHeaderImageUrl = ""; //头像上传后返回的链接
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -148,10 +151,18 @@ public class EditInformationActivity extends BaseActivity {
                 return;
             }
             UserBean.DataBean.UserInfoBean detail = userInfo.data.userInfo;
-            GlideApp.with(this).load(detail.headImg).into(ivHeader);
+            if(!TextUtils.isEmpty(detail.headImg)){
+                GlideApp.with(this).load(detail.headImg).into(ivHeader);
+            }
             tvNickName.setText(detail.nickName);
             etNickName.setText(detail.nickName);
-            tvSex.setText(detail.sex + "");
+
+            if(detail.sex == 2){
+                tvSex.setText(R.string.man);
+            }else {
+                tvSex.setText(R.string.woman);
+            }
+
             String birthDay = detail.birthDay;
             Date date = CalendarHelper.parseDate(birthDay, DATE_FORMAT);
             mCal.setTime(date);
@@ -159,6 +170,13 @@ public class EditInformationActivity extends BaseActivity {
             tvTimeBirth.setText(CalendarHelper.format(mCal.getTime(), "HH:mm"));
             tvPlaceBirth.setText(detail.birthPlace);
             tvPlaceNow.setText(detail.livePlace);
+
+            //去除感叹号
+            deleteTextDrawable(tvSex);
+            deleteTextDrawable(tvDateBirth);
+            deleteTextDrawable(tvTimeBirth);
+            deleteTextDrawable(tvPlaceBirth);
+            deleteTextDrawable(tvPlaceNow);
         }
     }
 
@@ -181,12 +199,11 @@ public class EditInformationActivity extends BaseActivity {
             sex = String.valueOf(2);
         }
         String userId = String.valueOf(AppSetting.getUserInfo().data.userInfo.id);
-        // TODO: 2017/7/9 需要拿到上传头像后的url
-        String headImg = "";
+        String headImg = mHeaderImageUrl;
         final String time = CalendarHelper.format(mCal.getTime(), DATE_FORMAT);
         String birthLongi = "";//出生经度
         String birthLati = "";//出生纬度
-        String liveLongi = " ";//现居地经度
+        String liveLongi = "";//现居地经度
         String liveLati = "";//现居地纬度
 
 
@@ -208,6 +225,8 @@ public class EditInformationActivity extends BaseActivity {
                             userInfoDetail.birthPlace = placeBirth;
                             userInfoDetail.livePlace = placeNow;
                             AppSetting.saveUserInfo(userInfo);
+                            //这里也需要发起一个修改用户信息的事件
+                            // TODO: 2017/7/9  发出修改用户信息的事件
                             Toaster.showShort("资料保存成功");
                         } else {
                             Toaster.showShort("资料保存失败");
@@ -253,8 +272,10 @@ public class EditInformationActivity extends BaseActivity {
                     Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                     String host = uri.getEncodedPath();
                     String nameEx = host.substring(host.lastIndexOf(".") + 1, host.length());
-                    ivHeader.setImageBitmap(bitmap);
-                    ivBlurBg.setImageBitmap(ViewUtil.blurBitmap(bitmap));
+                    if (bitmap != null && !bitmap.isRecycled()) {
+                        ivHeader.setImageBitmap(bitmap);
+                        ivBlurBg.setImageBitmap(ViewUtil.blurBitmap(bitmap));
+                    }
 
                     updateUserImg(nameEx);
                 } catch (FileNotFoundException e) {
@@ -267,47 +288,19 @@ public class EditInformationActivity extends BaseActivity {
     }
 
     private void updateUserImg(String nameEx) {
-        UpdateUserRepo.updateImg(mBitBase64, nameEx).compose(this.<String>bindToLifecycle())
+        UpdateUserRepo.updateImg(mBitBase64, nameEx, String.valueOf(AppSetting.getUserInfo().data.userInfo.id))
+                .compose(this.<UpLoadHeaderBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new RxObserver<String>() {
-                               @Override
-                               public void onDataSuccess(String s) {
-                                   Log.d(TAG, "onDataSuccess() called with: s = [" + s + "]");
-                               }
+                .subscribe(new RxObserver<UpLoadHeaderBean>() {
 
-                               @Override
-                               public void onSubscribe(@NonNull Disposable d) {
-                                   Log.d(TAG, "onSubscribe() called with: d = [" + d + "]");
-                                   super.onSubscribe(d);
-                               }
+                    @Override
+                    public void onDataSuccess(UpLoadHeaderBean upLoadHeaderBean) {
+                        mHeaderImageUrl = upLoadHeaderBean.data;
+                    }
 
-                               @Override
-                               public void onNext(@NonNull String s) {
-                                   Log.d(TAG, "onNext() called with: s = [" + s + "]");
-                                   super.onNext(s);
-                               }
-
-                               @Override
-                               public void onError(@NonNull Throwable e) {
-                                   Log.d(TAG, "onError() called with: e = [" + e + "]");
-                                   super.onError(e);
-                               }
-
-                               @Override
-                               protected void onFailed(Throwable e) {
-                                   Log.d(TAG, "onFailed() called with: e = [" + e + "]");
-                                   super.onFailed(e);
-                               }
-
-                               @Override
-                               public void onComplete() {
-                                   Log.d(TAG, "onComplete() called");
-                                   super.onComplete();
-                               }
-                           }
-                );
+                });
     }
 
     private static final String TAG = "EditInformationActivity";

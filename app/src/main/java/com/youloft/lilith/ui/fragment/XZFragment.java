@@ -115,7 +115,7 @@ public class XZFragment extends BaseFragment {
      * 显示登录画面或显示填写资料画面
      */
     private void showDialog(int type) {
-        new LogInOrCompleteDialog(mContext).show();
+//        new LogInOrCompleteDialog(mContext).show();
     }
 
     /**
