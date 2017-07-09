@@ -18,12 +18,18 @@ import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.event.TabChangeEvent;
 import com.youloft.lilith.common.net.OnlineConfigAgent;
+import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.ViewUtil;
 import com.youloft.lilith.cons.ConsRepo;
+import com.youloft.lilith.info.bean.CheckLoginBean;
+import com.youloft.lilith.info.repo.UpdateUserRepo;
+import com.youloft.lilith.login.bean.UserBean;
+import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.ui.view.NavBarLayout;
 
 import org.greenrobot.eventbus.EventBus;
@@ -33,6 +39,9 @@ import org.greenrobot.eventbus.ThreadMode;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * 主页面
@@ -62,7 +71,35 @@ public class MainActivity extends BaseActivity {
         //更新配置项
         OnlineConfigAgent.getInstance().onAppStart(getApplicationContext());
         mMainTabManager = new TabManager(this);
+        checkLogin();
+    }
 
+    /**
+     * 检查用户登录状态
+     */
+    private void checkLogin() {
+        final UserBean userInfo = AppSetting.getUserInfo();
+        if(userInfo == null || userInfo.data == null || userInfo.data.userInfo == null){
+            return;
+        }
+        if(userInfo.data.userInfo.id == 0){
+            return;
+        }
+        UpdateUserRepo.checkLoginStatus(String.valueOf(userInfo.data.userInfo.id))
+                .compose(this.<CheckLoginBean>bindToLifecycle())
+                .subscribeOn(Schedulers.newThread())
+                .toObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new RxObserver<CheckLoginBean>() {
+                    @Override
+                    public void onDataSuccess(CheckLoginBean checkLoginBean) {
+                        String token = (String) checkLoginBean.data;
+                        String accessToken = userInfo.data.userInfo.accessToken;
+                        if(token.equals(accessToken)){
+                            AppConfig.LOGIN_STATUS = true;//登录状态设置为 登录
+                        }
+                    }
+                });
     }
 
     @Override

@@ -13,11 +13,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.base.BaseFragment;
 import com.youloft.lilith.login.activity.LoginActivity;
 import com.youloft.lilith.login.bean.UserBean;
+import com.youloft.lilith.login.event.LoginEvent;
 import com.youloft.lilith.setting.AppSetting;
 
 import org.greenrobot.eventbus.EventBus;
@@ -64,18 +66,25 @@ public class MEFragment extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        EventBus.getDefault().register(this);
+        EventBus.getDefault().register(this);
     }
 
     //登录成功之后接收到的事件  快捷登录, 注册成功, 账号密码登录, 三方登录 都会发送事件到这个地方
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread() {
+    public void onEventMainThread(LoginEvent loginEvent) {
         //登录成功了,图片,昵称
+        setUserInfo();
+    }
+
+    /**
+     * 填充用户数据
+     */
+    private void setUserInfo() {
         UserBean userInfo = AppSetting.getUserInfo();
         String headImgUrl = userInfo.data.userInfo.headImg;
         String nickName = userInfo.data.userInfo.nickName;
         tvNickName.setText(nickName);
-        if(!TextUtils.isEmpty(headImgUrl)){
+        if (!TextUtils.isEmpty(headImgUrl)) {
             GlideApp.with(mContext).load(headImgUrl).into(ivHeader);
         }
 //        ConsManager.getConsSrc("1").pKey
@@ -100,7 +109,10 @@ public class MEFragment extends BaseFragment {
                 startActivity(new Intent(getActivity(), LoginActivity.class));
             }
         });
-
+        //view创建完成之后,检查登录状态,如果是登录的状态,那么把用户数据填上去
+        if(AppConfig.LOGIN_STATUS){
+            setUserInfo();
+        }
         return rootView;
     }
 
@@ -127,5 +139,10 @@ public class MEFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @OnClick(R.id.iv_header)
+    public void onHeaderClicked() {
+        ARouter.getInstance().build("/test/EditInformationActivity").navigation();
     }
 }

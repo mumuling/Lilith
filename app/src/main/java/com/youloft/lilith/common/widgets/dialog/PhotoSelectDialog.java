@@ -10,7 +10,7 @@ import android.view.View;
 
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.utils.Toaster;
-import com.youloft.lilith.setting.EditInformationActivity;
+import com.youloft.lilith.info.activity.EditInformationActivity;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;

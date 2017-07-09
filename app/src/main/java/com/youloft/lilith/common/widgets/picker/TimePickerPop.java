@@ -60,6 +60,7 @@ public class TimePickerPop implements CanShow, TimePicker.onTimeChangedListener 
                 if (listener != null) {
                     listener.onSelected(String.valueOf(hour) + ":" + String.valueOf(min));
                 }
+                hide();
             }
         });
 

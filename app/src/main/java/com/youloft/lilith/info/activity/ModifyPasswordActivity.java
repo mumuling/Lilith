@@ -18,13 +18,12 @@ import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.info.bean.OldPasswordBean;
-import com.youloft.lilith.info.repo.UpdatePasswordRepo;
+import com.youloft.lilith.info.repo.UpdateUserRepo;
 import com.youloft.lilith.login.bean.ModifyPasswordBean;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -165,7 +164,7 @@ public class ModifyPasswordActivity extends BaseActivity {
             return;
         }
         //发起请求
-        UpdatePasswordRepo.checkOldPassword(userID, oldPassword)
+        UpdateUserRepo.checkOldPassword(userID, oldPassword)
                 .compose(this.<OldPasswordBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
@@ -255,7 +254,7 @@ public class ModifyPasswordActivity extends BaseActivity {
             Toaster.showShort("新密码不一致");
             return;
         }
-        UpdatePasswordRepo.updatePassword(userID,oldPassword,newPwd)
+        UpdateUserRepo.updatePassword(userID,oldPassword,newPwd)
                 .compose(this.<ModifyPasswordBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()

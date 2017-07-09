@@ -57,6 +57,7 @@ public class DatePickerPop implements CanShow ,DatePicker.onDateChangedListener{
                 if (listener != null) {
                     listener.onSelected(date.getTime());
                 }
+                hide();
             }
         });
 
