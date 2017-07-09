@@ -2,19 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp"
-    android:background="@color/cons_share_bg_color"
     android:orientation="vertical">
 
     <com.youloft.lilith.cons.view.LuckView
         android:id="@+id/cons_luck_view"
         android:layout_width="match_parent"
-        android:layout_height="185dp" />
+        android:layout_height="185dp"
+        android:background="@color/cons_share_bg_color" />
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/cons_share_bg_color">
+
         <TextView
             android:id="@+id/cons_luck_msg"
             android:layout_width="match_parent"

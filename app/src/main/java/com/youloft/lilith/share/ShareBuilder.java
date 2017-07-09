@@ -4,10 +4,10 @@ import android.content.Context;
 import android.graphics.Bitmap;
 
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.umeng.socialize.media.UMImage;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.utils.ViewUtil;
+import com.youloft.socialize.media.ShareImage;
 
 /**
  * Created by zchao on 2017/7/6.
@@ -24,7 +24,7 @@ import com.youloft.lilith.common.utils.ViewUtil;
 public class ShareBuilder {
     private String mShareTitle;
     private String mShareUrl;
-    private UMImage mShareBitmap;
+    private ShareImage mShareBitmap;
     private Context mContext;
     private String mShareContent;
 
@@ -62,7 +62,7 @@ public class ShareBuilder {
      */
     public ShareBuilder withImg(Bitmap img) {
         if (img != null) {
-            mShareBitmap = new UMImage(mContext, img);
+            mShareBitmap = new ShareImage(mContext, img);
         }
         return this;
     }
@@ -73,7 +73,7 @@ public class ShareBuilder {
      * @return
      */
     public ShareBuilder withIcon() {
-        mShareBitmap = new UMImage(mContext, R.mipmap.icon_launcher);
+        mShareBitmap = new ShareImage(mContext, R.mipmap.icon_launcher);
         return this;
     }
 
@@ -92,14 +92,14 @@ public class ShareBuilder {
      * 开始分享
      */
     public void share() {
-        CustomShareActivity.mShareBitmap = mShareBitmap;
+        ShareActivity.mShareBitmap = mShareBitmap;
         if (mContext instanceof BaseActivity) {
-            CustomShareActivity.mBGBitmap = ViewUtil.blurBitmap(((BaseActivity) mContext).takeScreenShot(false), mContext);
+            ShareActivity.mBGBitmap = ViewUtil.blurBitmap(((BaseActivity) mContext).takeScreenShot(false), mContext);
         }
-        ARouter.getInstance().build("/share/CustomShareActivity")
-                .withString("mShareTitle", mShareTitle)
-                .withString("mShareUrl", mShareUrl)
-                .withString("mShareContent", mShareContent)
+        ARouter.getInstance().build("/ui/share")
+                .withString("title", mShareTitle)
+                .withString("url", mShareUrl)
+                .withString("content", mShareContent)
                 .navigation();
     }
 }

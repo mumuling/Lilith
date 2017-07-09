@@ -1,6 +1,17 @@
 package com.youloft.lilith.ui;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.util.LruCache;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.ViewUtils;
+import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -11,6 +22,7 @@ import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.event.TabChangeEvent;
 import com.youloft.lilith.common.net.OnlineConfigAgent;
+import com.youloft.lilith.common.utils.ViewUtil;
 import com.youloft.lilith.cons.ConsRepo;
 import com.youloft.lilith.ui.view.NavBarLayout;
 
@@ -20,6 +32,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * 主页面

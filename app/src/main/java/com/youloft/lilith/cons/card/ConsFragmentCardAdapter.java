@@ -37,6 +37,7 @@ public class ConsFragmentCardAdapter extends RecyclerView.Adapter<BaseHolder> {
         }
     }
 
+
     @Override
     public int getItemCount() {
         return 10;

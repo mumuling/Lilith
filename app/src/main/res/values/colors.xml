@@ -8,6 +8,7 @@
     <color name="tab_text_color">#efdfff</color>
     <color name="tab_bg_color">#e630284d</color>
     <color name="tab_line_color">#504671</color>
+    <color name="tab_share_color">#2f2a40</color>
 
 
     <color name="province_line_border">#C7C7C7</color>
@@ -42,7 +43,7 @@
     <color name="constellation_money_color">#0fffb74a</color>
     <color name="constellation_work_color">#0f49b5ff</color>
     <color name="constellation_week_color">#453b60</color>
-    <color name="cons_share_bg_color">#33000000</color>
+    <color name="cons_share_bg_color">#2f2a40</color>
     <color name="cons_detail_bg_color">#af000000</color>
     <!--!!!!!!!!!!!!!!!!!!!!!这个是整个项目基调主题背景色-->
     <color name="theme_background">#282142</color>
