@@ -63,6 +63,7 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
      */
     protected Map<String, String[]> mDistrictDatasMap = new HashMap<String, String[]>();
 
+    protected CityInfo mCurrentCityInfo = new CityInfo();
     /**
      * 当前省的名称
      */
@@ -79,15 +80,10 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
     protected String mCurrentDistrictName = "";
 
 
-    private OnCityItemClickListener listener;
+    private OnPickerSelectListener<CityInfo> listener;
 
-    public interface OnCityItemClickListener {
-        void onSelected(String... citySelected);
 
-        void onCancel();
-    }
-
-    public CityPicker setOnCityItemClickListener(OnCityItemClickListener listener) {
+    public CityPicker setOnCityItemClickListener(OnPickerSelectListener<CityInfo> listener) {
         this.listener = listener;
         return this;
     }
@@ -226,6 +222,11 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
         this.backgroundPop = builder.backgroundPop;
         this.titleTextColorStr = builder.titleTextColorStr;
 
+        this.mCurrentCityInfo.pProvice = defaultProvinceName;
+        this.mCurrentCityInfo.pCity = defaultCityName;
+        this.mCurrentCityInfo.pDistrict = defaultDistrict;
+
+
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         popview = layoutInflater.inflate(R.layout.pop_citypicker, null);
 
@@ -310,11 +311,11 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
             public void onClick(View v) {
                 if (showProvinceAndCity) {
                     if (listener != null) {
-                        listener.onSelected(mCurrentProviceName, mCurrentCityName, "");
+                        listener.onSelected(mCurrentCityInfo);
                     }
                 } else {
                     if (listener != null) {
-                        listener.onSelected(mCurrentProviceName, mCurrentCityName, mCurrentDistrictName);
+                        listener.onSelected(mCurrentCityInfo);
                     }
                 }
                 hide();
@@ -688,6 +689,7 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
     private void updateAreas() {
         int pCurrent = mViewCity.getCurrentItem();
         mCurrentCityName = mCitisDatasMap.get(mCurrentProviceName)[pCurrent];
+        mCurrentCityInfo.pProvice = mCurrentCityName;
         String[] areas = mDistrictDatasMap.get(mCurrentCityName);
 
         if (areas == null) {
@@ -728,6 +730,7 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
     private void updateCities() {
         int pCurrent = mViewProvince.getCurrentItem();
         mCurrentProviceName = mProvinceDatas[pCurrent];
+        mCurrentCityInfo.pProvice = mCurrentProviceName;
         String[] cities = mCitisDatasMap.get(mCurrentProviceName);
         if (cities == null) {
             cities = new String[]{""};
@@ -787,12 +790,12 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
     public void onChanged(WheelView wheel, int oldValue, int newValue) {
         // TODO Auto-generated method stub
         if (wheel == mViewProvince) {
-
             updateCities();
         } else if (wheel == mViewCity) {
             updateAreas();
         } else if (wheel == mViewDistrict) {
             mCurrentDistrictName = mDistrictDatasMap.get(mCurrentCityName)[newValue];
+            mCurrentCityInfo.pDistrict = mCurrentDistrictName;
         }
     }
 }

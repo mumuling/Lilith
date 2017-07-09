@@ -11,7 +11,7 @@ import android.widget.PopupWindow;
 
 import com.youloft.lilith.R;
 
-import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
@@ -20,27 +20,25 @@ import java.util.GregorianCalendar;
  * version:
  */
 
-public class TimePickerPop implements CanShow, TimePicker.onTimeChangedListener {
+public class DatePickerPop implements CanShow ,DatePicker.onDateChangedListener{
 
     private final PopupWindow popwindow;
     private final View popview;
     private final View mCancel;
     private final View mConfirm;
     Context mContext;
-    private final TimePicker mTimePicker;
-    private int hour = 0;
-    private int min = 0;
+    private final DatePicker mDatePicker;
+    private GregorianCalendar date = new GregorianCalendar();
 
-    private OnPickerSelectListener listener;
-
-    public TimePickerPop(Context mContext) {
+    private OnPickerSelectListener<Date> listener;
+    public DatePickerPop(Context mContext) {
         this.mContext = mContext;
 
         LayoutInflater layoutInflater = LayoutInflater.from(mContext);
-        popview = layoutInflater.inflate(R.layout.pop_timepicker, null);
+        popview = layoutInflater.inflate(R.layout.pop_datepicker, null);
         mConfirm = popview.findViewById(R.id.tv_confirm);
         mCancel = popview.findViewById(R.id.tv_cancel);
-        mTimePicker = (TimePicker) popview.findViewById(R.id.time_picker);
+        mDatePicker = (DatePicker) popview.findViewById(R.id.date_picker);
 
         popwindow = new PopupWindow(popview, LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT);
@@ -50,15 +48,14 @@ public class TimePickerPop implements CanShow, TimePicker.onTimeChangedListener 
         popwindow.setOutsideTouchable(false);
         popwindow.setFocusable(true);
 
-        mTimePicker.setDateChangedListener(this);
-
+        mDatePicker.setDateChangedListener(this);
         setUpData();
 
         mConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (listener != null) {
-                    listener.onSelected(String.valueOf(hour) + ":" + String.valueOf(min));
+                    listener.onSelected(date.getTime());
                 }
             }
         });
@@ -74,13 +71,13 @@ public class TimePickerPop implements CanShow, TimePicker.onTimeChangedListener 
         });
     }
 
-    public TimePickerPop setOnSelectListener(OnPickerSelectListener listener) {
+    public DatePickerPop setOnSelectListener(OnPickerSelectListener listener){
         this.listener = listener;
         return this;
     }
 
-    public static TimePickerPop getDefaultTimePicker(Context context) {
-        return new TimePickerPop(context);
+    public static DatePickerPop getDefaultDatePicker(Context context){
+        return new DatePickerPop(context);
     }
 
 
@@ -98,10 +95,7 @@ public class TimePickerPop implements CanShow, TimePicker.onTimeChangedListener 
     }
 
     private void setUpData() {
-        GregorianCalendar cal = new GregorianCalendar();
-        hour = cal.get(Calendar.HOUR_OF_DAY);
-        min = cal.get(Calendar.MINUTE);
-        mTimePicker.setHourAndMin(hour, min);
+        mDatePicker.setDate(date);
     }
 
     @Override
@@ -116,9 +110,9 @@ public class TimePickerPop implements CanShow, TimePicker.onTimeChangedListener 
         return popwindow.isShowing();
     }
 
+
     @Override
-    public void onDateChanged(int hour, int min, int amOrpm) {
-        this.hour = hour;
-        this.min = min;
+    public void onDateChanged(GregorianCalendar date) {
+        this.date.setTime(date.getTime());
     }
 }

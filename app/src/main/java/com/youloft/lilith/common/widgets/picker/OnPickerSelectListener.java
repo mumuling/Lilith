@@ -6,8 +6,8 @@ package com.youloft.lilith.common.widgets.picker;
  * version:
  */
 
-public interface OnPickerSelectListener {
-    void onSelected(String... citySelected);
+public interface OnPickerSelectListener<T> {
+    void onSelected(T data);
 
     void onCancel();
 }

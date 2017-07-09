@@ -13,6 +13,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -30,7 +31,10 @@ import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.CalendarHelper;
 import com.youloft.lilith.common.utils.SafeUtil;
 import com.youloft.lilith.common.utils.ViewUtil;
+import com.youloft.lilith.common.widgets.picker.CityInfo;
 import com.youloft.lilith.common.widgets.picker.CityPicker;
+import com.youloft.lilith.common.widgets.picker.DatePicker;
+import com.youloft.lilith.common.widgets.picker.DatePickerPop;
 import com.youloft.lilith.common.widgets.picker.OnPickerSelectListener;
 import com.youloft.lilith.common.widgets.picker.TimePickerPop;
 import com.youloft.lilith.cons.bean.ConsPredictsBean;
@@ -41,6 +45,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.logging.LogManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -252,9 +257,9 @@ public class ConsCalDetailActivity extends BaseActivity {
     }
 
     private void share() {
-//        CityPicker.getDefCityPicker(this).setOnCityItemClickListener(new CityPicker.OnCityItemClickListener() {
+//        CityPicker.getDefCityPicker(this).setOnCityItemClickListener(new OnPickerSelectListener<CityInfo>() {
 //            @Override
-//            public void onSelected(String... citySelected) {
+//            public void onSelected(CityInfo citySelected) {
 //
 //            }
 //
@@ -264,18 +269,30 @@ public class ConsCalDetailActivity extends BaseActivity {
 //            }
 //        }).show();
 
-        TimePickerPop.getDefaultTimePicker(this).setOnSelectListener(new OnPickerSelectListener() {
+//        TimePickerPop.getDefaultTimePicker(this).setOnSelectListener(new OnPickerSelectListener<String>() {
+//            @Override
+//            public void onSelected(String citySelected) {
+//                Log.d(TAG, "onSelected() called with: citySelected = [" + citySelected + "]");
+//            }
+//
+//            @Override
+//            public void onCancel() {
+//                Log.d(TAG, "onCancel() called");
+//            }
+//        }).show();
+        final java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyyMMdd");
+        DatePickerPop.getDefaultDatePicker(this).setOnSelectListener(new OnPickerSelectListener<Date>() {
             @Override
-            public void onSelected(String... citySelected) {
-                Log.d(TAG, "onSelected() called with: citySelected = [" + citySelected[0] +"|"+citySelected[1] + "]");
+            public void onSelected(Date data) {
+
+                Log.d(TAG, "onSelected() called with: data = [" + format.format(data) + "]");
             }
 
             @Override
             public void onCancel() {
-                Log.d(TAG, "onCancel() called");
+
             }
         }).show();
-
 
 //        LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 //        View shareview = inflater.inflate(R.layout.cons_detail_share_view, null);
