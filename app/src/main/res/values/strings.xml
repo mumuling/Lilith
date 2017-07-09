@@ -5,6 +5,7 @@
     <string name="lilith_permission_label">允许读取和更新丽丽丝设置</string>
     <string name="master_measure">大师亲算</string>
     <string name="cons_share_text">分享我的运势</string>
+    <string name="cons_share_customization_text">定制我的运势</string>
     <string name="cons_love_text">感情运势上升</string>
     <string name="cons_money_text">财富运势上升</string>
     <string name="cons_work_text">工作运势上升</string>
