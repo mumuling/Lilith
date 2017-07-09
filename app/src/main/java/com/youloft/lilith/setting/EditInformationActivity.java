@@ -23,8 +23,10 @@ import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.utils.ViewUtil;
 import com.youloft.lilith.common.widgets.dialog.PhotoSelectDialog;
+import com.youloft.lilith.common.widgets.picker.CityInfo;
 import com.youloft.lilith.common.widgets.picker.CityPicker;
 import com.youloft.lilith.common.widgets.picker.DatePicker;
+import com.youloft.lilith.common.widgets.picker.OnPickerSelectListener;
 import com.youloft.lilith.ui.view.BaseToolBar;
 
 import java.io.FileNotFoundException;
@@ -164,13 +166,12 @@ public class EditInformationActivity extends BaseActivity {
      */
     private void cityPick(final TextView tv) {
         CityPicker.getDefCityPicker(this)
-                .setOnCityItemClickListener(new CityPicker.OnCityItemClickListener() {
+                .setOnCityItemClickListener(new OnPickerSelectListener<CityInfo>() {
                     @Override
-                    public void onSelected(String... citySelected) {
+                    public void onSelected(CityInfo data) {
+
                         StringBuilder builder = new StringBuilder("");
-                        for (int i = 0; i < citySelected.length; i++) {
-                            builder.append(citySelected[i]);
-                        }
+                        builder.append(data.pProvice).append(data.pCity).append(data.pDistrict);
                         String content = builder.toString();
                         tv.setText(content);
                         tv.setCompoundDrawables(null,null,null,null);

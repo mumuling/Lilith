@@ -50,7 +50,6 @@
         <!--上升星座-->
         <LinearLayout
             android:id="@+id/ll_rise"
-            android:visibility="invisible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
@@ -78,7 +77,6 @@
         <!--太阳星座-->
         <LinearLayout
             android:id="@+id/ll_sun"
-            android:visibility="invisible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right|bottom"
@@ -106,7 +104,6 @@
         <!--月亮星座-->
         <LinearLayout
             android:id="@+id/ll_moon"
-            android:visibility="invisible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right|bottom"

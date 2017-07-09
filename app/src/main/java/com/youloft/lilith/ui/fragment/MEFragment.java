@@ -3,6 +3,7 @@ package com.youloft.lilith.ui.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +17,8 @@ import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.base.BaseFragment;
 import com.youloft.lilith.login.activity.LoginActivity;
-import com.youloft.lilith.login.event.LoginEvent;
-import com.youloft.lilith.login.event.LoginWithPwdEvent;
-import com.youloft.lilith.register.event.RegisterEvent;
+import com.youloft.lilith.login.bean.UserBean;
+import com.youloft.lilith.setting.AppSetting;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -64,31 +64,25 @@ public class MEFragment extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EventBus.getDefault().register(this);
+//        EventBus.getDefault().register(this);
     }
 
-    //这个是从快捷登录那边发过来的
+    //登录成功之后接收到的事件  快捷登录, 注册成功, 账号密码登录, 三方登录 都会发送事件到这个地方
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(LoginEvent loginEvent) {
+    public void onEventMainThread() {
         //登录成功了,图片,昵称
-        String headImgUrl = loginEvent.mUserBean.data.userInfo.headImg;
-        String nickName = loginEvent.mUserBean.data.userInfo.nickName;
+        UserBean userInfo = AppSetting.getUserInfo();
+        String headImgUrl = userInfo.data.userInfo.headImg;
+        String nickName = userInfo.data.userInfo.nickName;
         tvNickName.setText(nickName);
-        GlideApp.with(mContext).load(headImgUrl).into(ivHeader);
+        if(!TextUtils.isEmpty(headImgUrl)){
+            GlideApp.with(mContext).load(headImgUrl).into(ivHeader);
+        }
+//        ConsManager.getConsSrc("1").pKey
 //        GlideApp.with(mContext).load(headImgUrl).transform(new BlurTransformatio).into(ivBlurBg);
     }
 
-    //这个是注册成功后,设置完密码 发过来的
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onRegisterEvent(RegisterEvent registerEvent){
 
-    }
-
-    //这个是手机号码+密码登录,发过来的
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onLoginWithPwdEvent(LoginWithPwdEvent loginWithPwdEvent){
-
-    }
     @Override
     public void onDestroy() {
         super.onDestroy();
