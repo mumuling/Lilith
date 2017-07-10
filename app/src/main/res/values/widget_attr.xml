@@ -42,7 +42,7 @@
         <item name="selectionDividerHeight">1dip</item>
         <item name="android:minWidth">48dip</item>
         <item name="android:maxHeight">200dip</item>
-        <item name="android:textColor">#FF333333</item>
+        <item name="android:textColor">#ffffff</item>
         <item name="android:textSize">18dp</item>
         <item name="selectionDividersDistance">40dp</item>
         <item name="scaleDetal">4dp</item>

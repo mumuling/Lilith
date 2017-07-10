@@ -9,6 +9,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
+import com.youloft.lilith.common.event.TabChangeEvent;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.info.bean.LogoutBean;
@@ -16,6 +17,7 @@ import com.youloft.lilith.info.event.LogoutEvent;
 import com.youloft.lilith.info.repo.UpdateUserRepo;
 import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.setting.AppSetting;
+import com.youloft.lilith.ui.TabManager;
 import com.youloft.lilith.ui.view.BaseToolBar;
 
 import org.greenrobot.eventbus.EventBus;
@@ -87,11 +89,14 @@ public class SettingActivity extends BaseActivity {
                     public void onDataSuccess(LogoutBean logoutBean) {
                         String data = logoutBean.data;
                         if(data.equals("true")){
-                            // TODO: 2017/7/9 把tab设置到首页
+                            //1.把tab设置到首页
                             //2.发出事件
                             //3.把存好的user信息情况  把登录状态设置为false
                             //4.关闭当前页面
+                            //通知大家登出的事件
                             EventBus.getDefault().post(new LogoutEvent());
+                            //tab设置到首页的事件
+                            EventBus.getDefault().post(new TabChangeEvent(TabManager.TAB_INDEX_XZ));
                             AppSetting.saveUserInfo(new UserBean());
                             finish();
                         }else {

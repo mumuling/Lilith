@@ -11,6 +11,7 @@
         android:background="@drawable/shp_me_bg">
         <ImageView
             android:id="@+id/iv_blur_bg"
+            android:scaleType="centerCrop"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
         <!--中间的头像和小的星座-->

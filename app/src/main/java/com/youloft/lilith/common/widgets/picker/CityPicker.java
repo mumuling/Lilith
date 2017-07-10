@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.database.CityInfoManager;
+import com.youloft.lilith.common.utils.ViewUtil;
 import com.youloft.lilith.common.widgets.picker.wheel.OnWheelChangedListener;
 import com.youloft.lilith.common.widgets.picker.wheel.WheelView;
 import com.youloft.lilith.common.widgets.picker.wheel.adapters.ArrayWheelAdapter;
@@ -42,11 +43,11 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
 
     private RelativeLayout mRelativeTitleBg;
 
-    private TextView mTvOK;
+    private View mTvOK;
 
     private TextView mTvTitle;
 
-    private TextView mTvCancel;
+    private View mTvCancel;
 
     /**
      * 所有省
@@ -184,9 +185,9 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
      */
     public static CityPicker getDefCityPicker(Context context){
         return new CityPicker.Builder(context).textSize(20)
-                .titleTextColor("#000000")
-                .backgroundPop(0xa0000000)
-                .textColor(Color.parseColor("#000000"))
+                .backgroundPop(Color.TRANSPARENT)
+                .textColor(Color.parseColor("#ffffff"))
+                .textSize(16)
                 .provinceCyclic(false)
                 .cityCyclic(false)
                 .districtCyclic(false)
@@ -210,7 +211,6 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
         this.context = builder.mContext;
         this.padding = builder.padding;
         this.mTitle = builder.mTitle;
-        this.titleBackgroundColorStr = builder.titleBackgroundColorStr;
         this.confirmTextColorStr = builder.confirmTextColorStr;
         this.cancelTextColorStr = builder.cancelTextColorStr;
 
@@ -234,9 +234,9 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
         mViewCity = (WheelView) popview.findViewById(R.id.id_city);
         mViewDistrict = (WheelView) popview.findViewById(R.id.id_district);
         mRelativeTitleBg = (RelativeLayout) popview.findViewById(R.id.rl_title);
-        mTvOK = (TextView) popview.findViewById(R.id.tv_confirm);
+        mTvOK =  popview.findViewById(R.id.tv_confirm);
         mTvTitle = (TextView) popview.findViewById(R.id.tv_title);
-        mTvCancel = (TextView) popview.findViewById(R.id.tv_cancel);
+        mTvCancel =  popview.findViewById(R.id.tv_cancel);
 
 
         popwindow = new PopupWindow(popview, LinearLayout.LayoutParams.MATCH_PARENT,
@@ -248,12 +248,6 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
         popwindow.setFocusable(true);
 
 
-        /**
-         * 设置标题背景颜色
-         */
-        if (!TextUtils.isEmpty(this.titleBackgroundColorStr)) {
-            mRelativeTitleBg.setBackgroundColor(Color.parseColor(this.titleBackgroundColorStr));
-        }
 
         /**
          * 设置标题
@@ -266,17 +260,6 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
         //设置确认按钮文字颜色
         if (!TextUtils.isEmpty(this.titleTextColorStr)) {
             mTvTitle.setTextColor(Color.parseColor(this.titleTextColorStr));
-        }
-
-
-        //设置确认按钮文字颜色
-        if (!TextUtils.isEmpty(this.confirmTextColorStr)) {
-            mTvOK.setTextColor(Color.parseColor(this.confirmTextColorStr));
-        }
-
-        //设置取消按钮文字颜色
-        if (!TextUtils.isEmpty(this.cancelTextColorStr)) {
-            mTvCancel.setTextColor(Color.parseColor(this.cancelTextColorStr));
         }
 
 
@@ -382,10 +365,6 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
          */
         private String confirmTextColorStr = "#0000FF";
 
-        /**
-         * 标题背景颜色
-         */
-        private String titleBackgroundColorStr = "#E9E9E9";
 
         /**
          * 标题颜色
@@ -435,17 +414,6 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
          */
         public Builder backgroundPop(int backgroundPopColor) {
             this.backgroundPop = backgroundPopColor;
-            return this;
-        }
-
-        /**
-         * 设置标题背景颜色
-         *
-         * @param colorBg
-         * @return
-         */
-        public Builder titleBackgroundColor(String colorBg) {
-            this.titleBackgroundColorStr = colorBg;
             return this;
         }
 

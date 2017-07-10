@@ -17,6 +17,8 @@ import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.base.BaseFragment;
+import com.youloft.lilith.info.event.LogoutEvent;
+import com.youloft.lilith.info.event.UserInfoUpDateEvent;
 import com.youloft.lilith.login.activity.LoginActivity;
 import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.login.event.LoginEvent;
@@ -76,6 +78,17 @@ public class MEFragment extends BaseFragment {
         setUserInfo();
     }
 
+    //用户修改信息过后,发出的事件
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUserInfoUpDate(UserInfoUpDateEvent userInfoUpDateEvent) {
+        //登录成功了,图片,昵称
+        setUserInfo();
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUserLogout(LogoutEvent logoutEvent) {
+
+    }
+
     /**
      * 填充用户数据
      */
@@ -86,9 +99,9 @@ public class MEFragment extends BaseFragment {
         tvNickName.setText(nickName);
         if (!TextUtils.isEmpty(headImgUrl)) {
             GlideApp.with(mContext).load(headImgUrl).into(ivHeader);
+            GlideApp.with(mContext).load(headImgUrl).into(ivBlurBg);
         }
 //        ConsManager.getConsSrc("1").pKey
-//        GlideApp.with(mContext).load(headImgUrl).transform(new BlurTransformatio).into(ivBlurBg);
     }
 
 

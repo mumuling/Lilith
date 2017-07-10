@@ -29,40 +29,52 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_gravity="center_horizontal"
+                android:background="@color/topic_user_img_err"
                 android:layout_marginTop="22dp"
                 app:radius="80dp" />
+
             <TextView
                 android:id="@+id/login_jump_dialog_nickname"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="4dp"
-                android:layout_height="wrap_content"
+                android:text="莉莉斯"
                 android:textColor="@color/white"
-                android:textSize="19dp"
-                android:text="莉莉斯"/>
+                android:textSize="19dp" />
 
             <TextView
                 android:id="@+id/login_jump_dialog_description"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="32dp"
-                android:textSize="19dp"
-                android:textColor="@color/white"
                 android:layout_marginLeft="22dp"
                 android:layout_marginRight="22dp"
+                android:layout_marginTop="32dp"
                 android:gravity="center_horizontal"
                 android:text="查看专属运势，请登陆后填写资料！"
-                android:layout_height="wrap_content" />
+                android:textColor="@color/white"
+                android:textSize="16dp" />
 
             <Button
                 android:id="@+id/login_jump_dialog_btn"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
                 android:layout_marginLeft="50dp"
                 android:layout_marginRight="50dp"
-                android:text="登录查看"
-                android:textColor="@color/white"
+                android:layout_marginTop="36dp"
                 android:background="@drawable/login_jump_dialog_bnt_bg"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:text="登录查看"
+                android:textColor="@color/white" />
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/login_jump_dialog_close"
+            android:layout_gravity="right"
+            android:padding="13dp"
+            android:src="@drawable/topic_close_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
     </FrameLayout>
 </FrameLayout>

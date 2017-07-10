@@ -17,6 +17,9 @@ import com.youloft.lilith.ui.view.TabItemBean;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zchao on 2017/6/26.
@@ -29,8 +32,7 @@ public class TabManager implements NavBarLayout.OnTabChangeListener {
     private final NavBarLayout mNavBar;
     private Activity mMainActivity;
     private Fragment mCurrentFragment;
-    private ArrayList<Fragment> mFragments = new ArrayList<>();
-    private HashMap<String, Fragment> mFragmentsCache = new HashMap<>();
+    private LinkedHashMap<Integer,Fragment> mFragmentsCache = new LinkedHashMap<>();
     private static int FRAGMENT_CONTAINER = R.id.main_content;
 
     public static final int TAB_INDEX_XZ = 0;
@@ -56,21 +58,17 @@ public class TabManager implements NavBarLayout.OnTabChangeListener {
             return;
         }
         ArrayList<TabItemBean> tabs = mNavBar.getTabs();
-        mFragments.clear();
         for (int i = 0; i < tabs.size(); i++) {
             TabItemBean safeData = SafeUtil.getSafeData(tabs, i);
             if (safeData == null) {
                 continue;
             }
-            if (mFragmentsCache.containsKey(safeData.mTabName)) {
-                mFragments.add(mFragmentsCache.get(safeData.mTabName));
-            } else {
+            if (!mFragmentsCache.containsKey(safeData.mIndex)) {
                 Fragment fragment = fragmentCreator(safeData.mTabName);
                 if (fragment == null) {
                     continue;
                 }
-                mFragmentsCache.put(safeData.mTabName, fragment);
-                mFragments.add(fragment);
+                mFragmentsCache.put(safeData.mIndex, fragment);
             }
         }
         bindTabFragment();
@@ -84,12 +82,14 @@ public class TabManager implements NavBarLayout.OnTabChangeListener {
      * @return
      */
     private Fragment fragmentCreator(String tag) {
+
         if (TextUtils.isEmpty(tag)) {
             return null;
         }
         Fragment fragment = null;
         switch (tag) {
             case "星座":
+
                 fragment = new XZFragment();
                 break;
             case "话题":
@@ -115,7 +115,8 @@ public class TabManager implements NavBarLayout.OnTabChangeListener {
      */
     private void setTabIndex(int index) {
         FragmentTransaction ft = mFragmentManager.beginTransaction();
-        Fragment safeData = SafeUtil.getSafeData(mFragments, index);
+
+        Fragment safeData = mFragmentsCache.get(index);
         if (safeData == null) {
             return;
         }
@@ -135,9 +136,10 @@ public class TabManager implements NavBarLayout.OnTabChangeListener {
      */
     private void bindTabFragment() {
         FragmentTransaction ft = mFragmentManager.beginTransaction();
-        for (int i = 0; i < mFragments.size(); i++) {
-            ft.add(FRAGMENT_CONTAINER, mFragments.get(i));
-            ft.hide(mFragments.get(i));
+        for (Map.Entry<Integer, Fragment> fragment:mFragmentsCache.entrySet()
+             ) {
+            ft.add(FRAGMENT_CONTAINER, fragment.getValue());
+            ft.hide(fragment.getValue());
         }
         ft.commit();
     }
