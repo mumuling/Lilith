@@ -26,6 +26,7 @@ public class BaseToolBar extends ToolBarLayout {
 
     private ImageView mBackBtn, mShareBtn;
     private TextView mTitleTV;
+    private TextView mSaveTV;
     private OnToolBarItemClickListener mListener;
 
     public BaseToolBar(@NonNull Context context) {
@@ -65,6 +66,7 @@ public class BaseToolBar extends ToolBarLayout {
         mBackBtn = (ImageView) findViewById(R.id.tool_bar_back_btn);
         mShareBtn = (ImageView) findViewById(R.id.tool_bar_share_btn);
         mTitleTV = (TextView) findViewById(R.id.tool_bar_title);
+        mSaveTV = (TextView) findViewById(R.id.tool_bar_save);
     }
 
     /**
@@ -73,6 +75,14 @@ public class BaseToolBar extends ToolBarLayout {
      */
     public void setBackgroundColor(int color){
         super.setBackgroundColor(color);
+    }
+
+    /**
+     * 设置是否显示保存按钮
+     * @param showSaveBtn
+     */
+    public void setShowSaveBtn(boolean showSaveBtn){
+        mSaveTV.setVisibility(showSaveBtn ? VISIBLE : GONE);
     }
 
     /**
@@ -133,6 +143,14 @@ public class BaseToolBar extends ToolBarLayout {
 
     public void setOnToolBarItemClickListener(OnToolBarItemClickListener listener){
         mListener = listener;
+        mSaveTV.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mListener != null) {
+                    mListener.OnSaveBtnClick();
+                }
+            }
+        });
         mBackBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -163,5 +181,6 @@ public class BaseToolBar extends ToolBarLayout {
         void OnBackBtnClick();
         void OnTitleBtnClick();
         void OnShareBtnClick();
+        void OnSaveBtnClick();
     }
 }

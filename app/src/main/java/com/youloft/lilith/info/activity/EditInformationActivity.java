@@ -110,6 +110,8 @@ public class EditInformationActivity extends BaseActivity {
 
         btlEditInformation.setBackgroundColor(Color.TRANSPARENT);
         btlEditInformation.setTitle("编辑资料");
+        btlEditInformation.setShowShareBtn(false);
+        btlEditInformation.setShowSaveBtn(true);
         btlEditInformation.setOnToolBarItemClickListener(new BaseToolBar.OnToolBarItemClickListener() {
             @Override
             public void OnBackBtnClick() {
@@ -123,11 +125,15 @@ public class EditInformationActivity extends BaseActivity {
 
             @Override
             public void OnShareBtnClick() {
+
+            }
+
+            @Override
+            public void OnSaveBtnClick() {
                 //1.确认资料是否都有数据
                 //2.对应服务器需要的参数,做一下数据组装
                 //3.发起请求修改用户信息
                 savaUserInfo();
-
             }
         });
 
