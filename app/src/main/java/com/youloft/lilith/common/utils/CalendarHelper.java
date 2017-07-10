@@ -55,8 +55,8 @@ public  static  SimpleDateFormat formatAll = new SimpleDateFormat("yyyy-MM-dd HH
         return calendar.get(Calendar.ZONE_OFFSET) + calendar.get(Calendar.DST_OFFSET);
     }
 
-    public static String getInterValTime(long times) {
-        long interval = System.currentTimeMillis();
+    public static String getInterValTime(long times,long interval) {
+         interval = System.currentTimeMillis();
         if ((interval-times)/(1000*60*60*24) >= 1) {
             return (int)((interval-times)/(1000*60*60*24)) + "天前";
         } else if ((interval-times)/(1000*60*60) >=1) {

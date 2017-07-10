@@ -220,7 +220,7 @@ public class TopicDetailActivity extends BaseActivity {
 
             @Override
             public void OnTitleBtnClick() {
-                voteDialog.show();
+
             }
 
             @Override
