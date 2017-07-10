@@ -40,6 +40,11 @@ public class CityInfoManager {
      */
     protected Map<String, String[]> mCitysDatasMap = new HashMap<String, String[]>();
 
+    /**
+     * key区 value 经读 纬度
+     */
+    protected Map<String, String[]> mLongAndLat = new HashMap<String, String[]>();
+
 
     private static CityInfoManager instance = null;
 
@@ -114,8 +119,15 @@ public class CityInfoManager {
                     }
                     Cursor districts = rawQueryByKey("city", safeArrayData, "");
                     String[] dis = new String[districts.getCount()];
+                    String[] lonandlat = new String[2];
                     while (districts.moveToNext()) {
-                        dis[districts.getPosition()] = districts.getString(districts.getColumnIndex("district"));
+                        String district = districts.getString(districts.getColumnIndex("district"));
+                        String longitude = districts.getString(districts.getColumnIndex("longitude"));
+                        String latitude = districts.getString(districts.getColumnIndex("latitude"));
+                        dis[districts.getPosition()] = district;
+                        lonandlat[0] = longitude;
+                        lonandlat[1] = latitude;
+                        mLongAndLat.put(district, lonandlat);
                     }
                     districts.close();
                     mCitysDatasMap.put(safeArrayData, dis);
@@ -123,6 +135,17 @@ public class CityInfoManager {
             }
         }
         return mCitysDatasMap;
+    }
+
+    /**
+     * 获取所有城市经纬度
+     * @return
+     */
+    public synchronized Map<String, String[]> getDistrictLongAndLati(){
+        if (mLongAndLat.isEmpty()) {
+            getCityAndDistrictDate();
+        }
+        return mLongAndLat;
     }
 
 
