@@ -119,5 +119,4 @@ public class MainActivity extends BaseActivity {
             mMainTabManager.selectChange(selectTab);
         }
     }
-
 }

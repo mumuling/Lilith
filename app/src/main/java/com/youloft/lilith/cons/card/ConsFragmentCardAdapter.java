@@ -15,6 +15,8 @@ import com.youloft.lilith.cons.bean.ConsPredictsBean;
 public class ConsFragmentCardAdapter extends RecyclerView.Adapter<BaseHolder> {
     private Context mContext;
     private ConsPredictsBean mData;
+    private String mTitle = "";
+
     public ConsFragmentCardAdapter(Context context) {
         mContext = context;
     }
@@ -22,6 +24,11 @@ public class ConsFragmentCardAdapter extends RecyclerView.Adapter<BaseHolder> {
     public void setData(ConsPredictsBean data){
         mData = data;
         notifyDataSetChanged();
+    }
+
+    public void setTitle(String titleName){
+        mTitle = titleName;
+        notifyItemChanged(0);
     }
 
     @Override
@@ -34,6 +41,8 @@ public class ConsFragmentCardAdapter extends RecyclerView.Adapter<BaseHolder> {
         if (holder == null)return;
         if (holder instanceof ConsBaseHolder && mData != null) {
             ((ConsBaseHolder) holder).bindData(mData);
+        } else if (holder instanceof ConsTitleHolder) {
+            ((ConsTitleHolder) holder).bindData(mTitle);
         }
     }
 
