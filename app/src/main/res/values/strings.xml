@@ -54,6 +54,10 @@
     <string name="share_wxhy">微信好友</string>
     <string name="share_wxcc">朋友圈</string>
     <string name="man">男</string>
+    <string name="log_dialog_to_lod_btn">登录查看</string>
+    <string name="log_dialog_to_complete_btn">填写资料</string>
+    <string name="log_dialog_to_lod">查看专属运势,请登录后填写资料</string>
+    <string name="log_dialog_to_complete">查看专属运势,请填写资料</string>
 
     <string-array name="cons_luck_line_color">
         <item>#de5deb,#99de5deb,#0fde5deb</item>

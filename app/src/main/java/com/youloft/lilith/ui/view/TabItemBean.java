@@ -18,6 +18,7 @@ public class TabItemBean {
         this.mSelected = selected;
     }
 
+
     public String mTabName;     //主页底部tab的item名字
     public int mTabIc;          //主页底部tab的item图标
     public int mTabIcUnSelect;    //主页底部tab的item选中图标
