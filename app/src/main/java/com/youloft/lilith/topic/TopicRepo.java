@@ -98,10 +98,14 @@ public class TopicRepo extends AbstractDataRepo {
      * @param tid  话题编号
      * @return
      */
-    public static Flowable<TopicDetailBean> getTopicDetail(String tid) {
+    public static Flowable<TopicDetailBean> getTopicDetail(String tid,String vid) {
         HashMap<String, String> param = new HashMap();
         param.put("tid",tid);
-        return unionFlow(Urls.TOPIC_INFO,null,param,true,TopicDetailBean.class,null,0);
+        if (vid != null) param.put("vid",vid);
+
+
+
+        return unionFlow(Urls.TOPIC_INFO,null,param,true,TopicDetailBean.class,"topic_info" + tid,2 *1000 *60);
     }
 
     /**

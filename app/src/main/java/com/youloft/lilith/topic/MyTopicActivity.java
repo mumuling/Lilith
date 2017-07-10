@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.rx.RxObserver;
@@ -50,7 +51,11 @@ public class MyTopicActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_topic);
         ButterKnife.bind(this);
-        userInfo = AppSetting.getUserInfo().data.userInfo;
+        if (AppConfig.LOGIN_STATUS) {
+            userInfo = AppSetting.getUserInfo().data.userInfo;
+        } else {
+            userInfo = null;
+        }
         pointCache = PointCache.getIns(this);
         initView();
         requestMyTopicFirst();

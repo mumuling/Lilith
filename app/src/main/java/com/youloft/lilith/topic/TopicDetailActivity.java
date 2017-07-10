@@ -109,7 +109,7 @@ public class TopicDetailActivity extends BaseActivity {
      *   第一次请求观点列表
      */
     private void requestPointList() {
-        TopicRepo.getPointList(String.valueOf(tid),null,"1",null,true)
+        TopicRepo.getPointList(String.valueOf(tid),null,"10",null,true)
                 .compose(this.<PointBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
@@ -164,7 +164,12 @@ public class TopicDetailActivity extends BaseActivity {
      *   请求话题详细信息
      */
     private void requestTopicDetail() {
-        TopicRepo.getTopicDetail(String.valueOf(tid))
+        int userId = -1;
+        if (AppConfig.LOGIN_STATUS &&AppSetting.getUserInfo() != null) {
+            userId = AppSetting.getUserInfo().data.userInfo.id;
+        }
+
+        TopicRepo.getTopicDetail(String.valueOf(tid),userId== -1?null:String.valueOf(userId))
                 .compose(this.<TopicDetailBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
