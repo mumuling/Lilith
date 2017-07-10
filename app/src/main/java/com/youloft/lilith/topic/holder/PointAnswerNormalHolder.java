@@ -8,11 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.rx.RxObserver;
+import com.youloft.lilith.cons.view.LogInOrCompleteDialog;
+import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.topic.PointDetailActivity;
 import com.youloft.lilith.topic.TopicRepo;
 import com.youloft.lilith.topic.adapter.PointAnswerAdapter;
@@ -56,6 +60,8 @@ public class PointAnswerNormalHolder extends RecyclerView.ViewHolder implements 
     TextView textReply;
     @BindView(R.id.text_to_name)
     TextView textToName;
+    @BindView(R.id.ll_reply)
+    LinearLayout llReply;
     private int isZan;
     private ReplyBean.DataBean mData;
     private Context mContext;
@@ -71,16 +77,14 @@ public class PointAnswerNormalHolder extends RecyclerView.ViewHolder implements 
     }
 
     private void initView() {
-        itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (itemView.getContext() instanceof PointDetailActivity) {
-                    ((PointDetailActivity) itemView.getContext()).clickReply(mData.uid,mData.nickName);
-                }
-            }
-        });
+
     }
 
+    /**
+     *
+     * @param dataBean  回复的数据
+     * @param isFirst   是否为列表的第一条
+     */
     public void bindView(ReplyBean.DataBean dataBean,boolean isFirst) {
         if (dataBean == null)return;
         this.mData = dataBean;
@@ -109,6 +113,7 @@ public class PointAnswerNormalHolder extends RecyclerView.ViewHolder implements 
                 .load(dataBean.headImg)
                 .into(imageCommentUser);
         imageZan.setOnClickListener(this);
+        llReply.setOnClickListener(this);
     }
 
     private void bindZan(ReplyBean.DataBean dataBean) {
@@ -141,7 +146,10 @@ public class PointAnswerNormalHolder extends RecyclerView.ViewHolder implements 
         switch (v.getId()) {
             case R.id.image_zan:
             case R.id.text_zan_count:
-
+                if (!AppConfig.LOGIN_STATUS) {
+                    new LogInOrCompleteDialog(mContext).show();
+                    return;
+                }
                 ((BitmapDrawable) imageZan.getDrawable()).setAntiAlias(true);
                 Rotate3dAnimation m3DAnimation;
                 if (isZan == 1) {
@@ -183,13 +191,17 @@ public class PointAnswerNormalHolder extends RecyclerView.ViewHolder implements 
 
 
                 break;
-            case R.id.text_reply:
+            case R.id.ll_reply:
+                if (itemView.getContext() instanceof PointDetailActivity) {
+                    ((PointDetailActivity) itemView.getContext()).clickReply(mData.uid,mData.nickName);
+                }
                 break;
         }
     }
 
     private void clickLike() {
-        TopicRepo.likeReply(String.valueOf(mData.id),"10000")
+        int userId = AppSetting.getUserInfo().data.userInfo.id;
+        TopicRepo.likeReply(String.valueOf(mData.id),String.valueOf(userId))
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -211,6 +223,10 @@ public class PointAnswerNormalHolder extends RecyclerView.ViewHolder implements 
                 });
     }
 
+    /**
+     *      更新点赞数据库
+     * @param ispost  是否提交成功
+     */
     private void updateLikeTable(int ispost) {
         TopicLikingTable topicLikingTable;
         if (isZan == 0) {

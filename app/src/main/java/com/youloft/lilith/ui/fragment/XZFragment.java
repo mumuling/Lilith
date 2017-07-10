@@ -160,7 +160,7 @@ public class XZFragment extends BaseFragment {
      */
     @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
     public void onLoddingCheck(LoddingCheckEvent event) {
-//        checkUserInfo();
+        checkUserInfo();
     }
 
     private void checkUserInfo() {
@@ -199,7 +199,6 @@ public class XZFragment extends BaseFragment {
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
 
             }
-
             int totalDy = 0;
 
             @Override

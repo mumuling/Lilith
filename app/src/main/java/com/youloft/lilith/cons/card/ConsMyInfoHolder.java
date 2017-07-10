@@ -69,7 +69,7 @@ public class ConsMyInfoHolder extends ConsBaseHolder {
     /**
      * 检查登录状态
      */
-    @OnClick(R.id.cons_my_info_share_icon)
+    @OnClick(R.id.cons_my_info_root)
     public void checkLogStatus() {
         EventBus.getDefault().post(new LoddingCheckEvent());
     }
