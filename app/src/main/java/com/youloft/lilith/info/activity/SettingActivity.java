@@ -121,12 +121,12 @@ public class SettingActivity extends BaseActivity {
                             //通知大家登出的事件
                             EventBus.getDefault().post(new LogoutEvent());
                             //tab设置到首页的事件
-                            EventBus.getDefault().post(new TabChangeEvent(TabManager.TAB_INDEX_XZ));
                             AppSetting.saveUserInfo(new UserBean());
                             PointCache.getIns(SettingActivity.this).deleteTable();
                             TopicLikeCache.getIns(SettingActivity.this).deleteTable();
                             PointAnswerCache.getIns(SettingActivity.this).deleteTable();
                             finish();
+                            EventBus.getDefault().post(new TabChangeEvent(TabManager.TAB_INDEX_XZ));
                         }else {
                             Toaster.showShort("退出登录失败");
                         }

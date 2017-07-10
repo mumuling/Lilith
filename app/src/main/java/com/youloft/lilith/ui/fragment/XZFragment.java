@@ -29,6 +29,7 @@ import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.login.event.LoginEvent;
 import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.share.ShareBuilder;
+import com.youloft.lilith.ui.MainActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -88,6 +89,7 @@ public class XZFragment extends BaseFragment {
                 TextUtils.isEmpty(userInfo.data.userInfo.birthDay)) {       //需要登录
             String date = "1990-04-02";
             String time = "12:00:00";
+            mCardAdapter.setTitle("");
             getData(date, time, "", "");  //没登录选双鱼
         } else {
             //登录且有资料
@@ -165,22 +167,24 @@ public class XZFragment extends BaseFragment {
      */
     @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
     public void onLoddingCheck(LoddingCheckEvent event) {
-        checkUserInfo();
+        if (event != null) {
+            checkUserInfo();
+        }
     }
 
     private void checkUserInfo() {
         if (!AppConfig.LOGIN_STATUS) {
             showDialog(LOG_IN);
-            return;
-        }
-        UserBean userInfo = AppSetting.getUserInfo();
-        UserBean.DataBean data = userInfo.data;
-        if (data == null ||
-                data.userInfo == null ||
-                data.userInfo.id == 0 ||
-                TextUtils.isEmpty(data.userInfo.birthDay)) {
-            showDialog(COMPLETE_INFO);
-            return;
+        } else {
+            UserBean userInfo = AppSetting.getUserInfo();
+            UserBean.DataBean data = userInfo.data;
+            if (data == null ||
+                    data.userInfo == null ||
+                    data.userInfo.id == 0 ||
+                    TextUtils.isEmpty(data.userInfo.birthDay)||
+                    TextUtils.isEmpty(data.userInfo.birthPlace)) {
+                showDialog(COMPLETE_INFO);
+            }
         }
     }
 

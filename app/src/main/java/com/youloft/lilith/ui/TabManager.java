@@ -31,8 +31,7 @@ public class TabManager implements NavBarLayout.OnTabChangeListener {
     private final FragmentManager mFragmentManager;
     private final NavBarLayout mNavBar;
     private Activity mMainActivity;
-    private Fragment mCurrentFragment;
-    private LinkedHashMap<Integer,Fragment> mFragmentsCache = new LinkedHashMap<>();
+    private LinkedHashMap<Integer, Fragment> mFragmentsCache = new LinkedHashMap<>();
     private static int FRAGMENT_CONTAINER = R.id.main_content;
 
     public static final int TAB_INDEX_XZ = 0;
@@ -58,6 +57,7 @@ public class TabManager implements NavBarLayout.OnTabChangeListener {
             return;
         }
         ArrayList<TabItemBean> tabs = mNavBar.getTabs();
+        removeAllFragment();
         for (int i = 0; i < tabs.size(); i++) {
             TabItemBean safeData = SafeUtil.getSafeData(tabs, i);
             if (safeData == null) {
@@ -73,6 +73,22 @@ public class TabManager implements NavBarLayout.OnTabChangeListener {
         }
         bindTabFragment();
         setTabIndex(TAB_INDEX_XZ);
+    }
+
+    private void removeAllFragment() {
+        List<Fragment> fragments = mFragmentManager.getFragments();
+        if (fragments == null || fragments.isEmpty()) {
+            return;
+        }
+        FragmentTransaction ft = mFragmentManager.beginTransaction();
+
+        for (int i = 0; i < fragments.size(); i++) {
+            Fragment safeData = SafeUtil.getSafeData(fragments, i);
+            if (safeData != null) {
+                ft.remove(safeData);
+            }
+        }
+        ft.commit();
     }
 
     /**
@@ -120,13 +136,24 @@ public class TabManager implements NavBarLayout.OnTabChangeListener {
         if (safeData == null) {
             return;
         }
-        if (mCurrentFragment != null) {
-            ft.hide(mCurrentFragment);
+        hidAll();
+
+        ft.show(safeData);
+        mNavBar.setSelectTab(index);
+        ft.commit();
+    }
+
+    private void hidAll() {
+        List<Fragment> fragments = mFragmentManager.getFragments();
+        if (fragments == null || fragments.isEmpty()) {
+            return;
         }
-        mCurrentFragment = safeData;
-        if (mCurrentFragment != null) {
-            ft.show(mCurrentFragment);
-            mNavBar.setSelectTab(index);
+        FragmentTransaction ft = mFragmentManager.beginTransaction();
+        for (int i = 0; i < fragments.size(); i++) {
+            Fragment fragment = SafeUtil.getSafeData(fragments, i);
+            if (fragment != null) {
+                ft.hide(fragment);
+            }
         }
         ft.commit();
     }
@@ -136,8 +163,8 @@ public class TabManager implements NavBarLayout.OnTabChangeListener {
      */
     private void bindTabFragment() {
         FragmentTransaction ft = mFragmentManager.beginTransaction();
-        for (Map.Entry<Integer, Fragment> fragment:mFragmentsCache.entrySet()
-             ) {
+        for (Map.Entry<Integer, Fragment> fragment : mFragmentsCache.entrySet()
+                ) {
             ft.add(FRAGMENT_CONTAINER, fragment.getValue());
             ft.hide(fragment.getValue());
         }
