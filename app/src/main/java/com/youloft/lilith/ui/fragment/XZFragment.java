@@ -25,6 +25,8 @@ import com.youloft.lilith.cons.consmanager.LoddingCheckEvent;
 import com.youloft.lilith.cons.consmanager.ShareConsEvent;
 import com.youloft.lilith.cons.view.LogInOrCompleteDialog;
 import com.youloft.lilith.info.activity.EditInformationActivity;
+import com.youloft.lilith.info.bean.UpdateUserInfoBean;
+import com.youloft.lilith.info.event.UserInfoUpDateEvent;
 import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.login.event.LoginEvent;
 import com.youloft.lilith.setting.AppSetting;
@@ -145,6 +147,17 @@ public class XZFragment extends BaseFragment {
      */
     @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
     public void onLoddingChagne(LoginEvent event) {
+        initDate();
+        Log.d(TAG, "onLoddingChagne() called with: event = [" + event + "]");
+    }
+
+    /**
+     * 资料改变
+     *
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
+    public void onUpdate(UserInfoUpDateEvent event) {
         initDate();
         Log.d(TAG, "onLoddingChagne() called with: event = [" + event + "]");
     }

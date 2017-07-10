@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,7 +73,34 @@ public class MEFragment extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
+
     }
+
+//    @Override
+//    public void onResume() {
+//        Log.d(TAG, "onResume() called");
+//        super.onResume();
+//    }
+//
+//    private static final String TAG = "MEFragment";
+//    @Override
+//    public void setUserVisibleHint(boolean isVisibleToUser) {
+//        super.setUserVisibleHint(isVisibleToUser);
+//        Log.d(TAG, "setUserVisibleHint() called with: isVisibleToUser = [" + isVisibleToUser + "]");
+//        if (isVisibleToUser && !AppConfig.LOGIN_STATUS) {
+//            ARouter.getInstance().build("/test/LoginActivity")
+//                    .navigation();
+//        }
+//    }
+//
+//    @Override
+//    public void onHiddenChanged(boolean hidden) {
+//        super.onHiddenChanged(hidden);
+//        if (!hidden &&!AppConfig.LOGIN_STATUS ) {
+//            ARouter.getInstance().build("/test/LoginActivity")
+//                    .navigation();
+//        }
+//    }
 
     //登录成功之后接收到的事件  快捷登录, 注册成功, 账号密码登录, 三方登录 都会发送事件到这个地方
     @Subscribe(threadMode = ThreadMode.MAIN)

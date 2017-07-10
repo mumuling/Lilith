@@ -222,8 +222,6 @@ public class EditInformationActivity extends BaseActivity {
         String headImg = mHeaderImageUrl;
         final String time = CalendarHelper.format(mCal.getTime(), DATE_FORMAT);
 
-
-
         UpdateUserRepo.updateUserInfo(userId, nickName, headImg, sex, time, placeBirth, birthLongi, birthLati, placeNow, liveLongi, liveLati)
                 .compose(this.<UpdateUserInfoBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
@@ -245,6 +243,7 @@ public class EditInformationActivity extends BaseActivity {
                             userInfoDetail.birthPlace = placeBirth;
                             userInfoDetail.livePlace = placeNow;
                             AppSetting.saveUserInfo(userInfo);
+                            finish();
                             EventBus.getDefault().post(new UserInfoUpDateEvent());
                             Toaster.showShort("资料保存成功");
                         } else {

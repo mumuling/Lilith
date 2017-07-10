@@ -100,8 +100,9 @@ public class SettingActivity extends BaseActivity {
      * 退出登录
      */
     private void logoutUser() {
-        if(AppSetting.getUserInfo()==null || AppSetting.getUserInfo().data == null
-                ||AppSetting.getUserInfo().data.userInfo == null){
+        UserBean userInfo = AppSetting.getUserInfo();
+        if(userInfo==null || userInfo.data == null
+                ||userInfo.data.userInfo == null){
             return;
         }
         String uid = String.valueOf(AppSetting.getUserInfo().data.userInfo.id);

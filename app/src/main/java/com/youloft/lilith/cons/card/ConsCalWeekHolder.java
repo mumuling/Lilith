@@ -47,13 +47,13 @@ public class ConsCalWeekHolder extends ConsBaseHolder implements ConsCalendar.On
     @Override
     public void onClick() {
         UserBean userInfo = AppSetting.getUserInfo();
-        UserBean.DataBean data = userInfo.data;
         if (!AppConfig.LOGIN_STATUS ||
-                data == null ||
-                data.userInfo == null ||
-                data.userInfo.id == 0 ||
-                TextUtils.isEmpty(data.userInfo.birthDay) ||
-                TextUtils.isEmpty(data.userInfo.birthPlace)) {
+                userInfo == null||
+                userInfo.data == null ||
+                userInfo.data.userInfo == null ||
+                userInfo.data.userInfo.id == 0 ||
+                TextUtils.isEmpty(userInfo.data.userInfo.birthDay) ||
+                TextUtils.isEmpty(userInfo.data.userInfo.birthPlace)) {
             EventBus.getDefault().post(new LoddingCheckEvent());
             return;
         }

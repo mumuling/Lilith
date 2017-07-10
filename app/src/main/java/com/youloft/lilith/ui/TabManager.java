@@ -6,6 +6,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 
+import com.alibaba.android.arouter.launcher.ARouter;
+import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.utils.SafeUtil;
 import com.youloft.lilith.ui.fragment.CCFragment;
@@ -130,12 +132,12 @@ public class TabManager implements NavBarLayout.OnTabChangeListener {
      * @param index
      */
     private void setTabIndex(int index) {
-        FragmentTransaction ft = mFragmentManager.beginTransaction();
-
         Fragment safeData = mFragmentsCache.get(index);
         if (safeData == null) {
             return;
         }
+
+        FragmentTransaction ft = mFragmentManager.beginTransaction();
         hidAll();
 
         ft.show(safeData);
@@ -172,8 +174,14 @@ public class TabManager implements NavBarLayout.OnTabChangeListener {
     }
 
     @Override
-    public void selectChange(int index) {
+    public boolean selectChange(int index) {
+        if (!AppConfig.LOGIN_STATUS) {
+                        ARouter.getInstance().build("/test/LoginActivity")
+                                .navigation();
+            return true;
+        }
         setTabIndex(index);
+        return false;
     }
 
     @Override

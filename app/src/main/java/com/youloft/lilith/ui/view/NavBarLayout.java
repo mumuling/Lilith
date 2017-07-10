@@ -78,11 +78,15 @@ public class NavBarLayout extends LinearLayout {
                         if (v instanceof NavItemView) {
                             TabItemBean tb = ((NavItemView) v).getData();
                             if (tb != null) {
+                                if (mTabChangeListener != null) {
+                                    boolean b = mTabChangeListener.selectChange(tb.mIndex);
+                                    if (b) {
+                                        return;
+                                    }
+                                }
                                 resetAllSelect();
                                 ((NavItemView) v).setSelect(true);
-                                if (mTabChangeListener != null) {
-                                    mTabChangeListener.selectChange(tb.mIndex);
-                                }
+
                             }
                         }
                     }
@@ -145,7 +149,7 @@ public class NavBarLayout extends LinearLayout {
      * @see
     */
     public interface OnTabChangeListener{
-        void selectChange(int index);
+        boolean selectChange(int index);
         void tabsChange();
     }
 
