@@ -42,7 +42,6 @@ public class ConsHotTopicHolder extends CardHolder {
         ButterKnife.bind(this, itemView);
 
         init();
-
         TopicRepo.getTopicList("2", "10")
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()

@@ -131,7 +131,7 @@ public class LuckView extends View {
      * @param date
      */
     public void setDate(LuckData date) {
-        if (date == null) {
+        if (date == null || date.data == null || date.data.isEmpty()) {
             return;
         }
         mData = date;

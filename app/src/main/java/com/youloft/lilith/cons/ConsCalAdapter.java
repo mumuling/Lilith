@@ -71,9 +71,41 @@ public class ConsCalAdapter extends RecyclerView.Adapter<ConsCalAdapter.ConsCalI
     public void onBindViewHolder(ConsCalItemHolder holder, int position) {
         ConsPredictsBean.DataBean.PredictsBean safeData = SafeUtil.getSafeData(mPredicts, position);
         if (safeData == null) {
+            bindNoData(holder, position);
             return;
         }
         bindDayView(holder, safeData);
+    }
+
+    /**
+     * 无数据时候绑定样式
+     */
+    private void bindNoData(ConsCalItemHolder holder, int position) {
+        mIndexCal.setTimeInMillis(System.currentTimeMillis());
+        mIndexCal.add(Calendar.DAY_OF_MONTH, position);
+        long intervalDays = CalendarHelper.getIntervalDays(new GregorianCalendar(), mIndexCal);
+        String word = "";
+        if (intervalDays < 0) {
+            word = "昨天";
+        } else if (intervalDays == 0) {
+            word = "今天";
+        } else if (intervalDays == 1) {
+            word = "明天";
+        } else if (intervalDays == 2) {
+            word = "后天";
+        } else {
+            word = String.valueOf(mIndexCal.get(Calendar.DAY_OF_MONTH));
+        }
+        holder.mDayText.setText(word);
+        holder.mStack.removeAllViews();
+        if (holder.mStack.getChildCount() == 0) {
+            ImageView imageView = new ImageView(mContext);
+            imageView.setImageResource(R.drawable.cons_cal_no_img_bg);
+            holder.mStack.addView(imageView);
+            ViewGroup.LayoutParams layoutParams = imageView.getLayoutParams();
+            layoutParams.height = layoutParams.width = mIconSize;
+            imageView.setLayoutParams(layoutParams);
+        }
     }
 
     private void bindDayView(ConsCalItemHolder holder, ConsPredictsBean.DataBean.PredictsBean predicts) {

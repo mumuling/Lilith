@@ -1,7 +1,10 @@
 package com.youloft.lilith.cons.card;
 
 import android.content.Context;
+import android.text.TextUtils;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -43,6 +46,8 @@ public class ConsYSHolder extends ConsBaseHolder {
     LuckView mConsLuckView;
     @BindView(R.id.cons_luck_msg)
     TextView mConsLuckMsg;
+    @BindView(R.id.cons_luck_msg_no_data)
+    ImageView mConsNoData;
     @BindView(R.id.root)
     LinearLayout mRoot;
 
@@ -55,7 +60,7 @@ public class ConsYSHolder extends ConsBaseHolder {
     }
 
     @OnClick(R.id.root)
-    public void checkLodding(){
+    public void checkLodding() {
         EventBus.getDefault().post(new LoddingCheckEvent());
     }
 
@@ -69,7 +74,7 @@ public class ConsYSHolder extends ConsBaseHolder {
                 msg = String.valueOf(detailData.msgAvg);
                 break;
             case CONS_LOVE:
-                msg = String.valueOf(detailData.msglove) ;
+                msg = String.valueOf(detailData.msglove);
                 break;
             case CONS_WORK:
                 msg = String.valueOf(detailData.msgcareer);
@@ -79,6 +84,7 @@ public class ConsYSHolder extends ConsBaseHolder {
                 break;
         }
         mConsLuckMsg.setText(msg);
+        mConsNoData.setVisibility(TextUtils.isEmpty(msg) ? View.VISIBLE : View.GONE);
         mConsLuckMsg.getBackground().setLevel(type);
 
         if (detailData.predicts != null) {

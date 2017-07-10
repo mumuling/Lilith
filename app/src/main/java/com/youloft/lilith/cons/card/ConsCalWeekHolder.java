@@ -42,7 +42,8 @@ public class ConsCalWeekHolder extends ConsBaseHolder implements ConsCalendar.On
         int[] local = new int[2];
         mWeekView.getLocationOnScreen(local);
         if (mContext instanceof MainActivity) {
-            Bitmap screenShort = ((MainActivity) mContext).takeScreenShot(false);
+
+            Bitmap screenShort = ((MainActivity) mContext).takeScreenShot(false, 4);
             screenShort = ViewUtil.blurBitmap(screenShort, mContext);
 
             ConsCalDetailActivity.startConsCalDetailActivity(mContext, local, screenShort, mData);
