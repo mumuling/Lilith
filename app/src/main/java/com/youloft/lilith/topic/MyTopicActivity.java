@@ -72,7 +72,7 @@ public class MyTopicActivity extends BaseActivity {
                     @Override
                     public void onDataSuccess(MyTopicBean myTopicBean) {
                         if (myTopicBean.data != null && myTopicBean.data.size() != 0) {
-                            readDb(myTopicBean.data);//
+                            readDb(myTopicBean.data);
                             adapter.setMyTopicList(myTopicList);
                         }
                     }
@@ -91,35 +91,36 @@ public class MyTopicActivity extends BaseActivity {
      */
     private void readDb(ArrayList<MyTopicBean.DataBean> data) {
         ArrayList<PointTable> pointTables =pointCache.getAllTablePoint();
-        if (pointTables == null || pointTables.size() == 0)return;
-        ArrayList<MyTopicBean.DataBean> list = new ArrayList<>();
-        list.addAll(data);
-        Iterator iter= list.iterator();
-        while (iter.hasNext()) {
-            if (iter.next() instanceof MyTopicBean.DataBean) {
-                int pid = ((MyTopicBean.DataBean) iter.next()).id;
-                if (pointCache.getPointByPid(pid) != null) {
-                    pointCache.deletaDataByPid(pid);
-                    list.remove(iter.next());
-                }
+        if (pointTables != null && pointTables.size() != 0) {
+            for (int i  = 0; i < pointTables.size(); i ++) {
+                PointTable pointTable = pointTables.get(i);
+                MyTopicBean.DataBean topic = new MyTopicBean.DataBean();
+                topic.date = pointTable.buildDate;
+                topic.id = pointTable.pid;
+                topic.optionTitle = pointTable.voteTitle;
+                topic.reply = 0;
+                topic.zan = 0;
+                topic.topicOptionId = pointTable.oid;
+                topic.topicIdTitle = pointTable.topicTitle;
+                topic.Viewpoint = pointTable.viewPoint;
+                topic.topicId = pointTable.tid;
+                topic.isclick = 0;
+                myTopicList.add(topic);
             }
+            ArrayList<MyTopicBean.DataBean> list = new ArrayList<>();
+            Iterator iter= list.iterator();
+//            while (iter.hasNext()) {
+//                MyTopicBean.DataBean dataBean = (MyTopicBean.DataBean) iter.next();
+//                int pid = dataBean.id;
+//                if (pointCache.getPointByPid(pid) != null) {
+//                    pointCache.deletaDataByPid(pid);
+//                    list.remove(dataBean);
+//                }
+//            }
+            myTopicList.addAll(list);
+        } else {
+            myTopicList.addAll(data);
         }
-        for (int i  = 0; i < pointTables.size(); i ++) {
-            PointTable pointTable = pointTables.get(i);
-            MyTopicBean.DataBean topic = new MyTopicBean.DataBean();
-            topic.date = pointTable.buildDate;
-            topic.id = pointTable.pid;
-            topic.optionTitle = pointTable.voteTitle;
-            topic.reply = 0;
-            topic.zan = 0;
-            topic.topicOptionId = pointTable.oid;
-            topic.topicIdTitle = pointTable.topicTitle;
-            topic.Viewpoint = pointTable.viewPoint;
-            topic.topicId = pointTable.tid;
-            topic.isclick = 0;
-            myTopicList.add(topic);
-        }
-        myTopicList.addAll(list);
     }
 
     private void initView() {
