@@ -63,6 +63,13 @@ public class PointCache {
                        , new String[]{String.valueOf(pointTable.pid)});
     }
 
+    public void deleteTable() {
+        SQLiteDatabase db = PointTableHelper.getInstance(mContext).getWritableDatabase();
+        db.delete(PointTable.TABLE_NAME,null,null);
+        db.close();
+
+    }
+
     /**
      *
      * @param uid

@@ -7,12 +7,14 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.net.AbsResponse;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.CalendarHelper;
 import com.youloft.lilith.common.utils.ViewUtil;
+import com.youloft.lilith.cons.view.LogInOrCompleteDialog;
 import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.topic.TopicRepo;
@@ -225,15 +227,23 @@ public class VoteHolder extends RecyclerView.ViewHolder {
             @Override
             public void clickLeft() {
                 if (topicInfo.isVote == 1|| isVote == 1)return;
-                voteDialog.show();
-                voteDialog.setTitle(topicInfo.option.get(0).shortTitle,topicInfo.option.get(0).id);
+                if (!AppConfig.LOGIN_STATUS) {
+                    new LogInOrCompleteDialog(itemView.getContext()).show();
+                } else {
+                    voteDialog.show();
+                    voteDialog.setTitle(topicInfo.option.get(0).shortTitle, topicInfo.option.get(0).id);
+                }
             }
 
             @Override
             public void clickRight() {
                 if (topicInfo.isVote == 1|| isVote == 1)return;
-                voteDialog.show();
-                voteDialog.setTitle(topicInfo.option.get(1).shortTitle,topicInfo.option.get(1).id);
+                if (!AppConfig.LOGIN_STATUS) {
+                    new LogInOrCompleteDialog(itemView.getContext()).show();
+                } else {
+                    voteDialog.show();
+                    voteDialog.setTitle(topicInfo.option.get(1).shortTitle, topicInfo.option.get(1).id);
+                }
             }
         });
         if (topicInfo.isVote ==1 && needVoteAnimation) {

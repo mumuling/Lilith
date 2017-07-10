@@ -52,6 +52,12 @@ public class TopicLikeCache {
                 + TopicLikingTable.Columns.TYPE + " =? ", new String[]{topicLikingTable.mId + "",topicLikingTable.mType});
     }
 
+    public void deleteTable() {
+        SQLiteDatabase db = TopicLikingHelper.getInstance(mContext).getWritableDatabase();
+        db.delete(TopicLikingTable.TABLE_NAME,null,null);
+        db.close();
+    }
+
     /**
      * 通过城市uid删除点赞信息
      * @param uid

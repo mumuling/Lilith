@@ -230,7 +230,7 @@ public class TopicDetailActivity extends BaseActivity {
         });
 
 
-
+//滑动到底部的监听
         rvTopicDetail.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -263,6 +263,7 @@ public class TopicDetailActivity extends BaseActivity {
                     @Override
                     public void onDataSuccess(TopicBean topicBean) {
                         if (topicBean.data != null) {
+                            otherTopicList.clear();
                             otherTopicList.addAll(topicBean.data);
                             adapter.setOtherTopicList(topicBean.data);
                             totalTopic = totalTopic + topicBean.data.size();
@@ -276,41 +277,6 @@ public class TopicDetailActivity extends BaseActivity {
                 });
     }
 
-    /**
-     *   加载更多观点
-     */
-
-    public boolean loadMorePiont() {
-
-        TopicRepo.getPointList(String.valueOf(tid),null,"1",String.valueOf(totalPoint),false)
-                .compose(this.<PointBean>bindToLifecycle())
-                .subscribeOn(Schedulers.newThread())
-                .toObservable()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new RxObserver<PointBean>() {
-                    @Override
-                    public void onDataSuccess(PointBean pointBean) {
-                        if (pointBean.data == null || pointBean.data.size() == 0 ) {
-                            isMorePoint = false;
-                            return;
-                        }
-                        pointList.addAll(pointBean.data);
-                        adapter.setPointBeanList(pointBean.data);
-                        totalPoint = totalPoint + pointList.size();
-                        isMorePoint = true;
-                    }
-
-                    @Override
-                    protected void onFailed(Throwable e) {
-
-                        super.onFailed(e);
-                        isMorePoint = false;
-
-                    }
-                });
-        return isMorePoint;
-
-    }
 
     @Override
     protected void onDestroy() {

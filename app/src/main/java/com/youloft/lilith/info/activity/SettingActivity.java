@@ -17,6 +17,9 @@ import com.youloft.lilith.info.event.LogoutEvent;
 import com.youloft.lilith.info.repo.UpdateUserRepo;
 import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.setting.AppSetting;
+import com.youloft.lilith.topic.db.PointAnswerCache;
+import com.youloft.lilith.topic.db.PointCache;
+import com.youloft.lilith.topic.db.TopicLikeCache;
 import com.youloft.lilith.ui.TabManager;
 import com.youloft.lilith.ui.view.BaseToolBar;
 
@@ -98,6 +101,9 @@ public class SettingActivity extends BaseActivity {
                             //tab设置到首页的事件
                             EventBus.getDefault().post(new TabChangeEvent(TabManager.TAB_INDEX_XZ));
                             AppSetting.saveUserInfo(new UserBean());
+                            PointCache.getIns(SettingActivity.this).deleteTable();
+                            TopicLikeCache.getIns(SettingActivity.this).deleteTable();
+                            PointAnswerCache.getIns(SettingActivity.this).deleteTable();
                             finish();
                         }else {
                             Toaster.showShort("退出登录失败");

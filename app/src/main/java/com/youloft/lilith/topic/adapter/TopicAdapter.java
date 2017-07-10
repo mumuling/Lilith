@@ -75,7 +75,7 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 @Override
                 public void onClick(View v) {
                     ARouter.getInstance().build("/test/TopicDetailActivity")
-                            .withInt("tid", topicBeanList.get(position - 1).id)
+                            .withInt("tid", topicBeanList.get(getRealPosition(position)).id)
                             .navigation();
                 }
             });

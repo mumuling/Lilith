@@ -67,8 +67,14 @@ public class TopicInfoCache {
     public void deleteData(int uid) {
         SQLiteDatabase db = TopicTableHelper.getInstance(mContext).getWritableDatabase();
         db.delete(TopicTable.TABLE_NAME, TopicTable.Columns.UID + "=? ", new String[]{String.valueOf(uid)});
+        db.close();
     }
 
+    public void deleteTable() {
+        SQLiteDatabase db = TopicTableHelper.getInstance(mContext).getWritableDatabase();
+        db.delete(TopicTable.TABLE_NAME,null,null);
+        db.close();
+    }
 
 
     /**
