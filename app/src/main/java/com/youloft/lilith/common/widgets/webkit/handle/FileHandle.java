@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -43,9 +44,11 @@ public class FileHandle extends AbsHandle {
     @Override
     public void handle(final Activity activity, final WebView webView, String url, String action, String params) {
         if (activity instanceof FragmentActivity) {
-            if (activity.isDestroyed()) {
-                mPreActionSheet = null;
-                return;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                if (activity.isDestroyed()) {
+                    mPreActionSheet = null;
+                    return;
+                }
             }
             if (mPreActionSheet != null && mPreActionSheet.isVisible()) {
                 return;
