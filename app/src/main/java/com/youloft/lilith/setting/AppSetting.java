@@ -51,18 +51,20 @@ public class AppSetting {
 
     /**
      * 登录成功之后 存入返回的user 信息
+     *
      * @param userInfo
      */
-    public static void saveUserInfo(UserBean userInfo){
+    public static void saveUserInfo(UserBean userInfo) {
         String userInfoJson = JSON.toJSONString(userInfo);
-        SettingProvider.save(sContext,"user_login_info",userInfoJson);
+        SettingProvider.save(sContext, "user_login_info", userInfoJson);
     }
 
     /**
      * 获取登录成功后的信息
+     *
      * @return
      */
-    public static UserBean getUserInfo(){
+    public static UserBean getUserInfo() {
         String userInfo = SettingProvider.getString(sContext, "user_login_info", null);
         JSONObject parse = (JSONObject) JSON.parse(userInfo);
         UserBean userBean = JSONObject.toJavaObject(parse, UserBean.class);

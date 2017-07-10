@@ -3,12 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <LinearLayout
         android:id="@+id/ll_title_background"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="#E9E9E9"
+        android:background="@color/constellation_week_color"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -16,34 +17,35 @@
             android:layout_width="match_parent"
             android:layout_height="45dp">
 
-            <TextView
+            <ImageView
                 android:id="@+id/tv_confirm"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="15dp"
                 android:gravity="center_vertical"
-                android:text="确定"
-                android:textColor="@color/colorPrimary"
-                android:textSize="18sp" />
+                android:src="@drawable/popup_right_icon" />
 
-            <TextView
+            <ImageView
                 android:id="@+id/tv_cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="15dp"
                 android:gravity="center_vertical"
-                android:text="取消"
-                android:textColor="@color/colorPrimary"
-                android:textSize="18sp" />
+                android:src="@drawable/topic_close_icon" />
 
         </RelativeLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/white_10" />
 
         <com.youloft.lilith.common.widgets.picker.wheel.WheelView
             android:id="@+id/gender_wheel_view"
             android:layout_width="match_parent"
-            android:layout_height="200dp"/>
+            android:layout_height="200dp" />
 
     </LinearLayout>
 

@@ -2,13 +2,17 @@ package com.youloft.lilith.cons.card;
 
 import android.content.Context;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.utils.SafeUtil;
 import com.youloft.lilith.cons.bean.ConsPredictsBean;
 import com.youloft.lilith.cons.bean.LuckData;
+import com.youloft.lilith.cons.consmanager.LoddingCheckEvent;
 import com.youloft.lilith.cons.view.LuckView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -39,6 +43,8 @@ public class ConsYSHolder extends ConsBaseHolder {
     LuckView mConsLuckView;
     @BindView(R.id.cons_luck_msg)
     TextView mConsLuckMsg;
+    @BindView(R.id.root)
+    LinearLayout mRoot;
 
     public ConsYSHolder(Context context, ViewGroup parent, int type) {
         super(context, parent, R.layout.cons_ys_holder);
@@ -48,6 +54,10 @@ public class ConsYSHolder extends ConsBaseHolder {
         mConsLuckView.setType(type);
     }
 
+    @OnClick(R.id.root)
+    public void checkLodding(){
+        EventBus.getDefault().post(new LoddingCheckEvent());
+    }
 
     @Override
     public void bindData(ConsPredictsBean data) {

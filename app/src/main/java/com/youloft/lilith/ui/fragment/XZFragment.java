@@ -20,6 +20,7 @@ import com.youloft.lilith.common.utils.ViewUtil;
 import com.youloft.lilith.cons.ConsRepo;
 import com.youloft.lilith.cons.bean.ConsPredictsBean;
 import com.youloft.lilith.cons.card.ConsFragmentCardAdapter;
+import com.youloft.lilith.cons.consmanager.LoddingCheckEvent;
 import com.youloft.lilith.cons.consmanager.ShareConsEvent;
 import com.youloft.lilith.cons.view.LogInOrCompleteDialog;
 import com.youloft.lilith.info.activity.EditInformationActivity;
@@ -35,6 +36,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -50,6 +52,7 @@ public class XZFragment extends BaseFragment {
     private RecyclerView mConsList;
     private ConsFragmentCardAdapter mCardAdapter;
     private GregorianCalendar mCal = new GregorianCalendar();
+
     public XZFragment() {
         super(R.layout.fragment_xz);
     }
@@ -69,33 +72,34 @@ public class XZFragment extends BaseFragment {
         EventBus.getDefault().unregister(this);
     }
 
-    private static final int LOG_IN = 1;
-    private static final int COMPLETE_INFO = 2;
+    public static final int LOG_IN = 1;
+    public static final int COMPLETE_INFO = 2;
 
     /**
      * 初始化数据
      */
     private void initDate() {
-        if (!AppConfig.LOGIN_STATUS) {      //需要登录
-            showDialog(LOG_IN);
-            return;
-        }
-        UserBean userInfo = AppSetting.getUserInfo();
-        UserBean.DataBean data = userInfo.data;
-        if (data == null || data.userInfo == null || data.userInfo.id == 0) {       //需要登录
-            showDialog(LOG_IN);
-            return;
-        }
-        if (TextUtils.isEmpty(data.userInfo.birthDay)) {        //需要完善资料
-            showDialog(COMPLETE_INFO);
-            return;
-        }
-        UserBean.DataBean.UserInfoBean userInfo1 = data.userInfo;
 
+        UserBean userInfo = AppSetting.getUserInfo();
+        if (!AppConfig.LOGIN_STATUS ||
+                userInfo == null||
+                userInfo.data == null ||
+                userInfo.data.userInfo == null ||
+                userInfo.data.userInfo.id == 0 ||
+                TextUtils.isEmpty(userInfo.data.userInfo.birthDay)) {       //需要登录
+            getData("1990-04-02", "", "", "");  //没登录选双鱼
+            return;
+        }
+
+        //登录且有资料
+        UserBean.DataBean.UserInfoBean userInfo1 = userInfo.data.userInfo;
         Date date = CalendarHelper.parseDate(userInfo1.birthDay, EditInformationActivity.DATE_FORMAT);
         mCal.setTime(date);
+        getData(CalendarHelper.format(date, "yyyy-MM-dd"), CalendarHelper.format(date, "HH:mm:ss"), userInfo1.birthLongi, userInfo1.birthLati);
+    }
 
-        ConsRepo.getConsPredicts(CalendarHelper.format(date, "yyyy-MM-dd"),CalendarHelper.format(date, "HH:mm:ss"),userInfo1.birthLongi,userInfo1.birthLati)
+    private void getData(String birdt, String birtm, String birlongi, String birlati) {
+        ConsRepo.getConsPredicts(birdt, birtm, birlongi, birlati)
                 .compose(this.<ConsPredictsBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
@@ -108,14 +112,14 @@ public class XZFragment extends BaseFragment {
                         }
                     }
                 });
-
     }
+
 
     /**
      * 显示登录画面或显示填写资料画面
      */
     private void showDialog(int type) {
-//        new LogInOrCompleteDialog(mContext).show();
+        new LogInOrCompleteDialog(mContext).setStatus(type).show();
     }
 
     /**
@@ -128,6 +132,7 @@ public class XZFragment extends BaseFragment {
         String mSource = event.mSource;
         share();
     }
+
     /**
      * 登录状态改变
      *
@@ -149,6 +154,32 @@ public class XZFragment extends BaseFragment {
     }
 
     /**
+     * 检查登录状态，或个人信息
+     *
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
+    public void onLoddingCheck(LoddingCheckEvent event) {
+//        checkUserInfo();
+    }
+
+    private void checkUserInfo() {
+        if (!AppConfig.LOGIN_STATUS) {
+            showDialog(LOG_IN);
+            return;
+        }
+        UserBean userInfo = AppSetting.getUserInfo();
+        UserBean.DataBean data = userInfo.data;
+        if (data == null ||
+                data.userInfo == null ||
+                data.userInfo.id == 0 ||
+                TextUtils.isEmpty(data.userInfo.birthDay)) {
+            showDialog(COMPLETE_INFO);
+            return;
+        }
+    }
+
+    /**
      * 初始化viewe
      *
      * @param view
@@ -162,18 +193,20 @@ public class XZFragment extends BaseFragment {
         mConsList.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         mConsList.setAdapter(mCardAdapter);
 
-        mMaskView.setAlpha(0.1f);
+        final float height = ViewUtil.dp2px(200);
         mConsList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+
             }
+
             int totalDy = 0;
+
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 totalDy += dy;
-                int height = mMaskView.getHeight();
                 if (totalDy <= height) {
-                    float alpha = 1 - (height- totalDy) * 1f / height;
+                    float alpha = 1 - (height - totalDy) * 1f / height;
                     mMaskView.setAlpha(alpha);
                     if (mMaskView.getVisibility() != View.VISIBLE) {
                         mMaskView.setVisibility(View.VISIBLE);
@@ -181,13 +214,14 @@ public class XZFragment extends BaseFragment {
                 }
             }
         });
+
+        mConsList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkUserInfo();
+            }
+        });
     }
 
-    public int getScollYDistance(RecyclerView view) {
-        LinearLayoutManager layoutManager = (LinearLayoutManager) view.getLayoutManager();
-        int position = layoutManager.findFirstVisibleItemPosition();
-        View firstVisiableChildView = layoutManager.findViewByPosition(position);
-        int itemHeight = firstVisiableChildView.getHeight();
-        return (position) * itemHeight - firstVisiableChildView.getTop();
-    }
+
 }
