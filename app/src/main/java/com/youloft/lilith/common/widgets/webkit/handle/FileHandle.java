@@ -152,7 +152,7 @@ public class FileHandle extends AbsHandle {
      *
      * @param picturePath
      */
-    private void doUploadImage(String picturePath) {
+    protected void doUploadImage(String picturePath) {
         Observable.just(picturePath)
                 .map(new Function<String, String>() {
                     @Override
