@@ -29,7 +29,11 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-
+        beta {
+            signingConfig signingConfigs.youloft
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
         debug {
             signingConfig signingConfigs.youloft
             minifyEnabled false
@@ -41,6 +45,71 @@ android {
         resolutionStrategy.force 'com.google.code.findbugs:jsr305:1.3.9'
     }
 }
+
+/**
+ * 获取日期串
+ * @return
+ */
+def getDate() {
+    TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"));
+    Calendar cal = Calendar.getInstance();
+    def date = cal.getTime();
+    def formattedDate = date.format('yyyyMMdd-HHmm')
+    return formattedDate
+}
+/**
+ * 改变包路径
+ * @param type
+ */
+def changeApkPath(String type, String buldType) {
+    def dateString = getDate();
+    android.applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            if (variant.buildType.name == buldType) {
+                def releaseApkName = android.defaultConfig.applicationId + "_" + type + "_" + android.defaultConfig.versionName + "_" + android.defaultConfig.versionCode + '.apk'
+                output.outputFile = new File(rootProject.rootDir.getAbsolutePath() + "/output/Lilith/" + versionName + "/" + type + "/" + dateString, releaseApkName)
+                println output.outputFile.absolutePath
+            }
+        }
+    }
+}
+
+/**
+ * 编译测试任务
+ */
+task buildPublish(dependsOn: 'assembleRelease') {
+    android.applicationVariants.all { variant ->
+        if (variant.name == 'debug') {
+            task("generateJavadoc", type: Javadoc) {
+                description "Generates Javadoc for $variant.name."
+                source = variant.javaCompile.source
+                ext.androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
+                classpath = files(variant.javaCompile.classpath.files) + files(ext.androidJar)
+                destinationDir = new File(rootProject.rootDir.getAbsolutePath() + "/output/Lilith/$versionName/javadoc/")
+                options.links("http://docs.oracle.com/javase/7/docs/api/");
+                options.links("http://d.android.com/reference/");
+                failOnError false
+            }
+            buildPublish.dependsOn(generateJavadoc)
+        }
+    }
+    changeApkPath("publish", "release");
+}
+
+/**
+ * 编译Beta任务
+ */
+task buildBeta(dependsOn: 'assembleBeta') {
+    changeApkPath("beta", "beta");
+}
+
+/**
+ * 编译Alpha任务
+ */
+task buildAlpha(dependsOn: 'assembleDebug') {
+    changeApkPath("alpha", "debug");
+}
+
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')

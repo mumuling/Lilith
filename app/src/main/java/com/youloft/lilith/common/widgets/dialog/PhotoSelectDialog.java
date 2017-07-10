@@ -47,15 +47,10 @@ public class PhotoSelectDialog extends BaseDialog {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.take_photo:
-                Toaster.showShort("拍照");
-                Intent getImageByCamera = new Intent("android.media.action.IMAGE_CAPTURE");
-                mContext.startActivityForResult(getImageByCamera, EditInformationActivity.CODE_CAMERA);
                 break;
             case R.id.photo_select:
                 Intent albumIntent = new Intent(Intent.ACTION_PICK);
                 albumIntent.setType("image/*");
-//                albumIntent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-                mContext.startActivityForResult(albumIntent, EditInformationActivity.CODE_PICK_IMAGE);
                 dismiss();
                 break;
             case R.id.cancel:

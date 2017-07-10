@@ -2,11 +2,17 @@ package com.youloft.lilith.topic.holder;
 
 import android.animation.ValueAnimator;
 import android.content.ContentValues;
+import android.graphics.Bitmap;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
@@ -26,6 +32,7 @@ import com.youloft.lilith.topic.db.PointCache;
 import com.youloft.lilith.topic.db.PointTable;
 import com.youloft.lilith.topic.db.TopicInfoCache;
 import com.youloft.lilith.topic.db.TopicTable;
+import com.youloft.lilith.topic.widget.BlurFactor;
 import com.youloft.lilith.topic.widget.VoteDialog;
 import com.youloft.lilith.topic.widget.VoteView;
 
@@ -56,6 +63,7 @@ public class VoteHolder extends RecyclerView.ViewHolder {
     private boolean needVoteAnimation = true;
     private int isVote = 0;
     private TopicDetailAdapter adapter;
+    private UserBean.DataBean.UserInfoBean userInfo;
 
     public VoteHolder(View itemView,TopicDetailAdapter adapter) {
         super(itemView);
@@ -150,7 +158,10 @@ public class VoteHolder extends RecyclerView.ViewHolder {
                 if (topicInfo !=null && topicInfo.isVote ==1)return;
                 if (topicInfo == null) return;
                 if (isVote == 1 )return;
-                TopicRepo.postVote(String.valueOf(topicInfo.id),String.valueOf(id),"10018",msg)
+                userInfo = AppSetting.getUserInfo().data.userInfo;
+                if (userInfo == null)return;
+
+                TopicRepo.postVote(String.valueOf(topicInfo.id),String.valueOf(id),String.valueOf(userInfo.id),msg)
                         .subscribeOn(Schedulers.newThread())
                         .toObservable()
                         .observeOn(AndroidSchedulers.mainThread())
@@ -253,7 +264,25 @@ public class VoteHolder extends RecyclerView.ViewHolder {
         GlideApp.with(itemView.getContext())
                 .asBitmap()
                 .load(topicInfo.backImg)
-                .into(imageTop);
+                .listener(new RequestListener<Bitmap>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                        BlurFactor factor = new BlurFactor();
+                        factor.width = resource.getWidth();
+                        factor.height = resource.getHeight();
+                        factor.radius = 5;
+                        resource = factor.of(itemView.getContext(), resource, factor);
+                        //resource = BitmapFactory.decodeResource(mContext.getResources(),R.drawable.back_icon);
+                        imageTop.setImageBitmap(resource);
+                        return false;
+                    }
+                })
+                .into(ViewUtil.getScreenWidth(itemView.getContext()),(int) ViewUtil.dp2px(150));
         textTopicTitle.setText("#" + topicInfo.title);
     }
 
