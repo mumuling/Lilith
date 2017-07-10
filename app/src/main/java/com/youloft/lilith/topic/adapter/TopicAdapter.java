@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
+import com.youloft.lilith.common.utils.ViewUtil;
 import com.youloft.lilith.topic.bean.TopicBean;
 import com.youloft.lilith.topic.widget.BlurFactor;
 import com.youloft.lilith.topic.widget.TopicUserDataBind;
@@ -148,7 +150,7 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                         }
 
                     })
-                    .into(150,150);
+                    .into(ViewUtil.getScreenWidth(mContext),(int) ViewUtil.dp2px(150));
 
 
 
