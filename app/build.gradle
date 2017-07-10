@@ -91,7 +91,7 @@ task buildBeta(dependsOn: 'assembleBeta') {
 /**
  * 编译Alpha任务
  */
-task buildAlpha(dependsOn: 'assembleDebug') << {
+task buildAlpha(dependsOn: 'assembleDebug') {
     changeApkPath("alpha", "debug");
 }
 
