@@ -98,7 +98,6 @@ public class ConsCalDetailActivity extends BaseActivity {
     private int[] week_locals;
     private int distance;
     private ConsPredictsBean mData;
-    private ConsPredictsBean data;
 
     /**
      * 关闭
@@ -142,8 +141,6 @@ public class ConsCalDetailActivity extends BaseActivity {
             doAnimator();
             return;
         }
-
-        this.data = data;
 
         List<ConsPredictsBean.DataBean.PredictsBean> predicts = data.data.predicts;
         if (!predicts.isEmpty()) {
@@ -263,66 +260,40 @@ public class ConsCalDetailActivity extends BaseActivity {
         ConsCalendar mShareCal = (ConsCalendar) shareView.findViewById(R.id.cons_detail_cal_view_share);
         final ImageView mShareBg = (ImageView) shareView.findViewById(R.id.share_bg_img);
         mShareTitle.setText(mConsDetailTitle.getText().toString());
-        mShareCal.setData(data);
 
-        //不能直接使用glide加载到imageView里边
-        GlideApp.with(shareView).asBitmap().load(data.data.bgImg).into(new SimpleTarget<Bitmap>() {
-            @Override
-            public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-                mShareBg.setImageBitmap(resource);
-                shareView.measure(
-                        View.MeasureSpec.makeMeasureSpec(mConsDetailContentTop.getWidth(), View.MeasureSpec.EXACTLY),
-                        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-                shareView.layout(0, 0, shareView.getMeasuredWidth(),
-                        shareView.getMeasuredHeight());
+        if (mData != null
+                && mData.data != null
+                && mData.data.predicts != null
+                && !mData.data.predicts.isEmpty()) {
+            mShareCal.setData(mData);
 
-                Bitmap b = Bitmap.createBitmap(shareView.getMeasuredWidth(), shareView.getMeasuredHeight(), Bitmap.Config.RGB_565);
-                Canvas canvas = new Canvas(b);
-                shareView.draw(canvas);
-
-                new ShareBuilder(ConsCalDetailActivity.this).withImg(b).share();
-            }
-        });
+            //不能直接使用glide加载到imageView里边
+            GlideApp.with(shareView).asBitmap().load(mData.data.bgImg).into(new SimpleTarget<Bitmap>() {
+                @Override
+                public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                    mShareBg.setImageBitmap(resource);
+                    canShare(shareView);
+                }
+            });
+        } else {
+            //没有数据直接搞图
+            canShare(shareView);
+        }
 
     }
 
-    private void share1() {
-        mConsDetailCalView.setDrawingCacheEnabled(true);
-        Bitmap drawingCache = mConsDetailCalView.getDrawingCache();
-        if (drawingCache != null && !drawingCache.isRecycled()) {
-            int height = drawingCache.getHeight();
-            int width = drawingCache.getWidth();
-            Paint paint = new Paint();
-            Bitmap shareBit = Bitmap.createBitmap(width, height + (int) ViewUtil.dp2px(167), Bitmap.Config.ARGB_8888);
-            Canvas canvas = new Canvas(shareBit);
-            canvas.drawColor(Color.YELLOW);
-            ViewUtil.renderTextByCenter(canvas, mConsDetailTitle.getText().toString(), width / 2, ViewUtil.dp2px(23.5f), mConsDetailTitle.getPaint());
-            canvas.drawBitmap(drawingCache, 0, ViewUtil.dp2px(47), paint);
+    private void canShare(View shareView) {
+        shareView.measure(
+                View.MeasureSpec.makeMeasureSpec(mConsDetailContentTop.getWidth(), View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        shareView.layout(0, 0, shareView.getMeasuredWidth(),
+                shareView.getMeasuredHeight());
 
-            Drawable[] loveDrawables = mConsDetailConsLoveTendency.getCompoundDrawables();
-            Drawable[] moneyDrawables = mConsDetailConsMoneyTendency.getCompoundDrawables();
-            Drawable[] workDrawables = mConsDetailConsWorkTendency.getCompoundDrawables();
-            int v = (int) ViewUtil.dp2px(15);
-            int wordY = (int) ViewUtil.dp2px(10);
-            int v1 = (int) ViewUtil.dp2px(327);
-            int v2 = (int) ViewUtil.dp2px(20);
-            int space = (int) ViewUtil.dp2px(35);
-            int word = (int) ViewUtil.dp2px(88);
-            loveDrawables[0].setBounds(v, v1, v + v2, v1 + v2);
-            moneyDrawables[0].setBounds(v, v1 + space, v + v2, v1 + +space + v2);
-            workDrawables[0].setBounds(v, v1 + space + space, v + v2, v1 + space + space + v2);
+        Bitmap b = Bitmap.createBitmap(shareView.getMeasuredWidth(), shareView.getMeasuredHeight(), Bitmap.Config.RGB_565);
+        Canvas canvas = new Canvas(b);
+        shareView.draw(canvas);
 
-            loveDrawables[0].draw(canvas);
-            moneyDrawables[0].draw(canvas);
-            workDrawables[0].draw(canvas);
-
-
-            ViewUtil.renderTextByCenter(canvas, mConsDetailConsLoveTendency.getText().toString(), word, v1 + wordY, mConsDetailConsLoveTendency.getPaint());
-            ViewUtil.renderTextByCenter(canvas, mConsDetailConsMoneyTendency.getText().toString(), word, v1 + wordY + space, mConsDetailConsMoneyTendency.getPaint());
-            ViewUtil.renderTextByCenter(canvas, mConsDetailConsWorkTendency.getText().toString(), word, v1 + wordY + space + space, mConsDetailConsWorkTendency.getPaint());
-
-            new ShareBuilder(this).withImg(shareBit).share();
-        }
+        new ShareBuilder(ConsCalDetailActivity.this).withImg(b).share();
     }
 
     public static void startConsCalDetailActivity(Context context, int[] local, Bitmap bitmapByte, ConsPredictsBean bean) {
