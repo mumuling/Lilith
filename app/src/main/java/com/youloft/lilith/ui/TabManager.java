@@ -175,7 +175,7 @@ public class TabManager implements NavBarLayout.OnTabChangeListener {
 
     @Override
     public boolean selectChange(int index) {
-        if (!AppConfig.LOGIN_STATUS) {
+        if (index == TabManager.TAB_INDEX_SZ && !AppConfig.LOGIN_STATUS) {
                         ARouter.getInstance().build("/test/LoginActivity")
                                 .navigation();
             return true;
