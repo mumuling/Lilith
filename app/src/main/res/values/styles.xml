@@ -12,7 +12,7 @@
     <style name="TranslucentThem" parent="AppTheme">
         <item name="android:windowAnimationStyle">@style/Animation</item>
         <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowFullscreen">false</item>
         <item name="android:windowBackground">@color/translucent</item>
     </style>
     <style name="Animation">

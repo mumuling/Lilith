@@ -80,6 +80,12 @@ public class PointAnswerCache {
                 , new String[]{String.valueOf(uid)});
     }
 
+    public void deleteTable() {
+        SQLiteDatabase db = PointAnswerTableHelper.getInstance(mContext).getWritableDatabase();
+        db.delete(PointAnswerTable.TABLE_NAME,null,null);
+        db.close();
+    }
+
 
     /**
      *   通过ID 和 Type查找点赞信息

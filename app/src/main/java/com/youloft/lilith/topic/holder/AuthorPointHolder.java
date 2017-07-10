@@ -9,11 +9,14 @@ import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.net.AbsResponse;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.cons.consmanager.ConsManager;
+import com.youloft.lilith.cons.view.LogInOrCompleteDialog;
+import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.topic.PointDetailActivity;
 import com.youloft.lilith.topic.TopicRepo;
 import com.youloft.lilith.topic.bean.PointBean;
@@ -148,6 +151,10 @@ public class AuthorPointHolder extends RecyclerView.ViewHolder implements View.O
         switch (v.getId()) {
             case R.id.image_zan:
             case R.id.text_zan_count:
+                if (!AppConfig.LOGIN_STATUS) {
+                    new LogInOrCompleteDialog(mContext).show();
+                    return;
+                }
                 ((BitmapDrawable) imageZan.getDrawable()).setAntiAlias(true);
                 Rotate3dAnimation m3DAnimation;
                 if (isZan == 1) {
@@ -191,7 +198,8 @@ public class AuthorPointHolder extends RecyclerView.ViewHolder implements View.O
     }
 
     public void clickLike() {
-        TopicRepo.likePoint(String.valueOf(point.id),"10000")
+        int userId = AppSetting.getUserInfo().data.userInfo.id;
+        TopicRepo.likePoint(String.valueOf(point.id),String.valueOf(userId))
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
                 .observeOn(AndroidSchedulers.mainThread())

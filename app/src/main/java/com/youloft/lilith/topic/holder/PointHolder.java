@@ -14,12 +14,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.net.AbsResponse;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.CalendarHelper;
 import com.youloft.lilith.cons.consmanager.ConsManager;
+import com.youloft.lilith.cons.view.LogInOrCompleteDialog;
 import com.youloft.lilith.topic.PointDetailActivity;
 import com.youloft.lilith.topic.TopicDetailActivity;
 import com.youloft.lilith.topic.TopicRepo;
@@ -120,6 +122,10 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
         switch (v.getId()) {
             case R.id.image_zan:
             case R.id.text_zan_count:
+                if (!AppConfig.LOGIN_STATUS) {
+                    new LogInOrCompleteDialog(mContext).show();
+                    return;
+                }
                 ((BitmapDrawable) imageZan.getDrawable()).setAntiAlias(true);
                 Rotate3dAnimation m3DAnimation;
                 if (isZan == 1) {
