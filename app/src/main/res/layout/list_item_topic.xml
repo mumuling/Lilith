@@ -12,6 +12,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
+            android:background="#80000000"
             app:radius="5dp" />
         <TextView
             android:layout_width="wrap_content"
@@ -35,5 +36,6 @@
             android:layout_marginRight="28dp"
             android:layout_marginBottom="23dp"
             />
+
 
 </FrameLayout>

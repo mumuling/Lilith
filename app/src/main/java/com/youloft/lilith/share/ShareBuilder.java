@@ -94,7 +94,7 @@ public class ShareBuilder {
     public void share() {
         ShareActivity.mShareBitmap = mShareBitmap;
         if (mContext instanceof BaseActivity) {
-            ShareActivity.mBGBitmap = ViewUtil.blurBitmap(((BaseActivity) mContext).takeScreenShot(false), mContext);
+            ShareActivity.mBGBitmap = ViewUtil.blurBitmap(((BaseActivity) mContext).takeScreenShot(false, 4), mContext);
         }
         ARouter.getInstance().build("/ui/share")
                 .withString("title", mShareTitle)

@@ -19,6 +19,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerViewEx;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.WindowManager;
 
 import com.youloft.lilith.R;
 
@@ -178,6 +179,14 @@ public class ViewUtil {
         rs.destroy();
 
         return outBitmap;
+    }
+
+    public static int getScreenWidth(Context context) {
+        WindowManager wm = (WindowManager) context
+                .getSystemService(Context.WINDOW_SERVICE);
+
+        int width = wm.getDefaultDisplay().getWidth();
+        return width;
     }
 
     /**

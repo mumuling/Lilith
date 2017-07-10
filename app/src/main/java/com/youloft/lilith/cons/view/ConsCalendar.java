@@ -83,7 +83,10 @@ public class ConsCalendar extends RecyclerView {
      * @param data
      */
     public void setData(ConsPredictsBean data) {
-        if (data != null && data.data != null) {
+        if (data != null
+                && data.data != null
+                && data.data.predicts != null
+                && !data.data.predicts.isEmpty()) {
             adapter.setConsData(data.data);
         }
     }
