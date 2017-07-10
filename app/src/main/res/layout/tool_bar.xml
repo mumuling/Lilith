@@ -32,4 +32,14 @@
             android:layout_marginRight="10dp"
             android:visibility="invisible"
             android:src="@drawable/constellation_share_icon" />
+        <TextView
+            android:id="@+id/tool_bar_save"
+            android:layout_gravity="center|right"
+            android:padding="5dp"
+            android:textColor="#f5f0e9"
+            android:text="保存"
+            android:visibility="invisible"
+            android:layout_marginRight="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 </FrameLayout>

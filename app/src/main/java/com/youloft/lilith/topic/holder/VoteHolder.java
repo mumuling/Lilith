@@ -154,7 +154,7 @@ public class VoteHolder extends RecyclerView.ViewHolder {
         voteDialog = new VoteDialog(itemView.getContext());
         voteDialog.setListener(new VoteDialog.OnClickConfirmListener() {
             @Override
-            public void clickConfirm(final String msg, final int id) {
+            public void clickConfirm(final String msg, final int id,final String voteTitle) {
                 if (topicInfo !=null && topicInfo.isVote ==1)return;
                 if (topicInfo == null) return;
                 if (isVote == 1 )return;
@@ -171,7 +171,7 @@ public class VoteHolder extends RecyclerView.ViewHolder {
                                 int poitnID = (int) s.data;
                                 if (poitnID!= -1) {
                                     String time = CalendarHelper.getNowTimeString();
-                                    updatePointDb(id,topicInfo.id,poitnID,msg,time);
+                                    updatePointDb(id,topicInfo.id,poitnID,msg,time,topicInfo.title,voteTitle);
                                     isVote = 1;
                                     topicInfo.totalVote++;
                                     addOptionVote(id);
@@ -195,8 +195,8 @@ public class VoteHolder extends RecyclerView.ViewHolder {
         voteView = (VoteView) itemView.findViewById(R.id.vote_view);
     }
 
-    private void updatePointDb(int oid ,int tid, int poitnID, String msg,String time) {
-        PointTable pointTable = new PointTable(oid,tid,poitnID,msg,time);
+    private void updatePointDb(int oid ,int tid, int poitnID, String msg,String time,String topicTitle,String voteTitle) {
+        PointTable pointTable = new PointTable(oid,tid,poitnID,msg,time,topicTitle,voteTitle);
         PointCache.getIns(itemView.getContext()).insertData(pointTable);
         UserBean.DataBean.UserInfoBean userInfo = AppSetting.getUserInfo().data.userInfo;
         PointBean.DataBean dataBean = new PointBean.DataBean();

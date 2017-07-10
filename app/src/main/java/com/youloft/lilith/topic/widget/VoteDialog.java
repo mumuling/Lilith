@@ -33,6 +33,7 @@ public class VoteDialog extends BaseDialog implements View.OnClickListener {
     private EditText editVote;
     public OnClickConfirmListener onClickConfirmListener;
     private int voteId;
+    private String voteTitle;
 
     public VoteDialog(@NonNull Context context) {
         super(context);
@@ -67,6 +68,7 @@ public class VoteDialog extends BaseDialog implements View.OnClickListener {
 
     public void setTitle(String title,int id) {
         voteId = id;
+        voteTitle = title;
         textPointVote.setText(title);
     }
 
@@ -79,7 +81,7 @@ public class VoteDialog extends BaseDialog implements View.OnClickListener {
             case R.id.report_confirm:
                 this.dismiss();
                 if (onClickConfirmListener != null) {
-                    onClickConfirmListener.clickConfirm(editVote.getText().toString(),voteId);
+                    onClickConfirmListener.clickConfirm(editVote.getText().toString(),voteId,voteTitle);
                 }
                 break;
             default:
@@ -87,6 +89,6 @@ public class VoteDialog extends BaseDialog implements View.OnClickListener {
         }
     }
     public interface  OnClickConfirmListener {
-        void clickConfirm(String msg,int id);
+        void clickConfirm(String msg,int id,String title);
     }
 }

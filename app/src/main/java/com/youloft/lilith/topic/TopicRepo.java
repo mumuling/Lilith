@@ -5,6 +5,7 @@ import com.youloft.lilith.LLApplication;
 import com.youloft.lilith.common.AbstractDataRepo;
 import com.youloft.lilith.common.net.AbsResponse;
 import com.youloft.lilith.common.net.Urls;
+import com.youloft.lilith.topic.bean.MyTopicBean;
 import com.youloft.lilith.topic.bean.PointAnswerBean;
 import com.youloft.lilith.topic.bean.PointBean;
 import com.youloft.lilith.topic.bean.ReplyBean;
@@ -194,4 +195,29 @@ public class TopicRepo extends AbstractDataRepo {
         return post(Urls.POINT_REPLY,null,param,true,PointAnswerBean.class,null,0);
     }
 
+    /**
+     *
+     * @param uid   用户ID
+     * @param skip  跳过条数
+     * @param limit 请求条数
+     * @return
+     */
+    public static Flowable<MyTopicBean> getMyTopic(String uid, String skip,String limit,boolean needCache) {
+        HashMap<String, String> param = new HashMap();
+        param.put("uid",uid);
+        if (skip != null) param.put("skip",skip);
+        if (limit != null) param.put("limit",limit);
+        String cacheKey = "my_topic" + uid;
+        long duration = 5 * 60 * 1000;
+        if (needCache) {
+
+            if (!LLApplication.getApiCache().isExpired(cacheKey,duration)) {
+                return LLApplication.getApiCache().readCache(cacheKey,MyTopicBean.class);
+            } else {
+                return httpFlow(Urls.MY_VOTE, null, param, true, MyTopicBean.class, cacheKey, duration);
+            }
+        } else {
+            return httpFlow(Urls.MY_VOTE, null, param, true, MyTopicBean.class, null, 0);
+        }
+    }
 }
