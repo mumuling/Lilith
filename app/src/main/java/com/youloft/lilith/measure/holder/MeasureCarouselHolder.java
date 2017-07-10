@@ -37,7 +37,7 @@ public class MeasureCarouselHolder extends BaseMeasureHolder {
             }else {
                 vpCarousel.setCurrentItem(index);
             }
-            mhandler.postDelayed(mRunnable,1000);
+            mhandler.postDelayed(mRunnable,2000);
         }
     };
     public MeasureCarouselHolder(Context context, ViewGroup parent) {
@@ -49,7 +49,7 @@ public class MeasureCarouselHolder extends BaseMeasureHolder {
     public void bindData(MeasureBean.DataBean mMeasureData, int position) {
         this.mMeasureData = mMeasureData;
         vpCarousel.setAdapter(new MyAdapter(mMeasureData, mContext));
-        mhandler.postDelayed(mRunnable,1000);
+        mhandler.postDelayed(mRunnable,2000);
         vpCarousel.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {

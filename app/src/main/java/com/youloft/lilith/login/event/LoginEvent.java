@@ -7,5 +7,8 @@ package com.youloft.lilith.login.event;
  */
 
 public class LoginEvent {
-
+    public boolean isLogin; //true代表登录,false代表登出
+    public LoginEvent(boolean isLogin) {
+        this.isLogin = isLogin;
+    }
 }

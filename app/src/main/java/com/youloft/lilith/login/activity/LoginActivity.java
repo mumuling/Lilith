@@ -206,7 +206,7 @@ public class LoginActivity extends BaseActivity {
                     public void onDataSuccess(UserBean userBean) {
                         AppSetting.saveUserInfo(userBean); //保存用户信息
                         AppConfig.LOGIN_STATUS = true; //设置登录标识
-                        EventBus.getDefault().post(new LoginEvent());//发送登录事件
+                        EventBus.getDefault().post(new LoginEvent(true));//发送登录事件
                         finish();
                     }
                 });
@@ -251,24 +251,20 @@ public class LoginActivity extends BaseActivity {
     public void wechatLogin(View view) {
         SocializeApp.get(this).getPlatformInfo(this, SocializePlatform.WEIXIN, new AuthListener() {
             @Override
-            public void onStart(SocializePlatform platform) {
-                Log.d(TAG, "onStart() called with: platform = [" + platform + "]");
+            public void onStart(SocializePlatform platform) {Log.d(TAG, "onStart() called with: platform = [" + platform + "]");
             }
 
             @Override
-            public void onComplete(SocializePlatform platform, int code, Map<String, String> data) {
-                Log.d(TAG, "onComplete() called with: platform = [" + platform + "], code = [" + code + "], data = [" + data + "]");
+            public void onComplete(SocializePlatform platform, int code, Map<String, String> data) {Log.d(TAG, "onComplete() called with: platform = [" + platform + "], code = [" + code + "], data = [" + data + "]");
                 thirdLogin(platform, data);
             }
 
             @Override
-            public void onError(SocializePlatform platform, int code, Throwable err) {
-                Log.d(TAG, "onError() called with: platform = [" + platform + "], code = [" + code + "], err = [" + err + "]");
+            public void onError(SocializePlatform platform, int code, Throwable err) {Log.d(TAG, "onError() called with: platform = [" + platform + "], code = [" + code + "], err = [" + err + "]");
             }
 
             @Override
-            public void onCancel(SocializePlatform platform, int code) {
-                Log.d(TAG, "onCancel() called with: platform = [" + platform + "], code = [" + code + "]");
+            public void onCancel(SocializePlatform platform, int code) {Log.d(TAG, "onCancel() called with: platform = [" + platform + "], code = [" + code + "]");
             }
         });
     }
@@ -302,14 +298,12 @@ public class LoginActivity extends BaseActivity {
                 .subscribe(new RxObserver<UserBean>() {
                     @Override
                     public void onDataSuccess(UserBean userBean) {
-                        Log.d(TAG, "onDataSuccess() called with: userBean = [" + userBean + "]");
+                        AppSetting.saveUserInfo(userBean); //保存用户信息
+                        AppConfig.LOGIN_STATUS = true; //设置登录标识
+                        EventBus.getDefault().post(new LoginEvent(true));//发送登录事件
+                        finish();
                     }
 
-                    @Override
-                    protected void onFailed(Throwable e) {
-                        super.onFailed(e);
-                        Log.d(TAG, "onFailed() called with: e = [" + e + "]");
-                    }
                 });
     }
 

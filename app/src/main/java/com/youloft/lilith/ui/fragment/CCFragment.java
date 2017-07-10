@@ -56,6 +56,9 @@ public class CCFragment extends BaseFragment {
         rvCC.setLayoutManager(manager);
         mMeasureAdapter = new MeasureAdapter(mContext);
         rvCC.setAdapter(mMeasureAdapter);
+        btlCC.setShowShareBtn(false);
+        btlCC.setShowBackBtn(false);
+        btlCC.setTitle(getResources().getString(R.string.cece));
         getMeasureData();
         return rootView;
     }

@@ -21,13 +21,11 @@ import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.base.BaseFragment;
 import com.youloft.lilith.common.utils.ViewUtil;
-import com.youloft.lilith.info.event.LogoutEvent;
 import com.youloft.lilith.info.event.UserInfoUpDateEvent;
 import com.youloft.lilith.login.activity.LoginActivity;
 import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.login.event.LoginEvent;
 import com.youloft.lilith.setting.AppSetting;
-import com.youloft.lilith.ui.GlideBlurTransform;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -79,8 +77,14 @@ public class MEFragment extends BaseFragment {
     //登录成功之后接收到的事件  快捷登录, 注册成功, 账号密码登录, 三方登录 都会发送事件到这个地方
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(LoginEvent loginEvent) {
-        //登录成功了,图片,昵称
-        setUserInfo();
+        boolean isLogin = loginEvent.isLogin;
+        if (isLogin) {
+            //登录成功了,图片,昵称
+            setUserInfo();
+        } else {
+            //登出了
+        }
+
     }
 
     //用户修改信息过后,发出的事件
@@ -88,11 +92,7 @@ public class MEFragment extends BaseFragment {
     public void onUserInfoUpDate(UserInfoUpDateEvent userInfoUpDateEvent) {
         setUserInfo();
     }
-    //用户退出登录了,发出事件
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onUserLogout(LogoutEvent logoutEvent) {
 
-    }
 
     /**
      * 填充用户数据
@@ -133,7 +133,7 @@ public class MEFragment extends BaseFragment {
             }
         });
         //view创建完成之后,检查登录状态,如果是登录的状态,那么把用户数据填上去
-        if(AppConfig.LOGIN_STATUS){
+        if (AppConfig.LOGIN_STATUS) {
             setUserInfo();
         }
         return rootView;

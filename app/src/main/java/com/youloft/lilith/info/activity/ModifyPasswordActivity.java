@@ -164,6 +164,11 @@ public class ModifyPasswordActivity extends BaseActivity {
         if (TextUtils.isEmpty(oldPassword)) {
             return;
         }
+
+        if(AppSetting.getUserInfo()==null || AppSetting.getUserInfo().data == null
+                ||AppSetting.getUserInfo().data.userInfo == null){
+            return;
+        }
         userID = String.valueOf(AppSetting.getUserInfo().data.userInfo.id);
         //发起请求
         UpdateUserRepo.checkOldPassword(userID, oldPassword)
