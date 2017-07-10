@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -43,9 +44,11 @@ public class FileHandle extends AbsHandle {
     @Override
     public void handle(final Activity activity, final WebView webView, String url, String action, String params) {
         if (activity instanceof FragmentActivity) {
-            if (activity.isDestroyed()) {
-                mPreActionSheet = null;
-                return;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                if (activity.isDestroyed()) {
+                    mPreActionSheet = null;
+                    return;
+                }
             }
             if (mPreActionSheet != null && mPreActionSheet.isVisible()) {
                 return;
@@ -121,6 +124,7 @@ public class FileHandle extends AbsHandle {
             this.mWebView = null;
             return;
         }
+        Cursor cursor = null;
         try {
             if ((requestCode == REQ_PHOTOLIBRARY || requestCode == REQ_CAMERA) && resultCode == Activity.RESULT_OK) {
                 Uri selectedImage = photoUri;
@@ -132,15 +136,20 @@ public class FileHandle extends AbsHandle {
                     selectedImage = data.getData();
                 }
                 String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                Cursor cursor = activity.getContentResolver().query(selectedImage,
+                cursor = activity.getContentResolver().query(selectedImage,
                         filePathColumn, null, null, null);
-                cursor.moveToFirst();
-                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                String picturePath = cursor.getString(columnIndex);
-                doUploadImage(picturePath);
+                if (cursor.moveToFirst()) {
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    String picturePath = cursor.getString(columnIndex);
+                    doUploadImage(picturePath);
+                }
             }
         } catch (Throwable e) {
             this.mWebView = null;
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
     }
 
@@ -149,7 +158,7 @@ public class FileHandle extends AbsHandle {
      *
      * @param picturePath
      */
-    private void doUploadImage(String picturePath) {
+    protected void doUploadImage(String picturePath) {
         Observable.just(picturePath)
                 .map(new Function<String, String>() {
                     @Override

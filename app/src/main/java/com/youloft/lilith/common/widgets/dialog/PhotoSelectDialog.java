@@ -53,7 +53,8 @@ public class PhotoSelectDialog extends BaseDialog {
                 break;
             case R.id.photo_select:
                 Intent albumIntent = new Intent(Intent.ACTION_PICK);
-                albumIntent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+                albumIntent.setType("image/*");
+//                albumIntent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
                 mContext.startActivityForResult(albumIntent, EditInformationActivity.CODE_PICK_IMAGE);
                 dismiss();
                 break;
