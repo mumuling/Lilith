@@ -83,7 +83,7 @@ public class MyTopicHolder extends RecyclerView.ViewHolder {
             imageUserSex.setImageResource(R.drawable.topic_female_icon);
         }
         //点赞数
-        textZanCount.setText(point.zan);
+        textZanCount.setText(String.valueOf(point.zan));
         //点赞状态
         if (point.isclick == 1) {
             imageZan.setImageResource(R.drawable.topic_liking_icon);

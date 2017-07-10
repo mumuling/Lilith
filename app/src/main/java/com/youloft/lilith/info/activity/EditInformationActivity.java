@@ -1,18 +1,11 @@
 package com.youloft.lilith.info.activity;
 
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Rect;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Base64;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -29,14 +22,12 @@ import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.CalendarHelper;
 import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.common.utils.ViewUtil;
-import com.youloft.lilith.common.widgets.dialog.PhotoSelectDialog;
 import com.youloft.lilith.common.widgets.picker.CityInfo;
 import com.youloft.lilith.common.widgets.picker.CityPicker;
 import com.youloft.lilith.common.widgets.picker.DatePickerPop;
 import com.youloft.lilith.common.widgets.picker.GenderPickerPop;
 import com.youloft.lilith.common.widgets.picker.OnPickerSelectListener;
 import com.youloft.lilith.common.widgets.picker.TimePickerPop;
-import com.youloft.lilith.common.widgets.webkit.handle.FileHandle;
 import com.youloft.lilith.common.widgets.webkit.handle.UserFileHandle;
 import com.youloft.lilith.info.bean.UpLoadHeaderBean;
 import com.youloft.lilith.info.bean.UpdateUserInfoBean;
@@ -44,18 +35,10 @@ import com.youloft.lilith.info.event.UserInfoUpDateEvent;
 import com.youloft.lilith.info.repo.UpdateUserRepo;
 import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.setting.AppSetting;
-import com.youloft.lilith.ui.GlideBlurTransform;
 import com.youloft.lilith.ui.view.BaseToolBar;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.net.URI;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -97,6 +80,13 @@ public class EditInformationActivity extends BaseActivity {
     TextView tvPlaceNow;   //现居地点
     @BindView(R.id.et_nick_name)
     EditText etNickName;  //下面的可编辑昵称
+
+    private String birthLongi = "";//出生经度
+    private String birthLati = "";//出生纬度
+    private String liveLongi = "";//现居地经度
+    private String liveLati = "";//现居地纬度
+
+
     private String sex;
     private String mBitBase64;
     private String mHeaderImageUrl = ""; //头像上传后返回的链接
@@ -202,6 +192,9 @@ public class EditInformationActivity extends BaseActivity {
         }
     }
 
+    /**
+     * 保存用户信息的网络请求
+     */
     private void savaUserInfo() {
         final String nickName = etNickName.getText().toString();
         final String sexStr = tvSex.getText().toString();
@@ -220,13 +213,15 @@ public class EditInformationActivity extends BaseActivity {
         if (sexStr.equals(getResources().getString(R.string.man))) {//女 1   男 2
             sex = String.valueOf(2);
         }
+        if(AppSetting.getUserInfo()==null || AppSetting.getUserInfo().data == null
+                ||AppSetting.getUserInfo().data.userInfo == null){
+            Toaster.showShort("信息修改失败");
+            return;
+        }
         String userId = String.valueOf(AppSetting.getUserInfo().data.userInfo.id);
         String headImg = mHeaderImageUrl;
         final String time = CalendarHelper.format(mCal.getTime(), DATE_FORMAT);
-        String birthLongi = "";//出生经度
-        String birthLati = "";//出生纬度
-        String liveLongi = "";//现居地经度
-        String liveLati = "";//现居地纬度
+
 
 
         UpdateUserRepo.updateUserInfo(userId, nickName, headImg, sex, time, placeBirth, birthLongi, birthLati, placeNow, liveLongi, liveLati)
@@ -363,10 +358,10 @@ public class EditInformationActivity extends BaseActivity {
                         .show();
                 break;
             case R.id.fl_place_birth://弹出城市选择器
-                cityPick(tvPlaceBirth);
+                cityPick(tvPlaceBirth,true);
                 break;
             case R.id.fl_place_now://弹出城市选择器
-                cityPick(tvPlaceNow);
+                cityPick(tvPlaceNow,false);
                 break;
         }
     }
@@ -375,8 +370,9 @@ public class EditInformationActivity extends BaseActivity {
      * 城市的选择
      *
      * @param tv
+     * @param b  待办来源  true代表出生地   false 现居地
      */
-    private void cityPick(final TextView tv) {
+    private void cityPick(final TextView tv, final boolean b) {
         CityPicker.getDefCityPicker(this)
                 .setOnCityItemClickListener(new OnPickerSelectListener<CityInfo>() {
                     @Override
@@ -386,6 +382,14 @@ public class EditInformationActivity extends BaseActivity {
                         String content = builder.toString();
                         tv.setText(content);
                         deleteTextDrawable(tv);
+                        if(b){
+                            birthLongi = data.pLongitude;
+                            birthLati = data.pLatitude;
+                        }else {
+                            liveLongi = data.pLongitude;
+                            liveLati = data.pLatitude;
+                        }
+
                     }
 
                     @Override

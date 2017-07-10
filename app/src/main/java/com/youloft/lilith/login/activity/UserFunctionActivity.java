@@ -350,7 +350,7 @@ public class UserFunctionActivity extends BaseActivity {
 
                         AppSetting.saveUserInfo(userBean); //保存用户信息
                         AppConfig.LOGIN_STATUS = true; //设置登录标识
-                        EventBus.getDefault().post(new LoginEvent());//发送登录事件
+                        EventBus.getDefault().post(new LoginEvent(true));//发送登录事件
                         finish();
 
                     }
