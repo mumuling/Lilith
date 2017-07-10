@@ -56,6 +56,7 @@ public class VoteHolder extends RecyclerView.ViewHolder {
     private boolean needVoteAnimation = true;
     private int isVote = 0;
     private TopicDetailAdapter adapter;
+    private UserBean.DataBean.UserInfoBean userInfo;
 
     public VoteHolder(View itemView,TopicDetailAdapter adapter) {
         super(itemView);
@@ -150,7 +151,10 @@ public class VoteHolder extends RecyclerView.ViewHolder {
                 if (topicInfo !=null && topicInfo.isVote ==1)return;
                 if (topicInfo == null) return;
                 if (isVote == 1 )return;
-                TopicRepo.postVote(String.valueOf(topicInfo.id),String.valueOf(id),"10018",msg)
+                userInfo = AppSetting.getUserInfo().data.userInfo;
+                if (userInfo == null)return;
+
+                TopicRepo.postVote(String.valueOf(topicInfo.id),String.valueOf(id),String.valueOf(userInfo.id),msg)
                         .subscribeOn(Schedulers.newThread())
                         .toObservable()
                         .observeOn(AndroidSchedulers.mainThread())

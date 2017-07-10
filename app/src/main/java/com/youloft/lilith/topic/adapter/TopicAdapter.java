@@ -1,6 +1,10 @@
 package com.youloft.lilith.topic.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,9 +13,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.topic.bean.TopicBean;
+import com.youloft.lilith.topic.widget.BlurFactor;
 import com.youloft.lilith.topic.widget.TopicUserDataBind;
 
 import java.util.ArrayList;
@@ -106,12 +115,13 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         public TextView mTopicContent;
         public TopicUserDataBind mUserImageStackViewGroup;
         public ImageView mTopicImage;
-
+        public ImageView imageTest;
         public NormalViewHolder(View itemView) {
             super(itemView);
             mTopicContent = (TextView) itemView.findViewById(R.id.topic_content);
             mUserImageStackViewGroup = (TopicUserDataBind) itemView.findViewById(R.id.layout_user_image);
             mTopicImage = (ImageView) itemView.findViewById(R.id.image_topic_bg);
+
         }
 
         public void bind(TopicBean.DataBean topic) {
@@ -119,8 +129,30 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             GlideApp.with(itemView)
                     .asBitmap()
                     .load(topic.backImg)
-//                    .transform(new GlideBlurTransform(mContext))
-                    .into(mTopicImage);
+                    .listener(new RequestListener<Bitmap>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                            BlurFactor factor = new BlurFactor();
+                            factor.width = resource.getWidth();
+                            factor.height = resource.getHeight();
+                            factor.radius = 5;
+                            resource = factor.of(mContext, resource, factor);
+                            //resource = BitmapFactory.decodeResource(mContext.getResources(),R.drawable.back_icon);
+                            mTopicImage.setImageBitmap(resource);
+                            return false;
+                        }
+
+                    })
+                    .into(150,150);
+
+
+
+
             mUserImageStackViewGroup.bindData(topic.voteUser, topic.totalVote);
         }
     }
@@ -139,7 +171,25 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             GlideApp.with(itemView)
                     .asBitmap()
                     .load(topic.backImg)
-                    .into(mTopicImage);
+                    .listener(new RequestListener<Bitmap>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                            BlurFactor factor = new BlurFactor();
+                            factor.width = resource.getWidth();
+                            factor.height = resource.getHeight();
+                            factor.radius = 5;
+                            resource = factor.of(mContext, resource, factor);
+                            //resource = BitmapFactory.decodeResource(mContext.getResources(),R.drawable.back_icon);
+                            mTopicImage.setImageBitmap(resource);
+                            return false;
+                        }
+                    })
+                    .into(200,150);
             mUserImageStackViewGroup.bindData(topic.voteUser, topic.totalVote);
         }
     }
