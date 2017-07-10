@@ -30,6 +30,7 @@ import com.youloft.lilith.cons.consmanager.LoddingCheckEvent;
 import com.youloft.lilith.info.bean.CheckLoginBean;
 import com.youloft.lilith.info.repo.UpdateUserRepo;
 import com.youloft.lilith.login.bean.UserBean;
+import com.youloft.lilith.login.event.LoginEvent;
 import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.ui.view.NavBarLayout;
 
@@ -99,6 +100,11 @@ public class MainActivity extends BaseActivity {
                         if(token.equals(accessToken)){
 //                            AppConfig.LOGIN_STATUS = true;//登录状态设置为 登录
 //                            EventBus.getDefault().post(new LoddingCheckEvent());
+                            AppConfig.LOGIN_STATUS = true;//登录状态设置为 登录
+                            EventBus.getDefault().post(new LoginEvent(true));
+                        } else {
+                            AppConfig.LOGIN_STATUS = false;//登录状态置为 未登录
+                            EventBus.getDefault().post(new LoginEvent(false));
                         }
                     }
                 });
