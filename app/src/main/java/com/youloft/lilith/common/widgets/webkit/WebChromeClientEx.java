@@ -1,9 +1,15 @@
 package com.youloft.lilith.common.widgets.webkit;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Message;
 import android.view.View;
+import android.webkit.JsPromptResult;
+import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.widget.Toast;
 
 /**
  * WebChromeClientEx增强类
@@ -109,6 +115,85 @@ public class WebChromeClientEx extends WebChromeClient {
         }
         super.onShowCustomView(view, requestedOrientation, callback);
 
+    }
+
+    /**
+     * 重新处理JSConfirm避免由Webview处理弹出后导致WebView被阻塞
+     *
+     * @param view
+     * @param url
+     * @param message
+     * @param result
+     * @return
+     */
+    @Override
+    public boolean onJsAlert(WebView view, String url, String message, final JsResult result) {
+        new AlertDialog.Builder(view.getContext()).setTitle(url).setMessage(message).setCancelable(false).setNegativeButton("确定", new Dialog.OnClickListener() {
+            /**
+             * This method will be invoked when a button in the dialog is clicked.
+             *
+             * @param dialog The dialog that received the click.
+             * @param which  The button that was clicked (e.g.
+             *               {@link DialogInterface#BUTTON1}) or the position
+             */
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                result.confirm();
+            }
+        }).show();
+        return true;
+    }
+
+    /**
+     * 重新处理JSConfirm避免由Webview处理弹出后导致WebView被阻塞
+     *
+     * @param view
+     * @param url
+     * @param message
+     * @param result
+     * @return
+     */
+    @Override
+    public boolean onJsConfirm(WebView view, String url, String message, final JsResult result) {
+        new AlertDialog.Builder(view.getContext()).setTitle(url).setMessage(message).setCancelable(false).setNeutralButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                result.cancel();
+                dialog.dismiss();
+            }
+        }).setNegativeButton("确定", new Dialog.OnClickListener() {
+            /**
+             * This method will be invoked when a button in the dialog is clicked.
+             *
+             * @param dialog The dialog that received the click.
+             * @param which  The button that was clicked (e.g.
+             *               {@link DialogInterface#BUTTON1}) or the position
+             */
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                result.confirm();
+                dialog.dismiss();
+
+            }
+        }).show();
+        return true;
+    }
+
+    /**
+     * 直接不支持Prompt
+     *
+     * @param view
+     * @param url
+     * @param message
+     * @param defaultValue
+     * @param result
+     * @return
+     */
+    @Override
+    public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, JsPromptResult result) {
+        result.cancel();
+        return true;
     }
 
 
