@@ -213,8 +213,5 @@ public class XZFragment extends BaseFragment {
                 }
             }
         });
-
     }
-
-
 }

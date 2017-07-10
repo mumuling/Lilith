@@ -64,6 +64,11 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
      */
     protected Map<String, String[]> mDistrictDatasMap = new HashMap<String, String[]>();
 
+    /**
+     * key 区 values经纬度
+     */
+    protected Map<String, String[]> mLongAndLati = new HashMap<String, String[]>();
+
     protected CityInfo mCurrentCityInfo = new CityInfo();
     /**
      * 当前省的名称
@@ -166,7 +171,7 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
     /**
      * 第一次默认得显示，一般配合定位，使用
      */
-    private String defaultDistrict = "昌平区";
+    private String defaultDistrict = "东城区";
 
     /**
      * 两级联动
@@ -649,6 +654,7 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
         mProvinceDatas = CityInfoManager.getInstance(context).getProvinceDatas().clone();
         mCitisDatasMap.putAll(CityInfoManager.getInstance(context).getProvinceAndCityDates());
         mDistrictDatasMap.putAll(CityInfoManager.getInstance(context).getCityAndDistrictDate());
+        mLongAndLati.putAll(CityInfoManager.getInstance(context).getDistrictLongAndLati());
     }
 
     /**
@@ -690,6 +696,8 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
         }
         mCurrentCityInfo.pCity = mCurrentCityName;
         mCurrentCityInfo.pDistrict = mCurrentDistrictName;
+        mCurrentCityInfo.pLongitude = mLongAndLati.get(mCurrentDistrictName)[0];
+        mCurrentCityInfo.pLatitude = mLongAndLati.get(mCurrentDistrictName)[1];
         districtWheel.setPadding(padding);
     }
 
@@ -765,6 +773,8 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
         } else if (wheel == mViewDistrict) {
             mCurrentDistrictName = mDistrictDatasMap.get(mCurrentCityName)[newValue];
             mCurrentCityInfo.pDistrict = mCurrentDistrictName;
+            mCurrentCityInfo.pLongitude = mLongAndLati.get(mCurrentDistrictName)[0];
+            mCurrentCityInfo.pLatitude = mLongAndLati.get(mCurrentDistrictName)[1];
         }
     }
 }

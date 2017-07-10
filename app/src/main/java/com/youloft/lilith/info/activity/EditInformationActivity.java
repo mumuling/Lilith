@@ -381,7 +381,6 @@ public class EditInformationActivity extends BaseActivity {
                 .setOnCityItemClickListener(new OnPickerSelectListener<CityInfo>() {
                     @Override
                     public void onSelected(CityInfo data) {
-
                         StringBuilder builder = new StringBuilder("");
                         builder.append(data.pProvice).append("-").append(data.pCity).append("-").append(data.pDistrict);
                         String content = builder.toString();
