@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -32,16 +31,17 @@ import com.youloft.lilith.common.widgets.picker.DatePickerPop;
 import com.youloft.lilith.common.widgets.picker.GenderPickerPop;
 import com.youloft.lilith.common.widgets.picker.OnPickerSelectListener;
 import com.youloft.lilith.common.widgets.picker.TimePickerPop;
-import com.youloft.lilith.common.widgets.view.RoundImageView;
 import com.youloft.lilith.info.bean.UpLoadHeaderBean;
 import com.youloft.lilith.info.bean.UpdateUserInfoBean;
+import com.youloft.lilith.info.event.UserInfoUpDateEvent;
 import com.youloft.lilith.info.repo.UpdateUserRepo;
 import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.ui.view.BaseToolBar;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -52,11 +52,7 @@ import java.util.GregorianCalendar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import de.hdodenhof.circleimageview.CircleImageView;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -153,7 +149,9 @@ public class EditInformationActivity extends BaseActivity {
             UserBean.DataBean.UserInfoBean detail = userInfo.data.userInfo;
             if(!TextUtils.isEmpty(detail.headImg)){
                 GlideApp.with(this).load(detail.headImg).into(ivHeader);
+                GlideApp.with(this).load(detail.headImg).into(ivBlurBg);
             }
+
             tvNickName.setText(detail.nickName);
             etNickName.setText(detail.nickName);
 
@@ -222,11 +220,11 @@ public class EditInformationActivity extends BaseActivity {
                             userInfoDetail.nickName = nickName;
                             userInfoDetail.sex = Integer.parseInt(sex);
                             userInfoDetail.birthDay = time;
+                            userInfoDetail.headImg = mHeaderImageUrl;
                             userInfoDetail.birthPlace = placeBirth;
                             userInfoDetail.livePlace = placeNow;
                             AppSetting.saveUserInfo(userInfo);
-                            //这里也需要发起一个修改用户信息的事件
-                            // TODO: 2017/7/9  发出修改用户信息的事件
+                            EventBus.getDefault().post(new UserInfoUpDateEvent());
                             Toaster.showShort("资料保存成功");
                         } else {
                             Toaster.showShort("资料保存失败");

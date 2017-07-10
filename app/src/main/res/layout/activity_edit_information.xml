@@ -28,7 +28,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="100dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/cons" />
+                android:src="@drawable/div" />
             <!--用户昵称-->
             <TextView
                 android:id="@+id/tv_nick_name"

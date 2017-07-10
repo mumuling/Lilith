@@ -8,6 +8,8 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -37,6 +39,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -155,7 +158,7 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        SocializeApp.get(this).onActivityResult(requestCode,resultCode,data);
+        SocializeApp.get(this).onActivityResult(requestCode, resultCode, data);
     }
 
 
@@ -185,15 +188,15 @@ public class LoginActivity extends BaseActivity {
         //3.发起登录请求
         String phoneNumber = etPhoneNumber.getText().toString().replaceAll("-", "");
         String password = etPassword.getText().toString();
-        if(TextUtils.isEmpty(phoneNumber) || TextUtils.isEmpty(password)){
+        if (TextUtils.isEmpty(phoneNumber) || TextUtils.isEmpty(password)) {
             Toaster.showShort("手机号码或者密码不能为空");
             return;
         }
-        if(phoneNumber.length() != 11){
+        if (phoneNumber.length() != 11) {
             Toaster.showShort("手机号码不正确");
             return;
         }
-        LoginUserRepo.loginWithPassword(phoneNumber,password)
+        LoginUserRepo.loginWithPassword(phoneNumber, password)
                 .compose(this.<UserBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
@@ -249,24 +252,65 @@ public class LoginActivity extends BaseActivity {
         SocializeApp.get(this).getPlatformInfo(this, SocializePlatform.WEIXIN, new AuthListener() {
             @Override
             public void onStart(SocializePlatform platform) {
-
+                Log.d(TAG, "onStart() called with: platform = [" + platform + "]");
             }
 
             @Override
             public void onComplete(SocializePlatform platform, int code, Map<String, String> data) {
-                System.out.println("5");
+                Log.d(TAG, "onComplete() called with: platform = [" + platform + "], code = [" + code + "], data = [" + data + "]");
+                thirdLogin(platform, data);
             }
 
             @Override
             public void onError(SocializePlatform platform, int code, Throwable err) {
-
+                Log.d(TAG, "onError() called with: platform = [" + platform + "], code = [" + code + "], err = [" + err + "]");
             }
 
             @Override
             public void onCancel(SocializePlatform platform, int code) {
-
+                Log.d(TAG, "onCancel() called with: platform = [" + platform + "], code = [" + code + "]");
             }
         });
+    }
+
+    /**
+     * 三方登录回调成功
+     *
+     * @param plf  暂时不用
+     * @param data
+     */
+    private void thirdLogin(SocializePlatform plf, Map<String, String> data) {
+        String nickName = data.get("name");
+        String platform = "0";
+        String headimgurl = data.get("iconurl");
+        String openid = data.get("openid");
+        String gender = data.get("gender");
+        String nickName64 = Base64.encodeToString(nickName.getBytes(), Base64.DEFAULT);
+        //由于服务器对性别的区分是1 2 所以做一下转换
+        if("男".equals(gender)){
+            gender = "1";
+        }else if("女".equals(gender)){
+            gender = "2";
+        }else {
+            gender = "0";
+        }
+        LoginUserRepo.wechatLogin(nickName64,platform,headimgurl,openid,gender)
+                .compose(this.<UserBean>bindToLifecycle())
+                .subscribeOn(Schedulers.newThread())
+                .toObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new RxObserver<UserBean>() {
+                    @Override
+                    public void onDataSuccess(UserBean userBean) {
+                        Log.d(TAG, "onDataSuccess() called with: userBean = [" + userBean + "]");
+                    }
+
+                    @Override
+                    protected void onFailed(Throwable e) {
+                        super.onFailed(e);
+                        Log.d(TAG, "onFailed() called with: e = [" + e + "]");
+                    }
+                });
     }
 
     private boolean isShowPassword = true;//是否显示密码的标识
