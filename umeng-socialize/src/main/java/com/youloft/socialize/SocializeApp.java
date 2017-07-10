@@ -9,6 +9,7 @@ import android.os.Bundle;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.common.SocializeConstants;
 import com.youloft.socialize.wrapper.AuthListener;
 import com.youloft.socialize.wrapper.AuthListenerWrapper;
 
@@ -112,4 +113,12 @@ public class SocializeApp {
     }
 
 
+    /**
+     * 设置友盟AppKey
+     *
+     * @param appKey
+     */
+    public static void setAppKey(String appKey) {
+        SocializeConstants.APPKEY = appKey;
+    }
 }

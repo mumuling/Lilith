@@ -159,7 +159,6 @@ public class VoteHolder extends RecyclerView.ViewHolder {
                                 if (poitnID!= -1) {
                                     String time = CalendarHelper.getNowTimeString();
                                     updatePointDb(id,topicInfo.id,poitnID,msg,time);
-
                                     isVote = 1;
                                     topicInfo.totalVote++;
                                     addOptionVote(id);
@@ -201,6 +200,7 @@ public class VoteHolder extends RecyclerView.ViewHolder {
         dataBean.topicOptionId = oid;
         dataBean.topicId = tid;
         dataBean.viewpoint = msg;
+        dataBean.id = poitnID;
         adapter.setPointOnFirst(dataBean);
 
     }

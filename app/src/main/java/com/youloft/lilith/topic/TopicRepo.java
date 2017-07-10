@@ -5,6 +5,7 @@ import com.youloft.lilith.LLApplication;
 import com.youloft.lilith.common.AbstractDataRepo;
 import com.youloft.lilith.common.net.AbsResponse;
 import com.youloft.lilith.common.net.Urls;
+import com.youloft.lilith.topic.bean.PointAnswerBean;
 import com.youloft.lilith.topic.bean.PointBean;
 import com.youloft.lilith.topic.bean.ReplyBean;
 import com.youloft.lilith.topic.bean.TopicBean;
@@ -37,7 +38,6 @@ public class TopicRepo extends AbstractDataRepo {
         String cacheKey = "point_reply" + vid;
         long cacheDuration = 2 * 1000;
         HashMap<String, String> param = new HashMap();
-        param.clear();
         param.put("vid",vid);
         if (uid != null)  param.put("uid",uid);
         if (limit!=null)param.put("limit",limit);
@@ -63,7 +63,6 @@ public class TopicRepo extends AbstractDataRepo {
         String cacheKey = "topic_list" + sortby;
         long cacheDuration = 2 * 1000;
         HashMap<String, String> param = new HashMap();
-        param.clear();
         param.put("sortby",sortby);
         if (limit != null)param.put("limit",limit);
 
@@ -100,14 +99,21 @@ public class TopicRepo extends AbstractDataRepo {
      */
     public static Flowable<TopicDetailBean> getTopicDetail(String tid) {
         HashMap<String, String> param = new HashMap();
-        param.clear();
         param.put("tid",tid);
         return unionFlow(Urls.TOPIC_INFO,null,param,true,TopicDetailBean.class,null,0);
     }
 
+    /**
+     *     请求观点列表
+     * @param tid   话题ID
+     * @param uid  用户ID
+     * @param limit  请求条数
+     * @param skip   跳过条数
+     * @param needCache   是否缓存
+     * @return
+     */
     public static Flowable<PointBean> getPointList(String tid,String uid,String limit,String skip,boolean needCache) {
         HashMap<String, String> param = new HashMap();
-        param.clear();
         param.put("tid",tid);
         if (uid != null)param.put("uid",uid);
         if (limit!=null)param.put("limit",limit);
@@ -125,9 +131,17 @@ public class TopicRepo extends AbstractDataRepo {
         }
     }
 
+    /**
+     *          投票
+     * @param tid 话题id
+     * @param oid  选择的观点ID
+     * @param uid  用户ID
+     * @param viewpoint   观点
+     * @return
+     */
+
     public static Flowable<VoteBean> postVote(String tid,String oid,String uid, String viewpoint) {
         HashMap<String, String> param = new HashMap();
-        param.clear();
         param.put("tid",tid);
         param.put("uid",uid);
         param.put("oid",oid);
@@ -143,18 +157,41 @@ public class TopicRepo extends AbstractDataRepo {
      */
     public static Flowable<AbsResponse> likePoint(String vid, String uid) {
         HashMap<String, String> param = new HashMap();
-        param.clear();
         param.put("vid",vid);
         param.put("uid",uid);
         return httpFlow(Urls.LIKE_POINT,null,param,true,AbsResponse.class,null,0);
     }
 
+    /**
+     *    回复点赞
+     * @param rid  回复的ID
+     * @param uid  用户的ID
+     * @return
+     */
     public static Flowable<VoteBean> likeReply(String rid,String uid) {
         HashMap<String, String> param = new HashMap();
-        param.clear();
         param.put("rid",rid);
         param.put("uid",uid);
         return httpFlow(Urls.LIKE_REPLY,null,param,true,VoteBean.class,null,0);
+    }
+
+    /**
+     *      观点回复
+     * @param vid   观点编号
+     * @param uid   回复人
+     * @param nickName   回复人昵称
+     * @param msg     回复内容
+     * @param pid     引用的回复编号
+     * @return
+     */
+    public static Flowable<PointAnswerBean> reply(String vid, String uid, String nickName, String msg, String pid) {
+        HashMap<String, String> param = new HashMap();
+        param.put("tid",vid);
+        param.put("uid",uid);
+        param.put("NickName",nickName);
+        param.put("txt",msg);
+        param.put("pid",pid);
+        return post(Urls.POINT_REPLY,null,param,true,PointAnswerBean.class,null,0);
     }
 
 }

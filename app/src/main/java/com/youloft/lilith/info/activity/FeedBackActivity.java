@@ -1,4 +1,4 @@
-package com.youloft.lilith.setting;
+package com.youloft.lilith.info.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,7 +14,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Created by Administrator on 2017/6/30.
+ * 意见反馈页面
+ *
+ * Created by gyh on 2017/6/30.
  */
 @Route(path = "/test/FeedBackActivity")
 public class FeedBackActivity extends BaseActivity {

@@ -269,7 +269,7 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
         //用户评论，最多显示3条
         if (point.replyList!= null && point.replyList.size() > 0) {
             for (int i = 0 ; i < point.replyList.size();i++) {
-                if (i >= 3)return;
+                if (i >= 3)break;
                 PointBean.DataBean.ReplyListBean reply = point.replyList.get(i);
                 if (reply != null) {
                     replyTextArray[i].setText(reply.nickName + ": " + reply.contents);

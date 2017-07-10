@@ -20,6 +20,7 @@ import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.info.bean.OldPasswordBean;
 import com.youloft.lilith.info.repo.UpdateUserRepo;
 import com.youloft.lilith.login.bean.ModifyPasswordBean;
+import com.youloft.lilith.setting.AppSetting;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -57,7 +58,7 @@ public class ModifyPasswordActivity extends BaseActivity {
     @BindView(R.id.btn_confirm)
     Button btnConfirm;   //确认按钮
 
-    private String userID = "99999"; //目前是假的uid
+    private String userID;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -163,6 +164,7 @@ public class ModifyPasswordActivity extends BaseActivity {
         if (TextUtils.isEmpty(oldPassword)) {
             return;
         }
+        userID = String.valueOf(AppSetting.getUserInfo().data.userInfo.id);
         //发起请求
         UpdateUserRepo.checkOldPassword(userID, oldPassword)
                 .compose(this.<OldPasswordBean>bindToLifecycle())
@@ -267,7 +269,7 @@ public class ModifyPasswordActivity extends BaseActivity {
                             finish();
                         }else {
                             //失败
-
+                            Toaster.showShort("密码修改失败");
                         }
 
                     }

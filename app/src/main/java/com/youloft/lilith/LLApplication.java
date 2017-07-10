@@ -2,9 +2,6 @@ package com.youloft.lilith;
 
 import android.app.Application;
 
-import com.umeng.socialize.Config;
-import com.umeng.socialize.PlatformConfig;
-import com.umeng.socialize.UMShareAPI;
 import com.youloft.lilith.api.LilithApi;
 import com.youloft.lilith.common.cache.CacheStore;
 import com.youloft.lilith.common.net.APIFactory;
@@ -12,6 +9,8 @@ import com.youloft.lilith.common.net.OnlineConfigAgent;
 import com.youloft.lilith.common.utils.LocationUtil;
 import com.youloft.lilith.common.utils.Utils;
 import com.youloft.lilith.router.AppRouter;
+import com.youloft.socialize.SocializeApp;
+import com.youloft.statistics.AppAnalytics;
 
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
@@ -28,9 +27,6 @@ public class LLApplication extends Application {
 
 
     private static LLApplication sInstance = null;
-    {
-        PlatformConfig.setWeixin("wxf21154c0fd625f83", "8ca4c335d3f77292a7649797849b3777");
-    }
 
     @Override
     public void onCreate() {
@@ -40,13 +36,8 @@ public class LLApplication extends Application {
         Utils.init(this);
         //初始化基础配置
         AppConfig.init(this);
-        //初始化推送
-//        initPush(this, AppConfig.UMENG_APPKEY, AppConfig.UMENG_PUSH_SECRET, AppConfig.CHANNEL);
-        //初始化统计
-//        AppAnalytics.init(this, AppConfig.TD_APPID, AppConfig.CHANNEL);
-        //初始化页面路由
-        AppRouter.init(this, AppConfig.DebugMode);
-        initShare();
+        //初始化三方SDK
+        initThirdSDK();
         //初始化在线参数
         OnlineConfigAgent
                 .initConfig(CONFIG_APP_KEY, String.valueOf(AppConfig.VERSION_CODE))
@@ -68,9 +59,22 @@ public class LLApplication extends Application {
         LocationUtil.updateLocation();//后台更新定位缓存数据
     }
 
-    private void initShare() {
-        Config.DEBUG = true;
-        UMShareAPI.get(this);
+    /**
+     * 三方SDK初始化
+     * <p>
+     * 注意初始化顺序不得随意改变
+     */
+    private void initThirdSDK() {
+        //初始化页面路由
+        AppRouter.init(this, AppConfig.DebugMode);
+        //社交化&登录
+        SocializeApp.setAppKey(AppConfig.UMENG_APPKEY);//设置分享的AppKey
+        SocializeApp.setWeixin(AppConfig.WEIXIN_APPKEY, AppConfig.WEIXIN_SECRET);
+        SocializeApp.get(this);
+        //初始化统计
+        AppAnalytics.init(this, AppConfig.TD_APPID, AppConfig.CHANNEL);
+        //初始化推送
+        //initPush(this, AppConfig.UMENG_APPKEY, AppConfig.UMENG_PUSH_SECRET, AppConfig.CHANNEL);
     }
 
 

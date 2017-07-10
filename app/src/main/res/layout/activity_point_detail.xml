@@ -53,26 +53,62 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#33ffffff"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+          >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:id="@+id/text_confirm"
+                android:text="发表"
+                android:textSize="17sp"
+                android:textColor="#de5deb"
+                android:layout_alignParentRight="true"
+                android:visibility="gone"
+                android:gravity="center_vertical"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:paddingLeft="7dp"
+                android:layout_toLeftOf="@id/text_confirm"
+                android:background="@drawable/topic_comment_edit_bg"
+                android:orientation="horizontal"
+                >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/image_pen"
+                android:src="@drawable/topic_talk_icon"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="8dp"
+                />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/topic_comment_edit_bg"
-        android:id="@+id/comment_edit"
-        android:hint="你来说点什么吧"
-        android:textColorHint="#999999"
-        android:textColor="@color/white"
-        android:drawableLeft="@drawable/topic_talk_icon"
-        android:drawablePadding="8dp"
-        android:textCursorDrawable="@drawable/cursor_bg"
-        android:textSize="15sp"
+         <EditText
+             android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:paddingLeft="8dp"
+               android:paddingRight="8dp"
+               android:layout_toRightOf="@id/image_pen"
+               android:id="@+id/comment_edit"
+                android:hint="你来说点什么吧"
+                android:textColorHint="#999999"
+                android:textColor="@color/white"
+                android:background="@null"
+               android:gravity="center_vertical"
+             android:textCursorDrawable="@drawable/cursor_bg"
+                 android:textSize="15sp"
         />
+            </LinearLayout>
+
+
+        </RelativeLayout>
     </LinearLayout>
 
 </com.youloft.lilith.topic.widget.SoftInputLayout>

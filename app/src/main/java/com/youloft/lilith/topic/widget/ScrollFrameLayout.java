@@ -113,14 +113,14 @@ public class ScrollFrameLayout extends RecyclerView {
             case MotionEvent.ACTION_DOWN:
                 beforeY = event.getRawY();
                 mStartY = event.getRawY();
-                return false;
+                return super.onTouchEvent(event);
             case MotionEvent.ACTION_POINTER_DOWN:
             case MotionEvent.ACTION_POINTER_UP:
                 mIsFilt = true;
-                return false;
+                return super.onTouchEvent(event);
             case MotionEvent.ACTION_MOVE:
                 if(!isIntercept && Math.abs(event.getRawY() - mStartY) <= mMinMoveDistance){
-                    return false;
+                    return super.onTouchEvent(event);
                 } else{
                     isIntercept = true;
                 }
@@ -133,7 +133,7 @@ public class ScrollFrameLayout extends RecyclerView {
                 float distance = event.getRawY() - beforeY;
                 beforeY = event.getRawY();
                 if (Math.abs(distance) <= 0) {
-                    return false;
+                    return super.onTouchEvent(event);
                 }
 
                 if (mCurrentMarginTop <=this.getTop()) {
@@ -186,10 +186,10 @@ public class ScrollFrameLayout extends RecyclerView {
                 }
                 onScroll(mCurrentMarginTop, true);
 
-                return false;
+                 return super.onTouchEvent(event);
         }
 
-        return false;
+         return super.onTouchEvent(event);
     }
 
     //将接口设置进去

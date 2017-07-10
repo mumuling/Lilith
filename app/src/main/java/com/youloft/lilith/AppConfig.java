@@ -23,11 +23,16 @@ public class AppConfig {
      */
     public static final String CID = "Youloft_Android";
     public static final String CONFIG_APP_KEY = "lilith_android";
-    public static final String TD_APPID = "";//talkingdata
-    public static final String UMENG_APPKEY = "";//umeng
+    public static final String TD_APPID = "72A651CFBCCA43EABB547A6C6518F144";//TD的APPKey
+
+    public static final String UMENG_APPKEY = "595de80bf43e487e8300177e";//友盟AppKey
     public static final String UMENG_PUSH_SECRET = "";//推送
 
-    public static boolean LOGIN_STATUS ; //false代表未登录,  true代表登录了
+    public static final String WEIXIN_APPKEY = "wxf21154c0fd625f83";
+    public static final String WEIXIN_SECRET = "8ca4c335d3f77292a7649797849b3777";
+
+    public static boolean LOGIN_STATUS; //false代表未登录,  true代表登录了
+
 
     /**
      * 服务器相关
@@ -94,7 +99,7 @@ public class AppConfig {
      */
     private static void readChannel(Context appContext) {
         try {
-            CHANNEL = WalleChannelReader.getChannel(appContext.getApplicationContext());
+            CHANNEL = WalleChannelReader.getChannel(appContext.getApplicationContext(), "unknow");
         } catch (Exception e) {
             CHANNEL = "unknow";
         }

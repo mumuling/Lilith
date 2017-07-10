@@ -102,9 +102,9 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".login.activity.UserFunctionActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".setting.SettingActivity"
+        <activity android:name=".info.activity.SettingActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".setting.FeedBackActivity"
+        <activity android:name=".info.activity.FeedBackActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".setting.AboutMeActivity"
             android:screenOrientation="portrait"/>

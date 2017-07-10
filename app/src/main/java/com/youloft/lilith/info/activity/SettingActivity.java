@@ -1,4 +1,4 @@
-package com.youloft.lilith.setting;
+package com.youloft.lilith.info.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,11 +9,24 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
+import com.youloft.lilith.common.rx.RxObserver;
+import com.youloft.lilith.common.utils.Toaster;
+import com.youloft.lilith.info.bean.LogoutBean;
+import com.youloft.lilith.info.event.LogoutEvent;
+import com.youloft.lilith.info.repo.UpdateUserRepo;
+import com.youloft.lilith.login.bean.UserBean;
+import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.ui.view.BaseToolBar;
+
+import org.greenrobot.eventbus.EventBus;
+import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * 设置界面
@@ -53,8 +66,38 @@ public class SettingActivity extends BaseActivity {
                 ARouter.getInstance().build("/test/AboutMeActivity").navigation();
                 break;
             case R.id.tv_logout://退出登录
-                Toast.makeText(this, "退出登录", Toast.LENGTH_SHORT).show();
+                logoutUser();
                 break;
         }
+    }
+
+    /**
+     * 退出登录
+     */
+    private void logoutUser() {
+        String uid = String.valueOf(AppSetting.getUserInfo().data.userInfo.id);
+        String accessToken = AppSetting.getUserInfo().data.userInfo.accessToken;
+        UpdateUserRepo.logoutUser(uid,accessToken)
+                .compose(this.<LogoutBean>bindToLifecycle())
+                .subscribeOn(Schedulers.newThread())
+                .toObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new RxObserver<LogoutBean>() {
+                    @Override
+                    public void onDataSuccess(LogoutBean logoutBean) {
+                        String data = logoutBean.data;
+                        if(data.equals("true")){
+                            // TODO: 2017/7/9 把tab设置到首页
+                            //2.发出事件
+                            //3.把存好的user信息情况  把登录状态设置为false
+                            //4.关闭当前页面
+                            EventBus.getDefault().post(new LogoutEvent());
+                            AppSetting.saveUserInfo(new UserBean());
+                            finish();
+                        }else {
+                            Toaster.showShort("退出登录失败");
+                        }
+                    }
+                });
     }
 }
