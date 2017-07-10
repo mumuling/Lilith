@@ -9,12 +9,17 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
 import com.trello.rxlifecycle2.components.RxActivity;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 /**
  * Created by zchao on 2017/6/26.
@@ -50,15 +55,16 @@ public abstract class BaseActivity extends RxAppCompatActivity implements View.O
 
     /**
      * 截屏
-     *
+     *@param needFixStatus 是否需要去掉statubar
+     *@param compress 压缩比例
      * @return
      */
-    public Bitmap takeScreenShot(boolean needFixStatu) {
+    public Bitmap takeScreenShot(boolean needFixStatus, int compress) {
         try {
             View view = getWindow().getDecorView().findViewById(android.R.id.content);
             Bitmap b1 = loadBitmapFromView(view);
             Bitmap dest = null;
-            if (needFixStatu) {
+            if (needFixStatus) {
                 Rect frame = new Rect();
                 getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);
                 int statusBarHeight = frame.top;
@@ -66,6 +72,16 @@ public abstract class BaseActivity extends RxAppCompatActivity implements View.O
                         - statusBarHeight);
             } else {
                 dest = Bitmap.createBitmap(b1, 0, 0, b1.getWidth(), b1.getHeight());
+
+            }
+            if (compress != 0) {
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                dest.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                BitmapFactory.Options newOpts = new BitmapFactory.Options();
+                newOpts.inSampleSize = compress;
+                ByteArrayInputStream isBm = new ByteArrayInputStream(out.toByteArray());
+                dest.recycle();
+                dest = BitmapFactory.decodeStream(isBm, null, newOpts);
             }
             return dest;
         } catch (Throwable e) {
