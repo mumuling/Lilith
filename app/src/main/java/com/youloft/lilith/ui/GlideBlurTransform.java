@@ -39,6 +39,8 @@ public class GlideBlurTransform extends BitmapTransformation {
     @Override
     protected Bitmap transform(BitmapPool pool, Bitmap toTransform, int outWidth, int outHeight) {
 //        return ViewUtil.blurBitmap(toTransform, mContext);
+
+
         Bitmap blurredBitmap = toTransform.copy( Bitmap.Config.ARGB_8888, true );
 
         // Allocate memory for Renderscript to work with

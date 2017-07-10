@@ -5,8 +5,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Base64;
@@ -37,14 +40,18 @@ import com.youloft.lilith.info.event.UserInfoUpDateEvent;
 import com.youloft.lilith.info.repo.UpdateUserRepo;
 import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.setting.AppSetting;
+import com.youloft.lilith.ui.GlideBlurTransform;
 import com.youloft.lilith.ui.view.BaseToolBar;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.net.URI;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -147,17 +154,17 @@ public class EditInformationActivity extends BaseActivity {
                 return;
             }
             UserBean.DataBean.UserInfoBean detail = userInfo.data.userInfo;
-            if(!TextUtils.isEmpty(detail.headImg)){
+            if (!TextUtils.isEmpty(detail.headImg)) {
                 GlideApp.with(this).load(detail.headImg).into(ivHeader);
-                GlideApp.with(this).load(detail.headImg).into(ivBlurBg);
+                GlideApp.with(this).asBitmap().load(detail.headImg).transform(new GlideBlurTransform(this)).into(ivBlurBg);
             }
 
             tvNickName.setText(detail.nickName);
             etNickName.setText(detail.nickName);
 
-            if(detail.sex == 2){
+            if (detail.sex == 2) {
                 tvSex.setText(R.string.man);
-            }else {
+            } else {
                 tvSex.setText(R.string.woman);
             }
 
@@ -234,6 +241,9 @@ public class EditInformationActivity extends BaseActivity {
                 });
     }
 
+
+    private final String IMAGE_TYPE = "image/*";
+
     @OnClick(R.id.iv_header)
     public void onHeaderClicked() {
         PhotoSelectDialog dialog = new PhotoSelectDialog(this);
@@ -265,17 +275,29 @@ public class EditInformationActivity extends BaseActivity {
                 ContentResolver resolver = getContentResolver();
                 try {
                     InputStream inputStream = resolver.openInputStream(uri);
-                    byte[] bytes = getBytes(inputStream);
-                    mBitBase64 = Base64.encodeToString(bytes, Base64.DEFAULT);
-                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inJustDecodeBounds = true;
+                    Bitmap bitmap1 = BitmapFactory.decodeStream(inputStream, null, options);
+                    int width = options.outWidth;
+                    int height = options.outHeight;
+                    int height1 = ivHeader.getHeight();
+                    int simpleSize = Math.min(width, height) / height1;
+                    options.inJustDecodeBounds = false;
+                    options.inSampleSize = simpleSize;
+                    Bitmap bitmap = BitmapFactory.decodeStream( resolver.openInputStream(uri), null, options); //得到真实的缩略图
+
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    byte[] bytes = baos.toByteArray();
+                    mBitBase64 = Base64.encodeToString(bytes, Base64.DEFAULT);  //上传的Base64图
+
                     String host = uri.getEncodedPath();
                     String nameEx = host.substring(host.lastIndexOf(".") + 1, host.length());
                     if (bitmap != null && !bitmap.isRecycled()) {
                         ivHeader.setImageBitmap(bitmap);
                         ivBlurBg.setImageBitmap(ViewUtil.blurBitmap(bitmap));
                     }
-
-                    updateUserImg(nameEx);
+                    updateUserImg(TextUtils.isEmpty(nameEx) ? "jpg":nameEx);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -286,6 +308,7 @@ public class EditInformationActivity extends BaseActivity {
     }
 
     private void updateUserImg(String nameEx) {
+
         UpdateUserRepo.updateImg(mBitBase64, nameEx, String.valueOf(AppSetting.getUserInfo().data.userInfo.id))
                 .compose(this.<UpLoadHeaderBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
@@ -303,25 +326,6 @@ public class EditInformationActivity extends BaseActivity {
 
     private static final String TAG = "EditInformationActivity";
 
-    private byte[] getBytes(InputStream filePath) {
-        byte[] buffer = null;
-        try {
-            ByteArrayOutputStream bos = new ByteArrayOutputStream(1000);
-            byte[] b = new byte[1000];
-            int n;
-            while ((n = filePath.read(b)) != -1) {
-                bos.write(b, 0, n);
-            }
-            filePath.close();
-            bos.close();
-            buffer = bos.toByteArray();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return buffer;
-    }
 
     @OnClick({R.id.fl_sex, R.id.fl_date_birth, R.id.fl_time_birth, R.id.fl_place_birth, R.id.fl_place_now})
     public void onViewClicked(View view) {

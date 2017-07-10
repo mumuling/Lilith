@@ -215,12 +215,6 @@ public class XZFragment extends BaseFragment {
             }
         });
 
-        mConsList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkUserInfo();
-            }
-        });
     }
 
 
