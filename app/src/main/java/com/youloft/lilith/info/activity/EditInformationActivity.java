@@ -19,6 +19,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
@@ -34,6 +36,8 @@ import com.youloft.lilith.common.widgets.picker.DatePickerPop;
 import com.youloft.lilith.common.widgets.picker.GenderPickerPop;
 import com.youloft.lilith.common.widgets.picker.OnPickerSelectListener;
 import com.youloft.lilith.common.widgets.picker.TimePickerPop;
+import com.youloft.lilith.common.widgets.webkit.handle.FileHandle;
+import com.youloft.lilith.common.widgets.webkit.handle.UserFileHandle;
 import com.youloft.lilith.info.bean.UpLoadHeaderBean;
 import com.youloft.lilith.info.bean.UpdateUserInfoBean;
 import com.youloft.lilith.info.event.UserInfoUpDateEvent;
@@ -96,14 +100,18 @@ public class EditInformationActivity extends BaseActivity {
     private String sex;
     private String mBitBase64;
     private String mHeaderImageUrl = ""; //头像上传后返回的链接
+    private UserFileHandle fileHandle;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_information);
         ButterKnife.bind(this);
+
         btlEditInformation.setBackgroundColor(Color.TRANSPARENT);
         btlEditInformation.setTitle("编辑资料");
+        btlEditInformation.setShowShareBtn(false);
+        btlEditInformation.setShowSaveBtn(true);
         btlEditInformation.setOnToolBarItemClickListener(new BaseToolBar.OnToolBarItemClickListener() {
             @Override
             public void OnBackBtnClick() {
@@ -117,11 +125,15 @@ public class EditInformationActivity extends BaseActivity {
 
             @Override
             public void OnShareBtnClick() {
+
+            }
+
+            @Override
+            public void OnSaveBtnClick() {
                 //1.确认资料是否都有数据
                 //2.对应服务器需要的参数,做一下数据组装
                 //3.发起请求修改用户信息
                 savaUserInfo();
-
             }
         });
 
@@ -156,7 +168,12 @@ public class EditInformationActivity extends BaseActivity {
             UserBean.DataBean.UserInfoBean detail = userInfo.data.userInfo;
             if (!TextUtils.isEmpty(detail.headImg)) {
                 GlideApp.with(this).load(detail.headImg).into(ivHeader);
-                GlideApp.with(this).asBitmap().load(detail.headImg).transform(new GlideBlurTransform(this)).into(ivBlurBg);
+                GlideApp.with(this).asBitmap().load(detail.headImg).into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                        ivBlurBg.setImageBitmap(ViewUtil.blurBitmap(resource));
+                    }
+                });
             }
 
             tvNickName.setText(detail.nickName);
@@ -227,7 +244,9 @@ public class EditInformationActivity extends BaseActivity {
                             userInfoDetail.nickName = nickName;
                             userInfoDetail.sex = Integer.parseInt(sex);
                             userInfoDetail.birthDay = time;
-                            userInfoDetail.headImg = mHeaderImageUrl;
+                            if(!TextUtils.isEmpty(mHeaderImageUrl)){
+                                userInfoDetail.headImg = mHeaderImageUrl;
+                            }
                             userInfoDetail.birthPlace = placeBirth;
                             userInfoDetail.livePlace = placeNow;
                             AppSetting.saveUserInfo(userInfo);
@@ -246,70 +265,27 @@ public class EditInformationActivity extends BaseActivity {
 
     @OnClick(R.id.iv_header)
     public void onHeaderClicked() {
-        PhotoSelectDialog dialog = new PhotoSelectDialog(this);
-        dialog.show();
+//        PhotoSelectDialog dialog = new PhotoSelectDialog(this);
+//        dialog.show();
+        fileHandle = new UserFileHandle(ivHeader,ivBlurBg);
+        fileHandle.handle(this,null,null,null,null);
+        fileHandle.setOnUpLoadListener(new UserFileHandle.OnUpLoadListener() {
+            @Override
+            public void upLoad(String upBit,String nameEx) {
+                updateUserImg(upBit,nameEx);
+            }
+        });
     }
 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Uri uri = data.getData();
-
-        Bitmap photo = null;
-        switch (requestCode) {
-            case CODE_CAMERA:
-                if (data.getData() != null || data.getExtras() != null) { //防止没有返回结果
-
-                    if (uri != null) {
-                        photo = BitmapFactory.decodeFile(uri.getPath()); //拿到图片
-                    }
-                    if (photo == null) {
-                        Bundle bundle = data.getExtras();
-                        if (bundle != null) {
-                            photo = (Bitmap) bundle.get("data");
-                        }
-                    }
-                }
-                break;
-            case CODE_PICK_IMAGE:
-                ContentResolver resolver = getContentResolver();
-                try {
-                    InputStream inputStream = resolver.openInputStream(uri);
-                    BitmapFactory.Options options = new BitmapFactory.Options();
-                    options.inJustDecodeBounds = true;
-                    Bitmap bitmap1 = BitmapFactory.decodeStream(inputStream, null, options);
-                    int width = options.outWidth;
-                    int height = options.outHeight;
-                    int height1 = ivHeader.getHeight();
-                    int simpleSize = Math.min(width, height) / height1;
-                    options.inJustDecodeBounds = false;
-                    options.inSampleSize = simpleSize;
-                    Bitmap bitmap = BitmapFactory.decodeStream( resolver.openInputStream(uri), null, options); //得到真实的缩略图
-
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                    byte[] bytes = baos.toByteArray();
-                    mBitBase64 = Base64.encodeToString(bytes, Base64.DEFAULT);  //上传的Base64图
-
-                    String host = uri.getEncodedPath();
-                    String nameEx = host.substring(host.lastIndexOf(".") + 1, host.length());
-                    if (bitmap != null && !bitmap.isRecycled()) {
-                        ivHeader.setImageBitmap(bitmap);
-                        ivBlurBg.setImageBitmap(ViewUtil.blurBitmap(bitmap));
-                    }
-                    updateUserImg(TextUtils.isEmpty(nameEx) ? "jpg":nameEx);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-
-                break;
-
-        }
+        fileHandle.onActivityResult(this,requestCode,resultCode,data);
     }
 
-    private void updateUserImg(String nameEx) {
+    private void updateUserImg(String upBit,String nameEx) {
 
-        UpdateUserRepo.updateImg(mBitBase64, nameEx, String.valueOf(AppSetting.getUserInfo().data.userInfo.id))
+        UpdateUserRepo.updateImg(upBit, nameEx, String.valueOf(AppSetting.getUserInfo().data.userInfo.id))
                 .compose(this.<UpLoadHeaderBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
@@ -405,9 +381,8 @@ public class EditInformationActivity extends BaseActivity {
                 .setOnCityItemClickListener(new OnPickerSelectListener<CityInfo>() {
                     @Override
                     public void onSelected(CityInfo data) {
-
                         StringBuilder builder = new StringBuilder("");
-                        builder.append(data.pProvice).append(data.pCity).append(data.pDistrict);
+                        builder.append(data.pProvice).append("-").append(data.pCity).append("-").append(data.pDistrict);
                         String content = builder.toString();
                         tv.setText(content);
                         deleteTextDrawable(tv);

@@ -1,6 +1,7 @@
 package com.youloft.lilith.ui.fragment;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -13,16 +14,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.base.BaseFragment;
+import com.youloft.lilith.common.utils.ViewUtil;
 import com.youloft.lilith.info.event.LogoutEvent;
 import com.youloft.lilith.info.event.UserInfoUpDateEvent;
 import com.youloft.lilith.login.activity.LoginActivity;
 import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.login.event.LoginEvent;
 import com.youloft.lilith.setting.AppSetting;
+import com.youloft.lilith.ui.GlideBlurTransform;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -81,9 +86,9 @@ public class MEFragment extends BaseFragment {
     //用户修改信息过后,发出的事件
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onUserInfoUpDate(UserInfoUpDateEvent userInfoUpDateEvent) {
-        //登录成功了,图片,昵称
         setUserInfo();
     }
+    //用户退出登录了,发出事件
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onUserLogout(LogoutEvent logoutEvent) {
 
@@ -99,7 +104,12 @@ public class MEFragment extends BaseFragment {
         tvNickName.setText(nickName);
         if (!TextUtils.isEmpty(headImgUrl)) {
             GlideApp.with(mContext).load(headImgUrl).into(ivHeader);
-            GlideApp.with(mContext).load(headImgUrl).into(ivBlurBg);
+            GlideApp.with(mContext).asBitmap().load(headImgUrl).into(new SimpleTarget<Bitmap>() {
+                @Override
+                public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                    ivBlurBg.setImageBitmap(ViewUtil.blurBitmap(resource));
+                }
+            });
         }
 //        ConsManager.getConsSrc("1").pKey
     }

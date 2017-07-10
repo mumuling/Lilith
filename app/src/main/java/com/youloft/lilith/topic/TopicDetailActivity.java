@@ -227,6 +227,11 @@ public class TopicDetailActivity extends BaseActivity {
             public void OnShareBtnClick() {
 
             }
+
+            @Override
+            public void OnSaveBtnClick() {
+
+            }
         });
 
 

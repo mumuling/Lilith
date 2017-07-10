@@ -41,7 +41,7 @@ public class GenderPickerPop implements CanShow, OnWheelChangedListener{
     /**
      * Default text color
      */
-    public static final int DEFAULT_TEXT_COLOR = 0xFF585858;
+    public static final int DEFAULT_TEXT_COLOR = 0xFFFFFFFF;
 
     /**
      * Default text size

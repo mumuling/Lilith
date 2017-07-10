@@ -49,6 +49,28 @@ public class SettingActivity extends BaseActivity {
         setContentView(R.layout.activity_setting);
         ButterKnife.bind(this);
         btlSetting.setTitle("设置");
+        btlSetting.setShowShareBtn(false);
+        btlSetting.setOnToolBarItemClickListener(new BaseToolBar.OnToolBarItemClickListener() {
+            @Override
+            public void OnBackBtnClick() {
+                onBackPressed();
+            }
+
+            @Override
+            public void OnTitleBtnClick() {
+
+            }
+
+            @Override
+            public void OnShareBtnClick() {
+
+            }
+
+            @Override
+            public void OnSaveBtnClick() {
+
+            }
+        });
     }
 
 
