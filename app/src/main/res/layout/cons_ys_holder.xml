@@ -24,11 +24,20 @@
             android:layout_marginRight="10dp"
             android:background="@drawable/cons_luck_msg_bg"
             android:maxLines="2"
+            android:lines="2"
             android:paddingBottom="4dp"
             android:paddingLeft="8dp"
             android:paddingRight="7dp"
             android:paddingTop="3dp"
             android:textColor="@android:color/white"
             android:textSize="16dp" />
+
+        <ImageView
+            android:id="@+id/cons_luck_msg_no_data"
+            android:visibility="gone"
+            android:src="@drawable/cons_no_data_no_net"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     </FrameLayout>
 </LinearLayout>

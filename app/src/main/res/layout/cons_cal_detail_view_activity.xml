@@ -31,7 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="47dp"
                 android:gravity="center"
-                tools:text="@string/cons_cal_title"
+                android:text="@string/cons_cal_title"
                 android:textColor="@color/cons_detail_text_color" />
         </LinearLayout>
 

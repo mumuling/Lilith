@@ -138,7 +138,8 @@ public class ConsCalDetailActivity extends BaseActivity {
      * 绑定数据
      */
     private void bindData(ConsPredictsBean data) {
-        if (data == null || data.data == null || data.data.predicts == null) {
+        if (data == null || data.data == null || data.data.predicts == null || data.data.predicts.isEmpty()) {
+            doAnimator();
             return;
         }
 
@@ -171,7 +172,15 @@ public class ConsCalDetailActivity extends BaseActivity {
             mConsDetailCalView.setData(data);
 
         }
+        doAnimator();
 
+
+    }
+
+    /**
+     * 执行动画
+     */
+    private void doAnimator() {
         //数据绑定完后才执行动画。防止出现闪现
         mRoot.post(new Runnable() {
             @Override
