@@ -16,16 +16,20 @@ public class PointTable implements Serializable {
     public int tid;//话题的ID
     public int pid;//观点的ID
     public String viewPoint;//观点内容
+    public String topicTitle;
+    public String voteTitle;
     public int oid;//支持的ID
     public String buildDate;
 
     public PointTable(){}
-    public PointTable(int oid,int tid,int pid,String viewPoint,String buildDate) {
+    public PointTable(int oid,int tid,int pid,String viewPoint,String buildDate,String topicTitle,String voteTitle ) {
         this.tid = tid;
         this.pid = pid;
         this.oid = oid;
         this.viewPoint = viewPoint;
         this.buildDate = buildDate;
+        this.topicTitle = topicTitle;
+        this.voteTitle = voteTitle;
 
     }
     /**
@@ -38,6 +42,8 @@ public class PointTable implements Serializable {
                 + Columns.PID + " INTEGER,"
                 + Columns.OID + " INTEGER,"
                 + Columns.BUILD_DATE + " TEXT,"
+                + Columns.TOPIC_TITLE + " TEXT,"
+                + Columns.VOTE_TITLE + " TEXT,"
                 + Columns.VIEWPOINT + " TEXT" + ");");
     }
 
@@ -52,6 +58,8 @@ public class PointTable implements Serializable {
         contentValues.put(Columns.OID, oid);
         contentValues.put(Columns.VIEWPOINT,viewPoint);
         contentValues.put(Columns.BUILD_DATE,buildDate);
+        contentValues.put(Columns.TOPIC_TITLE,topicTitle);
+        contentValues.put(Columns.VOTE_TITLE,voteTitle);
         return contentValues;
     }
     public PointTable fromCursor(Cursor cursor) {
@@ -60,6 +68,8 @@ public class PointTable implements Serializable {
         this.viewPoint = cursor.getString(cursor.getColumnIndex(Columns.VIEWPOINT));
         this.oid = cursor.getInt(cursor.getColumnIndex(Columns.OID));
         this.buildDate = cursor.getString(cursor.getColumnIndex(Columns.BUILD_DATE));
+        this.topicTitle = cursor.getString(cursor.getColumnIndex(Columns.TOPIC_TITLE));
+        this.voteTitle = cursor.getString(cursor.getColumnIndex(Columns.VOTE_TITLE));
 
         return this;
     }
@@ -70,5 +80,7 @@ public class PointTable implements Serializable {
         String VIEWPOINT = "view_point";//观点内容
         String OID = "oid";//支持的id
         String BUILD_DATE = "build_date";
+        String TOPIC_TITLE = "topic_title";
+        String VOTE_TITLE = "vote_title";
     }
 }

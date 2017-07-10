@@ -145,7 +145,7 @@ public class MEFragment extends BaseFragment {
     public void clickMyItem(View view) {
         switch (view.getId()) {
             case R.id.rl_topic:
-                Toast.makeText(getActivity(), "话题", Toast.LENGTH_SHORT).show();
+                ARouter.getInstance().build("/test/MyTopicActivity").navigation();
                 break;
             case R.id.rl_personal_data:
                 ARouter.getInstance().build("/test/EditInformationActivity").navigation();

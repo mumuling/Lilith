@@ -24,6 +24,7 @@ public class Urls {
     public static final String LIKE_POINT = "http://lilith.51wnl.com/VoteZan";
     public static final String LIKE_REPLY = "http://lilith.51wnl.com/ReplyZan";
     public static final String POINT_REPLY =  "http://lilith.51wnl.com/VoteReply";
+    public static final String MY_VOTE= "http://lilith.51wnl.com/GetMyVote";
 
     //测测的url
     public static final String MEASURE_URL = "http://lilith.51wnl.com/GetCeceAd";

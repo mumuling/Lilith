@@ -8,6 +8,7 @@ import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.topic.bean.PointBean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,14 +43,6 @@ public class PointCache {
             db.insert(PointTable.TABLE_NAME, null, pointTable.createContentValues());
         }
     }
-    public void handlePointTableInfo(List<PointBean.DataBean> data) {
-        if (!AppConfig.LOGIN_STATUS || AppSetting.getUserInfo() == null) return;
-        for (int i = 0; i < data.size(); i ++) {
-            if (data.get(i).userId == AppSetting.getUserInfo().data.userInfo.id){
-                deleteData(data.get(i).id);
-            }
-        }
-    }
 
     /**
      * 更新数据
@@ -71,18 +64,28 @@ public class PointCache {
     }
 
     /**
-     *
+     *   通过话题ID删除数据
      * @param uid
      */
-    public void deleteData(int uid) {
+    public void deleteData(int tid) {
         SQLiteDatabase db = PointTableHelper.getInstance(mContext).getWritableDatabase();
         db.delete(PointTable.TABLE_NAME, PointTable.Columns.TID + "=? "
-               , new String[]{String.valueOf(uid)});
+               , new String[]{String.valueOf(tid)});
+    }
+
+    /**
+     *   通过观点ID删数据
+     * @param pid
+     */
+    public void deletaDataByPid(int pid) {
+        SQLiteDatabase db = PointTableHelper.getInstance(mContext).getWritableDatabase();
+        db.delete(PointTable.TABLE_NAME, PointTable.Columns.PID + "=? "
+                , new String[]{String.valueOf(pid)});
     }
 
 
     /**
-     *   通过ID 和 Type查找点赞信息
+     *   通过topicID查找我的观点
      * @param id
      * @return
      */
@@ -100,5 +103,42 @@ public class PointCache {
 
         cursor.close();
         return pointTable;
+    }
+    /**
+     *   通过pointID查找我的观点
+     * @param id
+     * @return
+     */
+    public PointTable getPointByPid(int id) {
+        SQLiteDatabase db = PointTableHelper.getInstance(mContext).getReadableDatabase();
+        Cursor cursor = db.query(PointTable.TABLE_NAME, null, PointTable.Columns.PID + " =? ",
+                new String[]{String.valueOf(id)}, null, null, null);
+        if (cursor == null) {
+            return null;
+        }
+        PointTable pointTable = null;
+        if (cursor.moveToNext()) {
+            pointTable = new PointTable().fromCursor(cursor);
+        }
+
+        cursor.close();
+        return pointTable;
+    }
+
+    public ArrayList<PointTable> getAllTablePoint() {
+        ArrayList<PointTable> pointList = new ArrayList<>();
+        SQLiteDatabase db = PointTableHelper.getInstance(mContext).getReadableDatabase();
+        Cursor cursor = db.query(PointTable.TABLE_NAME, null, null,
+                null, null, null, null);
+        if (cursor == null) {
+            return null;
+        }
+        PointTable pointTable = null;
+        while (cursor.moveToNext()) {
+            pointTable = new PointTable().fromCursor(cursor);
+            pointList.add(pointTable);
+        }
+        cursor.close();
+        return pointList;
     }
 }

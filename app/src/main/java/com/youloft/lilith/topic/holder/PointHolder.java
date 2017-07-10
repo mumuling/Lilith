@@ -299,7 +299,7 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
 
     private void bindTime(PointBean.DataBean point) {
         long time = CalendarHelper.getTimeMillisByString(point.buildDate);
-        textCommentTime.setText(CalendarHelper.getInterValTime(time));
+        textCommentTime.setText(CalendarHelper.getInterValTime(time,System.currentTimeMillis()));
     }
 
     private void bindZan(PointBean.DataBean dataBean) {

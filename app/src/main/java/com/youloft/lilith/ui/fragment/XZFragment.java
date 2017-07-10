@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerViewEx;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -36,7 +37,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -79,26 +79,29 @@ public class XZFragment extends BaseFragment {
      * 初始化数据
      */
     private void initDate() {
-
         UserBean userInfo = AppSetting.getUserInfo();
         if (!AppConfig.LOGIN_STATUS ||
-                userInfo == null||
+                userInfo == null ||
                 userInfo.data == null ||
                 userInfo.data.userInfo == null ||
                 userInfo.data.userInfo.id == 0 ||
                 TextUtils.isEmpty(userInfo.data.userInfo.birthDay)) {       //需要登录
-            getData("1990-04-02", "", "", "");  //没登录选双鱼
-            return;
+            String date = "1990-04-02";
+            String time = "12:00:00";
+            getData(date, time, "", "");  //没登录选双鱼
+        } else {
+            //登录且有资料
+            UserBean.DataBean.UserInfoBean userInfo1 = userInfo.data.userInfo;
+            Date date = CalendarHelper.parseDate(userInfo1.birthDay, EditInformationActivity.DATE_FORMAT);
+            mCal.setTime(date);
+            mCardAdapter.setTitle(TextUtils.isEmpty(userInfo1.nickName)? userInfo1.phone : userInfo1.nickName);
+            getData(CalendarHelper.format(date, "yyyy-MM-dd"), CalendarHelper.format(date, "HH:mm:ss"), userInfo1.birthLongi, userInfo1.birthLati);
         }
 
-        //登录且有资料
-        UserBean.DataBean.UserInfoBean userInfo1 = userInfo.data.userInfo;
-        Date date = CalendarHelper.parseDate(userInfo1.birthDay, EditInformationActivity.DATE_FORMAT);
-        mCal.setTime(date);
-        getData(CalendarHelper.format(date, "yyyy-MM-dd"), CalendarHelper.format(date, "HH:mm:ss"), userInfo1.birthLongi, userInfo1.birthLati);
     }
 
     private void getData(String birdt, String birtm, String birlongi, String birlati) {
+        Log.d(TAG, "getData() called with: birdt = [" + birdt + "], birtm = [" + birtm + "], birlongi = [" + birlongi + "], birlati = [" + birlati + "]");
         ConsRepo.getConsPredicts(birdt, birtm, birlongi, birlati)
                 .compose(this.<ConsPredictsBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
@@ -141,8 +144,10 @@ public class XZFragment extends BaseFragment {
     @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
     public void onLoddingChagne(LoginEvent event) {
         initDate();
+        Log.d(TAG, "onLoddingChagne() called with: event = [" + event + "]");
     }
 
+    private static final String TAG = "XZFragment";
     /**
      * 拉起分享
      */
@@ -193,25 +198,5 @@ public class XZFragment extends BaseFragment {
         mConsList.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         mConsList.setAdapter(mCardAdapter);
 
-        final float height = ViewUtil.dp2px(200);
-        mConsList.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-
-            }
-            int totalDy = 0;
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                totalDy += dy;
-                if (totalDy <= height) {
-                    float alpha = 1 - (height - totalDy) * 1f / height;
-                    mMaskView.setAlpha(alpha);
-                    if (mMaskView.getVisibility() != View.VISIBLE) {
-                        mMaskView.setVisibility(View.VISIBLE);
-                    }
-                }
-            }
-        });
     }
 }

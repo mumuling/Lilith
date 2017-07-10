@@ -23,7 +23,6 @@ import io.reactivex.Flowable;
  */
 @Route(path = "/repo/cons", name = "星座数据中心")
 public class ConsRepo extends AbstractDataRepo {
-    static HashMap<String, String> param = new HashMap();
 
     /**
      * @param birdt    出生日期格式: yyyy-MM-dd HH:mm:ss
@@ -34,19 +33,19 @@ public class ConsRepo extends AbstractDataRepo {
      *                 curlati  当时经度	选填, 缺省: 出生经度
      * @return
      */
-    public static Flowable<ConsPredictsBean> getConsPredicts(String birdt, String birtm,String birlongi, String birlati) {
-        param.clear();
+    public static synchronized Flowable<ConsPredictsBean> getConsPredicts(String birdt, String birtm, String birlongi, String birlati) {
+        HashMap<String, String> mParam = new HashMap();
         String[] location = LocationUtil.getLocation();
-        param.put("days", "28");
-        param.put("birdt", birdt);
-        param.put("birtm", birdt);
-        param.put("birlongi", birlongi);
-        param.put("birlati", birlati);
+        mParam.put("days", "28");
+        mParam.put("birdt", birdt);
+        mParam.put("birtm", birtm);
+        mParam.put("birlongi", birlongi);
+        mParam.put("birlati", birlati);
         if (location != null) {
-            param.put("curlongi", location[0]);
-            param.put("curlati", location[1]);
+            mParam.put("curlongi", location[0]);
+            mParam.put("curlati", location[1]);
         }
-        return unionFlow(Urls.CONS_PREDICTS, null, param, true, ConsPredictsBean.class, "cons_predicts", 1);
+        return unionFlow(Urls.CONS_PREDICTS, null, mParam, true, ConsPredictsBean.class, "cons_predicts", 1);
     }
 
 
