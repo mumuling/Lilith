@@ -124,6 +124,7 @@ public class FileHandle extends AbsHandle {
             this.mWebView = null;
             return;
         }
+        Cursor cursor = null;
         try {
             if ((requestCode == REQ_PHOTOLIBRARY || requestCode == REQ_CAMERA) && resultCode == Activity.RESULT_OK) {
                 Uri selectedImage = photoUri;
@@ -135,15 +136,20 @@ public class FileHandle extends AbsHandle {
                     selectedImage = data.getData();
                 }
                 String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                Cursor cursor = activity.getContentResolver().query(selectedImage,
+                cursor = activity.getContentResolver().query(selectedImage,
                         filePathColumn, null, null, null);
-                cursor.moveToFirst();
-                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                String picturePath = cursor.getString(columnIndex);
-                doUploadImage(picturePath);
+                if (cursor.moveToFirst()) {
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    String picturePath = cursor.getString(columnIndex);
+                    doUploadImage(picturePath);
+                }
             }
         } catch (Throwable e) {
             this.mWebView = null;
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
     }
 
