@@ -10,6 +10,7 @@ import com.youloft.lilith.info.bean.OldPasswordBean;
 import com.youloft.lilith.info.bean.UpLoadHeaderBean;
 import com.youloft.lilith.info.bean.UpdateUserInfoBean;
 import com.youloft.lilith.login.bean.ModifyPasswordBean;
+import com.youloft.lilith.login.bean.UserBean;
 
 import org.json.JSONObject;
 
@@ -116,5 +117,29 @@ public class UpdateUserRepo extends AbstractDataRepo {
     //检查版本
     public static Flowable<CheckVersionBean> checkVersion() {
         return unionFlow(Urls.CHECK_VERSION, null, null, true, CheckVersionBean.class, "check_version", 0);
+    }
+
+
+    //绑定手机
+    static HashMap<String, String> paramsBindPhone = new HashMap();
+
+    public static Flowable<UserBean> bindPhone(String code,String phone,String userid) {
+        paramsBindPhone.put("code", code);
+        paramsBindPhone.put("phone", phone);
+        paramsBindPhone.put("userid", userid);
+        return unionFlow(Urls.BIND_PHONE, null, paramsBindPhone, true, UserBean.class, "bind_phone", 0);
+    }
+
+
+    //绑定微信
+    static HashMap<String, String> paramsBindWx = new HashMap();
+
+    public static Flowable<UserBean> bindWx(String openid,String unionId,String nickName,String phone,String platform) {
+        paramsBindWx.put("openid", openid);
+        paramsBindWx.put("unionId", unionId);
+        paramsBindWx.put("nickName", nickName);
+        paramsBindWx.put("phone", phone);
+        paramsBindWx.put("platform", platform);
+        return unionFlow(Urls.BIND_WEXIN, null, paramsBindWx, true, UserBean.class, "bind_wexin", 0);
     }
 }

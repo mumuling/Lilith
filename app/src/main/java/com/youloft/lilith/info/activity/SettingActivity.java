@@ -3,7 +3,6 @@ package com.youloft.lilith.info.activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
-import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -33,7 +32,6 @@ import org.greenrobot.eventbus.EventBus;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -46,16 +44,14 @@ import io.reactivex.schedulers.Schedulers;
 public class SettingActivity extends BaseActivity {
     @BindView(R.id.btl_setting)
     BaseToolBar btlSetting;
-    private CheckVersionCodeDialog mVersionCodeDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
         ButterKnife.bind(this);
-        btlSetting.setTitle("设置");
+        btlSetting.setTitle(getResources().getString(R.string.setting));
         btlSetting.setShowShareBtn(false);
-        mVersionCodeDialog = new CheckVersionCodeDialog(this);
         btlSetting.setOnToolBarItemClickListener(new BaseToolBar.OnToolBarItemClickListener() {
             @Override
             public void OnBackBtnClick() {
@@ -109,7 +105,7 @@ public class SettingActivity extends BaseActivity {
      * 检查版本
      */
     private void checkVersionCode() {
-
+        final CheckVersionCodeDialog mVersionCodeDialog = new CheckVersionCodeDialog(this);
         mVersionCodeDialog.show();
         UpdateUserRepo.checkVersion()
                 .compose(this.<CheckVersionBean>bindToLifecycle())

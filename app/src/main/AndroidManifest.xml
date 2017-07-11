@@ -110,7 +110,7 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".setting.AboutMeActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".setting.BindAccountActivity"
+        <activity android:name=".info.activity.BindAccountActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".register.activity.SetPasswordActivity"
             android:screenOrientation="portrait"/>

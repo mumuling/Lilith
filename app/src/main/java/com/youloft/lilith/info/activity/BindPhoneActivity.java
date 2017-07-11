@@ -1,4 +1,4 @@
-package com.youloft.lilith.register.activity;
+package com.youloft.lilith.info.activity;
 
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -23,29 +23,30 @@ import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.Toaster;
+import com.youloft.lilith.info.repo.UpdateUserRepo;
 import com.youloft.lilith.login.bean.SendSmsBean;
 import com.youloft.lilith.login.bean.SmsCodeBean;
+import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.login.repo.SendSmsRepo;
 import com.youloft.lilith.login.repo.SmsCodeRepo;
 import com.youloft.lilith.register.bean.CheckPhoneBean;
 import com.youloft.lilith.register.repo.CheckPhoneRepo;
+import com.youloft.lilith.setting.AppSetting;
 
 import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- * 注册界面
- * <p>
- * Created by GYH on 2017/7/6.
+ * 绑定手机界面
+ * Created by gyh on 2017/7/11.
  */
-@Route(path = "/test/RegisterActivity")
-public class RegisterActivity extends BaseActivity {
-
-
+@Route(path = "/test/BindPhoneActivity")
+public class BindPhoneActivity extends BaseActivity{
     @BindView(R.id.vv_background)
     VideoView vvBackground;  //背景视频
     @BindView(R.id.et_verification_code)
@@ -84,7 +85,7 @@ public class RegisterActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_bind_phone);
         ButterKnife.bind(this);
         phoneNumberSetting();
         verificationCodeSetting();
@@ -146,7 +147,6 @@ public class RegisterActivity extends BaseActivity {
      */
     private void checkNumber() {
         //手机号码长度满足之后,
-        // TODO: 2017/7/7 正则校验
         String phoneNumber = etPhoneNumber.getText().toString().replaceAll("-", "");
         //发起号码验证请求
         CheckPhoneRepo.checkPhone(phoneNumber)
@@ -157,8 +157,19 @@ public class RegisterActivity extends BaseActivity {
                 .subscribe(new RxObserver<CheckPhoneBean>() {
                     @Override
                     public void onDataSuccess(CheckPhoneBean checkPhoneBean) {
-                        //如果成功了,根据信息进行判断
-                        showIsExist(checkPhoneBean);
+                        if(checkPhoneBean.data.result == 0){
+                            //如果成功了,根据信息进行判断
+                            showIsExist(checkPhoneBean);
+                        }else {
+                            Toaster.showShort("网络错误");
+                        }
+
+                    }
+
+                    @Override
+                    protected void onFailed(Throwable e) {
+                        super.onFailed(e);
+                        Toaster.showShort("网络错误");
                     }
                 });
     }
@@ -316,7 +327,7 @@ public class RegisterActivity extends BaseActivity {
             return;
         }
         //发送短信
-        SendSmsRepo.sendSms(phoneNumber, "Register")
+        SendSmsRepo.sendSms(phoneNumber,"Register")
                 .compose(this.<SendSmsBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
@@ -325,9 +336,6 @@ public class RegisterActivity extends BaseActivity {
                     @Override
                     public void onDataSuccess(SendSmsBean sendSmsBean) {
                         //确认短信发送成功了
-                        if (!sendSmsBean.data.isSend) {
-                            Toaster.showShort("获取验证码失败");
-                        }
                     }
                 });
 
@@ -341,7 +349,7 @@ public class RegisterActivity extends BaseActivity {
     private void getSmsCode() {
         //发起获取验证码的请求
         String smsCode = etVerificationCode.getText().toString();
-        SmsCodeRepo.getSmsCode(etPhoneNumber.getText().toString().replaceAll("-", ""), "Register", smsCode)
+        SmsCodeRepo.getSmsCode(etPhoneNumber.getText().toString().replaceAll("-", ""),"Register",smsCode)
                 .compose(this.<SmsCodeBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
@@ -349,19 +357,9 @@ public class RegisterActivity extends BaseActivity {
                 .subscribe(new RxObserver<SmsCodeBean>() {
                     @Override
                     public void onDataSuccess(SmsCodeBean smsCodeBean) {
-                        if (smsCodeBean.data.result) {
-                            mSmsCodeBean = smsCodeBean;
-                        } else {
-                            Toaster.showShort("网络错误");
-                        }
+                        mSmsCodeBean = smsCodeBean;
                         //这里拿回了验证码的相关信息, 在验证码输入框的监听里面验证用户的验证码是否正确
                         checkSmsCode();
-                    }
-
-                    @Override
-                    protected void onFailed(Throwable e) {
-                        super.onFailed(e);
-                        Toaster.showShort("网络错误");
                     }
                 });
     }
@@ -393,30 +391,51 @@ public class RegisterActivity extends BaseActivity {
         // 2. isCodeRigth 为true  代表可以注册
         // 3. 手机号码和验证码长度检验
         // 4. 手机正则校验
-        if (isNumberRight || !isCodeRight) {
+        if(isNumberRight || !isCodeRight){
             Toaster.showShort("手机号码已存在,或者验证码错误");
             return;
         }
         String phoneNumber = etPhoneNumber.getText().toString().replaceAll("-", "");
         String smsCode = etVerificationCode.getText().toString();
 
-        if (TextUtils.isEmpty(phoneNumber) || TextUtils.isEmpty(smsCode)) {
+        if(TextUtils.isEmpty(phoneNumber)||TextUtils.isEmpty(smsCode)){
             Toaster.showShort("手机号码或者验证码不能为空");
             return;
         }
-        if (phoneNumber.length() != 11 || smsCode.length() != 6) {
+        if(phoneNumber.length() != 11 || smsCode.length()!= 6){
             Toaster.showShort("请检查手机号码或者验证码");
             return;
         }
-        //这些条件都满足后,带着手机号码和验证码到设置密码界面
-        ARouter.getInstance()
-                .build("/test/SetPasswordActivity")
-                .withString("phoneNumber", phoneNumber)
-                .withString("smsCode", smsCode)
-                .withString("source", "20001")
-                .navigation();
-        //关掉本页面
-        finish();
+        final UserBean userInfo = AppSetting.getUserInfo();
+        if(userInfo == null){
+            Toaster.showShort("内部信息错误");
+            return;
+        }
+        //这些条件都满足后,发起请求
+        UpdateUserRepo.bindPhone(smsCode,phoneNumber,String.valueOf(userInfo.data.userInfo.id))
+                .compose(this.<UserBean>bindToLifecycle())
+                .subscribeOn(Schedulers.newThread())
+                .toObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new RxObserver<UserBean>() {
+                    @Override
+                    public void onDataSuccess(UserBean userBean) {
+                        if(userBean.data.result == 0){
+                            AppSetting.saveUserInfo(userBean);
+                            Toaster.showShort("绑定成功");
+                            finish();
+
+                        }else {
+                            Toaster.showShort("绑定失败");
+                        }
+                    }
+
+                    @Override
+                    protected void onFailed(Throwable e) {
+                        super.onFailed(e);
+                        Toaster.showShort("网络错误");
+                    }
+                });
     }
 
 

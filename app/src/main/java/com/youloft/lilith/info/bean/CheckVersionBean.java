@@ -12,11 +12,14 @@ public class CheckVersionBean extends AbsResponse<CheckVersionBean.DataBean>{
 
 
 
+
     public static class DataBean {
 
         @JSONField(name = "version")
         public String version;
         @JSONField(name = "downPath")
         public String downPath;
+        @JSONField(name = "contents")
+        public String contents;
     }
 }
