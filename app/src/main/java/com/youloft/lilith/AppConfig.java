@@ -31,7 +31,7 @@ public class AppConfig {
     public static final String WEIXIN_APPKEY = "wxf21154c0fd625f83";
     public static final String WEIXIN_SECRET = "8ca4c335d3f77292a7649797849b3777";
 
-    public static boolean LOGIN_STATUS; //false代表未登录,  true代表登录了
+    public static boolean LOGIN_STATUS = false; //false代表未登录,  true代表登录了
 
 
     /**

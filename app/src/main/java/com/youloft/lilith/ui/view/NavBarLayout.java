@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.utils.SafeUtil;
 import com.youloft.lilith.common.utils.ViewUtil;
+import com.youloft.lilith.cons.consmanager.ConsManager;
 
 import java.util.ArrayList;
 
@@ -57,6 +58,16 @@ public class NavBarLayout extends LinearLayout {
         mPaint.setColor(getResources().getColor(R.color.tab_line_color));
     }
 
+    public void changConsIcon(int consKey){
+        Integer[] consIconSrc = ConsManager.getConsIconSrc(String.valueOf(consKey));
+        NavItemView consIcon = SafeUtil.getSafeData(mTabViews, 0);
+        if (consIcon != null && consIcon.pTabInfo != null) {
+            consIcon.pTabInfo.mTabIcUnSelect = consIconSrc != null ? consIconSrc[1] : R.drawable.icon2_pisces;
+            consIcon.pTabInfo.mTabIc = consIconSrc != null ? consIconSrc[0] : R.drawable.icon_pisces;
+            consIcon.bindView();
+        }
+    }
+
     /**
      * 添加tabItem的view
      */
@@ -78,11 +89,15 @@ public class NavBarLayout extends LinearLayout {
                         if (v instanceof NavItemView) {
                             TabItemBean tb = ((NavItemView) v).getData();
                             if (tb != null) {
+                                if (mTabChangeListener != null) {
+                                    boolean b = mTabChangeListener.selectChange(tb.mIndex);
+                                    if (b) {
+                                        return;
+                                    }
+                                }
                                 resetAllSelect();
                                 ((NavItemView) v).setSelect(true);
-                                if (mTabChangeListener != null) {
-                                    mTabChangeListener.selectChange(tb.mIndex);
-                                }
+
                             }
                         }
                     }
@@ -145,7 +160,7 @@ public class NavBarLayout extends LinearLayout {
      * @see
     */
     public interface OnTabChangeListener{
-        void selectChange(int index);
+        boolean selectChange(int index);
         void tabsChange();
     }
 
@@ -196,7 +211,7 @@ public class NavBarLayout extends LinearLayout {
             bindView();
         }
 
-        private void bindView(){
+        public void bindView(){
             mNavIc.setImageResource(pTabInfo.mSelected ? pTabInfo.mTabIc : pTabInfo.mTabIcUnSelect);
             mNavName.setText(pTabInfo.mTabName);
         }

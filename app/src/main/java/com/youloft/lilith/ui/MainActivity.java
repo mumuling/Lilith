@@ -21,14 +21,17 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
+import com.youloft.lilith.common.event.ConsChangeEvent;
 import com.youloft.lilith.common.event.TabChangeEvent;
 import com.youloft.lilith.common.net.OnlineConfigAgent;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.ViewUtil;
 import com.youloft.lilith.cons.ConsRepo;
+import com.youloft.lilith.cons.consmanager.LoddingCheckEvent;
 import com.youloft.lilith.info.bean.CheckLoginBean;
 import com.youloft.lilith.info.repo.UpdateUserRepo;
 import com.youloft.lilith.login.bean.UserBean;
+import com.youloft.lilith.login.event.LoginEvent;
 import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.ui.view.NavBarLayout;
 
@@ -96,7 +99,13 @@ public class MainActivity extends BaseActivity {
                         String token = checkLoginBean.data;
                         String accessToken = userInfo.data.userInfo.accessToken;
                         if(token.equals(accessToken)){
+//                            AppConfig.LOGIN_STATUS = true;//登录状态设置为 登录
+//                            EventBus.getDefault().post(new LoddingCheckEvent());
                             AppConfig.LOGIN_STATUS = true;//登录状态设置为 登录
+                            EventBus.getDefault().post(new LoginEvent(true));
+                        } else {
+                            AppConfig.LOGIN_STATUS = false;//登录状态置为 未登录
+                            EventBus.getDefault().post(new LoginEvent(false));
                         }
                     }
                 });
@@ -117,6 +126,18 @@ public class MainActivity extends BaseActivity {
         int selectTab = event.selectTab;
         if (mMainTabManager != null) {
             mMainTabManager.selectChange(selectTab);
+        }
+    }
+
+    /**
+     * 星座改变通知
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
+    public void onConsChagneEvent(ConsChangeEvent event) {
+        int consType = event.consType;
+        if (mNavBar != null) {
+            mNavBar.changConsIcon(consType);
         }
     }
 }

@@ -33,7 +33,7 @@ public class ConsRepo extends AbstractDataRepo {
      *                 curlati  当时经度	选填, 缺省: 出生经度
      * @return
      */
-    public static synchronized Flowable<ConsPredictsBean> getConsPredicts(String birdt, String birtm, String birlongi, String birlati) {
+    public static Flowable<ConsPredictsBean> getConsPredicts(String birdt, String birtm, String birlongi, String birlati) {
         HashMap<String, String> mParam = new HashMap();
         String[] location = LocationUtil.getLocation();
         mParam.put("days", "28");

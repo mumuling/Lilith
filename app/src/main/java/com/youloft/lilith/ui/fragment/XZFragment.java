@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseFragment;
+import com.youloft.lilith.common.event.ConsChangeEvent;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.CalendarHelper;
 import com.youloft.lilith.common.utils.ViewUtil;
@@ -25,10 +26,13 @@ import com.youloft.lilith.cons.consmanager.LoddingCheckEvent;
 import com.youloft.lilith.cons.consmanager.ShareConsEvent;
 import com.youloft.lilith.cons.view.LogInOrCompleteDialog;
 import com.youloft.lilith.info.activity.EditInformationActivity;
+import com.youloft.lilith.info.bean.UpdateUserInfoBean;
+import com.youloft.lilith.info.event.UserInfoUpDateEvent;
 import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.login.event.LoginEvent;
 import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.share.ShareBuilder;
+import com.youloft.lilith.ui.MainActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -48,7 +52,6 @@ import io.reactivex.schedulers.Schedulers;
 
 public class XZFragment extends BaseFragment {
     private FrameLayout mRoot;
-    private ImageView mMaskView;
     private RecyclerView mConsList;
     private ConsFragmentCardAdapter mCardAdapter;
     private GregorianCalendar mCal = new GregorianCalendar();
@@ -88,6 +91,7 @@ public class XZFragment extends BaseFragment {
                 TextUtils.isEmpty(userInfo.data.userInfo.birthDay)) {       //需要登录
             String date = "1990-04-02";
             String time = "12:00:00";
+            mCardAdapter.setTitle("");
             getData(date, time, "", "");  //没登录选双鱼
         } else {
             //登录且有资料
@@ -101,7 +105,6 @@ public class XZFragment extends BaseFragment {
     }
 
     private void getData(String birdt, String birtm, String birlongi, String birlati) {
-        Log.d(TAG, "getData() called with: birdt = [" + birdt + "], birtm = [" + birtm + "], birlongi = [" + birlongi + "], birlati = [" + birlati + "]");
         ConsRepo.getConsPredicts(birdt, birtm, birlongi, birlati)
                 .compose(this.<ConsPredictsBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
@@ -112,6 +115,9 @@ public class XZFragment extends BaseFragment {
                     public void onDataSuccess(ConsPredictsBean bean) {
                         if (bean != null) {
                             mCardAdapter.setData(bean);
+                            if (bean.data != null) {
+                                EventBus.getDefault().post(new ConsChangeEvent(bean.data.signs));
+                            }
                         }
                     }
                 });
@@ -147,6 +153,17 @@ public class XZFragment extends BaseFragment {
         Log.d(TAG, "onLoddingChagne() called with: event = [" + event + "]");
     }
 
+    /**
+     * 资料改变
+     *
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
+    public void onUpdate(UserInfoUpDateEvent event) {
+        initDate();
+        Log.d(TAG, "onLoddingChagne() called with: event = [" + event + "]");
+    }
+
     private static final String TAG = "XZFragment";
     /**
      * 拉起分享
@@ -165,22 +182,24 @@ public class XZFragment extends BaseFragment {
      */
     @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
     public void onLoddingCheck(LoddingCheckEvent event) {
-        checkUserInfo();
+        if (event != null) {
+            checkUserInfo();
+        }
     }
 
     private void checkUserInfo() {
         if (!AppConfig.LOGIN_STATUS) {
             showDialog(LOG_IN);
-            return;
-        }
-        UserBean userInfo = AppSetting.getUserInfo();
-        UserBean.DataBean data = userInfo.data;
-        if (data == null ||
-                data.userInfo == null ||
-                data.userInfo.id == 0 ||
-                TextUtils.isEmpty(data.userInfo.birthDay)) {
-            showDialog(COMPLETE_INFO);
-            return;
+        } else {
+            UserBean userInfo = AppSetting.getUserInfo();
+            UserBean.DataBean data = userInfo.data;
+            if (data == null ||
+                    data.userInfo == null ||
+                    data.userInfo.id == 0 ||
+                    TextUtils.isEmpty(data.userInfo.birthDay)||
+                    TextUtils.isEmpty(data.userInfo.birthPlace)) {
+                showDialog(COMPLETE_INFO);
+            }
         }
     }
 
@@ -192,7 +211,6 @@ public class XZFragment extends BaseFragment {
     private void init(View view) {
         mConsList = (RecyclerView) view.findViewById(R.id.cons_card);
         mRoot = (FrameLayout) view.findViewById(R.id.root);
-        mMaskView = (ImageView) view.findViewById(R.id.cons_mask);
 
         mCardAdapter = new ConsFragmentCardAdapter(getContext());
         mConsList.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));

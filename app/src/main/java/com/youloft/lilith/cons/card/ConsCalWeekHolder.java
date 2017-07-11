@@ -2,14 +2,24 @@ package com.youloft.lilith.cons.card;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.text.TextUtils;
 import android.view.ViewGroup;
 
+import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.utils.ViewUtil;
 import com.youloft.lilith.cons.ConsCalDetailActivity;
 import com.youloft.lilith.cons.bean.ConsPredictsBean;
+import com.youloft.lilith.cons.consmanager.LoddingCheckEvent;
 import com.youloft.lilith.cons.view.ConsCalendar;
+import com.youloft.lilith.login.bean.UserBean;
+import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.ui.MainActivity;
+
+import org.greenrobot.eventbus.EventBus;
+
+import jp.wasabeef.blurry.internal.Blur;
+import jp.wasabeef.blurry.internal.BlurFactor;
 
 /**
  * Created by zchao on 2017/7/5.
@@ -17,7 +27,7 @@ import com.youloft.lilith.ui.MainActivity;
  * version:
  */
 
-public class ConsCalWeekHolder extends ConsBaseHolder implements ConsCalendar.OnClickListener{
+public class ConsCalWeekHolder extends ConsBaseHolder implements ConsCalendar.OnClickListener {
 
 
     private final ConsCalendar mWeekView;
@@ -39,13 +49,30 @@ public class ConsCalWeekHolder extends ConsBaseHolder implements ConsCalendar.On
 
     @Override
     public void onClick() {
+        UserBean userInfo = AppSetting.getUserInfo();
+        if (!AppConfig.LOGIN_STATUS ||
+                userInfo == null ||
+                userInfo.data == null ||
+                userInfo.data.userInfo == null ||
+                userInfo.data.userInfo.id == 0 ||
+                TextUtils.isEmpty(userInfo.data.userInfo.birthDay) ||
+                TextUtils.isEmpty(userInfo.data.userInfo.birthPlace)) {
+            EventBus.getDefault().post(new LoddingCheckEvent());
+            return;
+        }
+
         int[] local = new int[2];
         mWeekView.getLocationOnScreen(local);
         if (mContext instanceof MainActivity) {
 
             Bitmap screenShort = ((MainActivity) mContext).takeScreenShot(false, 4);
-            screenShort = ViewUtil.blurBitmap(screenShort, mContext);
 
+            BlurFactor bf = new BlurFactor();
+            bf.width = screenShort.getWidth();
+            bf.height = screenShort.getHeight();
+            bf.sampling = 10;
+            bf.radius = 10;
+            screenShort = Blur.of(mContext, screenShort, bf);
             ConsCalDetailActivity.startConsCalDetailActivity(mContext, local, screenShort, mData);
         } else {
             ConsCalDetailActivity.startConsCalDetailActivity(mContext, local, null, mData);

@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.event.TabChangeEvent;
@@ -100,12 +101,15 @@ public class SettingActivity extends BaseActivity {
      * 退出登录
      */
     private void logoutUser() {
-        if(AppSetting.getUserInfo()==null || AppSetting.getUserInfo().data == null
-                ||AppSetting.getUserInfo().data.userInfo == null){
+        if (!AppConfig.LOGIN_STATUS) {
+            return;     //未登陆直接return
+        }
+        UserBean userInfo = AppSetting.getUserInfo();
+        if(userInfo==null){
             return;
         }
-        String uid = String.valueOf(AppSetting.getUserInfo().data.userInfo.id);
-        String accessToken = AppSetting.getUserInfo().data.userInfo.accessToken;
+        String uid = String.valueOf(userInfo.data.userInfo.id);
+        String accessToken = userInfo.data.userInfo.accessToken;
         UpdateUserRepo.logoutUser(uid,accessToken)
                 .compose(this.<LogoutBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
@@ -121,18 +125,25 @@ public class SettingActivity extends BaseActivity {
                             //3.把存好的user信息情况  把登录状态设置为false
                             //4.关闭当前页面
                             //通知大家登出的事件
+                            AppConfig.LOGIN_STATUS = false;
                             EventBus.getDefault().post(new LoginEvent(false));
                             //tab设置到首页的事件
-                            EventBus.getDefault().post(new TabChangeEvent(TabManager.TAB_INDEX_XZ));
                             AppSetting.saveUserInfo(new UserBean());
                             PointCache.getIns(SettingActivity.this).deleteTable();
                             TopicLikeCache.getIns(SettingActivity.this).deleteTable();
                             PointAnswerCache.getIns(SettingActivity.this).deleteTable();
                             finish();
+                            EventBus.getDefault().post(new TabChangeEvent(TabManager.TAB_INDEX_XZ));
                         }else {
                             Toaster.showShort("退出登录失败");
                         }
                     }
                 });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }

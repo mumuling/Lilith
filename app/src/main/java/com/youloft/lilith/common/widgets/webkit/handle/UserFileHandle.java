@@ -1,10 +1,13 @@
 package com.youloft.lilith.common.widgets.webkit.handle;
 
-import android.graphics.Bitmap;
+import android.text.TextUtils;
 import android.widget.ImageView;
 
-import com.youloft.lilith.common.utils.ViewUtil;
+import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.widgets.webkit.utils.BitmapUtil;
+import com.youloft.lilith.glide.GlideBlurTwoViewTarget;
+
+import java.io.File;
 
 /**
  * Created by Administrator on 2017/7/10.
@@ -27,19 +30,21 @@ public class UserFileHandle extends FileHandle {
      */
     @Override
     protected void doUploadImage(String picturePath) {
-        String upBit = BitmapUtil.bitmapToString(picturePath, ivHeader.getWidth());
-        Bitmap bitmap = BitmapUtil.readZoomImage(picturePath, ivHeader.getWidth());
-        ivHeader.setImageBitmap(bitmap);
-        ivBlurBg.setImageBitmap(ViewUtil.blurBitmap(bitmap));
+        if (TextUtils.isEmpty(picturePath) || !new File(picturePath).exists()) {
+            return;
+        }
+        String upBit = BitmapUtil.bitmapToString(picturePath, 800);
+        GlideApp.with(ivHeader.getContext()).asBitmap().load(new File(picturePath)).into(new GlideBlurTwoViewTarget(ivHeader, ivBlurBg));
         if (onUpLoadListener != null) {
-            onUpLoadListener.upLoad(upBit,"jpg");
+            onUpLoadListener.upLoad(upBit, "jpg");
         }
     }
+
 
     private OnUpLoadListener onUpLoadListener;
 
     public interface OnUpLoadListener {
-        void upLoad(String upBit,String nameEx);
+        void upLoad(String upBit, String nameEx);
     }
 
     public void setOnUpLoadListener(OnUpLoadListener onUpLoadListener) {

@@ -5,13 +5,12 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.topic.bean.TopicBean;
-import com.youloft.lilith.ui.GlideCircleTransform;
+import com.youloft.lilith.glide.GlideCircleTransform;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +76,7 @@ public class UserImageStackViewGroup extends RelativeLayout {
             mUserImageList.get(i).setVisibility(VISIBLE);
             GlideApp.with(mContext).asBitmap()
                     .error(R.drawable.topic_user_img_er)
-                    .transform(new GlideCircleTransform(getContext()))
+                    .transform(new GlideCircleTransform())
                     .load(imageList.get(i).headImg)
                     .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                     .skipMemoryCache(false)

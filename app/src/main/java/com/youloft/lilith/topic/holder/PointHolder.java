@@ -1,8 +1,6 @@
 package com.youloft.lilith.topic.holder;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -24,21 +22,17 @@ import com.youloft.lilith.cons.consmanager.ConsManager;
 import com.youloft.lilith.cons.view.LogInOrCompleteDialog;
 import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.topic.PointDetailActivity;
-import com.youloft.lilith.topic.TopicDetailActivity;
 import com.youloft.lilith.topic.TopicRepo;
 import com.youloft.lilith.topic.adapter.TopicDetailAdapter;
 import com.youloft.lilith.topic.bean.ClickLikeBean;
 import com.youloft.lilith.topic.bean.PointBean;
-import com.youloft.lilith.topic.bean.TopicBean;
 import com.youloft.lilith.topic.bean.TopicDetailBean;
-import com.youloft.lilith.topic.bean.VoteBean;
 import com.youloft.lilith.topic.db.TopicLikeCache;
 import com.youloft.lilith.topic.db.TopicLikingTable;
 import com.youloft.lilith.topic.widget.Rotate3dAnimation;
-import com.youloft.lilith.ui.GlideCircleTransform;
+import com.youloft.lilith.glide.GlideCircleTransform;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -239,7 +233,7 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
 
         GlideApp.with(itemView)
                 .asBitmap().
-                transform(new GlideCircleTransform(itemView.getContext()))
+                transform(new GlideCircleTransform())
                 .load(point.headImg)
                 .into(imageCommentUser);
         //用户名字

@@ -60,6 +60,7 @@
     <string name="log_dialog_to_lod">查看专属运势,请登录后填写资料</string>
     <string name="log_dialog_to_complete">查看专属运势,请填写资料</string>
     <string name="cece">测测</string>
+    <string name="feed_back">意见反馈</string>
 
     <string-array name="cons_luck_line_color">
         <item>#de5deb,#99de5deb,#0fde5deb</item>

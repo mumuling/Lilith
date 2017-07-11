@@ -68,6 +68,9 @@ public class AppSetting {
         String userInfo = SettingProvider.getString(sContext, "user_login_info", null);
         JSONObject parse = (JSONObject) JSON.parse(userInfo);
         UserBean userBean = JSONObject.toJavaObject(parse, UserBean.class);
+        if(userBean == null || userBean.data == null || userBean.data.userInfo == null){
+            return null;
+        }
         return userBean;
     }
 
