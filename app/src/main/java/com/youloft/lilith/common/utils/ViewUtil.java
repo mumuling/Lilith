@@ -265,7 +265,10 @@ public class ViewUtil {
 //                bitmap.recycle();
             }
             //二维码
-            Bitmap bitmap = BitmapFactory.decodeResource(view.getResources(), R.drawable.login_phone_icon);
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = Math.round(1000/ViewUtil.dp2px(76));
+            Bitmap bitmap = BitmapFactory.decodeResource(view.getResources(), R.drawable.qrcard, options);
+
             if (bitmap != null && !bitmap.isRecycled()) {
                 bigCanvas.drawBitmap(bitmap, (view.getWidth() - bitmap.getWidth())/2, iHeight + ViewUtil.dp2px(16), paint);
             }
