@@ -107,7 +107,6 @@ public class MainActivity extends BaseActivity {
                         if(token.equals(accessToken)){
                             AppConfig.LOGIN_STATUS = true;//登录状态设置为 登录
                             EventBus.getDefault().post(new LoddingCheckEvent());
-                            AppConfig.LOGIN_STATUS = true;//登录状态设置为 登录
                             EventBus.getDefault().post(new LoginEvent(true));
                         } else {
                             AppConfig.LOGIN_STATUS = false;//登录状态置为 未登录

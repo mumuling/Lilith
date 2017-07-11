@@ -83,8 +83,7 @@ public class XZFragment extends BaseFragment {
      */
     private void initDate() {
         UserBean userInfo = AppSetting.getUserInfo();
-        if (!AppConfig.LOGIN_STATUS ||
-                userInfo == null ||
+        if (userInfo == null ||
                 userInfo.data == null ||
                 userInfo.data.userInfo == null ||
                 userInfo.data.userInfo.id == 0 ||
@@ -94,14 +93,13 @@ public class XZFragment extends BaseFragment {
             mCardAdapter.setTitle("");
             getData(date, time, "", "");  //没登录选双鱼
         } else {
-            //登录且有资料
+            //有资料
             UserBean.DataBean.UserInfoBean userInfo1 = userInfo.data.userInfo;
             Date date = CalendarHelper.parseDate(userInfo1.birthDay, EditInformationActivity.DATE_FORMAT);
             mCal.setTime(date);
             mCardAdapter.setTitle(TextUtils.isEmpty(userInfo1.nickName)? userInfo1.phone : userInfo1.nickName);
             getData(CalendarHelper.format(date, "yyyy-MM-dd"), CalendarHelper.format(date, "HH:mm:ss"), userInfo1.birthLongi, userInfo1.birthLati);
         }
-
     }
 
     private void getData(String birdt, String birtm, String birlongi, String birlati) {

@@ -213,6 +213,7 @@ public class ViewUtil {
             final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
             final int cacheSize = maxMemory / 8;
             LruCache<String, Bitmap> bitmapCache = new LruCache<>(cacheSize);
+            View shareView = null;
             for (int i = 1; i < size; i++) {
                 View itemView = null;
                 RecyclerView.ViewHolder holder = view.findViewHolderForAdapterPosition(i);
@@ -231,6 +232,12 @@ public class ViewUtil {
                    break;
                 }
 
+                View viewById = itemView.findViewById(R.id.cons_my_info_share_icon);
+                if (viewById != null) {
+                    viewById.setVisibility(View.INVISIBLE);
+                    shareView = viewById;
+                }
+
                 if(itemView.getWidth()==0||itemView.getHeight()==0){
                     itemView.measure(
                             View.MeasureSpec.makeMeasureSpec(view.getWidth() - view.getPaddingLeft() - view.getPaddingRight(), View.MeasureSpec.EXACTLY),
@@ -246,6 +253,10 @@ public class ViewUtil {
                     bitmapCache.put(String.valueOf(i), drawingCache);
                 }
                 height += itemView.getMeasuredHeight();
+            }
+
+            if (shareView != null) {
+                shareView.setVisibility(View.VISIBLE);
             }
 
             height += ViewUtil.dp2px(122);
@@ -266,7 +277,7 @@ public class ViewUtil {
             }
             //二维码
             BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inSampleSize = Math.round(1000/ViewUtil.dp2px(76));
+            options.inSampleSize = (int) Math.ceil(1000/ViewUtil.dp2px(76));
             Bitmap bitmap = BitmapFactory.decodeResource(view.getResources(), R.drawable.qrcard, options);
 
             if (bitmap != null && !bitmap.isRecycled()) {

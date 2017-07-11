@@ -1,10 +1,8 @@
 package com.youloft.lilith.info.activity;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
@@ -13,8 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.bumptech.glide.request.transition.Transition;
 import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
@@ -36,7 +32,6 @@ import com.youloft.lilith.info.event.UserInfoUpDateEvent;
 import com.youloft.lilith.info.repo.UpdateUserRepo;
 import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.setting.AppSetting;
-import com.youloft.lilith.glide.GlideBlurTransform;
 import com.youloft.lilith.ui.view.BaseToolBar;
 
 import org.greenrobot.eventbus.EventBus;
@@ -50,7 +45,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import jp.wasabeef.blurry.Blurry;
 
 /**
  * 编辑资料界面
@@ -290,6 +284,7 @@ public class EditInformationActivity extends BaseActivity {
                     public void onDataSuccess(UpLoadHeaderBean upLoadHeaderBean) {
                         userInfo.data.userInfo.headImg = upLoadHeaderBean.data;
                         AppSetting.saveUserInfo(userInfo);
+                        EventBus.getDefault().post(new UserInfoUpDateEvent());
                     }
 
                 });

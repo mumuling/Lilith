@@ -115,6 +115,6 @@ public class UpdateUserRepo extends AbstractDataRepo {
 
     //检查版本
     public static Flowable<CheckVersionBean> checkVersion() {
-        return unionFlow(Urls.CHECK_VERSION, null, null, true, CheckVersionBean.class, "logout_user", 0);
+        return unionFlow(Urls.CHECK_VERSION, null, null, true, CheckVersionBean.class, "check_version", 0);
     }
 }

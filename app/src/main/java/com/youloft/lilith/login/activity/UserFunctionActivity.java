@@ -22,6 +22,7 @@ import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.rx.RxObserver;
+import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.login.bean.SendSmsBean;
 import com.youloft.lilith.login.bean.SmsCodeBean;
 import com.youloft.lilith.login.bean.UserBean;
@@ -325,7 +326,10 @@ public class UserFunctionActivity extends BaseActivity {
         //这里做出判断,是哪个界面,做出对应的请求
         String phoneNumber = etPhoneNumber.getText().toString().replaceAll("-", "");
         String smsCode = etVerificationCode.getText().toString();
-        // TODO: 2017/7/6  这里需要对两个数据进行非空校验
+        if (TextUtils.isEmpty(phoneNumber) || TextUtils.isEmpty(smsCode)) {
+            Toaster.showShort("信息不能为空");
+            return;
+        }
         if (isCodeRight) {  //这里的变量是验证了验证码之后  正确的时候才为true
             quicklyLogin(phoneNumber, smsCode);
         }
@@ -347,12 +351,22 @@ public class UserFunctionActivity extends BaseActivity {
                 .subscribe(new RxObserver<UserBean>() {
                     @Override
                     public void onDataSuccess(UserBean userBean) {
+                        if (userBean.data.result == 0) {
 
-                        AppSetting.saveUserInfo(userBean); //保存用户信息
-                        AppConfig.LOGIN_STATUS = true; //设置登录标识
-                        EventBus.getDefault().post(new LoginEvent(true));//发送登录事件
-                        finish();
+                            AppSetting.saveUserInfo(userBean); //保存用户信息
+                            AppConfig.LOGIN_STATUS = true; //设置登录标识
+                            EventBus.getDefault().post(new LoginEvent(true));//发送登录事件
+                            finish();
+                        } else {
+                            Toaster.showShort("验证码错误");
+                        }
 
+                    }
+
+                    @Override
+                    protected void onFailed(Throwable e) {
+                        super.onFailed(e);
+                        Toaster.showShort("网络错误");
                     }
                 });
     }
