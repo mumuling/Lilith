@@ -96,20 +96,18 @@ public class UpdateUserRepo extends AbstractDataRepo {
     /**
      *
      * @param phoneNumber  电话号码
-     * @param deviceId  设备id
      * @param ipAddr     ip地址
      * @param appVer    版本号
      * @param osVer     系统版本
      * @param msgContent  反馈内容
      * @return
      */
-    public static Flowable<FeedBackBean> feedBack(String phoneNumber, String deviceId,String ipAddr,String appVer,String osVer,String msgContent) {
+    public static Flowable<FeedBackBean> feedBack(String phoneNumber,String ipAddr,String appVer,String osVer,String msgContent) {
         paramsFeedBack.put("Phone", phoneNumber);
-        paramsFeedBack.put("DeviceId", deviceId);
         paramsFeedBack.put("IpAddr", ipAddr);
         paramsFeedBack.put("AppVer", appVer);
         paramsFeedBack.put("OsVer", osVer);
         paramsFeedBack.put("MsgContent", msgContent);
-        return unionFlow(Urls.FEEDBACK, null, paramsFeedBack, true, FeedBackBean.class, "logout_user", 0);
+        return unionFlow(Urls.FEEDBACK, null, paramsFeedBack, true, FeedBackBean.class, "feed_back", 0);
     }
 }

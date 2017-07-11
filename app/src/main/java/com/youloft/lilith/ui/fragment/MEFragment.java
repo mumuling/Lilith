@@ -1,9 +1,11 @@
 package com.youloft.lilith.ui.fragment;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +15,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.base.BaseFragment;
-import com.youloft.lilith.info.event.LogoutEvent;
+import com.youloft.lilith.common.utils.ViewUtil;
 import com.youloft.lilith.info.event.UserInfoUpDateEvent;
 import com.youloft.lilith.login.activity.LoginActivity;
 import com.youloft.lilith.login.bean.UserBean;
@@ -69,25 +73,54 @@ public class MEFragment extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
+
     }
+
+//    @Override
+//    public void onResume() {
+//        Log.d(TAG, "onResume() called");
+//        super.onResume();
+//    }
+//
+//    private static final String TAG = "MEFragment";
+//    @Override
+//    public void setUserVisibleHint(boolean isVisibleToUser) {
+//        super.setUserVisibleHint(isVisibleToUser);
+//        Log.d(TAG, "setUserVisibleHint() called with: isVisibleToUser = [" + isVisibleToUser + "]");
+//        if (isVisibleToUser && !AppConfig.LOGIN_STATUS) {
+//            ARouter.getInstance().build("/test/LoginActivity")
+//                    .navigation();
+//        }
+//    }
+//
+//    @Override
+//    public void onHiddenChanged(boolean hidden) {
+//        super.onHiddenChanged(hidden);
+//        if (!hidden &&!AppConfig.LOGIN_STATUS ) {
+//            ARouter.getInstance().build("/test/LoginActivity")
+//                    .navigation();
+//        }
+//    }
 
     //登录成功之后接收到的事件  快捷登录, 注册成功, 账号密码登录, 三方登录 都会发送事件到这个地方
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(LoginEvent loginEvent) {
-        //登录成功了,图片,昵称
-        setUserInfo();
+        boolean isLogin = loginEvent.isLogin;
+        if (isLogin) {
+            //登录成功了,图片,昵称
+            setUserInfo();
+        } else {
+            //登出了
+        }
+
     }
 
     //用户修改信息过后,发出的事件
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onUserInfoUpDate(UserInfoUpDateEvent userInfoUpDateEvent) {
-        //登录成功了,图片,昵称
         setUserInfo();
     }
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onUserLogout(LogoutEvent logoutEvent) {
 
-    }
 
     /**
      * 填充用户数据
@@ -99,7 +132,12 @@ public class MEFragment extends BaseFragment {
         tvNickName.setText(nickName);
         if (!TextUtils.isEmpty(headImgUrl)) {
             GlideApp.with(mContext).load(headImgUrl).into(ivHeader);
-            GlideApp.with(mContext).load(headImgUrl).into(ivBlurBg);
+            GlideApp.with(mContext).asBitmap().load(headImgUrl).into(new SimpleTarget<Bitmap>() {
+                @Override
+                public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                    ivBlurBg.setImageBitmap(ViewUtil.blurBitmap(resource));
+                }
+            });
         }
 //        ConsManager.getConsSrc("1").pKey
     }
@@ -123,7 +161,7 @@ public class MEFragment extends BaseFragment {
             }
         });
         //view创建完成之后,检查登录状态,如果是登录的状态,那么把用户数据填上去
-        if(AppConfig.LOGIN_STATUS){
+        if (AppConfig.LOGIN_STATUS) {
             setUserInfo();
         }
         return rootView;
@@ -135,7 +173,7 @@ public class MEFragment extends BaseFragment {
     public void clickMyItem(View view) {
         switch (view.getId()) {
             case R.id.rl_topic:
-                Toast.makeText(getActivity(), "话题", Toast.LENGTH_SHORT).show();
+                ARouter.getInstance().build("/test/MyTopicActivity").navigation();
                 break;
             case R.id.rl_personal_data:
                 ARouter.getInstance().build("/test/EditInformationActivity").navigation();

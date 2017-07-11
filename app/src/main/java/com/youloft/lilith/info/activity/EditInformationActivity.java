@@ -1,24 +1,19 @@
 package com.youloft.lilith.info.activity;
 
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Rect;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Base64;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
@@ -27,13 +22,13 @@ import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.CalendarHelper;
 import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.common.utils.ViewUtil;
-import com.youloft.lilith.common.widgets.dialog.PhotoSelectDialog;
 import com.youloft.lilith.common.widgets.picker.CityInfo;
 import com.youloft.lilith.common.widgets.picker.CityPicker;
 import com.youloft.lilith.common.widgets.picker.DatePickerPop;
 import com.youloft.lilith.common.widgets.picker.GenderPickerPop;
 import com.youloft.lilith.common.widgets.picker.OnPickerSelectListener;
 import com.youloft.lilith.common.widgets.picker.TimePickerPop;
+import com.youloft.lilith.common.widgets.webkit.handle.UserFileHandle;
 import com.youloft.lilith.info.bean.UpLoadHeaderBean;
 import com.youloft.lilith.info.bean.UpdateUserInfoBean;
 import com.youloft.lilith.info.event.UserInfoUpDateEvent;
@@ -45,13 +40,6 @@ import com.youloft.lilith.ui.view.BaseToolBar;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.net.URI;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -93,17 +81,25 @@ public class EditInformationActivity extends BaseActivity {
     TextView tvPlaceNow;   //现居地点
     @BindView(R.id.et_nick_name)
     EditText etNickName;  //下面的可编辑昵称
+
+    private String birthLongi = "";//出生经度
+    private String birthLati = "";//出生纬度
+    private String liveLongi = "";//现居地经度
+    private String liveLati = "";//现居地纬度
+
     private String sex;
-    private String mBitBase64;
-    private String mHeaderImageUrl = ""; //头像上传后返回的链接
+    private UserFileHandle fileHandle;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_information);
         ButterKnife.bind(this);
+
         btlEditInformation.setBackgroundColor(Color.TRANSPARENT);
         btlEditInformation.setTitle("编辑资料");
+        btlEditInformation.setShowShareBtn(false);
+        btlEditInformation.setShowSaveBtn(true);
         btlEditInformation.setOnToolBarItemClickListener(new BaseToolBar.OnToolBarItemClickListener() {
             @Override
             public void OnBackBtnClick() {
@@ -117,11 +113,15 @@ public class EditInformationActivity extends BaseActivity {
 
             @Override
             public void OnShareBtnClick() {
+
+            }
+
+            @Override
+            public void OnSaveBtnClick() {
                 //1.确认资料是否都有数据
                 //2.对应服务器需要的参数,做一下数据组装
                 //3.发起请求修改用户信息
                 savaUserInfo();
-
             }
         });
 
@@ -150,7 +150,7 @@ public class EditInformationActivity extends BaseActivity {
             //获取用户信息,并且展示
 
             UserBean userInfo = AppSetting.getUserInfo();
-            if (userInfo == null) {
+            if (userInfo == null || userInfo.data == null || userInfo.data.userInfo == null) {
                 return;
             }
             UserBean.DataBean.UserInfoBean detail = userInfo.data.userInfo;
@@ -185,6 +185,9 @@ public class EditInformationActivity extends BaseActivity {
         }
     }
 
+    /**
+     * 保存用户信息的网络请求
+     */
     private void savaUserInfo() {
         final String nickName = etNickName.getText().toString();
         final String sexStr = tvSex.getText().toString();
@@ -203,14 +206,15 @@ public class EditInformationActivity extends BaseActivity {
         if (sexStr.equals(getResources().getString(R.string.man))) {//女 1   男 2
             sex = String.valueOf(2);
         }
-        String userId = String.valueOf(AppSetting.getUserInfo().data.userInfo.id);
-        String headImg = mHeaderImageUrl;
-        final String time = CalendarHelper.format(mCal.getTime(), DATE_FORMAT);
-        String birthLongi = "";//出生经度
-        String birthLati = "";//出生纬度
-        String liveLongi = "";//现居地经度
-        String liveLati = "";//现居地纬度
+        UserBean userInfo = AppSetting.getUserInfo();
+        if(userInfo==null){
+            Toaster.showShort("信息修改失败");
+            return;
+        }
 
+        String userId = String.valueOf(userInfo.data.userInfo.id);
+        String headImg = userInfo.data.userInfo.headImg;
+        final String time = CalendarHelper.format(mCal.getTime(), DATE_FORMAT);
 
         UpdateUserRepo.updateUserInfo(userId, nickName, headImg, sex, time, placeBirth, birthLongi, birthLati, placeNow, liveLongi, liveLati)
                 .compose(this.<UpdateUserInfoBean>bindToLifecycle())
@@ -227,10 +231,10 @@ public class EditInformationActivity extends BaseActivity {
                             userInfoDetail.nickName = nickName;
                             userInfoDetail.sex = Integer.parseInt(sex);
                             userInfoDetail.birthDay = time;
-                            userInfoDetail.headImg = mHeaderImageUrl;
                             userInfoDetail.birthPlace = placeBirth;
                             userInfoDetail.livePlace = placeNow;
                             AppSetting.saveUserInfo(userInfo);
+                            finish();
                             EventBus.getDefault().post(new UserInfoUpDateEvent());
                             Toaster.showShort("资料保存成功");
                         } else {
@@ -246,70 +250,30 @@ public class EditInformationActivity extends BaseActivity {
 
     @OnClick(R.id.iv_header)
     public void onHeaderClicked() {
-        PhotoSelectDialog dialog = new PhotoSelectDialog(this);
-        dialog.show();
+//        PhotoSelectDialog dialog = new PhotoSelectDialog(this);
+//        dialog.show();
+        fileHandle = new UserFileHandle(ivHeader,ivBlurBg);
+        fileHandle.handle(this,null,null,null,null);
+        fileHandle.setOnUpLoadListener(new UserFileHandle.OnUpLoadListener() {
+            @Override
+            public void upLoad(String upBit,String nameEx) {
+                updateUserImg(upBit,nameEx);
+            }
+        });
     }
 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Uri uri = data.getData();
-
-        Bitmap photo = null;
-        switch (requestCode) {
-            case CODE_CAMERA:
-                if (data.getData() != null || data.getExtras() != null) { //防止没有返回结果
-
-                    if (uri != null) {
-                        photo = BitmapFactory.decodeFile(uri.getPath()); //拿到图片
-                    }
-                    if (photo == null) {
-                        Bundle bundle = data.getExtras();
-                        if (bundle != null) {
-                            photo = (Bitmap) bundle.get("data");
-                        }
-                    }
-                }
-                break;
-            case CODE_PICK_IMAGE:
-                ContentResolver resolver = getContentResolver();
-                try {
-                    InputStream inputStream = resolver.openInputStream(uri);
-                    BitmapFactory.Options options = new BitmapFactory.Options();
-                    options.inJustDecodeBounds = true;
-                    Bitmap bitmap1 = BitmapFactory.decodeStream(inputStream, null, options);
-                    int width = options.outWidth;
-                    int height = options.outHeight;
-                    int height1 = ivHeader.getHeight();
-                    int simpleSize = Math.min(width, height) / height1;
-                    options.inJustDecodeBounds = false;
-                    options.inSampleSize = simpleSize;
-                    Bitmap bitmap = BitmapFactory.decodeStream( resolver.openInputStream(uri), null, options); //得到真实的缩略图
-
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                    byte[] bytes = baos.toByteArray();
-                    mBitBase64 = Base64.encodeToString(bytes, Base64.DEFAULT);  //上传的Base64图
-
-                    String host = uri.getEncodedPath();
-                    String nameEx = host.substring(host.lastIndexOf(".") + 1, host.length());
-                    if (bitmap != null && !bitmap.isRecycled()) {
-                        ivHeader.setImageBitmap(bitmap);
-                        ivBlurBg.setImageBitmap(ViewUtil.blurBitmap(bitmap));
-                    }
-                    updateUserImg(TextUtils.isEmpty(nameEx) ? "jpg":nameEx);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-
-                break;
-
-        }
+        fileHandle.onActivityResult(this,requestCode,resultCode,data);
     }
 
-    private void updateUserImg(String nameEx) {
-
-        UpdateUserRepo.updateImg(mBitBase64, nameEx, String.valueOf(AppSetting.getUserInfo().data.userInfo.id))
+    private void updateUserImg(String upBit,String nameEx) {
+        if(AppSetting.getUserInfo() == null){
+            return;
+        }
+        final UserBean userInfo = AppSetting.getUserInfo();
+        UpdateUserRepo.updateImg(upBit, nameEx, String.valueOf(userInfo.data.userInfo.id))
                 .compose(this.<UpLoadHeaderBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
@@ -318,7 +282,8 @@ public class EditInformationActivity extends BaseActivity {
 
                     @Override
                     public void onDataSuccess(UpLoadHeaderBean upLoadHeaderBean) {
-                        mHeaderImageUrl = upLoadHeaderBean.data;
+                        userInfo.data.userInfo.headImg = upLoadHeaderBean.data;
+                        AppSetting.saveUserInfo(userInfo);
                     }
 
                 });
@@ -387,10 +352,10 @@ public class EditInformationActivity extends BaseActivity {
                         .show();
                 break;
             case R.id.fl_place_birth://弹出城市选择器
-                cityPick(tvPlaceBirth);
+                cityPick(tvPlaceBirth,true);
                 break;
             case R.id.fl_place_now://弹出城市选择器
-                cityPick(tvPlaceNow);
+                cityPick(tvPlaceNow,false);
                 break;
         }
     }
@@ -399,18 +364,26 @@ public class EditInformationActivity extends BaseActivity {
      * 城市的选择
      *
      * @param tv
+     * @param b  待办来源  true代表出生地   false 现居地
      */
-    private void cityPick(final TextView tv) {
+    private void cityPick(final TextView tv, final boolean b) {
         CityPicker.getDefCityPicker(this)
                 .setOnCityItemClickListener(new OnPickerSelectListener<CityInfo>() {
                     @Override
                     public void onSelected(CityInfo data) {
-
                         StringBuilder builder = new StringBuilder("");
-                        builder.append(data.pProvice).append(data.pCity).append(data.pDistrict);
+                        builder.append(data.pProvice).append("-").append(data.pCity).append("-").append(data.pDistrict);
                         String content = builder.toString();
                         tv.setText(content);
                         deleteTextDrawable(tv);
+                        if(b){
+                            birthLongi = data.pLongitude;
+                            birthLati = data.pLatitude;
+                        }else {
+                            liveLongi = data.pLongitude;
+                            liveLati = data.pLatitude;
+                        }
+
                     }
 
                     @Override
@@ -426,5 +399,11 @@ public class EditInformationActivity extends BaseActivity {
      */
     private void deleteTextDrawable(TextView tv) {
         tv.setCompoundDrawables(null, null, null, null);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }

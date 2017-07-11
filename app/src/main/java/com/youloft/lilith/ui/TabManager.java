@@ -6,6 +6,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 
+import com.alibaba.android.arouter.launcher.ARouter;
+import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.utils.SafeUtil;
 import com.youloft.lilith.ui.fragment.CCFragment;
@@ -31,8 +33,7 @@ public class TabManager implements NavBarLayout.OnTabChangeListener {
     private final FragmentManager mFragmentManager;
     private final NavBarLayout mNavBar;
     private Activity mMainActivity;
-    private Fragment mCurrentFragment;
-    private LinkedHashMap<Integer,Fragment> mFragmentsCache = new LinkedHashMap<>();
+    private LinkedHashMap<Integer, Fragment> mFragmentsCache = new LinkedHashMap<>();
     private static int FRAGMENT_CONTAINER = R.id.main_content;
 
     public static final int TAB_INDEX_XZ = 0;
@@ -58,6 +59,7 @@ public class TabManager implements NavBarLayout.OnTabChangeListener {
             return;
         }
         ArrayList<TabItemBean> tabs = mNavBar.getTabs();
+        removeAllFragment();
         for (int i = 0; i < tabs.size(); i++) {
             TabItemBean safeData = SafeUtil.getSafeData(tabs, i);
             if (safeData == null) {
@@ -73,6 +75,22 @@ public class TabManager implements NavBarLayout.OnTabChangeListener {
         }
         bindTabFragment();
         setTabIndex(TAB_INDEX_XZ);
+    }
+
+    private void removeAllFragment() {
+        List<Fragment> fragments = mFragmentManager.getFragments();
+        if (fragments == null || fragments.isEmpty()) {
+            return;
+        }
+        FragmentTransaction ft = mFragmentManager.beginTransaction();
+
+        for (int i = 0; i < fragments.size(); i++) {
+            Fragment safeData = SafeUtil.getSafeData(fragments, i);
+            if (safeData != null) {
+                ft.remove(safeData);
+            }
+        }
+        ft.commit();
     }
 
     /**
@@ -114,19 +132,30 @@ public class TabManager implements NavBarLayout.OnTabChangeListener {
      * @param index
      */
     private void setTabIndex(int index) {
-        FragmentTransaction ft = mFragmentManager.beginTransaction();
-
         Fragment safeData = mFragmentsCache.get(index);
         if (safeData == null) {
             return;
         }
-        if (mCurrentFragment != null) {
-            ft.hide(mCurrentFragment);
+
+        FragmentTransaction ft = mFragmentManager.beginTransaction();
+        hidAll();
+
+        ft.show(safeData);
+        mNavBar.setSelectTab(index);
+        ft.commit();
+    }
+
+    private void hidAll() {
+        List<Fragment> fragments = mFragmentManager.getFragments();
+        if (fragments == null || fragments.isEmpty()) {
+            return;
         }
-        mCurrentFragment = safeData;
-        if (mCurrentFragment != null) {
-            ft.show(mCurrentFragment);
-            mNavBar.setSelectTab(index);
+        FragmentTransaction ft = mFragmentManager.beginTransaction();
+        for (int i = 0; i < fragments.size(); i++) {
+            Fragment fragment = SafeUtil.getSafeData(fragments, i);
+            if (fragment != null) {
+                ft.hide(fragment);
+            }
         }
         ft.commit();
     }
@@ -136,8 +165,8 @@ public class TabManager implements NavBarLayout.OnTabChangeListener {
      */
     private void bindTabFragment() {
         FragmentTransaction ft = mFragmentManager.beginTransaction();
-        for (Map.Entry<Integer, Fragment> fragment:mFragmentsCache.entrySet()
-             ) {
+        for (Map.Entry<Integer, Fragment> fragment : mFragmentsCache.entrySet()
+                ) {
             ft.add(FRAGMENT_CONTAINER, fragment.getValue());
             ft.hide(fragment.getValue());
         }
@@ -145,8 +174,14 @@ public class TabManager implements NavBarLayout.OnTabChangeListener {
     }
 
     @Override
-    public void selectChange(int index) {
+    public boolean selectChange(int index) {
+        if (index == TabManager.TAB_INDEX_SZ && !AppConfig.LOGIN_STATUS) {
+                        ARouter.getInstance().build("/test/LoginActivity")
+                                .navigation();
+            return true;
+        }
         setTabIndex(index);
+        return false;
     }
 
     @Override

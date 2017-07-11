@@ -13,9 +13,9 @@ import com.youloft.lilith.common.event.TabChangeEvent;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.info.bean.LogoutBean;
-import com.youloft.lilith.info.event.LogoutEvent;
 import com.youloft.lilith.info.repo.UpdateUserRepo;
 import com.youloft.lilith.login.bean.UserBean;
+import com.youloft.lilith.login.event.LoginEvent;
 import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.topic.db.PointAnswerCache;
 import com.youloft.lilith.topic.db.PointCache;
@@ -24,12 +24,10 @@ import com.youloft.lilith.ui.TabManager;
 import com.youloft.lilith.ui.view.BaseToolBar;
 
 import org.greenrobot.eventbus.EventBus;
-import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -49,6 +47,28 @@ public class SettingActivity extends BaseActivity {
         setContentView(R.layout.activity_setting);
         ButterKnife.bind(this);
         btlSetting.setTitle("设置");
+        btlSetting.setShowShareBtn(false);
+        btlSetting.setOnToolBarItemClickListener(new BaseToolBar.OnToolBarItemClickListener() {
+            @Override
+            public void OnBackBtnClick() {
+                onBackPressed();
+            }
+
+            @Override
+            public void OnTitleBtnClick() {
+
+            }
+
+            @Override
+            public void OnShareBtnClick() {
+
+            }
+
+            @Override
+            public void OnSaveBtnClick() {
+
+            }
+        });
     }
 
 
@@ -80,8 +100,12 @@ public class SettingActivity extends BaseActivity {
      * 退出登录
      */
     private void logoutUser() {
-        String uid = String.valueOf(AppSetting.getUserInfo().data.userInfo.id);
-        String accessToken = AppSetting.getUserInfo().data.userInfo.accessToken;
+        UserBean userInfo = AppSetting.getUserInfo();
+        if(userInfo==null){
+            return;
+        }
+        String uid = String.valueOf(userInfo.data.userInfo.id);
+        String accessToken = userInfo.data.userInfo.accessToken;
         UpdateUserRepo.logoutUser(uid,accessToken)
                 .compose(this.<LogoutBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
@@ -97,18 +121,24 @@ public class SettingActivity extends BaseActivity {
                             //3.把存好的user信息情况  把登录状态设置为false
                             //4.关闭当前页面
                             //通知大家登出的事件
-                            EventBus.getDefault().post(new LogoutEvent());
+                            EventBus.getDefault().post(new LoginEvent(false));
                             //tab设置到首页的事件
-                            EventBus.getDefault().post(new TabChangeEvent(TabManager.TAB_INDEX_XZ));
                             AppSetting.saveUserInfo(new UserBean());
                             PointCache.getIns(SettingActivity.this).deleteTable();
                             TopicLikeCache.getIns(SettingActivity.this).deleteTable();
                             PointAnswerCache.getIns(SettingActivity.this).deleteTable();
                             finish();
+                            EventBus.getDefault().post(new TabChangeEvent(TabManager.TAB_INDEX_XZ));
                         }else {
                             Toaster.showShort("退出登录失败");
                         }
                     }
                 });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }
