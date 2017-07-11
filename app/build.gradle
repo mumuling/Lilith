@@ -26,12 +26,12 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.youloft
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         beta {
             signingConfig signingConfigs.youloft
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
