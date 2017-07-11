@@ -21,6 +21,7 @@ import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.CalendarHelper;
 import com.youloft.lilith.common.utils.ViewUtil;
 import com.youloft.lilith.cons.view.LogInOrCompleteDialog;
+import com.youloft.lilith.glide.GlideBlurTransform;
 import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.topic.TopicRepo;
@@ -295,26 +296,9 @@ public class VoteHolder extends RecyclerView.ViewHolder {
         }
         GlideApp.with(itemView.getContext())
                 .asBitmap()
+                .transform(new GlideBlurTransform(itemView.getContext()))
                 .load(topicInfo.backImg)
-                .listener(new RequestListener<Bitmap>() {
-                    @Override
-                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                        BlurFactor factor = new BlurFactor();
-                        factor.width = resource.getWidth();
-                        factor.height = resource.getHeight();
-                        factor.radius = 5;
-                        resource = factor.of(itemView.getContext(), resource, factor);
-                        //resource = BitmapFactory.decodeResource(mContext.getResources(),R.drawable.back_icon);
-                        imageTop.setImageBitmap(resource);
-                        return false;
-                    }
-                })
-                .into(ViewUtil.getScreenWidth(itemView.getContext()),(int) ViewUtil.dp2px(150));
+                .into(imageTop);
         textTopicTitle.setText(topicInfo.title);
     }
 
