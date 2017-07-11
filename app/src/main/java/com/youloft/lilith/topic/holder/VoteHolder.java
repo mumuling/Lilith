@@ -168,7 +168,7 @@ public class VoteHolder extends RecyclerView.ViewHolder {
                         .subscribe(new RxObserver<VoteBean>() {
                             @Override
                             public void onDataSuccess(VoteBean s) {
-                                int poitnID = (int) s.data;
+                                int poitnID =  s.data;
                                 if (poitnID!= -1) {
                                     String time = CalendarHelper.getNowTimeString();
                                     updatePointDb(id,topicInfo.id,poitnID,msg,time,topicInfo.title,voteTitle);

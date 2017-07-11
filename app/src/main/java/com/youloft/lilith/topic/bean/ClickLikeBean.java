@@ -6,9 +6,9 @@ import com.youloft.lilith.common.net.AbsResponse;
  *
  */
 
-public class VoteBean extends AbsResponse<Integer> {
+public class ClickLikeBean extends AbsResponse<Boolean> {
 
 
-    public int dataX;
+    public boolean dataX;
     public String sign;
 }

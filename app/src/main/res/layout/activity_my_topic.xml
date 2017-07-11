@@ -27,6 +27,45 @@
         android:layout_height="match_parent"
         android:paddingLeft="20dp"
         android:id="@+id/rv_my_topic"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/ll_no_topic"
+        android:visibility="gone"
+        android:orientation="vertical"
+        >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/no_viewpoint_pic"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="80dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="暂无观点"
+            android:textColor="#80ffffff"
+            android:textSize="11dp"
+            android:layout_gravity="center_horizontal"/>
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/text_see_topic"
+            android:paddingLeft="44dp"
+            android:paddingRight="44dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:textColor="#cd6fe8"
+            android:textSize="17sp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="70dp"
+
+            android:background="@drawable/see_topic_bt_bg"
+            android:text="点击查看话题"/>
+
+    </LinearLayout>
 
 
 </LinearLayout>

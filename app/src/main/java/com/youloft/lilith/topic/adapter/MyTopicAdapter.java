@@ -42,7 +42,11 @@ public class MyTopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof MyTopicHolder) {
-            ((MyTopicHolder)holder).bind(myTopicList.get(position));
+            if (position == myTopicList.size() -1) {
+                ((MyTopicHolder) holder).bind(myTopicList.get(position),true);
+            } else {
+                ((MyTopicHolder) holder).bind(myTopicList.get(position),true);
+            }
         }
     }
 
@@ -51,3 +55,5 @@ public class MyTopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return myTopicList.size();
     }
 }
+
+
