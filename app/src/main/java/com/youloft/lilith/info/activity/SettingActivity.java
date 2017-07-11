@@ -7,11 +7,15 @@ import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.event.TabChangeEvent;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.Toaster;
+import com.youloft.lilith.common.widgets.dialog.CheckVersionCodeDialog;
+import com.youloft.lilith.common.widgets.dialog.DownloadSelectDialog;
+import com.youloft.lilith.info.bean.CheckVersionBean;
 import com.youloft.lilith.info.bean.LogoutBean;
 import com.youloft.lilith.info.repo.UpdateUserRepo;
 import com.youloft.lilith.login.bean.UserBean;
@@ -28,6 +32,7 @@ import org.greenrobot.eventbus.EventBus;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -40,6 +45,7 @@ import io.reactivex.schedulers.Schedulers;
 public class SettingActivity extends BaseActivity {
     @BindView(R.id.btl_setting)
     BaseToolBar btlSetting;
+    private CheckVersionCodeDialog mVersionCodeDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,6 +54,7 @@ public class SettingActivity extends BaseActivity {
         ButterKnife.bind(this);
         btlSetting.setTitle("设置");
         btlSetting.setShowShareBtn(false);
+        mVersionCodeDialog = new CheckVersionCodeDialog(this);
         btlSetting.setOnToolBarItemClickListener(new BaseToolBar.OnToolBarItemClickListener() {
             @Override
             public void OnBackBtnClick() {
@@ -82,7 +89,8 @@ public class SettingActivity extends BaseActivity {
                 ARouter.getInstance().build("/test/BindAccountActivity").navigation();
                 break;
             case R.id.rl_check_update://检查更新
-                Toast.makeText(this, "检查更新", Toast.LENGTH_SHORT).show();
+                checkVersionCode();
+
                 break;
             case R.id.rl_feedback://意见反馈
                 ARouter.getInstance().build("/test/FeedBackActivity").navigation();
@@ -97,16 +105,51 @@ public class SettingActivity extends BaseActivity {
     }
 
     /**
+     * 检查版本
+     */
+    private void checkVersionCode() {
+
+        mVersionCodeDialog.show();
+        UpdateUserRepo.checkVersion()
+                .compose(this.<CheckVersionBean>bindToLifecycle())
+                .subscribeOn(Schedulers.newThread())
+                .toObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new RxObserver<CheckVersionBean>() {
+                    @Override
+                    public void onDataSuccess(CheckVersionBean checkVersionBean) {
+                        String version = checkVersionBean.data.version;
+                        if (version.equals(AppSetting.getVersionCode())) {//一样
+                            Toaster.showShort("您当前版本为最新版本");
+                        } else {
+                            //弹出对话框,让用户选择是否下载
+                            DownloadSelectDialog downloadSelectDialog = new DownloadSelectDialog(SettingActivity.this);
+                            downloadSelectDialog.show();
+                        }
+                        mVersionCodeDialog.dismiss();
+                    }
+
+                    @Override
+                    protected void onFailed(Throwable e) {
+                        super.onFailed(e);
+                        mVersionCodeDialog.dismiss();
+                        Toaster.showShort("网络不畅");
+                    }
+                });
+
+    }
+
+    /**
      * 退出登录
      */
     private void logoutUser() {
         UserBean userInfo = AppSetting.getUserInfo();
-        if(userInfo==null){
+        if (userInfo == null) {
             return;
         }
         String uid = String.valueOf(userInfo.data.userInfo.id);
         String accessToken = userInfo.data.userInfo.accessToken;
-        UpdateUserRepo.logoutUser(uid,accessToken)
+        UpdateUserRepo.logoutUser(uid, accessToken)
                 .compose(this.<LogoutBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
@@ -115,7 +158,7 @@ public class SettingActivity extends BaseActivity {
                     @Override
                     public void onDataSuccess(LogoutBean logoutBean) {
                         String data = logoutBean.data;
-                        if(data.equals("true")){
+                        if (data.equals("true")) {
                             //1.把tab设置到首页
                             //2.发出事件
                             //3.把存好的user信息情况  把登录状态设置为false
@@ -123,13 +166,14 @@ public class SettingActivity extends BaseActivity {
                             //通知大家登出的事件
                             EventBus.getDefault().post(new LoginEvent(false));
                             //tab设置到首页的事件
+                            AppConfig.LOGIN_STATUS = false;
                             AppSetting.saveUserInfo(new UserBean());
                             PointCache.getIns(SettingActivity.this).deleteTable();
                             TopicLikeCache.getIns(SettingActivity.this).deleteTable();
                             PointAnswerCache.getIns(SettingActivity.this).deleteTable();
-                            finish();
                             EventBus.getDefault().post(new TabChangeEvent(TabManager.TAB_INDEX_XZ));
-                        }else {
+                            finish();
+                        } else {
                             Toaster.showShort("退出登录失败");
                         }
                     }
