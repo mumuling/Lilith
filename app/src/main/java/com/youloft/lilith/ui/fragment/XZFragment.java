@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseFragment;
+import com.youloft.lilith.common.event.ConsChangeEvent;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.CalendarHelper;
 import com.youloft.lilith.common.utils.ViewUtil;
@@ -116,6 +117,9 @@ public class XZFragment extends BaseFragment {
                     public void onDataSuccess(ConsPredictsBean bean) {
                         if (bean != null) {
                             mCardAdapter.setData(bean);
+                            if (bean.data != null) {
+                                EventBus.getDefault().post(new ConsChangeEvent(bean.data.signs));
+                            }
                         }
                     }
                 });

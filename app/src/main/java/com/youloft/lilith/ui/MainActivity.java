@@ -21,6 +21,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
+import com.youloft.lilith.common.event.ConsChangeEvent;
 import com.youloft.lilith.common.event.TabChangeEvent;
 import com.youloft.lilith.common.net.OnlineConfigAgent;
 import com.youloft.lilith.common.rx.RxObserver;
@@ -125,6 +126,18 @@ public class MainActivity extends BaseActivity {
         int selectTab = event.selectTab;
         if (mMainTabManager != null) {
             mMainTabManager.selectChange(selectTab);
+        }
+    }
+
+    /**
+     * 星座改变通知
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
+    public void onConsChagneEvent(ConsChangeEvent event) {
+        int consType = event.consType;
+        if (mNavBar != null) {
+            mNavBar.changConsIcon(consType);
         }
     }
 }
