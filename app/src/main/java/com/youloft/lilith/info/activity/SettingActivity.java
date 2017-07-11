@@ -179,8 +179,6 @@ public class SettingActivity extends BaseActivity {
                             finish();
                         }else {
                             finish();
-                        } else {
-                            Toaster.showShort("退出登录失败");
                         }
                     }
                 });

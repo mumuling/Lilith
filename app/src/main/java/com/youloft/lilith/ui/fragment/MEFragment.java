@@ -123,6 +123,7 @@ public class MEFragment extends BaseFragment {
      * 填充用户数据
      */
     private void setUserInfo() {
+
         UserBean userInfo = AppSetting.getUserInfo();
         String headImgUrl = userInfo.data.userInfo.headImg;
         String nickName = userInfo.data.userInfo.nickName;
@@ -130,40 +131,25 @@ public class MEFragment extends BaseFragment {
         if (!TextUtils.isEmpty(headImgUrl)) {
             GlideApp.with(mContext).asBitmap().dontAnimate().load(headImgUrl).into(new GlideBlurTwoViewTarget(ivHeader, ivBlurBg));
         }
-/**
- * 只想问写得是他妈的什么鬼
- */
-//            GlideApp.with(mContext).load(headImgUrl).into(ivHeader);
-//            GlideApp.with(mContext).asBitmap().load(headImgUrl).into(new SimpleTarget<Bitmap>() {
-//                @Override
-//                public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-//                    ivBlurBg.setImageBitmap(ViewUtil.blurBitmap(resource));
-//                }
-//            });
-            GlideApp.with(mContext).load(headImgUrl).into(ivHeader);
-            GlideApp.with(mContext).asBitmap().load(headImgUrl).into(ivBlurBg);
-        }
-
-
         //根据不同的key设置不同的星座
         String asceSigns = String.valueOf(userInfo.data.userInfo.asceSigns);//上升
         String moonSigns = String.valueOf(userInfo.data.userInfo.moonSigns);//月亮
         String sunSigns = String.valueOf(userInfo.data.userInfo.sunSigns);//太阳
         String signs = String.valueOf(userInfo.data.userInfo.signs);//我的星座
-
         ivRise.setImageResource(ConsManager.getConsIconSrc(ConsManager.getConsSrc(asceSigns).pKey)[0]);
         ivMoon.setImageResource(ConsManager.getConsIconSrc(ConsManager.getConsSrc(moonSigns).pKey)[0]);
         ivSun.setImageResource(ConsManager.getConsIconSrc(ConsManager.getConsSrc(sunSigns).pKey)[0]);
         ivConstellation.setImageResource(ConsManager.getConsIconSrc(ConsManager.getConsSrc(signs).pKey)[0]);
-
     }
+
 
     /**
      * 根据不同的key设置不同的icon
+     *
      * @param pKey
      * @param flag
      */
-    private void setStarIcon(String pKey,int flag){
+    private void setStarIcon(String pKey, int flag) {
         Integer integer = ConsManager.getConsIconSrc(pKey)[0];
 
     }
