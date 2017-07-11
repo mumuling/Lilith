@@ -127,7 +127,7 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
             case R.id.image_zan:
             case R.id.text_zan_count:
                 if (!AppConfig.LOGIN_STATUS) {
-                    new LogInOrCompleteDialog(mContext).show();
+                    new LogInOrCompleteDialog(mContext).setStatus(LogInOrCompleteDialog.TOPIC_IN).show();
                     return;
                 }
                 ((BitmapDrawable) imageZan.getDrawable()).setAntiAlias(true);

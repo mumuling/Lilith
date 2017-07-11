@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
@@ -19,6 +20,7 @@ import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.net.AbsResponse;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.CalendarHelper;
+import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.common.utils.ViewUtil;
 import com.youloft.lilith.cons.view.LogInOrCompleteDialog;
 import com.youloft.lilith.glide.GlideBlurTransform;
@@ -178,20 +180,22 @@ public class VoteHolder extends RecyclerView.ViewHolder {
                             public void onDataSuccess(VoteBean s) {
                                 int poitnID =  s.data;
                                 if (poitnID!= -1) {
-                                    String time = CalendarHelper.getNowTimeString();
-                                    updatePointDb(id,topicInfo.id,poitnID,msg,time,topicInfo.title,voteTitle);
-                                    isVote = 1;
+
                                     topicInfo.totalVote++;
                                     addOptionVote(id);
                                     voteAniamtion((float) topicInfo.option.get(0).vote/topicInfo.totalVote);
                                     needVoteAnimation = false;
+                                    String time = CalendarHelper.getNowTimeString();
+                                    updatePointDb(id,topicInfo.id,poitnID,msg,time,topicInfo.title,voteTitle);
+                                    isVote = 1;
                                     addToDb(topicInfo,id);
+                                    Toaster.showShort("投票成功！");
                                 }
                             }
 
                             @Override
                             protected void onFailed(Throwable e) {
-
+                                Toaster.showShort("投票失败！");
                                 super.onFailed(e);
                             }
                         });
@@ -272,7 +276,7 @@ public class VoteHolder extends RecyclerView.ViewHolder {
             public void clickLeft() {
                 if (topicInfo.isVote == 1|| isVote == 1)return;
                 if (!AppConfig.LOGIN_STATUS) {
-                    new LogInOrCompleteDialog(itemView.getContext()).show();
+                    new LogInOrCompleteDialog(itemView.getContext()).setStatus(LogInOrCompleteDialog.TOPIC_IN).show();
                 } else {
                     voteDialog.show();
                     voteDialog.setTitle(topicInfo.option.get(0).shortTitle, topicInfo.option.get(0).id);
@@ -283,7 +287,7 @@ public class VoteHolder extends RecyclerView.ViewHolder {
             public void clickRight() {
                 if (topicInfo.isVote == 1|| isVote == 1)return;
                 if (!AppConfig.LOGIN_STATUS) {
-                    new LogInOrCompleteDialog(itemView.getContext()).show();
+                    new LogInOrCompleteDialog(itemView.getContext()).setStatus(LogInOrCompleteDialog.TOPIC_IN).show();
                 } else {
                     voteDialog.show();
                     voteDialog.setTitle(topicInfo.option.get(1).shortTitle, topicInfo.option.get(1).id);
@@ -296,8 +300,11 @@ public class VoteHolder extends RecyclerView.ViewHolder {
         }
         GlideApp.with(itemView.getContext())
                 .asBitmap()
-                .transform(new GlideBlurTransform(itemView.getContext()))
                 .load(topicInfo.backImg)
+                .transform(new GlideBlurTransform(itemView.getContext()))
+                .dontAnimate()
+                .skipMemoryCache(false)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(imageTop);
         textTopicTitle.setText(topicInfo.title);
     }

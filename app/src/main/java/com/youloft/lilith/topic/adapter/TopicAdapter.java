@@ -42,6 +42,7 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private static int ITEM_TYPE_HEADER = 1000;//顶部header
     private static int ITEM_TYPE_NORMAL = 2000;//普通item
     private static int ITEM_TYPE_HOT_TOPIC = 2002;//首页热门item
+    private static int ITEM_TYPY_BOTTOM = 3999;
     private boolean isHotTopic = false;
 
     private List<TopicBean.DataBean> topicBeanList = new ArrayList<>();
@@ -71,8 +72,10 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             holder = new MyHeaderHolder(mInflater.inflate(R.layout.header_topic_rv, parent, false));
         } else if (viewType == ITEM_TYPE_HOT_TOPIC) {
             holder = new HotTopicViewHolder(mInflater.inflate(R.layout.list_item_hot_topic, parent, false));
-        } else {
+        } else if (viewType == ITEM_TYPE_NORMAL){
             holder = new NormalViewHolder(mInflater.inflate(R.layout.list_item_topic, parent, false));
+        } else {
+            holder = new MyHeaderHolder(mInflater.inflate(R.layout.bottom_topic_rv,parent,false));
         }
         return holder;
     }
@@ -94,7 +97,7 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return topicBeanList.size() + (isHotTopic ? 0 : 1);
+        return topicBeanList.size() + (isHotTopic ? 0 : 2);
     }
 
     public int getRealPosition(int position) {
@@ -106,7 +109,7 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         if (isHotTopic) {
             return ITEM_TYPE_HOT_TOPIC;
         }
-        return position == 0 ? ITEM_TYPE_HEADER : ITEM_TYPE_NORMAL;
+        return position == 0 ? ITEM_TYPE_HEADER :position == getItemCount() -1?ITEM_TYPY_BOTTOM : ITEM_TYPE_NORMAL;
     }
 
     /**
@@ -155,7 +158,6 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     .asBitmap()
                     .load(topic.backImg)
                     .dontAnimate()
-                    .transform(new GlideBlurTransform(mTopicImage.getContext()))
                     .into(mTopicImage);
             mUserImageStackViewGroup.bindData(topic.voteUser, topic.totalVote);
         }

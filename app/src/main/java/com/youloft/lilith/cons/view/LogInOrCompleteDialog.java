@@ -83,7 +83,7 @@ public class LogInOrCompleteDialog extends BaseDialog {
         initDate();
         return this;
     }
-
+public static final int TOPIC_IN = 3;
     private void initDate() {
         if (status == XZFragment.LOG_IN) {
 
@@ -101,11 +101,14 @@ public class LogInOrCompleteDialog extends BaseDialog {
             mLoginJumpDialogBtn.setText(getContext().getResources().getString(R.string.log_dialog_to_complete_btn));
             mLoginJumpDialogDescription.setText(getContext().getResources().getString(R.string.log_dialog_to_complete));
         }
+        else if (status == TOPIC_IN) {
+            mLoginJumpDialogDescription.setText(getContext().getResources().getString(R.string.log_dialog_to_lod_topic));
+        }
 
         mLoginJumpDialogBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (status == XZFragment.LOG_IN) {
+                if (status == XZFragment.LOG_IN ||status == TOPIC_IN) {
                     ARouter.getInstance().build("/test/LoginActivity")
                             .navigation();
                 } else {

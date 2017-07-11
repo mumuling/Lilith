@@ -78,6 +78,7 @@ public class XZFragment extends BaseFragment {
     public static final int LOG_IN = 1;
     public static final int COMPLETE_INFO = 2;
 
+
     /**
      * 初始化数据
      */
