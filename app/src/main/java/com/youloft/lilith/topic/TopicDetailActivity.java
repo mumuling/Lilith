@@ -109,7 +109,13 @@ public class TopicDetailActivity extends BaseActivity {
      *   第一次请求观点列表
      */
     private void requestPointList() {
-        TopicRepo.getPointList(String.valueOf(tid),null,"10",null,true)
+        int userId = 0;
+        if (AppConfig.LOGIN_STATUS && AppSetting.getUserInfo() != null) {
+            userId = AppSetting.getUserInfo().data.userInfo.id;
+        } else {
+            userId = 0;
+        }
+        TopicRepo.getPointList(String.valueOf(tid),String.valueOf(userId),"10",null,true)
                 .compose(this.<PointBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()

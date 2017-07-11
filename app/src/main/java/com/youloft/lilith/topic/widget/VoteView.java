@@ -115,8 +115,8 @@ public class VoteView extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        mCenterX = getWidth()/2;
-        mCenterY = getHeight()/2;
+        mCenterX = getMeasuredWidth()/2;
+        mCenterY = getMeasuredHeight()/2;
     }
 
 

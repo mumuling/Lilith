@@ -39,8 +39,6 @@ public class OtherTopicHolder extends RecyclerView.ViewHolder {
         if (topic == null ) {
             return;
         }
-        if (this.topic != null &&this.topic.backImg.equals(topic.backImg))return;
-        this.topic = topic;
 
        itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,6 +49,12 @@ public class OtherTopicHolder extends RecyclerView.ViewHolder {
             }
         });
         mTopicContent.setText(topic.title);
+        if (first) {
+            mOtherTopicText.setVisibility(View.VISIBLE);
+        } else {
+            mOtherTopicText.setVisibility(View.GONE);
+        }
+        if (this.topic != null && this.topic.backImg.equals(topic.backImg)) return;
         GlideApp.with(itemView)
                 .asBitmap()
                 .transform(new GlideBlurTransform(itemView.getContext()))
@@ -58,11 +62,8 @@ public class OtherTopicHolder extends RecyclerView.ViewHolder {
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                 .into(mTopicImage);
         mTopicUserImageLayout.bindData(topic.voteUser,topic.totalVote);
-        if (first) {
-            mOtherTopicText.setVisibility(View.VISIBLE);
-        } else {
-            mOtherTopicText.setVisibility(View.GONE);
-        }
+
+        this.topic = topic;
     }
 }
 

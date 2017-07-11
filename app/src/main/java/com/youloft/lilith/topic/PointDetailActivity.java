@@ -101,7 +101,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
         ARouter.getInstance().inject(this);
         pointAnswerCache = PointAnswerCache.getIns(this);
         imm = (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);
-        if (AppConfig.LOGIN_STATUS) {
+        if (AppConfig.LOGIN_STATUS && AppSetting.getUserInfo() != null) {
             userInfo = AppSetting.getUserInfo().data.userInfo;
         }
 
