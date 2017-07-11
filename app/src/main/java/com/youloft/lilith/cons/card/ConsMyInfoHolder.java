@@ -76,7 +76,7 @@ public class ConsMyInfoHolder extends ConsBaseHolder {
 
 
 
-    String formatDate = "dd.MM.yyyy";
+    String formatDate = "MM.dd.yyyy";
     private ConsPredictsBean.DataBean detailInfo;
 
     public ConsMyInfoHolder(Context context, ViewGroup parent) {

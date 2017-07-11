@@ -169,7 +169,6 @@ public class SettingActivity extends BaseActivity {
                             //4.关闭当前页面
                             //通知大家登出的事件
                             AppConfig.LOGIN_STATUS = false;
-                            EventBus.getDefault().post(new LoginEvent(false));
                             //tab设置到首页的事件
                             AppConfig.LOGIN_STATUS = false;
                             AppSetting.saveUserInfo(new UserBean());
@@ -177,6 +176,7 @@ public class SettingActivity extends BaseActivity {
                             TopicLikeCache.getIns(SettingActivity.this).deleteTable();
                             PointAnswerCache.getIns(SettingActivity.this).deleteTable();
                             TopicInfoCache.getIns(SettingActivity.this).deleteTable();
+                            EventBus.getDefault().post(new LoginEvent(false));
                             EventBus.getDefault().post(new TabChangeEvent(TabManager.TAB_INDEX_XZ));
                             finish();
                         }else {

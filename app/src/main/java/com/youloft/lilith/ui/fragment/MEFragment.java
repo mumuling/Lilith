@@ -136,10 +136,10 @@ public class MEFragment extends BaseFragment {
         String moonSigns = String.valueOf(userInfo.data.userInfo.moonSigns);//月亮
         String sunSigns = String.valueOf(userInfo.data.userInfo.sunSigns);//太阳
         String signs = String.valueOf(userInfo.data.userInfo.signs);//我的星座
-        ivRise.setImageResource(ConsManager.getConsIconSrc(ConsManager.getConsSrc(asceSigns).pKey)[0]);
-        ivMoon.setImageResource(ConsManager.getConsIconSrc(ConsManager.getConsSrc(moonSigns).pKey)[0]);
-        ivSun.setImageResource(ConsManager.getConsIconSrc(ConsManager.getConsSrc(sunSigns).pKey)[0]);
-        ivConstellation.setImageResource(ConsManager.getConsIconSrc(ConsManager.getConsSrc(signs).pKey)[0]);
+        ivRise.setImageResource(ConsManager.getConsIconSrc(asceSigns)[0]);
+        ivMoon.setImageResource(ConsManager.getConsIconSrc(moonSigns)[0]);
+        ivSun.setImageResource(ConsManager.getConsIconSrc(sunSigns)[0]);
+        ivConstellation.setImageResource(ConsManager.getConsIconSrc(signs)[0]);
     }
 
 
