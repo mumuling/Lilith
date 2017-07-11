@@ -11,10 +11,10 @@ import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.utils.CalendarHelper;
 import com.youloft.lilith.cons.consmanager.ConsManager;
+import com.youloft.lilith.glide.GlideCircleTransform;
 import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.topic.bean.MyTopicBean;
-import com.youloft.lilith.ui.GlideCircleTransform;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -56,20 +56,21 @@ public class MyTopicHolder extends RecyclerView.ViewHolder {
     View commentDividerBottom;
     private Context mContext;
     private UserBean.DataBean.UserInfoBean userInfo;
+
     public MyTopicHolder(View itemView) {
 
         super(itemView);
-        ButterKnife.bind(this,itemView);
+        ButterKnife.bind(this, itemView);
         mContext = itemView.getContext();
 
     }
 
     public void bind(MyTopicBean.DataBean point) {
         userInfo = AppSetting.getUserInfo().data.userInfo;
-        if (userInfo == null)return;
+        if (userInfo == null) return;
         //头像
         GlideApp.with(mContext)
-                .asBitmap().transform(new GlideCircleTransform(mContext))
+                .asBitmap().transform(new GlideCircleTransform())
                 .load(userInfo.headImg)
                 .into(imageCommentUser);
         //昵称
@@ -92,7 +93,7 @@ public class MyTopicHolder extends RecyclerView.ViewHolder {
         }
         textVoteResult.setText("投票给：" + point.optionTitle);
         textTopicTitle.setText("#" + point.topicIdTitle);
-        textCommentTime.setText(CalendarHelper.getInterValTime(CalendarHelper.getTimeMillisByString(point.date),System.currentTimeMillis()));
+        textCommentTime.setText(CalendarHelper.getInterValTime(CalendarHelper.getTimeMillisByString(point.date), System.currentTimeMillis()));
         textCommentAnswerCount.setText(point.reply);
     }
 

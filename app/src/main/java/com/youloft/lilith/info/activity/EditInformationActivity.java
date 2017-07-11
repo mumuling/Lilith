@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
@@ -12,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
@@ -21,7 +22,6 @@ import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.CalendarHelper;
 import com.youloft.lilith.common.utils.Toaster;
-import com.youloft.lilith.common.utils.ViewUtil;
 import com.youloft.lilith.common.widgets.picker.CityInfo;
 import com.youloft.lilith.common.widgets.picker.CityPicker;
 import com.youloft.lilith.common.widgets.picker.DatePickerPop;
@@ -29,13 +29,14 @@ import com.youloft.lilith.common.widgets.picker.GenderPickerPop;
 import com.youloft.lilith.common.widgets.picker.OnPickerSelectListener;
 import com.youloft.lilith.common.widgets.picker.TimePickerPop;
 import com.youloft.lilith.common.widgets.webkit.handle.UserFileHandle;
+import com.youloft.lilith.glide.GlideBlurTwoViewTarget;
 import com.youloft.lilith.info.bean.UpLoadHeaderBean;
 import com.youloft.lilith.info.bean.UpdateUserInfoBean;
 import com.youloft.lilith.info.event.UserInfoUpDateEvent;
 import com.youloft.lilith.info.repo.UpdateUserRepo;
 import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.setting.AppSetting;
-import com.youloft.lilith.ui.GlideBlurTransform;
+import com.youloft.lilith.glide.GlideBlurTransform;
 import com.youloft.lilith.ui.view.BaseToolBar;
 
 import org.greenrobot.eventbus.EventBus;
@@ -49,6 +50,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import jp.wasabeef.blurry.Blurry;
 
 /**
  * 编辑资料界面
@@ -155,8 +157,7 @@ public class EditInformationActivity extends BaseActivity {
             }
             UserBean.DataBean.UserInfoBean detail = userInfo.data.userInfo;
             if (!TextUtils.isEmpty(detail.headImg)) {
-                GlideApp.with(this).load(detail.headImg).into(ivHeader);
-                GlideApp.with(this).asBitmap().load(detail.headImg).transform(new GlideBlurTransform(this)).into(ivBlurBg);
+                GlideApp.with(this).asBitmap().dontAnimate().load(detail.headImg).into(new GlideBlurTwoViewTarget(ivHeader, ivBlurBg));
             }
 
             tvNickName.setText(detail.nickName);
@@ -207,7 +208,7 @@ public class EditInformationActivity extends BaseActivity {
             sex = String.valueOf(2);
         }
         UserBean userInfo = AppSetting.getUserInfo();
-        if(userInfo==null){
+        if (userInfo == null) {
             Toaster.showShort("信息修改失败");
             return;
         }
@@ -215,6 +216,11 @@ public class EditInformationActivity extends BaseActivity {
         String userId = String.valueOf(userInfo.data.userInfo.id);
         String headImg = userInfo.data.userInfo.headImg;
         final String time = CalendarHelper.format(mCal.getTime(), DATE_FORMAT);
+        String birthLongi = "";//出生经度
+        String birthLati = "";//出生纬度
+        String liveLongi = "";//现居地经度
+        String liveLati = "";//现居地纬度
+
 
         UpdateUserRepo.updateUserInfo(userId, nickName, headImg, sex, time, placeBirth, birthLongi, birthLati, placeNow, liveLongi, liveLati)
                 .compose(this.<UpdateUserInfoBean>bindToLifecycle())
@@ -252,12 +258,12 @@ public class EditInformationActivity extends BaseActivity {
     public void onHeaderClicked() {
 //        PhotoSelectDialog dialog = new PhotoSelectDialog(this);
 //        dialog.show();
-        fileHandle = new UserFileHandle(ivHeader,ivBlurBg);
-        fileHandle.handle(this,null,null,null,null);
+        fileHandle = new UserFileHandle(ivHeader, ivBlurBg);
+        fileHandle.handle(this, null, null, null, null);
         fileHandle.setOnUpLoadListener(new UserFileHandle.OnUpLoadListener() {
             @Override
-            public void upLoad(String upBit,String nameEx) {
-                updateUserImg(upBit,nameEx);
+            public void upLoad(String upBit, String nameEx) {
+                updateUserImg(upBit, nameEx);
             }
         });
     }
@@ -265,11 +271,11 @@ public class EditInformationActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        fileHandle.onActivityResult(this,requestCode,resultCode,data);
+        fileHandle.onActivityResult(this, requestCode, resultCode, data);
     }
 
-    private void updateUserImg(String upBit,String nameEx) {
-        if(AppSetting.getUserInfo() == null){
+    private void updateUserImg(String upBit, String nameEx) {
+        if (AppSetting.getUserInfo() == null) {
             return;
         }
         final UserBean userInfo = AppSetting.getUserInfo();
@@ -352,10 +358,10 @@ public class EditInformationActivity extends BaseActivity {
                         .show();
                 break;
             case R.id.fl_place_birth://弹出城市选择器
-                cityPick(tvPlaceBirth,true);
+                cityPick(tvPlaceBirth, true);
                 break;
             case R.id.fl_place_now://弹出城市选择器
-                cityPick(tvPlaceNow,false);
+                cityPick(tvPlaceNow, false);
                 break;
         }
     }
@@ -376,10 +382,10 @@ public class EditInformationActivity extends BaseActivity {
                         String content = builder.toString();
                         tv.setText(content);
                         deleteTextDrawable(tv);
-                        if(b){
+                        if (b) {
                             birthLongi = data.pLongitude;
                             birthLati = data.pLatitude;
-                        }else {
+                        } else {
                             liveLongi = data.pLongitude;
                             liveLati = data.pLatitude;
                         }

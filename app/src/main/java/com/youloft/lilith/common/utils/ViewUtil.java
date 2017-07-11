@@ -144,42 +144,6 @@ public class ViewUtil {
     }
 
 
-    public static Bitmap blurBitmap(Bitmap bitmap) {
-        return blurBitmap(bitmap, Utils.getContext());
-    }
-
-
-    public static Bitmap blurBitmap(Bitmap bitmap, Context context) {
-        if (bitmap == null) {
-            return null;
-        }
-        // 用需要创建高斯模糊bitmap创建一个空的bitmap
-        Bitmap outBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
-
-        // 初始化Renderscript，这个类提供了RenderScript context，在创建其他RS类之前必须要先创建这个类，他控制RenderScript的初始化，资源管理，释放
-        RenderScript rs = RenderScript.create(context);
-
-        // 创建高斯模糊对象
-        ScriptIntrinsicBlur blurScript = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
-
-        // 创建Allocations，此类是将数据传递给RenderScript内核的主要方法，并制定一个后备类型存储给定类型
-        Allocation allIn = Allocation.createFromBitmap(rs, bitmap);
-        Allocation allOut = Allocation.createFromBitmap(rs, outBitmap);
-
-        // 设定模糊度
-        blurScript.setRadius(25.f);
-
-        blurScript.setInput(allIn);
-        blurScript.forEach(allOut);
-
-        allOut.copyTo(outBitmap);
-
-        bitmap.recycle();
-
-        rs.destroy();
-
-        return outBitmap;
-    }
 
     public static int getScreenWidth(Context context) {
         WindowManager wm = (WindowManager) context

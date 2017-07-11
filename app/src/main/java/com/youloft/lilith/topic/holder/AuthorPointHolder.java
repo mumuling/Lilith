@@ -2,7 +2,6 @@ package com.youloft.lilith.topic.holder;
 
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.animation.Animation;
@@ -21,11 +20,10 @@ import com.youloft.lilith.topic.PointDetailActivity;
 import com.youloft.lilith.topic.TopicRepo;
 import com.youloft.lilith.topic.bean.PointBean;
 import com.youloft.lilith.topic.bean.TopicDetailBean;
-import com.youloft.lilith.topic.bean.VoteBean;
 import com.youloft.lilith.topic.db.TopicLikeCache;
 import com.youloft.lilith.topic.db.TopicLikingTable;
 import com.youloft.lilith.topic.widget.Rotate3dAnimation;
-import com.youloft.lilith.ui.GlideCircleTransform;
+import com.youloft.lilith.glide.GlideCircleTransform;
 
 import java.util.ArrayList;
 
@@ -90,7 +88,7 @@ public class AuthorPointHolder extends RecyclerView.ViewHolder implements View.O
         //头像
         GlideApp.with(itemView)
                 .asBitmap().
-                transform(new GlideCircleTransform(itemView.getContext()))
+                transform(new GlideCircleTransform())
                 .load(point.headImg)
                 .into(imageCommentUser);
         //用户名字

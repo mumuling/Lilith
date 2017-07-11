@@ -9,15 +9,18 @@ import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.utils.ViewUtil;
 import com.youloft.socialize.media.ShareImage;
 
+import jp.wasabeef.blurry.internal.Blur;
+import jp.wasabeef.blurry.internal.BlurFactor;
+
 /**
  * Created by zchao on 2017/7/6.
  * desc: 分享builder。使用：     new ShareBuilder(this)                                      //创建一个builder，
- *                                                  .withTitle("title")                     //主题
- *                                                  .withUrl("https://www.baidu.com")       //链接
- *                                                  .withImg(null)
- *                                                  .withIcon()                             //图片跟icon只能有一个，后边设置的会覆盖前面的
- *                                                  .withContent("内容")
- *                                                  .share();                               //发起分享，拉起分享界面
+ * .withTitle("title")                     //主题
+ * .withUrl("https://www.baidu.com")       //链接
+ * .withImg(null)
+ * .withIcon()                             //图片跟icon只能有一个，后边设置的会覆盖前面的
+ * .withContent("内容")
+ * .share();                               //发起分享，拉起分享界面
  * version:
  */
 
@@ -94,7 +97,13 @@ public class ShareBuilder {
     public void share() {
         ShareActivity.mShareBitmap = mShareBitmap;
         if (mContext instanceof BaseActivity) {
-            ShareActivity.mBGBitmap = ViewUtil.blurBitmap(((BaseActivity) mContext).takeScreenShot(false, 4), mContext);
+            Bitmap source = ((BaseActivity) mContext).takeScreenShot(false, 4);
+            BlurFactor bf = new BlurFactor();
+            bf.sampling = 10;
+            bf.radius = 10;
+            bf.width = source.getWidth();
+            bf.height = source.getHeight();
+            ShareActivity.mBGBitmap = Blur.of(mContext, source, bf);
         }
         ARouter.getInstance().build("/ui/share")
                 .withString("title", mShareTitle)
