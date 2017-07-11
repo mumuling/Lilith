@@ -2,16 +2,18 @@ package com.youloft.lilith.topic.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
+import com.youloft.lilith.common.utils.SafeUtil;
+import com.youloft.lilith.glide.GlideBlurTransform;
 import com.youloft.lilith.topic.bean.TopicBean;
-import com.youloft.lilith.ui.GlideCircleTransform;
+import com.youloft.lilith.glide.GlideCircleTransform;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,11 +75,18 @@ public class UserImageStackViewGroup extends RelativeLayout {
      * @param imageList
      */
     public void bindData(List<TopicBean.DataBean.VoteUserBean> imageList) {
+        for (int i = 0; i < mUserImageList.size() ; i++) {
+            ImageView safeData = SafeUtil.getSafeData(mUserImageList, i);
+            if (safeData != null) {
+                safeData.setVisibility(INVISIBLE);
+            }
+
+        }
         for (int i = 0; i < Math.min(imageList.size(), mUserImageList.size()); i++) {
             mUserImageList.get(i).setVisibility(VISIBLE);
             GlideApp.with(mContext).asBitmap()
                     .error(R.drawable.topic_user_img_er)
-                    .transform(new GlideCircleTransform(getContext()))
+                    .transform(new GlideCircleTransform())
                     .load(imageList.get(i).headImg)
                     .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                     .skipMemoryCache(false)

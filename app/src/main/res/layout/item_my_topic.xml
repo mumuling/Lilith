@@ -97,6 +97,8 @@
         android:drawablePadding="4dp"
         android:layout_marginRight="20dp"
         android:background="#1Fffffff"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:text="#爱情，究竟应该是互补还是相似的两"
         />
     <RelativeLayout
@@ -129,7 +131,6 @@
         android:layout_height="1dp"
         android:id="@+id/comment_divider_bottom"
         android:background="#1Affffff"
-
         android:layout_marginTop="16dp"/>
 
 

@@ -18,6 +18,9 @@ import com.youloft.lilith.ui.MainActivity;
 
 import org.greenrobot.eventbus.EventBus;
 
+import jp.wasabeef.blurry.internal.Blur;
+import jp.wasabeef.blurry.internal.BlurFactor;
+
 /**
  * Created by zchao on 2017/7/5.
  * desc:
@@ -48,7 +51,7 @@ public class ConsCalWeekHolder extends ConsBaseHolder implements ConsCalendar.On
     public void onClick() {
         UserBean userInfo = AppSetting.getUserInfo();
         if (!AppConfig.LOGIN_STATUS ||
-                userInfo == null||
+                userInfo == null ||
                 userInfo.data == null ||
                 userInfo.data.userInfo == null ||
                 userInfo.data.userInfo.id == 0 ||
@@ -63,8 +66,13 @@ public class ConsCalWeekHolder extends ConsBaseHolder implements ConsCalendar.On
         if (mContext instanceof MainActivity) {
 
             Bitmap screenShort = ((MainActivity) mContext).takeScreenShot(false, 4);
-            screenShort = ViewUtil.blurBitmap(screenShort, mContext);
 
+            BlurFactor bf = new BlurFactor();
+            bf.width = screenShort.getWidth();
+            bf.height = screenShort.getHeight();
+            bf.sampling = 10;
+            bf.radius = 10;
+            screenShort = Blur.of(mContext, screenShort, bf);
             ConsCalDetailActivity.startConsCalDetailActivity(mContext, local, screenShort, mData);
         } else {
             ConsCalDetailActivity.startConsCalDetailActivity(mContext, local, null, mData);

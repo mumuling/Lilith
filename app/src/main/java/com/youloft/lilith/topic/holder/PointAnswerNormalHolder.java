@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
 import android.widget.ImageView;
@@ -16,16 +15,18 @@ import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.cons.view.LogInOrCompleteDialog;
+import com.youloft.lilith.glide.GlideBlurTransform;
 import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.topic.PointDetailActivity;
 import com.youloft.lilith.topic.TopicRepo;
 import com.youloft.lilith.topic.adapter.PointAnswerAdapter;
+import com.youloft.lilith.topic.bean.ClickLikeBean;
 import com.youloft.lilith.topic.bean.ReplyBean;
 import com.youloft.lilith.topic.bean.VoteBean;
 import com.youloft.lilith.topic.db.TopicLikeCache;
 import com.youloft.lilith.topic.db.TopicLikingTable;
 import com.youloft.lilith.topic.widget.Rotate3dAnimation;
-import com.youloft.lilith.ui.GlideCircleTransform;
+import com.youloft.lilith.glide.GlideCircleTransform;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -109,7 +110,7 @@ public class PointAnswerNormalHolder extends RecyclerView.ViewHolder implements 
         }
         GlideApp.with(itemView)
                 .asBitmap()
-                .transform(new GlideCircleTransform(itemView.getContext()))
+                .transform(new GlideCircleTransform())
                 .load(dataBean.headImg)
                 .into(imageCommentUser);
         imageZan.setOnClickListener(this);
@@ -200,27 +201,29 @@ public class PointAnswerNormalHolder extends RecyclerView.ViewHolder implements 
     }
 
     private void clickLike() {
-        int userId = AppSetting.getUserInfo().data.userInfo.id;
-        TopicRepo.likeReply(String.valueOf(mData.id),String.valueOf(userId))
-                .subscribeOn(Schedulers.newThread())
-                .toObservable()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new RxObserver<VoteBean>() {
-                    @Override
-                    public void onDataSuccess(VoteBean s) {
-                        if ( (Boolean) s.data) {
-                            updateLikeTable(1);
-                        } else {
+        if (AppConfig.LOGIN_STATUS && AppSetting.getUserInfo() != null) {
+            int userId = AppSetting.getUserInfo().data.userInfo.id;
+            TopicRepo.likeReply(String.valueOf(mData.id), String.valueOf(userId))
+                    .subscribeOn(Schedulers.newThread())
+                    .toObservable()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new RxObserver<ClickLikeBean>() {
+                        @Override
+                        public void onDataSuccess(ClickLikeBean s) {
+                            if ((Boolean) s.data) {
+                                updateLikeTable(1);
+                            } else {
+                                updateLikeTable(0);
+                            }
+                        }
+
+                        @Override
+                        protected void onFailed(Throwable e) {
+                            super.onFailed(e);
                             updateLikeTable(0);
                         }
-                    }
-
-                    @Override
-                    protected void onFailed(Throwable e) {
-                        super.onFailed(e);
-                        updateLikeTable(0);
-                    }
-                });
+                    });
+        }
     }
 
     /**

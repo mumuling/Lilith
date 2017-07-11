@@ -10,11 +10,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.ViewTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.base.BaseFragment;
 import com.youloft.lilith.cons.consmanager.ConsManager;
+import com.youloft.lilith.common.utils.ViewUtil;
+import com.youloft.lilith.glide.GlideBlurTwoViewTarget;
 import com.youloft.lilith.info.event.UserInfoUpDateEvent;
 import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.login.event.LoginEvent;
@@ -29,6 +35,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import de.hdodenhof.circleimageview.CircleImageView;
+import jp.wasabeef.blurry.Blurry;
 
 /**
  * Created by zchao on 2017/6/27.
@@ -121,6 +128,18 @@ public class MEFragment extends BaseFragment {
         String nickName = userInfo.data.userInfo.nickName;
         tvNickName.setText(nickName);
         if (!TextUtils.isEmpty(headImgUrl)) {
+            GlideApp.with(mContext).asBitmap().dontAnimate().load(headImgUrl).into(new GlideBlurTwoViewTarget(ivHeader, ivBlurBg));
+        }
+/**
+ * 只想问写得是他妈的什么鬼
+ */
+//            GlideApp.with(mContext).load(headImgUrl).into(ivHeader);
+//            GlideApp.with(mContext).asBitmap().load(headImgUrl).into(new SimpleTarget<Bitmap>() {
+//                @Override
+//                public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+//                    ivBlurBg.setImageBitmap(ViewUtil.blurBitmap(resource));
+//                }
+//            });
             GlideApp.with(mContext).load(headImgUrl).into(ivHeader);
             GlideApp.with(mContext).asBitmap().load(headImgUrl).into(ivBlurBg);
         }

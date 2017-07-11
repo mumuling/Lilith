@@ -1,4 +1,4 @@
-package com.youloft.lilith.ui;
+package com.youloft.lilith.glide;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -11,16 +11,21 @@ import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 
 import java.security.MessageDigest;
 
-/**     Glide处理圆形图片
- *version
- *@author  slj
- *@time    2017/6/29 15:32
- *@class   GlideCircleTransform
+/**
+ * Glide处理圆形图片
+ * version
+ *
+ * @author slj
+ * @time 2017/6/29 15:32
+ * @class GlideCircleTransform
  */
 
 public class GlideCircleTransform extends BitmapTransformation {
-    public GlideCircleTransform(Context context) {
-        super(context);
+    private static final String ID = "com.youloft.glide.load.resource.bitmap.circle";
+    private static final byte[] ID_BYTES = ID.getBytes(CHARSET);
+
+    public GlideCircleTransform() {
+
     }
 
     @Override
@@ -50,6 +55,6 @@ public class GlideCircleTransform extends BitmapTransformation {
 
     @Override
     public void updateDiskCacheKey(MessageDigest messageDigest) {
-
+        messageDigest.update(ID_BYTES);
     }
 }

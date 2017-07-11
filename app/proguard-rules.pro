@@ -23,7 +23,10 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
-
+-dontwarn javax.**
+-dontwarn android.webkit.**
+-dontwarn com.alibaba.**
+-dontwarn retrofit2.**
 #Glide的混淆规则
 -keep public class * implements com.bumptech.glide.module.GlideModule
 -keep public class * extends com.bumptech.glide.AppGlideModule
@@ -32,8 +35,6 @@
   public *;
 }
 
-# for DexGuard only
--keepresourcexmlelements manifest/application/meta-data@value=GlideModule
 #EventBus
 -keepattributes *Annotation*
 -keepclassmembers class ** {
@@ -45,6 +46,15 @@
 -keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
     <init>(java.lang.Throwable);
 }
+#OKHttp:
+-dontwarn okio.**
+-dontwarn javax.annotation.Nullable
+-dontwarn javax.annotation.ParametersAreNonnullByDefault
+
+#reprotif:
+-dontwarn okio.**
+-dontwarn javax.annotation.**
+
 
 #arouter
 -keep public class com.alibaba.android.arouter.routes.**{*;}

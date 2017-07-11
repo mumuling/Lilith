@@ -143,6 +143,9 @@ public class SettingActivity extends BaseActivity {
      * 退出登录
      */
     private void logoutUser() {
+        if (!AppConfig.LOGIN_STATUS) {
+            return;     //未登陆直接return
+        }
         UserBean userInfo = AppSetting.getUserInfo();
         if (userInfo == null) {
             return;
@@ -164,6 +167,7 @@ public class SettingActivity extends BaseActivity {
                             //3.把存好的user信息情况  把登录状态设置为false
                             //4.关闭当前页面
                             //通知大家登出的事件
+                            AppConfig.LOGIN_STATUS = false;
                             EventBus.getDefault().post(new LoginEvent(false));
                             //tab设置到首页的事件
                             AppConfig.LOGIN_STATUS = false;
@@ -172,6 +176,8 @@ public class SettingActivity extends BaseActivity {
                             TopicLikeCache.getIns(SettingActivity.this).deleteTable();
                             PointAnswerCache.getIns(SettingActivity.this).deleteTable();
                             EventBus.getDefault().post(new TabChangeEvent(TabManager.TAB_INDEX_XZ));
+                            finish();
+                        }else {
                             finish();
                         } else {
                             Toaster.showShort("退出登录失败");

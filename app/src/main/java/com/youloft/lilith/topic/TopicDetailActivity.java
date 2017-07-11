@@ -74,9 +74,9 @@ public class TopicDetailActivity extends BaseActivity {
         topicInfoCache = TopicInfoCache.getIns(this);
         pointCache = PointCache.getIns(this);
         initView();
-        requestTopicDetail();
-        requestPointList();
-        requestOtherTopicList();
+        requestTopicDetail();//请求话题的详细信息
+        requestPointList();//请求观点列表
+        requestOtherTopicList();//请求底部的更多话题
     }
 
     /**
@@ -131,6 +131,10 @@ public class TopicDetailActivity extends BaseActivity {
                 });
     }
 
+    /**
+     *   处理观点信息的数据库。
+     * @param data
+     */
     private void handlePointTableInfo(List<PointBean.DataBean> data) {
         if (!AppConfig.LOGIN_STATUS ||AppSetting.getUserInfo() == null) return;
         UserBean.DataBean.UserInfoBean userInfo = AppSetting.getUserInfo().data.userInfo;
@@ -264,7 +268,7 @@ public class TopicDetailActivity extends BaseActivity {
      *  加载更多其他话题
      */
     public void loadMoreTopic() {
-        TopicRepo.getTopicListBottom("1",String.valueOf(totalTopic),false)
+        TopicRepo.getTopicListBottom("5",String.valueOf(totalTopic),false)
                 .compose(this.<TopicBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()

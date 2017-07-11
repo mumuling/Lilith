@@ -11,9 +11,9 @@
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.GET_TASKS"/>
 
 
-    
     <permission
         android:name="${applicationId}.permission.setting"
         android:label="@string/lilith_permission_label"
