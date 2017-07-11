@@ -158,7 +158,6 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     .asBitmap()
                     .load(topic.backImg)
                     .dontAnimate()
-                    .transform(new GlideBlurTransform(mTopicImage.getContext()))
                     .into(mTopicImage);
             mUserImageStackViewGroup.bindData(topic.voteUser, topic.totalVote);
         }
