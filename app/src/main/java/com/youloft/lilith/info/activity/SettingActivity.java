@@ -132,8 +132,8 @@ public class SettingActivity extends BaseActivity {
                             PointCache.getIns(SettingActivity.this).deleteTable();
                             TopicLikeCache.getIns(SettingActivity.this).deleteTable();
                             PointAnswerCache.getIns(SettingActivity.this).deleteTable();
-                            finish();
                             EventBus.getDefault().post(new TabChangeEvent(TabManager.TAB_INDEX_XZ));
+                            finish();
                         }else {
                             Toaster.showShort("退出登录失败");
                         }
