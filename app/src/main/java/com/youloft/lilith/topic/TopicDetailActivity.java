@@ -254,7 +254,8 @@ public class TopicDetailActivity extends BaseActivity {
                 int visibleItemCount = recyclerView.getChildCount();
 
                 if (newState == RecyclerView.SCROLL_STATE_IDLE
-                        && lastVisibleItemPosition == totalItemCount - 1
+                        && totalItemCount >=2
+                        && lastVisibleItemPosition >= totalItemCount - 2
                         && visibleItemCount > 0) {
                     if (otherTopicList!= null && otherTopicList.size() != 0) {
                         loadMoreTopic();
@@ -278,7 +279,7 @@ public class TopicDetailActivity extends BaseActivity {
                     public void onDataSuccess(TopicBean topicBean) {
                         if (topicBean.data != null) {
                             otherTopicList.clear();
-                            otherTopicList.addAll(topicBean.data);
+                            //otherTopicList.addAll(topicBean.data);
                             adapter.setOtherTopicList(topicBean.data);
                             totalTopic = totalTopic + topicBean.data.size();
                         }
