@@ -34,6 +34,7 @@
         android:text="#电话等级划分和技术开发和价格的守空房几点开始几号放假的"
         android:maxLines="2"
         android:gravity="center"
+        android:textColor="@color/white"
         android:layout_marginLeft="28dp"
         android:layout_marginRight="28dp"
         android:layout_gravity="top|center"

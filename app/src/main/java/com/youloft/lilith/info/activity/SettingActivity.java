@@ -134,7 +134,7 @@ public class SettingActivity extends BaseActivity {
                     protected void onFailed(Throwable e) {
                         super.onFailed(e);
                         mVersionCodeDialog.dismiss();
-                        Toaster.showShort("网络不畅");
+                        Toaster.showShort("网络错误");
                     }
                 });
 
@@ -180,7 +180,7 @@ public class SettingActivity extends BaseActivity {
                             EventBus.getDefault().post(new TabChangeEvent(TabManager.TAB_INDEX_XZ));
                             finish();
                         }else {
-                            finish();
+                            Toaster.showShort("网络错误");
                         }
                     }
                 });

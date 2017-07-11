@@ -142,19 +142,6 @@ public class MEFragment extends BaseFragment {
         ivConstellation.setImageResource(ConsManager.getConsIconSrc(signs)[0]);
     }
 
-
-    /**
-     * 根据不同的key设置不同的icon
-     *
-     * @param pKey
-     * @param flag
-     */
-    private void setStarIcon(String pKey, int flag) {
-        Integer integer = ConsManager.getConsIconSrc(pKey)[0];
-
-    }
-
-
     @Override
     public void onDestroy() {
         super.onDestroy();

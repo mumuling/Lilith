@@ -227,11 +227,21 @@ public class SetPasswordActivity extends BaseActivity {
                     .subscribe(new RxObserver<UserBean>() {
                         @Override
                         public void onDataSuccess(UserBean userBean) {
-                            //这里代表注册成功,并且也登录了
-                            AppSetting.saveUserInfo(userBean); //保存用户信息
-                            AppConfig.LOGIN_STATUS = true; //设置登录标识
-                            EventBus.getDefault().post(new LoginEvent(true));//发送登录事件
-                            finish();
+                            if(userBean.data.result == 0){
+                                //这里代表注册成功,并且也登录了
+                                AppSetting.saveUserInfo(userBean); //保存用户信息
+                                AppConfig.LOGIN_STATUS = true; //设置登录标识
+                                EventBus.getDefault().post(new LoginEvent(true));//发送登录事件
+                                finish();
+                            }else {
+                                Toaster.showShort("注册失败");
+                            }
+                        }
+
+                        @Override
+                        protected void onFailed(Throwable e) {
+                            super.onFailed(e);
+                            Toaster.showShort("网络错误");
                         }
                     });
         } else { //修改密码
@@ -249,6 +259,12 @@ public class SetPasswordActivity extends BaseActivity {
                             } else {//失败
                                 Toaster.showShort("修改密码失败");
                             }
+                        }
+
+                        @Override
+                        protected void onFailed(Throwable e) {
+                            super.onFailed(e);
+                            Toaster.showShort("网络错误");
                         }
                     });
         }
