@@ -405,4 +405,10 @@ public class EditInformationActivity extends BaseActivity {
     private void deleteTextDrawable(TextView tv) {
         tv.setCompoundDrawables(null, null, null, null);
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }
