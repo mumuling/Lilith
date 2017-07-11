@@ -59,7 +59,7 @@ public class MyTopicActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_topic);
         ButterKnife.bind(this);
-        if (AppConfig.LOGIN_STATUS) {
+        if (AppConfig.LOGIN_STATUS && AppSetting.getUserInfo() != null) {
             userInfo = AppSetting.getUserInfo().data.userInfo;
         } else {
             userInfo = null;

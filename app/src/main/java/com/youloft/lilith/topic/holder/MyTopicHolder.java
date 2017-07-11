@@ -1,17 +1,27 @@
 package com.youloft.lilith.topic.holder;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.alibaba.android.arouter.launcher.ARouter;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
+import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.CalendarHelper;
 import com.youloft.lilith.cons.consmanager.ConsManager;
+import com.youloft.lilith.glide.GlideBlurTransform;
 import com.youloft.lilith.glide.GlideCircleTransform;
 import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.setting.AppSetting;
@@ -24,7 +34,9 @@ import com.youloft.lilith.topic.bean.TopicDetailBean;
 import com.youloft.lilith.topic.bean.VoteBean;
 import com.youloft.lilith.topic.db.TopicLikeCache;
 import com.youloft.lilith.topic.db.TopicLikingTable;
-import com.youloft.lilith.ui.GlideCircleTransform;
+
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -99,14 +111,14 @@ public class MyTopicHolder extends RecyclerView.ViewHolder {
         }
             //头像
             GlideApp.with(mContext)
-                    .asBitmap().transform(new GlideCircleTransform(mContext))
+                    .asBitmap().transform(new GlideCircleTransform())
                     .load(userInfo.headImg)
                     .listener(new RequestListener<Bitmap>() {
                         @Override
                         public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                             GlideApp.with(mContext)
                                     .asBitmap()
-                                    .transform(new GlideCircleTransform(mContext))
+                                    .transform(new GlideCircleTransform())
                                     .load(R.drawable.calendar_work_icon)
                                     .into(imageCommentUser);
                             return false;
@@ -154,7 +166,7 @@ public class MyTopicHolder extends RecyclerView.ViewHolder {
         zanCount = point.zan;
         if (table == null) {
             isZan = point.isclick;
-        }else {   //如果有赞的信息再判断此条信息和服务器的是否同步
+        }else {
             isZan = table.mIsLike;
             if (table.mIsLike == point.isclick) {
                 TopicLikeCache.getIns(mContext).deleteData(id,PointDetailActivity.TYPE_POINT);
@@ -174,9 +186,6 @@ public class MyTopicHolder extends RecyclerView.ViewHolder {
         textZanCount.setText(String.valueOf(zanCount));
     }
 
-    /**
-     *   重新向服务器更新赞的信息
-     */
     private void clickLike() {
         if (AppConfig.LOGIN_STATUS && AppSetting.getUserInfo() != null) {
             int userId = AppSetting.getUserInfo().data.userInfo.id;
@@ -203,10 +212,6 @@ public class MyTopicHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    /**
-     *    更新赞的数据库
-     * @param ispost
-     */
     public void updateClickTable(int ispost) {
         TopicLikingTable topicLikingTable;
         if (isZan == 0) {
@@ -217,10 +222,6 @@ public class MyTopicHolder extends RecyclerView.ViewHolder {
         TopicLikeCache.getIns(itemView.getContext()).insertData(topicLikingTable);
     }
 
-    /**
-     *     组装成话题信息和观点信息，跳转传值需要
-     * @param point
-     */
     private void initPointAndTopic(MyTopicBean.DataBean point) {
          pointInfo = new PointBean.DataBean();
         pointInfo.id = point.id;
