@@ -9,6 +9,7 @@ import android.widget.RelativeLayout;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
+import com.youloft.lilith.glide.GlideBlurTransform;
 import com.youloft.lilith.topic.bean.TopicBean;
 import com.youloft.lilith.glide.GlideCircleTransform;
 
