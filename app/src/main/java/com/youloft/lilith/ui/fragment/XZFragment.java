@@ -52,7 +52,6 @@ import io.reactivex.schedulers.Schedulers;
 
 public class XZFragment extends BaseFragment {
     private FrameLayout mRoot;
-    private ImageView mMaskView;
     private RecyclerView mConsList;
     private ConsFragmentCardAdapter mCardAdapter;
     private GregorianCalendar mCal = new GregorianCalendar();
@@ -106,7 +105,6 @@ public class XZFragment extends BaseFragment {
     }
 
     private void getData(String birdt, String birtm, String birlongi, String birlati) {
-        Log.d(TAG, "getData() called with: birdt = [" + birdt + "], birtm = [" + birtm + "], birlongi = [" + birlongi + "], birlati = [" + birlati + "]");
         ConsRepo.getConsPredicts(birdt, birtm, birlongi, birlati)
                 .compose(this.<ConsPredictsBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
@@ -213,7 +211,6 @@ public class XZFragment extends BaseFragment {
     private void init(View view) {
         mConsList = (RecyclerView) view.findViewById(R.id.cons_card);
         mRoot = (FrameLayout) view.findViewById(R.id.root);
-        mMaskView = (ImageView) view.findViewById(R.id.cons_mask);
 
         mCardAdapter = new ConsFragmentCardAdapter(getContext());
         mConsList.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));

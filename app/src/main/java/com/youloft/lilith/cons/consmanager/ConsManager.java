@@ -51,14 +51,14 @@ public class ConsManager {
             mConsIconImg.put("2", new Integer[]{R.drawable.icon_pisces, R.drawable.icon2_pisces});
             mConsIconImg.put("3", new Integer[]{R.drawable.icon_aries, R.drawable.icon2_aries});
             mConsIconImg.put("4", new Integer[]{R.drawable.icon_taurus, R.drawable.icon2_taurus});
-            mConsIconImg.put("5", new Integer[]{R.drawable.icon2_gemini, R.drawable.icon2_gemini});
+            mConsIconImg.put("5", new Integer[]{R.drawable.icon_gemini, R.drawable.icon2_gemini});
             mConsIconImg.put("6", new Integer[]{R.drawable.icon_cancer, R.drawable.icon2_cancer});
             mConsIconImg.put("7", new Integer[]{R.drawable.icon_lion, R.drawable.icon2_lion});
             mConsIconImg.put("8", new Integer[]{R.drawable.icon_virgo, R.drawable.icon2_virgo});
             mConsIconImg.put("9", new Integer[]{R.drawable.icon_libra, R.drawable.icon2_libra});
             mConsIconImg.put("10", new Integer[]{R.drawable.icon_scorpio, R.drawable.icon2_scorpio});
             mConsIconImg.put("11", new Integer[]{R.drawable.icon_sagittarius, R.drawable.icon2_sagittarius});
-            mConsIconImg.put("12", new Integer[]{R.drawable.icon2_capricorn, R.drawable.icon2_capricorn});
+            mConsIconImg.put("12", new Integer[]{R.drawable.icon_capricorn, R.drawable.icon2_capricorn});
 
         }
     }
