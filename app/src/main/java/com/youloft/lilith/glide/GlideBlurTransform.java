@@ -2,18 +2,9 @@ package com.youloft.lilith.glide;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapShader;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.renderscript.Allocation;
-import android.renderscript.Element;
-import android.renderscript.RenderScript;
-import android.renderscript.ScriptIntrinsicBlur;
 
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
-import com.youloft.lilith.common.utils.ViewUtil;
-import com.youloft.lilith.cons.consmanager.ConsManager;
 
 import java.security.MessageDigest;
 
@@ -30,24 +21,35 @@ import jp.wasabeef.blurry.internal.BlurFactor;
  */
 
 public class GlideBlurTransform extends BitmapTransformation {
-    private static final String ID = "com.youloft.glide.load.resource.bitmap.blur";
-    private static final byte[] ID_BYTES = ID.getBytes(CHARSET);
+    private String ID = "com.youloft.glide.load.resource.bitmap.blur";
+    private byte[] ID_BYTES = ID.getBytes(CHARSET);
     private final Context mContext;
-    private final RenderScript rs;
 
     public GlideBlurTransform(Context context) {
         super();
         mContext = context;
-        rs = RenderScript.create(context);
+    }
+
+    private int sampling = 1;
+    private int radius = 10;
+
+    public GlideBlurTransform(Context context, int sampling, int radius) {
+        super();
+        mContext = context;
+        this.sampling = sampling;
+        this.radius = radius;
+        //更新
+        ID += "_" + sampling + "_" + radius;
+        ID_BYTES = ID.getBytes(CHARSET);
     }
 
     @Override
     protected Bitmap transform(BitmapPool bitmapPool, Bitmap toTransform, int outWidth, int outHeight) {
         BlurFactor bf = new BlurFactor();
-        bf.width = outWidth;
-        bf.height = outHeight;
-        bf.sampling = 10;
-        bf.radius = 10;
+        bf.width = toTransform.getWidth();
+        bf.height = toTransform.getHeight();
+        bf.sampling = sampling;
+        bf.radius = radius;
         return Blur.of(mContext, toTransform, bf);
     }
 
