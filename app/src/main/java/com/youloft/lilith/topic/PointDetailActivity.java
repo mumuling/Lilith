@@ -91,7 +91,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
     private PointAnswerCache pointAnswerCache;
     private InputMethodManager imm ;
     private UserBean.DataBean.UserInfoBean userInfo = null;
-
+    private boolean isReplyAuthor = true;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,6 +110,9 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
 
     }
 
+    /**
+     * 请求此观点的回复列表
+     */
     public void initReplyData() {
         int userId;
         if (userInfo == null){
@@ -202,11 +205,18 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
                     commentEdit.setText("");
                     commentEdit.clearFocus();
                     commentEdit.setHint("你来说点什么吧");
-                    replyId = 0;
-                    replyName = "";
+                    isReplyAuthor = true;
 
                 } else {
+                    if (!AppConfig.LOGIN_STATUS) {
+                        new LogInOrCompleteDialog(PointDetailActivity.this).show();
+                        return;
+                    }
                     ////软键盘弹出啦
+                    if (isReplyAuthor){
+                        replyId = 0;
+                        replyName = "";
+                    }
                     rvCommentAnswer.setNeedScrollDown(false);
                     textConfirm.setVisibility(View.VISIBLE);
                     imagePen.setVisibility(View.GONE);
@@ -221,7 +231,9 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
                 commandNum.setText(point.reply + "条回复");
             }
         }
-
+        /** 滑动到底部的监听
+         *
+         */
         rvCommentAnswer.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -244,6 +256,9 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
 
     }
 
+    /**
+     *   滑动到底部加载更多
+     */
     private void loadMoreReply() {
         if (point == null)return;
         int userId;
@@ -282,12 +297,11 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
     public void clickReply(int replyId,String replyName) {
         this.replyId = replyId;
         this.replyName = replyName;
-
+        isReplyAuthor = false;
         if (imm != null) {
             commentEdit.requestFocus();
             imm.showSoftInput(commentEdit,0);
         }
-
 
         commentEdit.setHint("回复 " + replyName + ":");
 
@@ -339,7 +353,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
                 }
                 break;
             case R.id.comment_edit:
-                clickReply(0,"");
+
 
                 break;
         }
@@ -371,7 +385,6 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
                             dataBean.nickName = userInfo.nickName;
                             dataBean.contents = reply_content;
                             dataBean.headImg = userInfo.headImg;
-
                             adapter.setAnswerTop(dataBean);
                             updatePointAnswerDb(dataBean,answerId);
                             Toaster.showShort("评论成功！");

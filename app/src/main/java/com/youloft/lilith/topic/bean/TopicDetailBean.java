@@ -1,5 +1,6 @@
 package com.youloft.lilith.topic.bean;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.youloft.lilith.common.net.AbsResponse;
 
 import java.util.ArrayList;
@@ -25,14 +26,21 @@ public class TopicDetailBean extends AbsResponse<TopicDetailBean.DataBean> {
          * isClose : 0
          * option : [{"id":1,"shortTitle":"相识","title":"相似更好，因为可以更好的理解对方","vote":2,"buildDate":"2017-06-27 20:48:43"},{"id":3,"shortTitle":"互补","title":"互补更好，不说了","vote":0,"buildDate":"2017-06-27 20:49:07"}]
          */
-
+        @JSONField(name = "id")
         public int id;
+        @JSONField(name = "title")
         public String title;
+        @JSONField(name = "backImg")
         public String backImg;
+        @JSONField(name = "collection")
         public int collection;
+        @JSONField(name = "totalVote")
         public int totalVote;
+        @JSONField(name = "isClose")
         public int isClose;
+        @JSONField(name = "isVote")
         public int isVote;
+        @JSONField(name = "option")
         public ArrayList<OptionBean> option;
 
         public static class OptionBean {
@@ -43,11 +51,15 @@ public class TopicDetailBean extends AbsResponse<TopicDetailBean.DataBean> {
              * vote : 2
              * buildDate : 2017-06-27 20:48:43
              */
-
+            @JSONField(name = "id")
             public int id;
+            @JSONField(name = "shortTitle")
             public String shortTitle;
+            @JSONField(name = "title")
             public String title;
+            @JSONField(name = "vote")
             public int vote;
+            @JSONField(name = "buildDate")
             public String buildDate;
         }
     }

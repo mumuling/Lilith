@@ -97,6 +97,7 @@
                android:paddingRight="8dp"
                android:layout_toRightOf="@id/image_pen"
                android:id="@+id/comment_edit"
+             android:clickable="true"
                 android:hint="你来说点什么吧"
                 android:textColorHint="#999999"
                 android:textColor="@color/white"

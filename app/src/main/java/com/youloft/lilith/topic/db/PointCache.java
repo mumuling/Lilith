@@ -58,7 +58,7 @@ public class PointCache {
 
     public void deleteTable() {
         SQLiteDatabase db = PointTableHelper.getInstance(mContext).getWritableDatabase();
-        db.delete(PointTable.TABLE_NAME,null,null);
+        db.delete(PointTable.TABLE_NAME,PointTable.Columns._ID + " >? ",new String[]{"0"});
         db.close();
 
     }

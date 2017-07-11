@@ -1,18 +1,26 @@
 package com.youloft.lilith.topic.holder;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.net.AbsResponse;
 import com.youloft.lilith.common.rx.RxObserver;
+import com.youloft.lilith.common.utils.CalendarHelper;
 import com.youloft.lilith.cons.consmanager.ConsManager;
 import com.youloft.lilith.cons.view.LogInOrCompleteDialog;
 import com.youloft.lilith.setting.AppSetting;
@@ -91,6 +99,22 @@ public class AuthorPointHolder extends RecyclerView.ViewHolder implements View.O
                 .asBitmap().
                 transform(new GlideCircleTransform())
                 .load(point.headImg)
+                .listener(new RequestListener<Bitmap>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                        GlideApp.with(itemView)
+                                .asBitmap()
+                                .transform(new GlideCircleTransform())
+                                .load(R.drawable.calendar_work_icon)
+                                .into(imageCommentUser);
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                        return false;
+                    }
+                })
                 .into(imageCommentUser);
         //用户名字
         textUserName.setText(point.nickName);
@@ -110,11 +134,17 @@ public class AuthorPointHolder extends RecyclerView.ViewHolder implements View.O
                 textVoteResult.setText("投票给" + optionBean.title);//投票
             }
         }
+        if (point.topicOptionId % 2 ==1) {
+            textVoteResult.setTextColor(Color.parseColor("#ff8282"));
+        } else {
+            textVoteResult.setTextColor(Color.parseColor("#5696df"));
+        }
         //星座
         textUserConstellation.setText(ConsManager.CONS_NAME[point.signs]);
         //观点
         textCommentContent.setText( point.viewpoint);
-        //是否有底部的加载更多
+        //时间
+        textCommentTime.setText(CalendarHelper.getInterValTime(CalendarHelper.getTimeMillisByString(point.buildDate),System.currentTimeMillis()));
 
 
 

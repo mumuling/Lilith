@@ -20,6 +20,7 @@ import com.youloft.lilith.login.event.LoginEvent;
 import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.topic.db.PointAnswerCache;
 import com.youloft.lilith.topic.db.PointCache;
+import com.youloft.lilith.topic.db.TopicInfoCache;
 import com.youloft.lilith.topic.db.TopicLikeCache;
 import com.youloft.lilith.ui.TabManager;
 import com.youloft.lilith.ui.view.BaseToolBar;
@@ -132,6 +133,7 @@ public class SettingActivity extends BaseActivity {
                             PointCache.getIns(SettingActivity.this).deleteTable();
                             TopicLikeCache.getIns(SettingActivity.this).deleteTable();
                             PointAnswerCache.getIns(SettingActivity.this).deleteTable();
+                            TopicInfoCache.getIns(SettingActivity.this).deleteTable();
                             finish();
                             EventBus.getDefault().post(new TabChangeEvent(TabManager.TAB_INDEX_XZ));
                         }else {
