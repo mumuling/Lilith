@@ -276,7 +276,7 @@ public class VoteHolder extends RecyclerView.ViewHolder {
             public void clickLeft() {
                 if (topicInfo.isVote == 1|| isVote == 1)return;
                 if (!AppConfig.LOGIN_STATUS) {
-                    new LogInOrCompleteDialog(itemView.getContext()).show();
+                    new LogInOrCompleteDialog(itemView.getContext()).setStatus(LogInOrCompleteDialog.TOPIC_IN).show();
                 } else {
                     voteDialog.show();
                     voteDialog.setTitle(topicInfo.option.get(0).shortTitle, topicInfo.option.get(0).id);
@@ -287,7 +287,7 @@ public class VoteHolder extends RecyclerView.ViewHolder {
             public void clickRight() {
                 if (topicInfo.isVote == 1|| isVote == 1)return;
                 if (!AppConfig.LOGIN_STATUS) {
-                    new LogInOrCompleteDialog(itemView.getContext()).show();
+                    new LogInOrCompleteDialog(itemView.getContext()).setStatus(LogInOrCompleteDialog.TOPIC_IN).show();
                 } else {
                     voteDialog.show();
                     voteDialog.setTitle(topicInfo.option.get(1).shortTitle, topicInfo.option.get(1).id);
