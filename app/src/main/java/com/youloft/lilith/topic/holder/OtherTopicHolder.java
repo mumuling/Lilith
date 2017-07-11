@@ -9,6 +9,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.widgets.view.RoundImageView;
+import com.youloft.lilith.glide.GlideBlurTransform;
 import com.youloft.lilith.topic.bean.TopicBean;
 import com.youloft.lilith.topic.widget.TopicUserImageLayout;
 
@@ -35,10 +36,10 @@ public class OtherTopicHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(final TopicBean.DataBean topic, boolean first) {
-        if (topic == null) {
+        if (topic == null ) {
             return;
         }
-        this.topic = topic;
+
        itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,17 +49,21 @@ public class OtherTopicHolder extends RecyclerView.ViewHolder {
             }
         });
         mTopicContent.setText(topic.title);
-        GlideApp.with(itemView)
-                .asBitmap()
-                .load(topic.backImg)
-                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                .into(mTopicImage);
-        mTopicUserImageLayout.bindData(topic.voteUser,topic.totalVote);
         if (first) {
             mOtherTopicText.setVisibility(View.VISIBLE);
         } else {
             mOtherTopicText.setVisibility(View.GONE);
         }
+        if (this.topic != null && this.topic.backImg.equals(topic.backImg)) return;
+        GlideApp.with(itemView)
+                .asBitmap()
+                .transform(new GlideBlurTransform(itemView.getContext()))
+                .load(topic.backImg)
+                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                .into(mTopicImage);
+        mTopicUserImageLayout.bindData(topic.voteUser,topic.totalVote);
+
+        this.topic = topic;
     }
 }
 

@@ -1,7 +1,9 @@
 package com.youloft.lilith.topic.bean;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.youloft.lilith.common.net.AbsResponse;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**    观点回复的对象
@@ -13,7 +15,7 @@ import java.util.List;
 
 public class ReplyBean extends AbsResponse<List<ReplyBean.DataBean>> {
 
-    public static class DataBean {
+    public static class DataBean implements Serializable{
         /**
          * id : 5
          * uid : 10001
@@ -29,19 +31,31 @@ public class ReplyBean extends AbsResponse<List<ReplyBean.DataBean>> {
          * zan : 1
          * isclick : 1
          */
-
+        @JSONField(name = "id")
         public int id;
+        @JSONField(name = "uid")
         public int uid;
+        @JSONField(name = "headImg")
         public String headImg;
+        @JSONField(name = "nickName")
         public String nickName;
+        @JSONField(name = "contents")
         public String contents;
+        @JSONField(name = "pid")
         public int pid;
+        @JSONField(name = "pName")
         public String pName;
+        @JSONField(name = "pContents")
         public String pContents;
+        @JSONField(name = "sex")
         public int sex;
+        @JSONField(name = "signs")
         public int signs;
+        @JSONField(name = "date")
         public String date;
+        @JSONField(name = "zan")
         public int zan;
+        @JSONField(name = "isclick")
         public int isclick;
     }
 

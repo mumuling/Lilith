@@ -21,6 +21,7 @@ import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.CalendarHelper;
 import com.youloft.lilith.common.utils.ViewUtil;
 import com.youloft.lilith.cons.view.LogInOrCompleteDialog;
+import com.youloft.lilith.glide.GlideBlurTransform;
 import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.topic.TopicRepo;
@@ -43,7 +44,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- *
+ *version   投票的Holder
+ *@author  slj
+ *@time    2017/7/11 14:11
+ *@class   VoteHolder
  */
 
 
@@ -131,6 +135,10 @@ public class VoteHolder extends RecyclerView.ViewHolder {
 
     }
 
+    /**
+     *   投票完成的动画
+     * @param scale
+     */
     private void voteAniamtion(final float scale) {
         firstAnimation.cancel();
         secondAnimation.cancel();
@@ -195,6 +203,16 @@ public class VoteHolder extends RecyclerView.ViewHolder {
         voteView = (VoteView) itemView.findViewById(R.id.vote_view);
     }
 
+    /**
+     *     投票完成后更新本地观点的数据库
+     * @param oid  选择的ID
+     * @param tid   话题的id
+     * @param poitnID  生成的观点的id
+     * @param msg    观点
+     * @param time  时间
+     * @param topicTitle  话题title
+     * @param voteTitle   选择的title
+     */
     private void updatePointDb(int oid ,int tid, int poitnID, String msg,String time,String topicTitle,String voteTitle) {
         PointTable pointTable = new PointTable(oid,tid,poitnID,msg,time,topicTitle,voteTitle);
         PointCache.getIns(itemView.getContext()).insertData(pointTable);
@@ -218,11 +236,21 @@ public class VoteHolder extends RecyclerView.ViewHolder {
 
     }
 
+    /**
+     *      更新数据库
+     * @param info 观点信息
+     * @param id  观点id
+     */
     private void addToDb(TopicDetailBean.DataBean info,int id) {
         TopicTable table = new TopicTable(info,id);
         TopicInfoCache.getIns(itemView.getContext()).insertData(table);
 
     }
+
+    /**
+     *   增加投票数
+     * @param id
+     */
     private void addOptionVote(int id) {
         if (topicInfo.option == null || topicInfo.option.size() == 0 )return;
         for (int i =0; i < topicInfo.option.size();i ++) {
@@ -231,6 +259,11 @@ public class VoteHolder extends RecyclerView.ViewHolder {
             }
         }
     }
+
+    /**
+     *   绑定holder
+     * @param topicInfo
+     */
     public void bindView(final TopicDetailBean.DataBean topicInfo) {
         if (topicInfo == null || topicInfo.option == null )return;
         this.topicInfo = topicInfo;
@@ -263,27 +296,10 @@ public class VoteHolder extends RecyclerView.ViewHolder {
         }
         GlideApp.with(itemView.getContext())
                 .asBitmap()
+                .transform(new GlideBlurTransform(itemView.getContext()))
                 .load(topicInfo.backImg)
-                .listener(new RequestListener<Bitmap>() {
-                    @Override
-                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                        BlurFactor factor = new BlurFactor();
-                        factor.width = resource.getWidth();
-                        factor.height = resource.getHeight();
-                        factor.radius = 5;
-                        resource = factor.of(itemView.getContext(), resource, factor);
-                        //resource = BitmapFactory.decodeResource(mContext.getResources(),R.drawable.back_icon);
-                        imageTop.setImageBitmap(resource);
-                        return false;
-                    }
-                })
-                .into(ViewUtil.getScreenWidth(itemView.getContext()),(int) ViewUtil.dp2px(150));
-        textTopicTitle.setText("#" + topicInfo.title);
+                .into(imageTop);
+        textTopicTitle.setText(topicInfo.title);
     }
 
 

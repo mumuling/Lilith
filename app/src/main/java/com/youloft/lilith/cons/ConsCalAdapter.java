@@ -57,7 +57,7 @@ public class ConsCalAdapter extends RecyclerView.Adapter<ConsCalAdapter.ConsCalI
             return;
         }
         mPredicts.clear();
-        mPredicts.addAll(bean.predicts);
+        mPredicts.addAll(bean.predicts.subList(1, bean.predicts.size()));
         notifyDataSetChanged();
     }
 

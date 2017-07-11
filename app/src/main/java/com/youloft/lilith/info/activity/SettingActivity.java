@@ -23,6 +23,7 @@ import com.youloft.lilith.login.event.LoginEvent;
 import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.topic.db.PointAnswerCache;
 import com.youloft.lilith.topic.db.PointCache;
+import com.youloft.lilith.topic.db.TopicInfoCache;
 import com.youloft.lilith.topic.db.TopicLikeCache;
 import com.youloft.lilith.ui.TabManager;
 import com.youloft.lilith.ui.view.BaseToolBar;
@@ -168,13 +169,14 @@ public class SettingActivity extends BaseActivity {
                             //4.关闭当前页面
                             //通知大家登出的事件
                             AppConfig.LOGIN_STATUS = false;
-                            EventBus.getDefault().post(new LoginEvent(false));
                             //tab设置到首页的事件
                             AppConfig.LOGIN_STATUS = false;
                             AppSetting.saveUserInfo(new UserBean());
                             PointCache.getIns(SettingActivity.this).deleteTable();
                             TopicLikeCache.getIns(SettingActivity.this).deleteTable();
                             PointAnswerCache.getIns(SettingActivity.this).deleteTable();
+                            TopicInfoCache.getIns(SettingActivity.this).deleteTable();
+                            EventBus.getDefault().post(new LoginEvent(false));
                             EventBus.getDefault().post(new TabChangeEvent(TabManager.TAB_INDEX_XZ));
                             finish();
                         }else {

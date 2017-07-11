@@ -109,7 +109,13 @@ public class TopicDetailActivity extends BaseActivity {
      *   第一次请求观点列表
      */
     private void requestPointList() {
-        TopicRepo.getPointList(String.valueOf(tid),null,"10",null,true)
+        int userId = 0;
+        if (AppConfig.LOGIN_STATUS && AppSetting.getUserInfo() != null) {
+            userId = AppSetting.getUserInfo().data.userInfo.id;
+        } else {
+            userId = 0;
+        }
+        TopicRepo.getPointList(String.valueOf(tid),String.valueOf(userId),"10",null,true)
                 .compose(this.<PointBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
@@ -254,7 +260,8 @@ public class TopicDetailActivity extends BaseActivity {
                 int visibleItemCount = recyclerView.getChildCount();
 
                 if (newState == RecyclerView.SCROLL_STATE_IDLE
-                        && lastVisibleItemPosition == totalItemCount - 1
+                        && totalItemCount >=2
+                        && lastVisibleItemPosition >= totalItemCount - 2
                         && visibleItemCount > 0) {
                     if (otherTopicList!= null && otherTopicList.size() != 0) {
                         loadMoreTopic();
@@ -278,7 +285,7 @@ public class TopicDetailActivity extends BaseActivity {
                     public void onDataSuccess(TopicBean topicBean) {
                         if (topicBean.data != null) {
                             otherTopicList.clear();
-                            otherTopicList.addAll(topicBean.data);
+                            //otherTopicList.addAll(topicBean.data);
                             adapter.setOtherTopicList(topicBean.data);
                             totalTopic = totalTopic + topicBean.data.size();
                         }

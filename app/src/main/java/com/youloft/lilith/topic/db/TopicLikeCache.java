@@ -54,7 +54,7 @@ public class TopicLikeCache {
 
     public void deleteTable() {
         SQLiteDatabase db = TopicLikingHelper.getInstance(mContext).getWritableDatabase();
-        db.delete(TopicLikingTable.TABLE_NAME,null,null);
+        db.delete(TopicLikingTable.TABLE_NAME,TopicLikingTable.Columns._ID + " >? ",new String[]{"0"});
         db.close();
     }
 

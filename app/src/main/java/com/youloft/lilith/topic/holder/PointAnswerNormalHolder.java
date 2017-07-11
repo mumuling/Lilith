@@ -1,7 +1,9 @@
 package com.youloft.lilith.topic.holder;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
@@ -10,10 +12,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.rx.RxObserver;
+import com.youloft.lilith.common.utils.CalendarHelper;
 import com.youloft.lilith.cons.view.LogInOrCompleteDialog;
 import com.youloft.lilith.glide.GlideBlurTransform;
 import com.youloft.lilith.setting.AppSetting;
@@ -112,9 +119,26 @@ public class PointAnswerNormalHolder extends RecyclerView.ViewHolder implements 
                 .asBitmap()
                 .transform(new GlideCircleTransform())
                 .load(dataBean.headImg)
+                .listener(new RequestListener<Bitmap>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                        GlideApp.with(itemView)
+                                .asBitmap()
+                                .transform(new GlideCircleTransform())
+                                .load(R.drawable.calendar_work_icon)
+                                .into(imageCommentUser);
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                        return false;
+                    }
+                })
                 .into(imageCommentUser);
         imageZan.setOnClickListener(this);
         llReply.setOnClickListener(this);
+        textAnswerTime.setText(CalendarHelper.getInterValTime(CalendarHelper.getTimeMillisByString(dataBean.date),System.currentTimeMillis()));
     }
 
     private void bindZan(ReplyBean.DataBean dataBean) {
@@ -189,7 +213,6 @@ public class PointAnswerNormalHolder extends RecyclerView.ViewHolder implements 
 
                     }
                 });
-
 
                 break;
             case R.id.ll_reply:
