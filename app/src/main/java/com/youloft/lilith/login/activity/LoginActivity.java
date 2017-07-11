@@ -24,6 +24,7 @@ import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.Toaster;
+import com.youloft.lilith.common.widgets.dialog.PrivacyDialog;
 import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.login.event.LoginEvent;
 import com.youloft.lilith.login.repo.LoginUserRepo;
@@ -204,10 +205,21 @@ public class LoginActivity extends BaseActivity {
                 .subscribe(new RxObserver<UserBean>() {
                     @Override
                     public void onDataSuccess(UserBean userBean) {
-                        AppSetting.saveUserInfo(userBean); //保存用户信息
-                        AppConfig.LOGIN_STATUS = true; //设置登录标识
-                        EventBus.getDefault().post(new LoginEvent(true));//发送登录事件
-                        finish();
+                        if (userBean.data.result == 0) {
+                            AppSetting.saveUserInfo(userBean); //保存用户信息
+                            AppConfig.LOGIN_STATUS = true; //设置登录标识
+                            EventBus.getDefault().post(new LoginEvent(true));//发送登录事件
+                            finish();
+
+                        } else {
+                            Toaster.showShort("密码错误");
+                        }
+                    }
+
+                    @Override
+                    protected void onFailed(Throwable e) {
+                        super.onFailed(e);
+                        Toaster.showShort("网络错误");
                     }
                 });
     }
@@ -216,7 +228,8 @@ public class LoginActivity extends BaseActivity {
     //隐私条款
     @OnClick(R.id.ll_privacy_terms)
     public void privacyTerms(View view) {
-        Toast.makeText(this, "隐私条款", Toast.LENGTH_SHORT).show();
+        PrivacyDialog privacyDialog = new PrivacyDialog(this);
+        privacyDialog.show();
     }
 
     //忘记密码
@@ -251,20 +264,20 @@ public class LoginActivity extends BaseActivity {
     public void wechatLogin(View view) {
         SocializeApp.get(this).getPlatformInfo(this, SocializePlatform.WEIXIN, new AuthListener() {
             @Override
-            public void onStart(SocializePlatform platform) {Log.d(TAG, "onStart() called with: platform = [" + platform + "]");
+            public void onStart(SocializePlatform platform) {
             }
 
             @Override
-            public void onComplete(SocializePlatform platform, int code, Map<String, String> data) {Log.d(TAG, "onComplete() called with: platform = [" + platform + "], code = [" + code + "], data = [" + data + "]");
+            public void onComplete(SocializePlatform platform, int code, Map<String, String> data) {
                 thirdLogin(platform, data);
             }
 
             @Override
-            public void onError(SocializePlatform platform, int code, Throwable err) {Log.d(TAG, "onError() called with: platform = [" + platform + "], code = [" + code + "], err = [" + err + "]");
+            public void onError(SocializePlatform platform, int code, Throwable err) {
             }
 
             @Override
-            public void onCancel(SocializePlatform platform, int code) {Log.d(TAG, "onCancel() called with: platform = [" + platform + "], code = [" + code + "]");
+            public void onCancel(SocializePlatform platform, int code) {
             }
         });
     }
@@ -283,14 +296,14 @@ public class LoginActivity extends BaseActivity {
         String gender = data.get("gender");
         String nickName64 = Base64.encodeToString(nickName.getBytes(), Base64.DEFAULT);
         //由于服务器对性别的区分是1 2 所以做一下转换
-        if("男".equals(gender)){
+        if ("男".equals(gender)) {
             gender = "1";
-        }else if("女".equals(gender)){
+        } else if ("女".equals(gender)) {
             gender = "2";
-        }else {
+        } else {
             gender = "0";
         }
-        LoginUserRepo.wechatLogin(nickName64,platform,headimgurl,openid,gender)
+        LoginUserRepo.wechatLogin(nickName64, platform, headimgurl, openid, gender)
                 .compose(this.<UserBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
@@ -298,10 +311,15 @@ public class LoginActivity extends BaseActivity {
                 .subscribe(new RxObserver<UserBean>() {
                     @Override
                     public void onDataSuccess(UserBean userBean) {
-                        AppSetting.saveUserInfo(userBean); //保存用户信息
-                        AppConfig.LOGIN_STATUS = true; //设置登录标识
-                        EventBus.getDefault().post(new LoginEvent(true));//发送登录事件
-                        finish();
+                        if (userBean.data.result == 0) {
+                            AppSetting.saveUserInfo(userBean); //保存用户信息
+                            AppConfig.LOGIN_STATUS = true; //设置登录标识
+                            EventBus.getDefault().post(new LoginEvent(true));//发送登录事件
+                            finish();
+                        } else {
+                            Toaster.showShort("登录失败");
+                        }
+
                     }
 
                 });
