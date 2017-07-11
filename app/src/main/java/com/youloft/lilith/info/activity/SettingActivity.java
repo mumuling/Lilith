@@ -101,12 +101,11 @@ public class SettingActivity extends BaseActivity {
      */
     private void logoutUser() {
         UserBean userInfo = AppSetting.getUserInfo();
-        if(userInfo==null || userInfo.data == null
-                ||userInfo.data.userInfo == null){
+        if(userInfo==null){
             return;
         }
-        String uid = String.valueOf(AppSetting.getUserInfo().data.userInfo.id);
-        String accessToken = AppSetting.getUserInfo().data.userInfo.accessToken;
+        String uid = String.valueOf(userInfo.data.userInfo.id);
+        String accessToken = userInfo.data.userInfo.accessToken;
         UpdateUserRepo.logoutUser(uid,accessToken)
                 .compose(this.<LogoutBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
@@ -135,5 +134,11 @@ public class SettingActivity extends BaseActivity {
                         }
                     }
                 });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }

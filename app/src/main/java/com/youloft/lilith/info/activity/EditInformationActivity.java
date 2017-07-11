@@ -35,6 +35,7 @@ import com.youloft.lilith.info.event.UserInfoUpDateEvent;
 import com.youloft.lilith.info.repo.UpdateUserRepo;
 import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.setting.AppSetting;
+import com.youloft.lilith.ui.GlideBlurTransform;
 import com.youloft.lilith.ui.view.BaseToolBar;
 
 import org.greenrobot.eventbus.EventBus;
@@ -86,10 +87,7 @@ public class EditInformationActivity extends BaseActivity {
     private String liveLongi = "";//现居地经度
     private String liveLati = "";//现居地纬度
 
-
     private String sex;
-    private String mBitBase64;
-    private String mHeaderImageUrl = ""; //头像上传后返回的链接
     private UserFileHandle fileHandle;
 
     @Override
@@ -158,12 +156,7 @@ public class EditInformationActivity extends BaseActivity {
             UserBean.DataBean.UserInfoBean detail = userInfo.data.userInfo;
             if (!TextUtils.isEmpty(detail.headImg)) {
                 GlideApp.with(this).load(detail.headImg).into(ivHeader);
-                GlideApp.with(this).asBitmap().load(detail.headImg).into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-                        ivBlurBg.setImageBitmap(ViewUtil.blurBitmap(resource));
-                    }
-                });
+                GlideApp.with(this).asBitmap().load(detail.headImg).transform(new GlideBlurTransform(this)).into(ivBlurBg);
             }
 
             tvNickName.setText(detail.nickName);
@@ -213,13 +206,14 @@ public class EditInformationActivity extends BaseActivity {
         if (sexStr.equals(getResources().getString(R.string.man))) {//女 1   男 2
             sex = String.valueOf(2);
         }
-        if(AppSetting.getUserInfo()==null || AppSetting.getUserInfo().data == null
-                ||AppSetting.getUserInfo().data.userInfo == null){
+        UserBean userInfo = AppSetting.getUserInfo();
+        if(userInfo==null){
             Toaster.showShort("信息修改失败");
             return;
         }
-        String userId = String.valueOf(AppSetting.getUserInfo().data.userInfo.id);
-        String headImg = mHeaderImageUrl;
+
+        String userId = String.valueOf(userInfo.data.userInfo.id);
+        String headImg = userInfo.data.userInfo.headImg;
         final String time = CalendarHelper.format(mCal.getTime(), DATE_FORMAT);
 
         UpdateUserRepo.updateUserInfo(userId, nickName, headImg, sex, time, placeBirth, birthLongi, birthLati, placeNow, liveLongi, liveLati)
@@ -237,9 +231,6 @@ public class EditInformationActivity extends BaseActivity {
                             userInfoDetail.nickName = nickName;
                             userInfoDetail.sex = Integer.parseInt(sex);
                             userInfoDetail.birthDay = time;
-                            if(!TextUtils.isEmpty(mHeaderImageUrl)){
-                                userInfoDetail.headImg = mHeaderImageUrl;
-                            }
                             userInfoDetail.birthPlace = placeBirth;
                             userInfoDetail.livePlace = placeNow;
                             AppSetting.saveUserInfo(userInfo);
@@ -278,8 +269,11 @@ public class EditInformationActivity extends BaseActivity {
     }
 
     private void updateUserImg(String upBit,String nameEx) {
-
-        UpdateUserRepo.updateImg(upBit, nameEx, String.valueOf(AppSetting.getUserInfo().data.userInfo.id))
+        if(AppSetting.getUserInfo() == null){
+            return;
+        }
+        final UserBean userInfo = AppSetting.getUserInfo();
+        UpdateUserRepo.updateImg(upBit, nameEx, String.valueOf(userInfo.data.userInfo.id))
                 .compose(this.<UpLoadHeaderBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
@@ -288,7 +282,8 @@ public class EditInformationActivity extends BaseActivity {
 
                     @Override
                     public void onDataSuccess(UpLoadHeaderBean upLoadHeaderBean) {
-                        mHeaderImageUrl = upLoadHeaderBean.data;
+                        userInfo.data.userInfo.headImg = upLoadHeaderBean.data;
+                        AppSetting.saveUserInfo(userInfo);
                     }
 
                 });
