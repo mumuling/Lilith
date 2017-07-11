@@ -161,8 +161,7 @@ public class EditInformationActivity extends BaseActivity {
                 GlideApp.with(this).asBitmap().load(detail.headImg).into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-                        Bitmap mBitmap = resource.copy(Bitmap.Config.ARGB_8888, true);
-                        ivBlurBg.setImageBitmap(ViewUtil.blurBitmap(mBitmap));
+                        ivBlurBg.setImageBitmap(ViewUtil.blurBitmap(resource));
                     }
                 });
             }
