@@ -150,7 +150,7 @@ public class EditInformationActivity extends BaseActivity {
             //获取用户信息,并且展示
 
             UserBean userInfo = AppSetting.getUserInfo();
-            if (userInfo == null) {
+            if (userInfo == null || userInfo.data == null || userInfo.data.userInfo == null) {
                 return;
             }
             UserBean.DataBean.UserInfoBean detail = userInfo.data.userInfo;

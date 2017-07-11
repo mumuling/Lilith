@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseFragment;
+import com.youloft.lilith.common.event.ConsChangeEvent;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.CalendarHelper;
 import com.youloft.lilith.common.utils.ViewUtil;
@@ -51,7 +52,6 @@ import io.reactivex.schedulers.Schedulers;
 
 public class XZFragment extends BaseFragment {
     private FrameLayout mRoot;
-    private ImageView mMaskView;
     private RecyclerView mConsList;
     private ConsFragmentCardAdapter mCardAdapter;
     private GregorianCalendar mCal = new GregorianCalendar();
@@ -105,7 +105,6 @@ public class XZFragment extends BaseFragment {
     }
 
     private void getData(String birdt, String birtm, String birlongi, String birlati) {
-        Log.d(TAG, "getData() called with: birdt = [" + birdt + "], birtm = [" + birtm + "], birlongi = [" + birlongi + "], birlati = [" + birlati + "]");
         ConsRepo.getConsPredicts(birdt, birtm, birlongi, birlati)
                 .compose(this.<ConsPredictsBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
@@ -116,6 +115,9 @@ public class XZFragment extends BaseFragment {
                     public void onDataSuccess(ConsPredictsBean bean) {
                         if (bean != null) {
                             mCardAdapter.setData(bean);
+                            if (bean.data != null) {
+                                EventBus.getDefault().post(new ConsChangeEvent(bean.data.signs));
+                            }
                         }
                     }
                 });
@@ -209,7 +211,6 @@ public class XZFragment extends BaseFragment {
     private void init(View view) {
         mConsList = (RecyclerView) view.findViewById(R.id.cons_card);
         mRoot = (FrameLayout) view.findViewById(R.id.root);
-        mMaskView = (ImageView) view.findViewById(R.id.cons_mask);
 
         mCardAdapter = new ConsFragmentCardAdapter(getContext());
         mConsList.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
