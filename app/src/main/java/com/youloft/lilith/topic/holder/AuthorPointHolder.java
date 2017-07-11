@@ -19,6 +19,7 @@ import com.youloft.lilith.cons.view.LogInOrCompleteDialog;
 import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.topic.PointDetailActivity;
 import com.youloft.lilith.topic.TopicRepo;
+import com.youloft.lilith.topic.bean.ClickLikeBean;
 import com.youloft.lilith.topic.bean.PointBean;
 import com.youloft.lilith.topic.bean.TopicDetailBean;
 import com.youloft.lilith.topic.bean.VoteBean;
@@ -198,38 +199,40 @@ public class AuthorPointHolder extends RecyclerView.ViewHolder implements View.O
     }
 
     public void clickLike() {
-        int userId = AppSetting.getUserInfo().data.userInfo.id;
-        TopicRepo.likePoint(String.valueOf(point.id),String.valueOf(userId))
-                .subscribeOn(Schedulers.newThread())
-                .toObservable()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new RxObserver<AbsResponse>() {
-                    @Override
-                    public void onDataSuccess(AbsResponse s) {
-                        if ( (Boolean) s.data) {
-                            updateClickTable(1);
-                        } else {
+        if (AppConfig.LOGIN_STATUS && AppSetting.getUserInfo() != null) {
+            int userId = AppSetting.getUserInfo().data.userInfo.id;
+            TopicRepo.likePoint(String.valueOf(point.id), String.valueOf(userId))
+                    .subscribeOn(Schedulers.newThread())
+                    .toObservable()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new RxObserver<ClickLikeBean>() {
+                        @Override
+                        public void onDataSuccess(ClickLikeBean s) {
+                            if ( s.data) {
+                                updateClickTable(1);
+                            } else {
+                                updateClickTable(0);
+                            }
+                        }
+
+                        @Override
+                        protected void onFailed(Throwable e) {
+                            super.onFailed(e);
                             updateClickTable(0);
                         }
-                    }
-
-                    @Override
-                    protected void onFailed(Throwable e) {
-                        super.onFailed(e);
-                        updateClickTable(0);
-                    }
-                });
+                    });
+        }
     }
 
     public void updateClickTable(int ispost) {
         TopicLikingTable topicLikingTable;
         if (isZan == 1) {
 
-            topicLikingTable = new TopicLikingTable(anthorId,0, PointDetailActivity.TYPE_POINT,ispost);
+            topicLikingTable = new TopicLikingTable(anthorId,1, PointDetailActivity.TYPE_POINT,ispost);
 
         } else {
 
-            topicLikingTable = new TopicLikingTable(anthorId,1,PointDetailActivity.TYPE_POINT,ispost);
+            topicLikingTable = new TopicLikingTable(anthorId,0,PointDetailActivity.TYPE_POINT,ispost);
 
         }
         TopicLikeCache.getIns(itemView.getContext()).insertData(topicLikingTable);

@@ -53,6 +53,9 @@ public class HTFragment extends BaseFragment{
 
     }
 
+    /**
+     *  请求话题信息
+     */
     private void requestTopic() {
         TopicRepo.getTopicList("0","10")
                 .compose(this.<TopicBean>bindToLifecycle())

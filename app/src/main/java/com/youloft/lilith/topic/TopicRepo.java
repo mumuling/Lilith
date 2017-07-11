@@ -5,6 +5,7 @@ import com.youloft.lilith.LLApplication;
 import com.youloft.lilith.common.AbstractDataRepo;
 import com.youloft.lilith.common.net.AbsResponse;
 import com.youloft.lilith.common.net.Urls;
+import com.youloft.lilith.topic.bean.ClickLikeBean;
 import com.youloft.lilith.topic.bean.MyTopicBean;
 import com.youloft.lilith.topic.bean.PointAnswerBean;
 import com.youloft.lilith.topic.bean.PointBean;
@@ -101,7 +102,7 @@ public class TopicRepo extends AbstractDataRepo {
     public static Flowable<TopicDetailBean> getTopicDetail(String tid,String vid) {
         HashMap<String, String> param = new HashMap();
         param.put("tid",tid);
-        if (vid != null) param.put("vid",vid);
+        if (vid != null) param.put("uid",vid);
 
 
 
@@ -160,11 +161,11 @@ public class TopicRepo extends AbstractDataRepo {
      * @param uid   点赞人
      * @return
      */
-    public static Flowable<AbsResponse> likePoint(String vid, String uid) {
+    public static Flowable<ClickLikeBean> likePoint(String vid, String uid) {
         HashMap<String, String> param = new HashMap();
         param.put("vid",vid);
         param.put("uid",uid);
-        return httpFlow(Urls.LIKE_POINT,null,param,true,AbsResponse.class,null,0);
+        return httpFlow(Urls.LIKE_POINT,null,param,true,ClickLikeBean.class,null,0);
     }
 
     /**
@@ -173,11 +174,11 @@ public class TopicRepo extends AbstractDataRepo {
      * @param uid  用户的ID
      * @return
      */
-    public static Flowable<VoteBean> likeReply(String rid,String uid) {
+    public static Flowable<ClickLikeBean> likeReply(String rid,String uid) {
         HashMap<String, String> param = new HashMap();
         param.put("rid",rid);
         param.put("uid",uid);
-        return httpFlow(Urls.LIKE_REPLY,null,param,true,VoteBean.class,null,0);
+        return httpFlow(Urls.LIKE_REPLY,null,param,true,ClickLikeBean.class,null,0);
     }
 
     /**
@@ -215,11 +216,11 @@ public class TopicRepo extends AbstractDataRepo {
         long duration = 5 * 60 * 1000;
         if (needCache) {
 
-            if (!LLApplication.getApiCache().isExpired(cacheKey,duration)) {
-                return LLApplication.getApiCache().readCache(cacheKey,MyTopicBean.class);
-            } else {
-                return httpFlow(Urls.MY_VOTE, null, param, true, MyTopicBean.class, cacheKey, duration);
-            }
+//            if (!LLApplication.getApiCache().isExpired(cacheKey,duration)) {
+//                return LLApplication.getApiCache().readCache(cacheKey,MyTopicBean.class);
+//            } else {
+                return httpFlow(Urls.MY_VOTE, null, param, true, MyTopicBean.class, null, 0);
+
         } else {
             return httpFlow(Urls.MY_VOTE, null, param, true, MyTopicBean.class, null, 0);
         }

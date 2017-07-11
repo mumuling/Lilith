@@ -22,10 +22,12 @@ import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.CalendarHelper;
 import com.youloft.lilith.cons.consmanager.ConsManager;
 import com.youloft.lilith.cons.view.LogInOrCompleteDialog;
+import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.topic.PointDetailActivity;
 import com.youloft.lilith.topic.TopicDetailActivity;
 import com.youloft.lilith.topic.TopicRepo;
 import com.youloft.lilith.topic.adapter.TopicDetailAdapter;
+import com.youloft.lilith.topic.bean.ClickLikeBean;
 import com.youloft.lilith.topic.bean.PointBean;
 import com.youloft.lilith.topic.bean.TopicBean;
 import com.youloft.lilith.topic.bean.TopicDetailBean;
@@ -333,26 +335,28 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
     }
 
     public void clickLike() {
-        TopicRepo.likePoint(String.valueOf(point.id),"10000")
-                .subscribeOn(Schedulers.newThread())
-                .toObservable()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new RxObserver<AbsResponse>() {
-                    @Override
-                    public void onDataSuccess(AbsResponse s) {
-                        if ((Boolean) s.data) {
-                            updateClickTable(1);
-                        } else {
+        if (AppConfig.LOGIN_STATUS && AppSetting.getUserInfo() != null) {
+            TopicRepo.likePoint(String.valueOf(point.id), String.valueOf(AppSetting.getUserInfo().data.userInfo.id))
+                    .subscribeOn(Schedulers.newThread())
+                    .toObservable()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new RxObserver<ClickLikeBean>() {
+                        @Override
+                        public void onDataSuccess(ClickLikeBean s) {
+                            if (s.data) {
+                                updateClickTable(1);
+                            } else {
+                                updateClickTable(0);
+                            }
+                        }
+
+                        @Override
+                        protected void onFailed(Throwable e) {
+                            super.onFailed(e);
                             updateClickTable(0);
                         }
-                    }
-
-                    @Override
-                    protected void onFailed(Throwable e) {
-                        super.onFailed(e);
-                        updateClickTable(0);
-                    }
-                });
+                    });
+        }
     }
 public void updateClickTable(int ispost) {
     TopicLikingTable topicLikingTable;

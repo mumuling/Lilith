@@ -20,6 +20,7 @@ import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.topic.PointDetailActivity;
 import com.youloft.lilith.topic.TopicRepo;
 import com.youloft.lilith.topic.adapter.PointAnswerAdapter;
+import com.youloft.lilith.topic.bean.ClickLikeBean;
 import com.youloft.lilith.topic.bean.ReplyBean;
 import com.youloft.lilith.topic.bean.VoteBean;
 import com.youloft.lilith.topic.db.TopicLikeCache;
@@ -200,27 +201,29 @@ public class PointAnswerNormalHolder extends RecyclerView.ViewHolder implements 
     }
 
     private void clickLike() {
-        int userId = AppSetting.getUserInfo().data.userInfo.id;
-        TopicRepo.likeReply(String.valueOf(mData.id),String.valueOf(userId))
-                .subscribeOn(Schedulers.newThread())
-                .toObservable()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new RxObserver<VoteBean>() {
-                    @Override
-                    public void onDataSuccess(VoteBean s) {
-                        if ( (Boolean) s.data) {
-                            updateLikeTable(1);
-                        } else {
+        if (AppConfig.LOGIN_STATUS && AppSetting.getUserInfo() != null) {
+            int userId = AppSetting.getUserInfo().data.userInfo.id;
+            TopicRepo.likeReply(String.valueOf(mData.id), String.valueOf(userId))
+                    .subscribeOn(Schedulers.newThread())
+                    .toObservable()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new RxObserver<ClickLikeBean>() {
+                        @Override
+                        public void onDataSuccess(ClickLikeBean s) {
+                            if ((Boolean) s.data) {
+                                updateLikeTable(1);
+                            } else {
+                                updateLikeTable(0);
+                            }
+                        }
+
+                        @Override
+                        protected void onFailed(Throwable e) {
+                            super.onFailed(e);
                             updateLikeTable(0);
                         }
-                    }
-
-                    @Override
-                    protected void onFailed(Throwable e) {
-                        super.onFailed(e);
-                        updateLikeTable(0);
-                    }
-                });
+                    });
+        }
     }
 
     /**
