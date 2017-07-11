@@ -3,6 +3,7 @@ package com.youloft.lilith.info.repo;
 import com.youloft.lilith.common.AbstractDataRepo;
 import com.youloft.lilith.common.net.Urls;
 import com.youloft.lilith.info.bean.CheckLoginBean;
+import com.youloft.lilith.info.bean.CheckVersionBean;
 import com.youloft.lilith.info.bean.FeedBackBean;
 import com.youloft.lilith.info.bean.LogoutBean;
 import com.youloft.lilith.info.bean.OldPasswordBean;
@@ -109,5 +110,11 @@ public class UpdateUserRepo extends AbstractDataRepo {
         paramsFeedBack.put("OsVer", osVer);
         paramsFeedBack.put("MsgContent", msgContent);
         return unionFlow(Urls.FEEDBACK, null, paramsFeedBack, true, FeedBackBean.class, "feed_back", 0);
+    }
+
+
+    //检查版本
+    public static Flowable<CheckVersionBean> checkVersion() {
+        return unionFlow(Urls.CHECK_VERSION, null, null, true, CheckVersionBean.class, "logout_user", 0);
     }
 }

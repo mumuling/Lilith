@@ -20,9 +20,8 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
-import com.youloft.lilith.common.utils.ViewUtil;
+import com.youloft.lilith.glide.GlideBlurTransform;
 import com.youloft.lilith.topic.bean.TopicBean;
-import com.youloft.lilith.topic.widget.BlurFactor;
 import com.youloft.lilith.topic.widget.TopicUserDataBind;
 
 import java.util.ArrayList;
@@ -59,7 +58,7 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     public void setData(List<TopicBean.DataBean> data) {
-        if (data == null )return;
+        if (data == null) return;
         topicBeanList.clear();
         topicBeanList.addAll(data);
         notifyDataSetChanged();
@@ -118,6 +117,7 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         public TopicUserDataBind mUserImageStackViewGroup;
         public ImageView mTopicImage;
         public ImageView imageTest;
+
         public NormalViewHolder(View itemView) {
             super(itemView);
             mTopicContent = (TextView) itemView.findViewById(R.id.topic_content);
@@ -131,28 +131,9 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             GlideApp.with(itemView)
                     .asBitmap()
                     .load(topic.backImg)
-                    .listener(new RequestListener<Bitmap>() {
-                        @Override
-                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                            return false;
-                        }
-
-                        @Override
-                        public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                            BlurFactor factor = new BlurFactor();
-                            factor.width = resource.getWidth();
-                            factor.height = resource.getHeight();
-                            factor.radius = 5;
-                            resource = factor.of(mContext, resource, factor);
-                            //resource = BitmapFactory.decodeResource(mContext.getResources(),R.drawable.back_icon);
-                            mTopicImage.setImageBitmap(resource);
-                            return false;
-                        }
-
-                    })
-                    .into(ViewUtil.getScreenWidth(mContext),(int) ViewUtil.dp2px(150));
-
-
+                    .dontAnimate()
+                    .transform(new GlideBlurTransform(mTopicImage.getContext()))
+                    .into(mTopicImage);
 
 
             mUserImageStackViewGroup.bindData(topic.voteUser, topic.totalVote);
@@ -173,25 +154,9 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             GlideApp.with(itemView)
                     .asBitmap()
                     .load(topic.backImg)
-                    .listener(new RequestListener<Bitmap>() {
-                        @Override
-                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                            return false;
-                        }
-
-                        @Override
-                        public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                            BlurFactor factor = new BlurFactor();
-                            factor.width = resource.getWidth();
-                            factor.height = resource.getHeight();
-                            factor.radius = 5;
-                            resource = factor.of(mContext, resource, factor);
-                            //resource = BitmapFactory.decodeResource(mContext.getResources(),R.drawable.back_icon);
-                            mTopicImage.setImageBitmap(resource);
-                            return false;
-                        }
-                    })
-                    .into(200,150);
+                    .dontAnimate()
+                    .transform(new GlideBlurTransform(mTopicImage.getContext()))
+                    .into(mTopicImage);
             mUserImageStackViewGroup.bindData(topic.voteUser, topic.totalVote);
         }
     }

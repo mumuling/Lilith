@@ -273,15 +273,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:background="#22ffffff" />
-            <Button
-                android:id="@+id/btn"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_gravity="bottom"
-                android:background="#2a1825"
-                android:text="登录临时跳转"
-                android:textColor="#ffffff" />
+                android:background="@color/white_20" />
+
         </LinearLayout>
 
 

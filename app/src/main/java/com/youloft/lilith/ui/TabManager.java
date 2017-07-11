@@ -142,7 +142,7 @@ public class TabManager implements NavBarLayout.OnTabChangeListener {
 
         ft.show(safeData);
         mNavBar.setSelectTab(index);
-        ft.commit();
+        ft.commitAllowingStateLoss();
     }
 
     private void hidAll() {
@@ -157,7 +157,7 @@ public class TabManager implements NavBarLayout.OnTabChangeListener {
                 ft.hide(fragment);
             }
         }
-        ft.commit();
+        ft.commitAllowingStateLoss();
     }
 
     /**

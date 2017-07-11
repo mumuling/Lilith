@@ -1,18 +1,13 @@
 package com.youloft.lilith.ui.fragment;
 
-import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
@@ -23,10 +18,10 @@ import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.base.BaseFragment;
+import com.youloft.lilith.cons.consmanager.ConsManager;
 import com.youloft.lilith.common.utils.ViewUtil;
 import com.youloft.lilith.glide.GlideBlurTwoViewTarget;
 import com.youloft.lilith.info.event.UserInfoUpDateEvent;
-import com.youloft.lilith.login.activity.LoginActivity;
 import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.login.event.LoginEvent;
 import com.youloft.lilith.setting.AppSetting;
@@ -50,8 +45,6 @@ import jp.wasabeef.blurry.Blurry;
 
 public class MEFragment extends BaseFragment {
 
-    @BindView(R.id.btn)
-    Button btn;
     Unbinder unbinder;
     @BindView(R.id.iv_constellation)
     ImageView ivConstellation; //用户星座
@@ -106,7 +99,7 @@ public class MEFragment extends BaseFragment {
 //        }
 //    }
 
-    //登录成功之后接收到的事件  快捷登录, 注册成功, 账号密码登录, 三方登录 都会发送事件到这个地方
+    //快捷登录, 注册成功, 账号密码登录, 三方登录 用户登出 都会发送事件到这个地方
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(LoginEvent loginEvent) {
         boolean isLogin = loginEvent.isLogin;
@@ -130,6 +123,7 @@ public class MEFragment extends BaseFragment {
      * 填充用户数据
      */
     private void setUserInfo() {
+
         UserBean userInfo = AppSetting.getUserInfo();
         String headImgUrl = userInfo.data.userInfo.headImg;
         String nickName = userInfo.data.userInfo.nickName;
@@ -137,16 +131,27 @@ public class MEFragment extends BaseFragment {
         if (!TextUtils.isEmpty(headImgUrl)) {
             GlideApp.with(mContext).asBitmap().dontAnimate().load(headImgUrl).into(new GlideBlurTwoViewTarget(ivHeader, ivBlurBg));
         }
-/**
- * 只想问写得是他妈的什么鬼
- */
-//            GlideApp.with(mContext).load(headImgUrl).into(ivHeader);
-//            GlideApp.with(mContext).asBitmap().load(headImgUrl).into(new SimpleTarget<Bitmap>() {
-//                @Override
-//                public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-//                    ivBlurBg.setImageBitmap(ViewUtil.blurBitmap(resource));
-//                }
-//            });
+        //根据不同的key设置不同的星座
+        String asceSigns = String.valueOf(userInfo.data.userInfo.asceSigns);//上升
+        String moonSigns = String.valueOf(userInfo.data.userInfo.moonSigns);//月亮
+        String sunSigns = String.valueOf(userInfo.data.userInfo.sunSigns);//太阳
+        String signs = String.valueOf(userInfo.data.userInfo.signs);//我的星座
+        ivRise.setImageResource(ConsManager.getConsIconSrc(ConsManager.getConsSrc(asceSigns).pKey)[0]);
+        ivMoon.setImageResource(ConsManager.getConsIconSrc(ConsManager.getConsSrc(moonSigns).pKey)[0]);
+        ivSun.setImageResource(ConsManager.getConsIconSrc(ConsManager.getConsSrc(sunSigns).pKey)[0]);
+        ivConstellation.setImageResource(ConsManager.getConsIconSrc(ConsManager.getConsSrc(signs).pKey)[0]);
+    }
+
+
+    /**
+     * 根据不同的key设置不同的icon
+     *
+     * @param pKey
+     * @param flag
+     */
+    private void setStarIcon(String pKey, int flag) {
+        Integer integer = ConsManager.getConsIconSrc(pKey)[0];
+
     }
 
 
@@ -158,15 +163,10 @@ public class MEFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO: inflate a fragment view
+
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
         unbinder = ButterKnife.bind(this, rootView);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), LoginActivity.class));
-            }
-        });
+
         //view创建完成之后,检查登录状态,如果是登录的状态,那么把用户数据填上去
         if (AppConfig.LOGIN_STATUS) {
             setUserInfo();

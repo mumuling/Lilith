@@ -54,7 +54,7 @@ public class GlideBlurTwoViewTarget extends BitmapImageViewTarget {
     public void onResourceReady(Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
         super.onResourceReady(resource, transition);
         if (mBlurView != null) {
-            Blurry.with(getView().getContext()).sampling(sampling).radius(radius).from(resource).into(mBlurView);
+            Blurry.with(getView().getContext()).sampling(sampling).async().radius(radius).from(resource).into(mBlurView);
         }
     }
 

@@ -1,5 +1,9 @@
 package com.youloft.lilith.ui;
 
+import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -11,6 +15,7 @@ import android.os.Bundle;
 import android.support.v4.util.LruCache;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ViewUtils;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -39,6 +44,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -63,7 +70,6 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.main_content_tv)
     TextView tv;
     private TabManager mMainTabManager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,8 +105,8 @@ public class MainActivity extends BaseActivity {
                         String token = checkLoginBean.data;
                         String accessToken = userInfo.data.userInfo.accessToken;
                         if(token.equals(accessToken)){
-//                            AppConfig.LOGIN_STATUS = true;//登录状态设置为 登录
-//                            EventBus.getDefault().post(new LoddingCheckEvent());
+                            AppConfig.LOGIN_STATUS = true;//登录状态设置为 登录
+                            EventBus.getDefault().post(new LoddingCheckEvent());
                             AppConfig.LOGIN_STATUS = true;//登录状态设置为 登录
                             EventBus.getDefault().post(new LoginEvent(true));
                         } else {
@@ -140,4 +146,5 @@ public class MainActivity extends BaseActivity {
             mNavBar.changConsIcon(consType);
         }
     }
+
 }
