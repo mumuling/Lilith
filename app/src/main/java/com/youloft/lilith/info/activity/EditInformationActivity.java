@@ -161,7 +161,8 @@ public class EditInformationActivity extends BaseActivity {
                 GlideApp.with(this).asBitmap().load(detail.headImg).into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-                        ivBlurBg.setImageBitmap(ViewUtil.blurBitmap(resource));
+                        Bitmap mBitmap = resource.copy(Bitmap.Config.ARGB_8888, true);
+                        ivBlurBg.setImageBitmap(ViewUtil.blurBitmap(mBitmap));
                     }
                 });
             }
@@ -404,5 +405,11 @@ public class EditInformationActivity extends BaseActivity {
      */
     private void deleteTextDrawable(TextView tv) {
         tv.setCompoundDrawables(null, null, null, null);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }
