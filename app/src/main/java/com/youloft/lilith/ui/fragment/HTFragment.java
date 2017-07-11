@@ -78,6 +78,7 @@ public class HTFragment extends BaseFragment{
     }
 
     private void initView() {
+        if (getView() == null)return;
         mToolBar = (BaseToolBar) getView().findViewById(R.id.tool_bar);
         mTopicRv = (RecyclerView) getView().findViewById(R.id.lv_topic);
         mToolBar.setTitle("星座话题");
