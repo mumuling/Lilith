@@ -82,7 +82,7 @@ public class PointAnswerCache {
 
     public void deleteTable() {
         SQLiteDatabase db = PointAnswerTableHelper.getInstance(mContext).getWritableDatabase();
-        db.delete(PointAnswerTable.TABLE_NAME,null,null);
+        db.delete(PointAnswerTable.TABLE_NAME,PointAnswerTable.Columns._ID + " >? ",new String[]{"0"});
         db.close();
     }
 

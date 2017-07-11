@@ -1,7 +1,10 @@
 package com.youloft.lilith.topic.holder;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.animation.Animation;
@@ -12,6 +15,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
@@ -178,7 +185,7 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
 
     public void loadMorePiont() {
 
-        TopicRepo.getPointList(String.valueOf(topic.id),null,"1",String.valueOf(totalPoint),false)
+        TopicRepo.getPointList(String.valueOf(topic.id),null,"10",String.valueOf(totalPoint),false)
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -233,9 +240,25 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
         //头像
 
         GlideApp.with(itemView)
-                .asBitmap().
-                transform(new GlideCircleTransform())
+                .asBitmap()
+                .transform(new GlideCircleTransform())
                 .load(point.headImg)
+                .listener(new RequestListener<Bitmap>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                        GlideApp.with(itemView)
+                                .asBitmap()
+                                .transform(new GlideCircleTransform())
+                                .load(R.drawable.calendar_work_icon)
+                                .into(imageCommentUser);
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                        return false;
+                    }
+                })
                 .into(imageCommentUser);
         //用户名字
         textUserName.setText(point.nickName);
@@ -255,6 +278,11 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
             if (optionBean.id == point.topicOptionId) {
                 textVoteResult.setText("投票给" + optionBean.title);//投票
             }
+        }
+        if (point.topicOptionId % 2 ==1) {
+            textVoteResult.setTextColor(Color.parseColor("#ff8282"));
+        } else {
+            textVoteResult.setTextColor(Color.parseColor("#5696df"));
         }
         //星座
         textUserConstellation.setText(ConsManager.CONS_NAME[point.signs]);

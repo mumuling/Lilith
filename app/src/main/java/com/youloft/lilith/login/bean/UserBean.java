@@ -23,42 +23,42 @@ public class UserBean extends AbsResponse<UserBean.DataBean> {
 
         public static class UserInfoBean {
             @JSONField(name = "id")
-            public int id;
+            public int id;   //id
             @JSONField(name = "phone")
-            public String phone;
+            public String phone;   //电话
             @JSONField(name = "nickName")
-            public String nickName;
+            public String nickName;   //昵称
             @JSONField(name = "headImg")
-            public String headImg;
+            public String headImg;  //头像链接
             @JSONField(name = "sex")
-            public int sex;
+            public int sex;   //性别
             @JSONField(name = "signs")
-            public int signs;
+            public int signs;    //星座
             @JSONField(name = "birthDay")
-            public String birthDay;
+            public String birthDay;  //出生日期  yyyy-MM-dd HH:mm:ss
             @JSONField(name = "birthPlace")
-            public String birthPlace;
+            public String birthPlace;  //出生地
             @JSONField(name = "livePlace")
-            public String livePlace;
+            public String livePlace;  //现居地
             @JSONField(name = "state")
             public int state;
             @JSONField(name = "accessToken")
             public String accessToken;
 
             @JSONField(name = "sunSigns")
-            public int sunSigns;
+            public int sunSigns;    //太阳星座
             @JSONField(name = "moonSigns")
-            public int moonSigns;
+            public int moonSigns;  //月亮星座
             @JSONField(name = "asceSigns")
-            public int asceSigns;
+            public int asceSigns; //上升星座
             @JSONField(name = "birthLongi")
-            public String birthLongi;
+            public String birthLongi;  //出生地经度
             @JSONField(name = "birthLati")
-            public String birthLati;
+            public String birthLati;   //出生地纬度
             @JSONField(name = "liveLongi")
-            public String liveLongi;
+            public String liveLongi;  //现居地经度
             @JSONField(name = "liveLati")
-            public String liveLati;
+            public String liveLati; //现居地纬度
         }
 
 

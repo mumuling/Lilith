@@ -55,6 +55,7 @@ public class LogInOrCompleteDialog extends BaseDialog {
         super(context, themeResId);
         setContentView(R.layout.lod_in_jump_dialog);
         ButterKnife.bind(this);
+        initDate();
     }
 
     @Override
