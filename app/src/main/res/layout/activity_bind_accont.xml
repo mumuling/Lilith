@@ -17,6 +17,7 @@
 
         <!--绑定手机-->
         <RelativeLayout
+            android:id="@+id/rl_bind_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
@@ -34,25 +35,27 @@
                 android:layout_marginLeft="20dp" />
 
             <TextView
+                android:id="@+id/tv_phone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/flag1"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="10dp"
                 android:layout_toEndOf="@+id/flag1"
-                android:text="绑定手机"
-                android:textColor="#ffffff"
+                android:text="@string/bind_phone"
+                android:textColor="@color/white"
                 android:textSize="16dp" />
 
             <TextView
+                android:id="@+id/tv_phone_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/flag5"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="8dp"
                 android:layout_toStartOf="@+id/flag5"
-                android:text="157****7581"
-                android:textColor="#ffffff"
+                android:text=""
+                android:textColor="@color/white"
                 android:textSize="16dp" />
 
             <ImageView
@@ -81,6 +84,7 @@
 
             <!--绑定微信-->
             <RelativeLayout
+                android:id="@+id/rl_bind_wx"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/slt_usercenter"
@@ -120,9 +124,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_marginLeft="20dp"
+                android:visibility="gone"
                 android:background="#22ffffff" />
             <!--绑定QQ-->
             <RelativeLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/slt_usercenter"
@@ -161,10 +167,12 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
+                android:visibility="gone"
                 android:layout_marginLeft="20dp"
                 android:background="#22ffffff" />
             <!--绑定微博-->
             <RelativeLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/slt_usercenter"

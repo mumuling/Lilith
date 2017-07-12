@@ -209,7 +209,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
 
                 } else {
                     if (!AppConfig.LOGIN_STATUS) {
-                        new LogInOrCompleteDialog(PointDetailActivity.this).show();
+                        new LogInOrCompleteDialog(PointDetailActivity.this).setStatus(LogInOrCompleteDialog.TOPIC_IN).show();
                         return;
                     }
                     ////软键盘弹出啦
@@ -341,7 +341,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
         switch (view.getId()) {
             case R.id.text_confirm:
                 if (!AppConfig.LOGIN_STATUS) {
-                    new LogInOrCompleteDialog(this).show();
+                    new LogInOrCompleteDialog(this).setStatus(LogInOrCompleteDialog.TOPIC_IN).show();
                     return;
                 }
                 if (TextUtils.isEmpty(commentEdit.getText().toString())) {

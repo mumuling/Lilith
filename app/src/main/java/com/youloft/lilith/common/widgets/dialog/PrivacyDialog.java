@@ -3,6 +3,7 @@ package com.youloft.lilith.common.widgets.dialog;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.StyleRes;
+import android.text.Html;
 import android.view.View;
 import android.widget.TextView;
 
@@ -20,8 +21,7 @@ import butterknife.OnClick;
 public class PrivacyDialog extends BaseDialog {
 
 
-    @BindView(R.id.tv_content)
-    TextView tvContent;
+
 
     public PrivacyDialog(@NonNull Context context) {
         super(context);
@@ -36,7 +36,6 @@ public class PrivacyDialog extends BaseDialog {
     private void initView() {
         setContentView(R.layout.dialog_privacy);
         ButterKnife.bind(this);
-
     }
 
     @OnClick({R.id.iv_close, R.id.fl_root})
@@ -49,5 +48,4 @@ public class PrivacyDialog extends BaseDialog {
         }
     }
 
-    public static final String CONTENT= "dasda";
 }

@@ -2,8 +2,8 @@ package com.youloft.lilith.info.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -33,8 +33,9 @@ import org.greenrobot.eventbus.EventBus;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -44,18 +45,17 @@ import io.reactivex.schedulers.Schedulers;
  */
 @Route(path = "/test/SettingActivity")
 public class SettingActivity extends BaseActivity {
+    private static final String TAG = "SettingActivity";
     @BindView(R.id.btl_setting)
     BaseToolBar btlSetting;
-    private CheckVersionCodeDialog mVersionCodeDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
         ButterKnife.bind(this);
-        btlSetting.setTitle("设置");
+        btlSetting.setTitle(getResources().getString(R.string.setting));
         btlSetting.setShowShareBtn(false);
-        mVersionCodeDialog = new CheckVersionCodeDialog(this);
         btlSetting.setOnToolBarItemClickListener(new BaseToolBar.OnToolBarItemClickListener() {
             @Override
             public void OnBackBtnClick() {
@@ -109,7 +109,7 @@ public class SettingActivity extends BaseActivity {
      * 检查版本
      */
     private void checkVersionCode() {
-
+        final CheckVersionCodeDialog mVersionCodeDialog = new CheckVersionCodeDialog(this);
         mVersionCodeDialog.show();
         UpdateUserRepo.checkVersion()
                 .compose(this.<CheckVersionBean>bindToLifecycle())
@@ -120,14 +120,17 @@ public class SettingActivity extends BaseActivity {
                     @Override
                     public void onDataSuccess(CheckVersionBean checkVersionBean) {
                         String version = checkVersionBean.data.version;
-                        if (version.equals(AppSetting.getVersionCode())) {//一样
-                            Toaster.showShort("您当前版本为最新版本");
-                        } else {
-                            //弹出对话框,让用户选择是否下载
-                            DownloadSelectDialog downloadSelectDialog = new DownloadSelectDialog(SettingActivity.this);
-                            downloadSelectDialog.show();
-                        }
-                        mVersionCodeDialog.dismiss();
+
+//                        if (version.equals(AppSetting.getVersionCode())) {
+//                            Toaster.showShort("您当前版本为最新版本");
+//                            mVersionCodeDialog.dismiss();
+//                        } else {
+//                            mVersionCodeDialog.dismiss();
+//                            //弹出对话框,让用户选择是否下载
+//                            DownloadSelectDialog downloadSelectDialog = new DownloadSelectDialog(SettingActivity.this);
+//                            downloadSelectDialog.show();
+//                        }
+
                     }
 
                     @Override
@@ -136,6 +139,7 @@ public class SettingActivity extends BaseActivity {
                         mVersionCodeDialog.dismiss();
                         Toaster.showShort("网络错误");
                     }
+
                 });
 
     }

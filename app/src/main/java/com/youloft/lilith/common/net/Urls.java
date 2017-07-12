@@ -62,4 +62,8 @@ public class Urls {
     public static final String UPLOAD_FILE = "http://lilith.51wnl.com/UploadHead";
     //微信登录
     public static final String WE_CHAT_LOGIN = "http://lilith.51wnl.com/OpenLogin";
+    //绑定手机
+    public static final String BIND_PHONE = "http://lilith.51wnl.com/BindPhone";
+    //绑定微信
+    public static final String BIND_WEXIN = "http://lilith.51wnl.com/bindwx";
 }
