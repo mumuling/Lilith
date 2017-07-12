@@ -30,6 +30,7 @@
         <item name="android:taskToBackExitAnimation">@null</item>
     </style>
     <style name="BaseDialog" parent="DialogTheme">
+        <item name="android:windowFullscreen">true</item>
         <item name="android:windowSoftInputMode">adjustResize</item>
     </style>
 

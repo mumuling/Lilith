@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/head_view"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/tab_share_color">
+    android:layout_height="wrap_content">
     <com.youloft.lilith.common.widgets.view.RefreshImageView
         android:id="@+id/refresh_icon"
         android:layout_width="60dp"

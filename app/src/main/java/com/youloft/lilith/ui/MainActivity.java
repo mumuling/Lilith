@@ -30,6 +30,8 @@ import com.youloft.lilith.common.event.ConsChangeEvent;
 import com.youloft.lilith.common.event.TabChangeEvent;
 import com.youloft.lilith.common.net.OnlineConfigAgent;
 import com.youloft.lilith.common.rx.RxObserver;
+import com.youloft.lilith.common.utils.NetUtil;
+import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.common.utils.ViewUtil;
 import com.youloft.lilith.cons.ConsRepo;
 import com.youloft.lilith.cons.consmanager.LoddingCheckEvent;
@@ -39,6 +41,7 @@ import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.login.event.LoginEvent;
 import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.ui.view.NavBarLayout;
+import com.youloft.lilith.ui.view.NetErrDialog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -77,11 +80,14 @@ public class MainActivity extends BaseActivity {
         ARouter.getInstance().inject(this);
         EventBus.getDefault().register(this);
         ButterKnife.bind(this);
+        checkNet();
         //更新配置项
         OnlineConfigAgent.getInstance().onAppStart(getApplicationContext());
         mMainTabManager = new TabManager(this);
         checkLogin();
     }
+
+
 
     /**
      * 检查用户登录状态
@@ -106,7 +112,6 @@ public class MainActivity extends BaseActivity {
                         String accessToken = userInfo.data.userInfo.accessToken;
                         if(token.equals(accessToken)){
                             AppConfig.LOGIN_STATUS = true;//登录状态设置为 登录
-                            EventBus.getDefault().post(new LoddingCheckEvent());
                             EventBus.getDefault().post(new LoginEvent(true));
                         } else {
                             AppConfig.LOGIN_STATUS = false;//登录状态置为 未登录
@@ -146,4 +151,28 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    /**
+     * 检查网络
+     */
+    private void checkNet() {
+        if (!NetUtil.isNetOK()) {
+            NetErrDialog dialog = new NetErrDialog(this);
+            dialog.show();
+        }
+    }
+
+    /**
+     * 处理两次点击返回才退出
+     */
+    long mFirstBackPress = 0;
+    @Override
+    public void onBackPressed() {
+        long l = System.currentTimeMillis();
+        if (l - mFirstBackPress >= 2000) {
+            Toaster.showShort(getString(R.string.out_program));
+            mFirstBackPress = l;
+            return;
+        }
+        super.onBackPressed();
+    }
 }

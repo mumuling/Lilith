@@ -28,12 +28,15 @@ import com.youloft.lilith.topic.PointDetailActivity;
 import com.youloft.lilith.topic.TopicRepo;
 import com.youloft.lilith.topic.adapter.PointAnswerAdapter;
 import com.youloft.lilith.topic.bean.ClickLikeBean;
+import com.youloft.lilith.topic.bean.ClickLikeEvent;
 import com.youloft.lilith.topic.bean.ReplyBean;
 import com.youloft.lilith.topic.bean.VoteBean;
 import com.youloft.lilith.topic.db.TopicLikeCache;
 import com.youloft.lilith.topic.db.TopicLikingTable;
 import com.youloft.lilith.topic.widget.Rotate3dAnimation;
 import com.youloft.lilith.glide.GlideCircleTransform;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -103,7 +106,7 @@ public class PointAnswerNormalHolder extends RecyclerView.ViewHolder implements 
         }
         textUserName.setText(dataBean.nickName);
         textAnswerContent.setText(dataBean.contents);
-        if (dataBean.sex == 1) {
+        if (dataBean.sex == 1 ||dataBean.sex == 0) {
             imageUserSex.setImageResource(R.drawable.topic_female_icon);
         } else {
             imageUserSex.setImageResource(R.drawable.topic_male_icon);
@@ -233,7 +236,7 @@ public class PointAnswerNormalHolder extends RecyclerView.ViewHolder implements 
                     .subscribe(new RxObserver<ClickLikeBean>() {
                         @Override
                         public void onDataSuccess(ClickLikeBean s) {
-                            if ((Boolean) s.data) {
+                            if ( s.data) {
                                 updateLikeTable(1);
                             } else {
                                 updateLikeTable(0);
@@ -263,6 +266,6 @@ public class PointAnswerNormalHolder extends RecyclerView.ViewHolder implements 
 
         }
         TopicLikeCache.getIns(itemView.getContext()).insertData(topicLikingTable);
-
+        EventBus.getDefault().post(new ClickLikeEvent(ClickLikeEvent.TYPE_ANSWER));
     }
 }

@@ -97,6 +97,7 @@
         android:drawablePadding="4dp"
         android:layout_marginRight="20dp"
         android:background="#1Fffffff"
+        android:textColor="@color/white"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:text="#爱情，究竟应该是互补还是相似的两"

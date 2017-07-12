@@ -66,6 +66,8 @@
     <string name="setting">设置</string>
     <string name="bind_phone">绑定手机</string>
     <string name="about_me">关于我们</string>
+    <string name="net_err">网络异常</string>
+    <string name="out_program">再按一次退出程序</string>
 
     <string-array name="cons_luck_line_color">
         <item>#de5deb,#99de5deb,#0fde5deb</item>

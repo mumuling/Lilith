@@ -60,7 +60,7 @@ public class ConsTitleHolder extends BaseHolder<String> {
         SpannableString ss = new SpannableString(String.format(unLoggin, getStringInDay()));
         highLight = new ForegroundColorSpan(mContext.getResources().getColor(R.color.cons_title_high_light));
 
-        ss.setSpan(highLight, (ss.length() - 12), (ss.length() - 8), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss.setSpan(highLight, (ss.length() - 11), (ss.length() - 7), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         mConsTitleText.setText(ss);
     }
 
@@ -77,7 +77,7 @@ public class ConsTitleHolder extends BaseHolder<String> {
 
 
 
-    /**
+    /**s
      * 获取当前时间是在上午 下午还是晚上
      * @return
      */

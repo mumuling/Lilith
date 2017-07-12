@@ -99,6 +99,7 @@ public class TopicDetailActivity extends BaseActivity {
                     @Override
                     public void onDataSuccess(TopicBean topicBean) {
                         if (topicBean.data != null) {
+                            chekTopic(topicBean.data);
                             otherTopicList.addAll(topicBean.data);
                             adapter.setOtherTopicList(topicBean.data);
                             totalTopic = topicBean.data.size();
@@ -280,7 +281,7 @@ public class TopicDetailActivity extends BaseActivity {
                         && totalItemCount >=2
                         && lastVisibleItemPosition >= totalItemCount - 2
                         && visibleItemCount > 0) {
-                    if (otherTopicList!= null && otherTopicList.size() != 0) {
+                    if (otherTopicList!= null && otherTopicList.size() >= 4) {
                         loadMoreTopic();
                     }
                 }
@@ -303,6 +304,7 @@ public class TopicDetailActivity extends BaseActivity {
                         if (topicBean.data != null) {
                             otherTopicList.clear();
                             //otherTopicList.addAll(topicBean.data);
+                            chekTopic(topicBean.data);
                             adapter.setOtherTopicList(topicBean.data);
                             totalTopic = totalTopic + topicBean.data.size();
                         }
@@ -313,6 +315,19 @@ public class TopicDetailActivity extends BaseActivity {
                         super.onFailed(e);
                     }
                 });
+    }
+
+    /**
+     *   检查话题是否重复
+     * @param data
+     */
+    private void chekTopic(List<TopicBean.DataBean> data) {
+        for (int i = 0; i < data.size(); i ++) {
+            if (data.get(i).id == tid) {
+                data.remove(i);
+                return;
+            }
+        }
     }
 
 

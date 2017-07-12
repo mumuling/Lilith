@@ -168,11 +168,11 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
         if (userInfo == null)return;
         if (tableArrayList == null || tableArrayList.size() == 0) return;
         PointAnswerTable table = null;
-
             for (int i = 0 ;i < replyList.size(); i ++) {
                  table = pointAnswerCache.getInforByCode(replyList.get(i).id);
                 if (table != null) {
                     pointAnswerCache.deletePointData(point.id);
+                    replyList.remove(i);
                     return;
                 }
             }
@@ -184,6 +184,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
             dataBean.contents = pointAnswerTable.viewPoint;
             dataBean.isclick = 0;
             dataBean.zan = 0;
+            dataBean.sex = userInfo.sex;
             dataBean.date = pointAnswerTable.buildDate;
             dataBean.id = pointAnswerTable.rid;
             dataBean.pid = pointAnswerTable.tid;
@@ -215,7 +216,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
                 root.getWindowVisibleDisplayFrame(rect);
                 int rootInvisibleHeight = root.getRootView().getHeight() - rect.bottom;
 
-                if (rootInvisibleHeight <= 100) {
+                if (rootInvisibleHeight <= 200) {
                     //软键盘隐藏啦
                     rvCommentAnswer.setNeedScrollDown(true);
                     imagePen.setVisibility(View.VISIBLE);
@@ -259,7 +260,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
                 if (newState == RecyclerView.SCROLL_STATE_IDLE
                         && lastVisibleItemPosition == totalItemCount - 1
                         && visibleItemCount > 0) {
-                    if (replyBeanList!= null && replyBeanList.size() != 0) {
+                    if (replyBeanList!= null && replyBeanList.size() >= 10) {
                         loadMoreReply();
                     }
                 }
@@ -419,6 +420,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
                             dataBean.nickName = userInfo.nickName;
                             dataBean.contents = reply_content;
                             dataBean.headImg = userInfo.headImg;
+                            dataBean.id = answerId;
                             adapter.setAnswerTop(dataBean);
                             updatePointAnswerDb(dataBean,answerId);
                             Toaster.showShort("评论成功！");

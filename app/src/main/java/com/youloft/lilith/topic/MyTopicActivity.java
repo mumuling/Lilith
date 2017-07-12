@@ -109,7 +109,7 @@ public class MyTopicActivity extends BaseActivity {
                 .subscribe(new RxObserver<MyTopicBean>() {
                     @Override
                     public void onDataSuccess(MyTopicBean myTopicBean) {
-                        if (myTopicBean.data != null && myTopicBean.data.size() != 0) {
+                        if (myTopicBean.data != null) {
                             readDb(myTopicBean.data ,true);
                             adapter.setMyTopicList(myTopicBean.data);
                         } else {
@@ -189,7 +189,7 @@ public class MyTopicActivity extends BaseActivity {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE
                         && lastVisibleItemPosition == totalItemCount - 1
                         && visibleItemCount > 0) {
-                    if (myTopicList!= null && myTopicList.size() != 0) {
+                    if (myTopicList!= null && myTopicList.size() >= 10) {
                         loadMoreTopic();
                     }
                 }

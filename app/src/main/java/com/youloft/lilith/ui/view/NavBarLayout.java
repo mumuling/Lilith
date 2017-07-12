@@ -137,12 +137,11 @@ public class NavBarLayout extends LinearLayout {
         resetAllSelect();
         mTabViews.get(index).setSelect(true);
     }
-
     /**
      * 设置默认的tab项目
      */
     private void initDefaultTabs() {
-        mTabs.add(new TabItemBean("星座", R.drawable.tab_mine_icon_unselect, R.drawable.tab_cece_icon, 0, true));
+        mTabs.add(new TabItemBean("白羊座", R.drawable.icon2_aries, R.drawable.icon_aries, 0, true));
         mTabs.add(new TabItemBean("话题", R.drawable.tab_talk_icon_unselect, R.drawable.tab_talk_icon, 1, false));
         mTabs.add(new TabItemBean("测测", R.drawable.tab_cece_icon_unselect, R.drawable.tab_cece_icon, 2, false));
         mTabs.add(new TabItemBean("我", R.drawable.tab_mine_icon_unselect, R.drawable.tab_mine_icon, 3, false));

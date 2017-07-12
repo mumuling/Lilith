@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerViewCanPullAble;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.youloft.lilith.AppConfig;
@@ -50,11 +51,12 @@ import io.reactivex.schedulers.Schedulers;
 
 public class XZFragment extends BaseFragment implements PullToRefreshLayout.OnRefreshListener {
     private FrameLayout mRoot;
+    private View mState;
     private PullToRefreshLayout mRefreshLayout;
     private RecyclerView mConsList;
     private ConsFragmentCardAdapter mCardAdapter;
     private GregorianCalendar mCal = new GregorianCalendar();
-
+    private float changeStateRange =  ViewUtil.dp2px(200);
     public XZFragment() {
         super(R.layout.fragment_xz);
     }
@@ -214,20 +216,18 @@ public class XZFragment extends BaseFragment implements PullToRefreshLayout.OnRe
     }
 
     private void checkUserInfo() {
-        if (!AppConfig.LOGIN_STATUS) {
+        UserBean userInfo = AppSetting.getUserInfo();
+        if (userInfo == null||
+                userInfo.data == null ||
+                userInfo.data.userInfo == null ||
+                userInfo.data.userInfo.id == 0 ) {
             showDialog(LOG_IN);
-        } else {
-            UserBean userInfo = AppSetting.getUserInfo();
-            UserBean.DataBean data = userInfo.data;
-            if (data == null ||
-                    data.userInfo == null ||
-                    data.userInfo.id == 0 ||
-                    TextUtils.isEmpty(data.userInfo.birthDay) ||
-                    TextUtils.isEmpty(data.userInfo.birthPlace)) {
-                showDialog(COMPLETE_INFO);
-            }
+        } else if (TextUtils.isEmpty(userInfo.data.userInfo.birthDay) ||
+                TextUtils.isEmpty(userInfo.data.userInfo.birthPlace)) {
+            showDialog(COMPLETE_INFO);
         }
     }
+
 
     /**
      * 初始化viewe
@@ -237,7 +237,12 @@ public class XZFragment extends BaseFragment implements PullToRefreshLayout.OnRe
     private void init(View view) {
         mConsList = (RecyclerView) view.findViewById(R.id.cons_card);
         mRoot = (FrameLayout) view.findViewById(R.id.root);
+        mState = view.findViewById(R.id.cons_statebar);
         mRefreshLayout = (PullToRefreshLayout) view.findViewById(R.id.cons_pull_to_refresh_layout);
+
+        ViewGroup.LayoutParams layoutParams = mState.getLayoutParams();
+        layoutParams.height = ViewUtil.getStatusHeight();
+        mState.setLayoutParams(layoutParams);
 
         mRefreshLayout.setOnRefreshListener(this);
 
@@ -245,6 +250,19 @@ public class XZFragment extends BaseFragment implements PullToRefreshLayout.OnRe
         mConsList.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         mConsList.setAdapter(mCardAdapter);
 
+        mConsList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            int totalDy = 0;
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                totalDy += dy;
+                if (totalDy <= 0) {
+                    mState.setAlpha(0f);
+                } else if (totalDy <= changeStateRange) {
+                    mState.setAlpha(totalDy / changeStateRange);
+                }
+            }
+        });
     }
 
     /**

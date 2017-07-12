@@ -50,8 +50,7 @@ public class ConsCalWeekHolder extends ConsBaseHolder implements ConsCalendar.On
     @Override
     public void onClick() {
         UserBean userInfo = AppSetting.getUserInfo();
-        if (!AppConfig.LOGIN_STATUS ||
-                userInfo == null ||
+        if (userInfo == null ||
                 userInfo.data == null ||
                 userInfo.data.userInfo == null ||
                 userInfo.data.userInfo.id == 0 ||
