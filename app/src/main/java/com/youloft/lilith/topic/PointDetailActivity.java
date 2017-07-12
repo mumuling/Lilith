@@ -452,7 +452,6 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
         pointAnswerTable.viewPoint = dataBean.contents;
         pointAnswerTable.rid = answerId;
         PointAnswerCache.getIns(this).insertData(pointAnswerTable);
-
     }
 
     @Override

@@ -144,7 +144,11 @@ public class MyTopicHolder extends RecyclerView.ViewHolder {
         bindZan(point);
         textCommentContent.setText(point.Viewpoint);
         textVoteResult.setText("投票给：" + point.optionTitle);
-        textTopicTitle.setText(point.topicIdTitle);
+        if (point.isclose != 1) {
+            textTopicTitle.setText(point.topicIdTitle);
+        }else {
+            textTopicTitle.setText("抱歉！此话题已关闭");
+        }
         if (point.topicOptionId%2 ==1) {
             textVoteResult.setTextColor(Color.parseColor("#ff8282"));
         } else {
@@ -287,6 +291,7 @@ public class MyTopicHolder extends RecyclerView.ViewHolder {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.text_topic_title:
+                if (topicBean.isclose ==1)return;
                 ARouter.getInstance().build("/test/TopicDetailActivity")
                         .withInt("tid", topicBean.topicId)
                         .navigation();
