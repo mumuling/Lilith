@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<level-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/grow_00000" android:maxLevel="1" />
+    <item android:drawable="@drawable/grow_00001" android:maxLevel="2"/>
+    <item android:drawable="@drawable/grow_00002" android:maxLevel="3"/>
+    <item android:drawable="@drawable/grow_00003" android:maxLevel="4"/>
+    <item android:drawable="@drawable/grow_00004" android:maxLevel="5"/>
+    <item android:drawable="@drawable/grow_00005" android:maxLevel="6"/>
+    <item android:drawable="@drawable/grow_00006" android:maxLevel="7"/>
+    <item android:drawable="@drawable/grow_00007" android:maxLevel="8"/>
+    <item android:drawable="@drawable/grow_00008" android:maxLevel="9"/>
+    <item android:drawable="@drawable/grow_00009" android:maxLevel="11"/>
+    <item android:drawable="@drawable/grow_00010" android:maxLevel="12"/>
+    <item android:drawable="@drawable/grow_00011" android:maxLevel="13"/>
+    <item android:drawable="@drawable/grow_00012" android:maxLevel="14"/>
+    <item android:drawable="@drawable/grow_00014" android:maxLevel="15"/>
+    <item android:drawable="@drawable/grow_00015" android:maxLevel="16"/>
+    <item android:drawable="@drawable/grow_00016" android:maxLevel="17"/>
+    <item android:drawable="@drawable/grow_00017" android:maxLevel="18"/>
+    <item android:drawable="@drawable/grow_00018" android:maxLevel="19"/>
+    <item android:drawable="@drawable/grow_00019" android:maxLevel="20"/>
+    <item android:drawable="@drawable/grow_00020" android:maxLevel="21"/>
+    <item android:drawable="@drawable/grow_00021" android:maxLevel="22"/>
+    <item android:drawable="@drawable/grow_00022" android:maxLevel="23"/>
+    <item android:drawable="@drawable/grow_00023" android:maxLevel="24"/>
+    <item android:drawable="@drawable/grow_00024" android:maxLevel="25"/>
+    <item android:drawable="@drawable/grow_00025" android:maxLevel="26"/>
+    <item android:drawable="@drawable/grow_00026" android:maxLevel="27"/>
+    <item android:drawable="@drawable/grow_00027" android:maxLevel="28"/>
+    <item android:drawable="@drawable/grow_00028" android:maxLevel="29"/>
+    <item android:drawable="@drawable/grow_00029" android:maxLevel="30"/>
+    <item android:drawable="@drawable/grow_00030" android:maxLevel="31"/>
+    <item android:drawable="@drawable/grow_00031" android:maxLevel="32"/>
+    <item android:drawable="@drawable/grow_00032" android:maxLevel="33"/>
+    <item android:drawable="@drawable/grow_00033" android:maxLevel="34"/>
+    <item android:drawable="@drawable/grow_00034" android:maxLevel="35"/>
+    <item android:drawable="@drawable/grow_00035" android:maxLevel="36"/>
+    <item android:drawable="@drawable/grow_00036" android:maxLevel="37"/>
+    <item android:drawable="@drawable/grow_00037" android:maxLevel="38"/>
+    <item android:drawable="@drawable/grow_00038" android:maxLevel="39"/>
+    <item android:drawable="@drawable/grow_00039" android:maxLevel="40"/>
+    <item android:drawable="@drawable/grow_00040" android:maxLevel="41"/>
+    <item android:drawable="@drawable/grow_00041" android:maxLevel="42"/>
+    <item android:drawable="@drawable/grow_00042" android:maxLevel="43"/>
+    <item android:drawable="@drawable/grow_00043" android:maxLevel="44"/>
+</level-list>
