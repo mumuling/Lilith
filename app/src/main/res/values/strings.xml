@@ -64,7 +64,7 @@
     <string name="feed_back">意见反馈</string>
     <string name="setting">设置</string>
     <string name="bind_phone">绑定手机</string>
-
+    <string name="about_me">关于我们</string>
 
     <string-array name="cons_luck_line_color">
         <item>#de5deb,#99de5deb,#0fde5deb</item>

@@ -126,6 +126,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".login.activity.ForgetPasswordActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".info.activity.BindPhoneActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

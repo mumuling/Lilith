@@ -26,6 +26,34 @@ public class AboutMeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about_me);
         ButterKnife.bind(this);
-        btlAboutMe.setTitle("关于我们");
+        btlAboutMe.setShowShareBtn(false);
+        btlAboutMe.setTitle(getResources().getString(R.string.about_me));
+        btlAboutMe.setOnToolBarItemClickListener(new BaseToolBar.OnToolBarItemClickListener() {
+            @Override
+            public void OnBackBtnClick() {
+                onBackPressed();
+            }
+
+            @Override
+            public void OnTitleBtnClick() {
+
+            }
+
+            @Override
+            public void OnShareBtnClick() {
+
+            }
+
+            @Override
+            public void OnSaveBtnClick() {
+
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }
