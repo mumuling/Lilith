@@ -22,7 +22,7 @@
             android:maxLines="2"
             android:gravity="left|center"
             android:textSize="20dp"
-            android:textColor="@color/white"
+            android:textColor="@color/white_70"
             android:layout_marginLeft="28dp"
             android:layout_marginRight="28dp"
             android:layout_gravity="top|center"

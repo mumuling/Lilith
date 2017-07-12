@@ -181,10 +181,14 @@ public class VoteHolder extends RecyclerView.ViewHolder {
                             public void onDataSuccess(VoteBean s) {
                                 int poitnID =  s.data;
                                 if (poitnID!= -1) {
-
                                     topicInfo.totalVote++;
-                                    addOptionVote(id);
-                                    voteAniamtion((float) topicInfo.option.get(0).vote/topicInfo.totalVote);
+                                    int votes = addOptionVote(id);
+
+                                    if (id % 2 == 1) {
+                                        voteAniamtion((float) votes / topicInfo.totalVote);
+                                    } else {
+                                        voteAniamtion((float) 1 - (votes / topicInfo.totalVote));
+                                    }
                                     needVoteAnimation = false;
                                     String time = CalendarHelper.getNowTimeString();
                                     updatePointDb(id,topicInfo.id,poitnID,msg,time,topicInfo.title,voteTitle);
@@ -256,13 +260,16 @@ public class VoteHolder extends RecyclerView.ViewHolder {
      *   增加投票数
      * @param id
      */
-    private void addOptionVote(int id) {
-        if (topicInfo.option == null || topicInfo.option.size() == 0 )return;
+    private int addOptionVote(int id) {
+        int vote = 0;
+        if (topicInfo.option == null || topicInfo.option.size() == 0 )return 0;
         for (int i =0; i < topicInfo.option.size();i ++) {
             if (id == topicInfo.option.get(i).id) {
                 topicInfo.option.get(i).vote++;
+                return topicInfo.option.get(i).vote;
             }
         }
+        return 0;
     }
 
     /**
@@ -315,6 +322,13 @@ public class VoteHolder extends RecyclerView.ViewHolder {
             }
         });
         if (topicInfo.isVote ==1 && needVoteAnimation) {
+            for (int j = 0 ; j < topicInfo.option.size(); j ++) {
+                if (topicInfo.option.get(j).id % 2 == 1) {
+                    voteAniamtion((float) topicInfo.option.get(j).vote/topicInfo.totalVote);
+                } else {
+                    voteAniamtion((float) 1 -  (topicInfo.option.get(j).vote/topicInfo.totalVote));
+                }
+            }
             voteAniamtion((float) topicInfo.option.get(0).vote/topicInfo.totalVote);
             needVoteAnimation = false;
         }
