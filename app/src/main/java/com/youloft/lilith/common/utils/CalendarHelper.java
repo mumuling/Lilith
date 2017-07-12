@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by zchao on 2017/7/5.
@@ -13,7 +14,10 @@ import java.util.Date;
  */
 
 public class CalendarHelper {
-public  static  SimpleDateFormat formatAll = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public  static  SimpleDateFormat formatAll = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public static long UNIT_DAY_MILLS = 24 * 60 * 60 * 1000;
+    public static long UNIT_HOUR_MILLS = 60 * 60 * 1000;
+    public static long UNIT_MINUTE_MILLS = 60 * 1000;
     public static String format(Date date, String formatString){
         SimpleDateFormat format = new SimpleDateFormat(formatString);
         String format1 = format.format(date);
@@ -57,12 +61,14 @@ public  static  SimpleDateFormat formatAll = new SimpleDateFormat("yyyy-MM-dd HH
 
     public static String getInterValTime(long times,long interval) {
          interval = System.currentTimeMillis();
-        if ((interval-times)/(1000*60*60*24) >= 1) {
-            return (int)((interval-times)/(1000*60*60*24)) + "天前";
-        } else if ((interval-times)/(1000*60*60) >=1) {
-            return (int)((interval-times)/(1000*60*60)) + "小时前";
+        if (Math.abs(interval-times)/UNIT_DAY_MILLS >= 1) {
+            return (int)(Math.abs(interval-times)/UNIT_DAY_MILLS) + "天前";
+        } else if (Math.abs(interval-times)/UNIT_HOUR_MILLS >=1) {
+            return (int)(Math.abs(interval-times)/UNIT_HOUR_MILLS) + "小时前";
+        } else  if (Math.abs(interval-times)/UNIT_MINUTE_MILLS == 0) {
+            return "刚刚";
         } else {
-            return (int)((interval-times)/(1000*60)) + "分钟前";
+            return (int)(Math.abs(interval-times)/UNIT_MINUTE_MILLS) + "分钟前";
         }
     }
 

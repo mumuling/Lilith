@@ -27,12 +27,15 @@ import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.topic.PointDetailActivity;
 import com.youloft.lilith.topic.TopicRepo;
 import com.youloft.lilith.topic.bean.ClickLikeBean;
+import com.youloft.lilith.topic.bean.ClickLikeEvent;
 import com.youloft.lilith.topic.bean.PointBean;
 import com.youloft.lilith.topic.bean.TopicDetailBean;
 import com.youloft.lilith.topic.db.TopicLikeCache;
 import com.youloft.lilith.topic.db.TopicLikingTable;
 import com.youloft.lilith.topic.widget.Rotate3dAnimation;
 import com.youloft.lilith.glide.GlideCircleTransform;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
@@ -264,6 +267,7 @@ public class AuthorPointHolder extends RecyclerView.ViewHolder implements View.O
 
         }
         TopicLikeCache.getIns(itemView.getContext()).insertData(topicLikingTable);
+        EventBus.getDefault().post(new ClickLikeEvent(ClickLikeEvent.TYPE_AUTHOR));
     }
 
 }
