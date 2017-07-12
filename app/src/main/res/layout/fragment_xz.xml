@@ -3,14 +3,18 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <android.support.v7.widget.RecyclerViewEx
-        android:id="@+id/cons_card"
+    <com.youloft.lilith.common.widgets.view.PullToRefreshLayout
+        android:id="@+id/cons_pull_to_refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:clipChildren="false"
-        android:clipToPadding="false" />
+        android:layout_height="match_parent">
 
+        <android.support.v7.widget.RecyclerViewCanPullAble
+            android:id="@+id/cons_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp" />
+    </com.youloft.lilith.common.widgets.view.PullToRefreshLayout>
 </FrameLayout>

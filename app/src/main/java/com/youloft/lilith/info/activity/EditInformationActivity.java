@@ -198,6 +198,10 @@ public class EditInformationActivity extends BaseActivity {
             Toaster.showShort("请完善信息");
             return;
         }
+        if (nickName.length() > 7) {//昵称长度不能超过7个
+            Toaster.showShort("昵称过长");
+            return;
+        }
         sex = "1";
         if (sexStr.equals(getResources().getString(R.string.man))) {//女 1   男 2
             sex = String.valueOf(2);
@@ -261,8 +265,9 @@ public class EditInformationActivity extends BaseActivity {
 
     /**
      * 上传图片的请求
-     * @param upBit 图片的base64
-     * @param nameEx  后缀名
+     *
+     * @param upBit  图片的base64
+     * @param nameEx 后缀名
      */
     private void updateUserImg(String upBit, String nameEx) {
         if (AppSetting.getUserInfo() == null) {

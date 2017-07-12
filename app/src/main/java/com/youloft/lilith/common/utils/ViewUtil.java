@@ -10,13 +10,9 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
-import android.renderscript.Allocation;
-import android.renderscript.Element;
-import android.renderscript.RenderScript;
-import android.renderscript.ScriptIntrinsicBlur;
 import android.support.v4.util.LruCache;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerViewEx;
+import android.support.v7.widget.RecyclerViewCanPullAble;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
@@ -200,7 +196,7 @@ public class ViewUtil {
      * @param view
      * @return
      */
-    public static Bitmap shotRecyclerView(RecyclerViewEx view) {
+    public static Bitmap shotRecyclerView(RecyclerViewCanPullAble view) {
         RecyclerView.Adapter adapter = view.getAdapter();
         Bitmap bigBitmap = null;
         if (adapter != null) {

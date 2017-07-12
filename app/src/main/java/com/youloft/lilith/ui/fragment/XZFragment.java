@@ -5,12 +5,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerViewEx;
+import android.support.v7.widget.RecyclerViewCanPullAble;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 
 import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
@@ -19,6 +17,7 @@ import com.youloft.lilith.common.event.ConsChangeEvent;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.CalendarHelper;
 import com.youloft.lilith.common.utils.ViewUtil;
+import com.youloft.lilith.common.widgets.view.PullToRefreshLayout;
 import com.youloft.lilith.cons.ConsRepo;
 import com.youloft.lilith.cons.bean.ConsPredictsBean;
 import com.youloft.lilith.cons.card.ConsFragmentCardAdapter;
@@ -26,13 +25,11 @@ import com.youloft.lilith.cons.consmanager.LoddingCheckEvent;
 import com.youloft.lilith.cons.consmanager.ShareConsEvent;
 import com.youloft.lilith.cons.view.LogInOrCompleteDialog;
 import com.youloft.lilith.info.activity.EditInformationActivity;
-import com.youloft.lilith.info.bean.UpdateUserInfoBean;
 import com.youloft.lilith.info.event.UserInfoUpDateEvent;
 import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.login.event.LoginEvent;
 import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.share.ShareBuilder;
-import com.youloft.lilith.ui.MainActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -42,6 +39,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -50,8 +48,9 @@ import io.reactivex.schedulers.Schedulers;
  * version:
  */
 
-public class XZFragment extends BaseFragment {
+public class XZFragment extends BaseFragment implements PullToRefreshLayout.OnRefreshListener {
     private FrameLayout mRoot;
+    private PullToRefreshLayout mRefreshLayout;
     private RecyclerView mConsList;
     private ConsFragmentCardAdapter mCardAdapter;
     private GregorianCalendar mCal = new GregorianCalendar();
@@ -80,9 +79,17 @@ public class XZFragment extends BaseFragment {
 
 
     /**
-     * 初始化数据
+     * 来自强制刷新
      */
     private void initDate() {
+        refreshDate(null);
+    }
+
+
+    /**
+     * 初始化数据
+     */
+    private void refreshDate(PullToRefreshLayout pullToRefreshLayout) {
         UserBean userInfo = AppSetting.getUserInfo();
         if (userInfo == null ||
                 userInfo.data == null ||
@@ -92,18 +99,18 @@ public class XZFragment extends BaseFragment {
             String date = "1990-04-02";
             String time = "12:00:00";
             mCardAdapter.setTitle("");
-            getData(date, time, "", "");  //没登录选双鱼
+            getData(date, time, "", "", pullToRefreshLayout);  //没登录选双鱼
         } else {
             //有资料
             UserBean.DataBean.UserInfoBean userInfo1 = userInfo.data.userInfo;
             Date date = CalendarHelper.parseDate(userInfo1.birthDay, EditInformationActivity.DATE_FORMAT);
             mCal.setTime(date);
-            mCardAdapter.setTitle(TextUtils.isEmpty(userInfo1.nickName)? userInfo1.phone : userInfo1.nickName);
-            getData(CalendarHelper.format(date, "yyyy-MM-dd"), CalendarHelper.format(date, "HH:mm:ss"), userInfo1.birthLongi, userInfo1.birthLati);
+            mCardAdapter.setTitle(TextUtils.isEmpty(userInfo1.nickName) ? userInfo1.phone : userInfo1.nickName);
+            getData(CalendarHelper.format(date, "yyyy-MM-dd"), CalendarHelper.format(date, "HH:mm:ss"), userInfo1.birthLongi, userInfo1.birthLati, pullToRefreshLayout);
         }
     }
 
-    private void getData(String birdt, String birtm, String birlongi, String birlati) {
+    private void getData(String birdt, String birtm, String birlongi, String birlati, final PullToRefreshLayout pullToRefreshLayout) {
         ConsRepo.getConsPredicts(birdt, birtm, birlongi, birlati)
                 .compose(this.<ConsPredictsBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
@@ -118,8 +125,30 @@ public class XZFragment extends BaseFragment {
                                 EventBus.getDefault().post(new ConsChangeEvent(bean.data.signs));
                             }
                         }
+
+                        if (pullToRefreshLayout != null) {
+                            pullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
+                        }
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        super.onError(e);
+                        sendFinish(pullToRefreshLayout);
+                    }
+
+                    @Override
+                    protected void onFailed(Throwable e) {
+                        super.onFailed(e);
+                        sendFinish(pullToRefreshLayout);
                     }
                 });
+    }
+
+    private void sendFinish(final PullToRefreshLayout pullToRefreshLayout) {
+        if (pullToRefreshLayout != null) {
+            pullToRefreshLayout.refreshFinish(PullToRefreshLayout.FAIL);
+        }
     }
 
 
@@ -149,7 +178,6 @@ public class XZFragment extends BaseFragment {
     @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
     public void onLoddingChagne(LoginEvent event) {
         initDate();
-        Log.d(TAG, "onLoddingChagne() called with: event = [" + event + "]");
     }
 
     /**
@@ -160,15 +188,14 @@ public class XZFragment extends BaseFragment {
     @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
     public void onUpdate(UserInfoUpDateEvent event) {
         initDate();
-        Log.d(TAG, "onLoddingChagne() called with: event = [" + event + "]");
     }
 
-    private static final String TAG = "XZFragment";
+
     /**
      * 拉起分享
      */
     private void share() {
-        Bitmap bitmap = ViewUtil.shotRecyclerView((RecyclerViewEx) mConsList);
+        Bitmap bitmap = ViewUtil.shotRecyclerView((RecyclerViewCanPullAble) mConsList);
         if (bitmap != null && !bitmap.isRecycled()) {
             new ShareBuilder(getContext()).withImg(bitmap).share();
         }
@@ -195,7 +222,7 @@ public class XZFragment extends BaseFragment {
             if (data == null ||
                     data.userInfo == null ||
                     data.userInfo.id == 0 ||
-                    TextUtils.isEmpty(data.userInfo.birthDay)||
+                    TextUtils.isEmpty(data.userInfo.birthDay) ||
                     TextUtils.isEmpty(data.userInfo.birthPlace)) {
                 showDialog(COMPLETE_INFO);
             }
@@ -210,10 +237,24 @@ public class XZFragment extends BaseFragment {
     private void init(View view) {
         mConsList = (RecyclerView) view.findViewById(R.id.cons_card);
         mRoot = (FrameLayout) view.findViewById(R.id.root);
+        mRefreshLayout = (PullToRefreshLayout) view.findViewById(R.id.cons_pull_to_refresh_layout);
+
+        mRefreshLayout.setOnRefreshListener(this);
 
         mCardAdapter = new ConsFragmentCardAdapter(getContext());
         mConsList.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         mConsList.setAdapter(mCardAdapter);
 
+    }
+
+    /**
+     * 下拉刷新时候回调此处,刷新业务逻辑写在这里边；在数据请求完成后，
+     * 要调用pullToRefreshLayout的refreshFinish()方法；这样才能关闭刷新动作
+     *
+     * @param pullToRefreshLayout
+     */
+    @Override
+    public void onRefresh(PullToRefreshLayout pullToRefreshLayout) {
+        refreshDate(pullToRefreshLayout);
     }
 }
