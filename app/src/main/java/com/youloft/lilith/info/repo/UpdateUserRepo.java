@@ -79,7 +79,7 @@ public class UpdateUserRepo extends AbstractDataRepo {
         param.put("data", imgBase64);
         param.put("ext", nameEx);
         param.put("uid", uid);
-        return httpFlow(Urls.UPLOAD_FILE, null, param, true, UpLoadHeaderBean.class, "img_user_info", 0);
+        return post(Urls.UPLOAD_FILE, null, param, true, UpLoadHeaderBean.class, "img_user_info", 0);
     }
 
 
