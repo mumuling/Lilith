@@ -30,7 +30,7 @@ public class UpdateUserRepo extends AbstractDataRepo {
     public static Flowable<OldPasswordBean> checkOldPassword(String uid, String pwd) {
         paramsOldPassword.put("uid", uid);
         paramsOldPassword.put("pwd", pwd);
-        return unionFlow(Urls.CHECK_OLD_PASSWORD, null, paramsOldPassword, true, OldPasswordBean.class, "old_password", 0);
+        return httpFlow(Urls.CHECK_OLD_PASSWORD, null, paramsOldPassword, true, OldPasswordBean.class, "old_password", 0);
     }
 
     //修改密码
@@ -40,7 +40,7 @@ public class UpdateUserRepo extends AbstractDataRepo {
         paramsUpdatePassword.put("uid", uid);
         paramsUpdatePassword.put("oldpwd", oldpwd);
         paramsUpdatePassword.put("newpwd", newpwd);
-        return unionFlow(Urls.MODIFY_PASSWORD_WITH_OLD, null, paramsUpdatePassword, true, ModifyPasswordBean.class, "update_password", 0);
+        return httpFlow(Urls.MODIFY_PASSWORD_WITH_OLD, null, paramsUpdatePassword, true, ModifyPasswordBean.class, "update_password", 0);
     }
 
     //修改用户信息
@@ -70,7 +70,7 @@ public class UpdateUserRepo extends AbstractDataRepo {
 
     public static Flowable<CheckLoginBean> checkLoginStatus(String uid) {
         paramsCheckLoginStatus.put("uid", uid);
-        return unionFlow(Urls.CHECK_LOGIN_STATUS, null, paramsCheckLoginStatus, true, CheckLoginBean.class, "check_login", 0);
+        return httpFlow(Urls.CHECK_LOGIN_STATUS, null, paramsCheckLoginStatus, true, CheckLoginBean.class, "check_login", 0);
     }
 
     //上传图片
@@ -79,7 +79,7 @@ public class UpdateUserRepo extends AbstractDataRepo {
         param.put("data", imgBase64);
         param.put("ext", nameEx);
         param.put("uid", uid);
-        return post(Urls.UPLOAD_FILE, null, param, true, UpLoadHeaderBean.class, "img_user_info", 0);
+        return httpFlow(Urls.UPLOAD_FILE, null, param, true, UpLoadHeaderBean.class, "img_user_info", 0);
     }
 
 
@@ -88,7 +88,7 @@ public class UpdateUserRepo extends AbstractDataRepo {
     public static Flowable<LogoutBean> logoutUser(String uid, String acctoken) {
         paramsLogoutUser.put("uid", uid);
         paramsLogoutUser.put("acctoken", acctoken);
-        return unionFlow(Urls.LOGOUT_URL, null, paramsLogoutUser, true, LogoutBean.class, "logout_user", 0);
+        return httpFlow(Urls.LOGOUT_URL, null, paramsLogoutUser, true, LogoutBean.class, "logout_user", 0);
     }
 
 
@@ -110,13 +110,13 @@ public class UpdateUserRepo extends AbstractDataRepo {
         paramsFeedBack.put("AppVer", appVer);
         paramsFeedBack.put("OsVer", osVer);
         paramsFeedBack.put("MsgContent", msgContent);
-        return unionFlow(Urls.FEEDBACK, null, paramsFeedBack, true, FeedBackBean.class, "feed_back", 0);
+        return httpFlow(Urls.FEEDBACK, null, paramsFeedBack, true, FeedBackBean.class, "feed_back", 0);
     }
 
 
     //检查版本
     public static Flowable<CheckVersionBean> checkVersion() {
-        return unionFlow(Urls.CHECK_VERSION, null, null, true, CheckVersionBean.class, "check_version", 0);
+        return httpFlow(Urls.CHECK_VERSION, null, null, true, CheckVersionBean.class, "check_version", 0);
     }
 
 
@@ -127,7 +127,7 @@ public class UpdateUserRepo extends AbstractDataRepo {
         paramsBindPhone.put("code", code);
         paramsBindPhone.put("phone", phone);
         paramsBindPhone.put("userid", userid);
-        return unionFlow(Urls.BIND_PHONE, null, paramsBindPhone, true, UserBean.class, "bind_phone", 0);
+        return httpFlow(Urls.BIND_PHONE, null, paramsBindPhone, true, UserBean.class, "bind_phone", 0);
     }
 
 
@@ -140,6 +140,6 @@ public class UpdateUserRepo extends AbstractDataRepo {
         paramsBindWx.put("nickName", nickName);
         paramsBindWx.put("phone", phone);
         paramsBindWx.put("platform", platform);
-        return unionFlow(Urls.BIND_WEXIN, null, paramsBindWx, true, UserBean.class, "bind_wexin", 0);
+        return httpFlow(Urls.BIND_WEXIN, null, paramsBindWx, true, UserBean.class, "bind_wexin", 0);
     }
 }

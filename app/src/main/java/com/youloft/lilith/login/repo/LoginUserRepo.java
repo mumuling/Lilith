@@ -23,7 +23,7 @@ public class LoginUserRepo extends AbstractDataRepo{
     public static Flowable<UserBean> loginWithPassword(String phone, String password) {
         params.put("phone",phone);
         params.put("pwd",password);
-        return unionFlow(Urls.LOGIN_URL, null, params, true, UserBean.class, "login_user_info", 0);
+        return httpFlow(Urls.LOGIN_URL, null, params, true, UserBean.class, "login_user_info", 0);
     }
 
     //微信登录
