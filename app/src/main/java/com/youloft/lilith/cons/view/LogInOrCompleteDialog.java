@@ -171,9 +171,11 @@ public class LogInOrCompleteDialog extends BaseDialog {
                 if (status == XZFragment.LOG_IN || status == TOPIC_IN) {
                     ARouter.getInstance().build("/test/LoginActivity")
                             .navigation();
+                    close();
                 } else {
                     ARouter.getInstance().build("/test/EditInformationActivity")
                             .navigation();
+                    close();
                 }
             }
         });
