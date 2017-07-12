@@ -14,7 +14,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#282142"
+        android:background="@drawable/lilith_bg"
         android:orientation="vertical">
 
         <!--修改密码和绑定账号部分-->
