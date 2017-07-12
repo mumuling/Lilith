@@ -189,7 +189,7 @@ public class MyTopicActivity extends BaseActivity {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE
                         && lastVisibleItemPosition == totalItemCount - 1
                         && visibleItemCount > 0) {
-                    if (myTopicList!= null && myTopicList.size() != 0) {
+                    if (myTopicList!= null && myTopicList.size() >= 10) {
                         loadMoreTopic();
                     }
                 }
