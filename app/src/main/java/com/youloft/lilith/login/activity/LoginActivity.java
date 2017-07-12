@@ -23,6 +23,7 @@ import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.rx.RxObserver;
+import com.youloft.lilith.common.utils.LoginUtils;
 import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.common.widgets.dialog.PrivacyDialog;
 import com.youloft.lilith.login.bean.UserBean;
@@ -214,6 +215,10 @@ public class LoginActivity extends BaseActivity {
             return;
         }
         if (phoneNumber.length() != 11) {
+            Toaster.showShort("手机号码不正确");
+            return;
+        }
+        if(!LoginUtils.isPhoneNumber(phoneNumber)){
             Toaster.showShort("手机号码不正确");
             return;
         }

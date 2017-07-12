@@ -22,6 +22,7 @@ import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.rx.RxObserver;
+import com.youloft.lilith.common.utils.LoginUtils;
 import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.login.bean.SendSmsBean;
 import com.youloft.lilith.login.bean.SmsCodeBean;
@@ -263,6 +264,15 @@ public class UserFunctionActivity extends BaseActivity {
             return;
         }
         String phoneNumber = etPhoneNumber.getText().toString().replaceAll("-", "");
+        if (TextUtils.isEmpty(phoneNumber)){
+            Toaster.showShort("手机号码不能为空");
+            return;
+        }
+
+        if(!LoginUtils.isPhoneNumber(phoneNumber)){
+            Toaster.showShort("手机号码不正确");
+            return;
+        }
         //发送短信
         SendSmsRepo.sendSms(phoneNumber, "Login")
                 .compose(this.<SendSmsBean>bindToLifecycle())
@@ -328,6 +338,10 @@ public class UserFunctionActivity extends BaseActivity {
         String smsCode = etVerificationCode.getText().toString();
         if (TextUtils.isEmpty(phoneNumber) || TextUtils.isEmpty(smsCode)) {
             Toaster.showShort("信息不能为空");
+            return;
+        }
+        if(!LoginUtils.isPhoneNumber(phoneNumber)){
+            Toaster.showShort("手机号码不正确");
             return;
         }
         if (isCodeRight) {  //这里的变量是验证了验证码之后  正确的时候才为true
