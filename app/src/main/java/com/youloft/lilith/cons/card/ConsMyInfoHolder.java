@@ -124,15 +124,6 @@ public class ConsMyInfoHolder extends ConsBaseHolder {
         mConsMyInfoEnWord.setText(detailInfo.eMsg);
         mConsMyInfoCnWord.setText(detailInfo.msg);
         GlideApp.with(mContext).load(detailInfo.bgImg).into(mConsMyInfoBg);
-        mConsMyInfoContentRoot.post(new Runnable() {
-            @Override
-            public void run() {
-                ViewGroup.LayoutParams layoutParams = mRoot.getLayoutParams();
-                layoutParams.height = mConsMyInfoContentRoot.getHeight();
-                mRoot.setLayoutParams(layoutParams);
-
-            }
-        });
     }
 
     private void bindDefault() {
