@@ -30,7 +30,7 @@ import butterknife.OnClick;
  * desc: 跳转登录界面或则完善资料界面的dialog
  * version:
  */
-
+//TODO 还需要做防止多次弹出此窗口的问题
 public class LogInOrCompleteDialog extends BaseDialog {
     @BindView(R.id.login_jump_dialog)
     ImageView mLoginJumpDialog;
@@ -91,7 +91,7 @@ public static final int TOPIC_IN = 3;
             UserBean userInfo = AppSetting.getUserInfo();
             if (userInfo != null && userInfo.data != null && userInfo.data.userInfo != null) {
                 UserBean.DataBean.UserInfoBean info = userInfo.data.userInfo;
-                String nickName = TextUtils.isDigitsOnly(info.nickName)? (TextUtils.isEmpty(info.phone)? "莉莉斯":info.phone): info.nickName;
+                String nickName = TextUtils.isDigitsOnly(info.nickName)? (TextUtils.isEmpty(info.phone)? getContext().getResources().getString(R.string.app_name_ch):info.phone): info.nickName;
                 mLoginJumpDialogNickname.setText(nickName);
 
                 if (!TextUtils.isEmpty(info.headImg)){
