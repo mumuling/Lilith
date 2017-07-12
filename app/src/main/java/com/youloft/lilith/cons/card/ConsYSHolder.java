@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -48,6 +49,8 @@ public class ConsYSHolder extends ConsBaseHolder {
     TextView mConsLuckMsg;
     @BindView(R.id.cons_luck_msg_no_data)
     ImageView mConsNoData;
+    @BindView(R.id.cons_luck_bg_group)
+    FrameLayout mConsTextGroup;
     @BindView(R.id.root)
     LinearLayout mRoot;
 
@@ -85,7 +88,7 @@ public class ConsYSHolder extends ConsBaseHolder {
         }
         mConsLuckMsg.setText(msg);
         mConsNoData.setVisibility(TextUtils.isEmpty(msg) ? View.VISIBLE : View.GONE);
-        mConsLuckMsg.getBackground().setLevel(type);
+        mConsTextGroup.getBackground().setLevel(type);
 
         if (detailData.predicts != null) {
             LuckData luckData = new LuckData();
