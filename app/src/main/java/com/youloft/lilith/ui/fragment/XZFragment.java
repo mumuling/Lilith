@@ -217,15 +217,14 @@ public class XZFragment extends BaseFragment implements PullToRefreshLayout.OnRe
 
     private void checkUserInfo() {
         UserBean userInfo = AppSetting.getUserInfo();
-        UserBean.DataBean data = userInfo.data;
-        if (data == null ||
-                data.userInfo == null ||
-                data.userInfo.id == 0 ||
-                TextUtils.isEmpty(data.userInfo.birthDay) ||
-                TextUtils.isEmpty(data.userInfo.birthPlace)) {
-            showDialog(COMPLETE_INFO);
-        } else {
+        if (userInfo == null||
+                userInfo.data == null ||
+                userInfo.data.userInfo == null ||
+                userInfo.data.userInfo.id == 0 ) {
             showDialog(LOG_IN);
+        } else if (TextUtils.isEmpty(userInfo.data.userInfo.birthDay) ||
+                TextUtils.isEmpty(userInfo.data.userInfo.birthPlace)) {
+            showDialog(COMPLETE_INFO);
         }
     }
 

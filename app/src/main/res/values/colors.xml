@@ -19,7 +19,7 @@
     <color name="cons_my_info_en_word_color">#7fffffff</color>
     <color name="white">#ffffff</color>
     <!--70%透明度白色  透明了30%-->
-    <color name="white_70">#1affffff</color>
+    <color name="white_70">#b2ffffff</color>
     <!--50%透明度白色-->
     <color name="white_50">#7fffffff</color>
     <!--20%透明度白色 透明了80%-->
