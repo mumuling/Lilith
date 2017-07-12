@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -16,8 +17,10 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.widgets.webkit.URLProtocolHandler;
 import com.youloft.lilith.common.widgets.webkit.WebChromeClientEx;
+import com.youloft.lilith.common.widgets.webkit.WebViewClientEx;
 import com.youloft.lilith.common.widgets.webkit.WebViewEx;
 import com.youloft.lilith.common.widgets.webkit.WebWindowManager;
+import com.youloft.lilith.ui.view.BaseToolBar;
 import com.youloft.socialize.SocializeApp;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
@@ -41,6 +44,7 @@ public class WebActivity extends AppCompatActivity implements WebChromeClientEx.
      * 协议处理
      */
     private URLProtocolHandler mProtocolHandler = null;
+    private BaseToolBar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,10 +64,21 @@ public class WebActivity extends AppCompatActivity implements WebChromeClientEx.
                 }
             }
         };
-        mFullScreenGroup = (ViewGroup) findViewById(R.id.full_container);
-        mWebGroup = (ViewGroup) findViewById(R.id.web_container);
+        initView();
         mWebWindowManager = new WebWindowManager<>(this, mWebGroup, mProtocolHandler, this);
         loadUrl(mParamsUrl);
+    }
+
+    private void initView() {
+        mFullScreenGroup = (ViewGroup) findViewById(R.id.full_container);
+        mWebGroup = (ViewGroup) findViewById(R.id.web_container);
+        mToolbar = (BaseToolBar) findViewById(R.id.topview);
+        mToolbar.mBackBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 
     /**
@@ -84,8 +99,22 @@ public class WebActivity extends AppCompatActivity implements WebChromeClientEx.
             return;
         }
         mWebWindowManager.getTopView().loadUrl(url);
+        mWebWindowManager.getTopView().setWebViewClient(new WebViewClientEx(){
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                setTitle(view.getTitle());
+            }
+        });
     }
 
+    /**
+     * 设置标题
+     * @param string
+     */
+    private void setTitle(String string){
+        mToolbar.setTitle(string);
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

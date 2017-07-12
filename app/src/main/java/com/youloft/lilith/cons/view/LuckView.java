@@ -187,7 +187,7 @@ public class LuckView extends View {
         for (int i = 0; i < mPathY.length; i++) {
             LuckData.LuckItem safeData = SafeUtil.getSafeData(data, i);
             if (safeData != null) {
-                float height = (mPathRectHeight - mDP10) * (1.0f - safeData.luckLevel * 1.0f / range);
+                float height = (mPathRectHeight - mDP10) * (1.0f - safeData.luckLevel * 1.0f / range) + mDP10;
                 mPathY[i] = Math.round(height);
             } else {
                 mPathY[i] = Math.round(mPathRectHeight / 2);

@@ -24,6 +24,7 @@ public class WebViewClientEx extends WebViewClient {
         this.mProtocolHandler = handler;
     }
 
+
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, String url) {
 

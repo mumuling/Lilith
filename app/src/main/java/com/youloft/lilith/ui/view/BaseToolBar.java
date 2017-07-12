@@ -24,9 +24,9 @@ import com.youloft.lilith.R;
 
 public class BaseToolBar extends ToolBarLayout {
 
-    private ImageView mBackBtn, mShareBtn;
-    private TextView mTitleTV;
-    private TextView mSaveTV;
+    public ImageView mBackBtn, mShareBtn;
+    public TextView mTitleTV;
+    public TextView mSaveTV;
     private OnToolBarItemClickListener mListener;
 
     public BaseToolBar(@NonNull Context context) {
