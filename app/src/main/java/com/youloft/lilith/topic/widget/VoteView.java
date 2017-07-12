@@ -138,11 +138,11 @@ public class VoteView extends View {
                 }
                 int endX = (int) event.getX();
                 int endY = (int) event.getY();
-                if (startX == endX && startY == endY && startX < mCenterX - bgWidth/2 + leftCircleWidth  && startX >mCenterX - bgWidth/2 ) {
+                if (Math.abs(startX - endX) <=10 && Math.abs(startY -endY) <=10 && startX < mCenterX - bgWidth/2 + leftCircleWidth  && startX >mCenterX - bgWidth/2 ) {
                     mItemClickListener.clickLeft();
                     return true;
                 }
-                if (startX == endX && startY == endY && startX > mCenterX + bgWidth/2 - rightCircleWidth && startX <=mCenterX + bgWidth/2 ) {
+                if (Math.abs(startX - endX) <=10 && Math.abs(startY -endY) <=10 && startX > mCenterX + bgWidth/2 - rightCircleWidth && startX <=mCenterX + bgWidth/2 ) {
                     mItemClickListener.clickRight();
                     return true;
                 }

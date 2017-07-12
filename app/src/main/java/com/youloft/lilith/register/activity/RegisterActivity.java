@@ -22,6 +22,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.rx.RxObserver;
+import com.youloft.lilith.common.utils.LoginUtils;
 import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.login.bean.SendSmsBean;
 import com.youloft.lilith.login.bean.SmsCodeBean;
@@ -322,7 +323,15 @@ public class RegisterActivity extends BaseActivity {
         // 4.  是否在一分钟的重发时间内
 
         String phoneNumber = etPhoneNumber.getText().toString().replaceAll("-", "");
+        if (TextUtils.isEmpty(phoneNumber)){
+            Toaster.showShort("手机号码不能为空");
+            return;
+        }
         if (phoneNumber.length() != 11) {
+            Toaster.showShort("手机号码不正确");
+            return;
+        }
+        if(!LoginUtils.isPhoneNumber(phoneNumber)){
             Toaster.showShort("手机号码不正确");
             return;
         }
@@ -425,6 +434,10 @@ public class RegisterActivity extends BaseActivity {
         }
         if (phoneNumber.length() != 11 || smsCode.length() != 6) {
             Toaster.showShort("请检查手机号码或者验证码");
+            return;
+        }
+        if(!LoginUtils.isPhoneNumber(phoneNumber)){
+            Toaster.showShort("手机号码不正确");
             return;
         }
         //这些条件都满足后,带着手机号码和验证码到设置密码界面

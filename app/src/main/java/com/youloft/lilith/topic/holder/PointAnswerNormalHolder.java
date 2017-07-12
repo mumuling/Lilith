@@ -233,7 +233,7 @@ public class PointAnswerNormalHolder extends RecyclerView.ViewHolder implements 
                     .subscribe(new RxObserver<ClickLikeBean>() {
                         @Override
                         public void onDataSuccess(ClickLikeBean s) {
-                            if ((Boolean) s.data) {
+                            if ( s.data) {
                                 updateLikeTable(1);
                             } else {
                                 updateLikeTable(0);
