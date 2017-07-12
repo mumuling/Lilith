@@ -182,7 +182,7 @@ public class TopicDetailActivity extends BaseActivity {
      */
     private void requestTopicDetail() {
         int userId = -1;
-        if (AppConfig.LOGIN_STATUS &&AppSetting.getUserInfo() != null) {
+        if (AppConfig.LOGIN_STATUS && AppSetting.getUserInfo() != null) {
             userId = AppSetting.getUserInfo().data.userInfo.id;
         }
 
@@ -232,7 +232,7 @@ public class TopicDetailActivity extends BaseActivity {
      */
     @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
     public void onLoddingChagne(LoginEvent event) {
-
+        requestTopicDetail();
 
     }
 
@@ -252,7 +252,7 @@ public class TopicDetailActivity extends BaseActivity {
 
             @Override
             public void OnTitleBtnClick() {
-
+    
             }
 
             @Override
@@ -319,5 +319,6 @@ public class TopicDetailActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

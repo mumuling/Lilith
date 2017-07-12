@@ -13,7 +13,7 @@ public class PointAnswerBean  {
      * status : 200
      * sign : b326b5062b2f0e69046810717534cb09
      */
-    @JSONField(name = "sdate")
+    @JSONField(name = "data")
     public int data;
     @JSONField(name = "status")
     public int status;
