@@ -133,13 +133,19 @@ public class MEFragment extends BaseFragment {
         }
         //根据不同的key设置不同的星座
         String asceSigns = String.valueOf(userInfo.data.userInfo.asceSigns);//上升
-        String moonSigns = String.valueOf(userInfo.data.userInfo.moonSigns);//月亮
         String sunSigns = String.valueOf(userInfo.data.userInfo.sunSigns);//太阳
+        String moonSigns = String.valueOf(userInfo.data.userInfo.moonSigns);//月亮
         String signs = String.valueOf(userInfo.data.userInfo.signs);//我的星座
-        ivRise.setImageResource(ConsManager.getConsIconSrc(asceSigns)[0]);
-        ivMoon.setImageResource(ConsManager.getConsIconSrc(moonSigns)[0]);
-        ivSun.setImageResource(ConsManager.getConsIconSrc(sunSigns)[0]);
-        ivConstellation.setImageResource(ConsManager.getConsIconSrc(signs)[0]);
+        ivRise.setImageResource(ConsManager.getAscendantConsIcon(asceSigns));
+        ivSun.setImageResource(ConsManager.getSunConsIcon(sunSigns));
+        ivMoon.setImageResource(ConsManager.getMoonConsIcon(moonSigns));
+        int sex = userInfo.data.userInfo.sex;
+        if (sex == 1) {//女
+            ivConstellation.setImageResource(ConsManager.getGirlConsIcon(signs));
+        } else {
+            ivConstellation.setImageResource(ConsManager.getBoyConsIcon(signs));
+        }
+
     }
 
     @Override

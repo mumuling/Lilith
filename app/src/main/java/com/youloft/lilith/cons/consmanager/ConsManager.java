@@ -13,6 +13,7 @@ import java.util.HashMap;
 public class ConsManager {
     private static final HashMap<String, ConsInfo> mConsImg = new HashMap<>();
     private static final HashMap<String, Integer[]> mConsIconImg = new HashMap<>();
+
     public static final String[] CONS_NAME = {"双鱼座", "水瓶座", "双鱼座", "白羊座", "金牛座", "双子座", "巨蟹座", "狮子座", "处女座", "天秤座", "天蝎座", "射手座", "摩羯座"};
 
     /**
@@ -42,7 +43,192 @@ public class ConsManager {
     }
 
     /**
-     * 初始化数据
+     * 初始化上升星座的集合
+     */
+    public static int getAscendantConsIcon(String index){
+
+        switch (Integer.parseInt(index)) {
+            case 1: //水瓶座
+                return R.drawable.ascendant_aquarius_icon;
+            case 2: //双鱼座
+                return R.drawable.ascendant_pisces_icon;
+            case 3:  //白羊座
+                return R.drawable.ascendant_aries_icon;
+            case 4:  //金牛座
+                return R.drawable.ascendant_taurus_icon;
+            case 5:  //双子座
+                return R.drawable.ascendant_gemini_icon;
+            case 6: //巨蟹座
+                return R.drawable.ascendant_cancer_icon;
+            case 7:  //狮子座
+                return R.drawable.ascendant_leo_icon;
+            case 8:  //处女座
+                return R.drawable.ascendant_virgo_icon;
+            case 9:  //天秤座
+                return R.drawable.ascendant_libra_icon;
+            case 10:  //天蝎座
+                return R.drawable.ascendant_scorpio_icon;
+            case 11:  //射手座
+                return R.drawable.ascendant_sagittarius_icon;
+            case 12:  //摩羯座
+                return R.drawable.ascendant_capricorn_icon;
+            default:  //默认返回白羊座
+                return R.drawable.ascendant_aries_icon;
+        }
+
+    }
+
+    /**
+     * 初始化太阳星座的集合
+     */
+    public static int getSunConsIcon(String index){
+
+        switch (Integer.parseInt(index)) {
+            case 1: //水瓶座
+                return R.drawable.sun_aquarius_icon;
+            case 2: //双鱼座
+                return R.drawable.sun_pisces_icon;
+            case 3:  //白羊座
+                return R.drawable.sun_aries_icon;
+            case 4:  //金牛座
+                return R.drawable.sun_taurus_icon;
+            case 5:  //双子座
+                return R.drawable.sun_gemini_icon;
+            case 6: //巨蟹座
+                return R.drawable.sun_cancer_icon;
+            case 7:  //狮子座
+                return R.drawable.sun_leo_icon;
+            case 8:  //处女座
+                return R.drawable.sun_virgo_icon;
+            case 9:  //天秤座
+                return R.drawable.sun_libra_icon;
+            case 10:  //天蝎座
+                return R.drawable.sun_scorpio_icon;
+            case 11:  //射手座
+                return R.drawable.sun_sagittarius_icon;
+            case 12:  //摩羯座
+                return R.drawable.sun_capricorn_icon;
+            default:  //默认返回白羊座
+                return R.drawable.sun_aries_icon;
+        }
+
+    }
+
+    /**
+     * 获取月亮星座
+     * @param index
+     * @return
+     */
+    public static int getMoonConsIcon(String index){
+
+        switch (Integer.parseInt(index)) {
+            case 1: //水瓶座
+                return R.drawable.moonconstellation_aquarius_icon;
+            case 2: //双鱼座
+                return R.drawable.moonconstellation_pisces_icon;
+            case 3:  //白羊座
+                return R.drawable.moonconstellation_aries_icon;
+            case 4:  //金牛座
+                return R.drawable.moonconstellation_taurus_icon;
+            case 5:  //双子座
+                return R.drawable.moonconstellation_gemini_icon;
+            case 6: //巨蟹座
+                return R.drawable.moonconstellation_cancer_icon;
+            case 7:  //狮子座
+                return R.drawable.moonconstellation_leo_icon;
+            case 8:  //处女座
+                return R.drawable.moonconstellation_virgo_icon;
+            case 9:  //天秤座
+                return R.drawable.moonconstellation_libra_icon;
+            case 10:  //天蝎座
+                return R.drawable.moonconstellation_scorpio_icon;
+            case 11:  //射手座
+                return R.drawable.moonconstellation_sagittarius_icon;
+            case 12:  //摩羯座
+                return R.drawable.moonconstellation_capricorn_icon;
+            default:  //默认返回白羊座
+                return R.drawable.moonconstellation_aries_icon;
+        }
+
+    }
+
+    /**
+     * 获取男星座
+     * @param index
+     * @return
+     */
+    public static int getBoyConsIcon(String index){
+
+        switch (Integer.parseInt(index)) {
+            case 1: //水瓶座
+                return R.drawable.boy_aquariuss_icon;
+            case 2: //双鱼座
+                return R.drawable.boy_pisces_icon;
+            case 3:  //白羊座
+                return R.drawable.boy_aries_icon;
+            case 4:  //金牛座
+                return R.drawable.boy_taurus_icon;
+            case 5:  //双子座
+                return R.drawable.boy_gemini_icon;
+            case 6: //巨蟹座
+                return R.drawable.boy_cancer_icon;
+            case 7:  //狮子座
+                return R.drawable.boy_leo_icon;
+            case 8:  //处女座
+                return R.drawable.boy_virgo_icon;
+            case 9:  //天秤座
+                return R.drawable.boy_libra_icon;
+            case 10:  //天蝎座
+                return R.drawable.boy_scorpio_icon;
+            case 11:  //射手座
+                return R.drawable.boy_sagittarius_icon;
+            case 12:  //摩羯座
+                return R.drawable.boy_capricorn_icon;
+            default:  //默认返回白羊座
+                return R.drawable.boy_aries_icon;
+        }
+
+    }
+
+    /**
+     * 获取女星座
+     * @param index
+     * @return
+     */
+    public static int getGirlConsIcon(String index){
+
+        switch (Integer.parseInt(index)) {
+            case 1: //水瓶座
+                return R.drawable.girl_aquariuss_icon;
+            case 2: //双鱼座
+                return R.drawable.girl_pisces_icon;
+            case 3:  //白羊座
+                return R.drawable.girl_aries_icon;
+            case 4:  //金牛座
+                return R.drawable.girl_taurus_icon;
+            case 5:  //双子座
+                return R.drawable.girl_gemini_icon;
+            case 6: //巨蟹座
+                return R.drawable.girl_cancer_icon;
+            case 7:  //狮子座
+                return R.drawable.girl_leo_icon;
+            case 8:  //处女座
+                return R.drawable.girl_virgo_icon;
+            case 9:  //天秤座
+                return R.drawable.girl_libra_icon;
+            case 10:  //天蝎座
+                return R.drawable.girl_scorpio_icon;
+            case 11:  //射手座
+                return R.drawable.girl_sagittarius_icon;
+            case 12:  //摩羯座
+                return R.drawable.girl_capricorn_icon;
+            default:  //默认返回白羊座
+                return R.drawable.girl_aries_icon;
+        }
+
+    }
+    /**
+     * 初始化tab数据
      */
     private static synchronized void initConsIconMap() {
         if (mConsIconImg.isEmpty()) {
