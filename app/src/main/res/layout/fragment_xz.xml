@@ -17,4 +17,10 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp" />
     </com.youloft.lilith.common.widgets.view.PullToRefreshLayout>
+
+    <View
+        android:id="@+id/cons_statebar"
+        android:background="@color/black_30"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"/>
 </FrameLayout>

@@ -52,7 +52,9 @@ public class LogInOrCompleteDialog extends BaseDialog {
     private boolean mNeedBlurbg = false;
     private Context mContext;
     private int status = XZFragment.LOG_IN; //
-    private static Bitmap mBlurBtimap = null;
+    private static Bitmap mBlurBitmap = null;
+
+    private static LogInOrCompleteDialog instance = null;
 
     public LogInOrCompleteDialog(@NonNull Context context) {
         this(context, R.style.DialogTheme);
@@ -63,7 +65,21 @@ public class LogInOrCompleteDialog extends BaseDialog {
         mContext = context;
         setContentView(R.layout.lod_in_jump_dialog);
         ButterKnife.bind(this);
-        initDate();
+    }
+
+
+    public static LogInOrCompleteDialog getDialog(Context context, boolean withblur, Bitmap blurBitmap){
+        if (instance == null) {
+            synchronized (LogInOrCompleteDialog.class){
+                if (instance == null) {
+                    instance = new LogInOrCompleteDialog(context);
+                }
+            }
+        }
+        if (withblur) {
+        }
+        instance.withBlurBg();
+        return instance;
     }
 
     @Override
@@ -82,8 +98,8 @@ public class LogInOrCompleteDialog extends BaseDialog {
 
     @Override
     public void dismiss() {
-        if (mBlurBtimap != null) {
-            mBlurBtimap.recycle();
+        if (mBlurBitmap != null) {
+            mBlurBitmap.recycle();
         }
         super.dismiss();
     }
@@ -95,7 +111,7 @@ public class LogInOrCompleteDialog extends BaseDialog {
      * @return
      */
     public LogInOrCompleteDialog withBlurBg(Bitmap blurBitmap) {
-        mBlurBtimap = blurBitmap;
+        mBlurBitmap = blurBitmap;
         mNeedBlurbg = true;
         return this;
     }
@@ -112,8 +128,20 @@ public class LogInOrCompleteDialog extends BaseDialog {
      */
     public LogInOrCompleteDialog setStatus(int statu) {
         this.status = statu;
-        initDate();
         return this;
+    }
+
+    /**
+     * 已显示就不在显示了
+     *
+     */
+    @Override
+    public void show() {
+        initDate();
+        if (isShowing()) {
+            return;
+        }
+        super.show();
     }
 
     public static final int TOPIC_IN = 3;
@@ -123,8 +151,8 @@ public class LogInOrCompleteDialog extends BaseDialog {
      */
     private void initDate() {
         if (mNeedBlurbg) {
-            if (mBlurBtimap != null && !mBlurBtimap.isRecycled()) {
-                mLoginJumpDialog.setImageBitmap(mBlurBtimap);
+            if (mBlurBitmap != null && !mBlurBitmap.isRecycled()) {
+                mLoginJumpDialog.setImageBitmap(mBlurBitmap);
             } else if (mContext instanceof BaseActivity) {
                 Bitmap bitmap = ((BaseActivity) mContext).takeScreenShot(false, 4);
                 if (bitmap != null && !bitmap.isRecycled()) {
