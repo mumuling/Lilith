@@ -299,6 +299,7 @@ public class EditInformationActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.fl_sex:
                 GenderPickerPop.getDefaultGenderPicker(this)
+                        .setGender("男") //这儿设置默认显示
                         .setOnSelectListener(new OnPickerSelectListener() {
                             @Override
                             public void onSelected(Object data) {

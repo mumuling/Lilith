@@ -119,6 +119,17 @@ public class GenderPickerPop implements CanShow, OnWheelChangedListener{
         return new GenderPickerPop(context);
     }
 
+    public GenderPickerPop setGender(String gender){
+        if (gender.equals("男")) {
+            mGenderWheel.setCurrentItem(0);
+        } else if (gender.equals("女")) {
+            mGenderWheel.setCurrentItem(1);
+        } else {
+            mGenderWheel.setCurrentItem(0);
+        }
+        return this;
+    }
+
 
     @Override
     public void setType(int var1) {
