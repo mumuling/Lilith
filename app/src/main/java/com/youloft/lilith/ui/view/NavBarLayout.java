@@ -60,12 +60,17 @@ public class NavBarLayout extends LinearLayout {
 
     public void changConsIcon(int consKey){
         Integer[] consIconSrc = ConsManager.getConsIconSrc(String.valueOf(consKey));
+        ConsManager.ConsInfo consSrc = ConsManager.getConsSrc(String.valueOf(consKey));
         NavItemView consIcon = SafeUtil.getSafeData(mTabViews, 0);
         if (consIcon != null && consIcon.pTabInfo != null) {
             consIcon.pTabInfo.mTabIcUnSelect = consIconSrc != null ? consIconSrc[1] : R.drawable.icon2_pisces;
             consIcon.pTabInfo.mTabIc = consIconSrc != null ? consIconSrc[0] : R.drawable.icon_pisces;
-            consIcon.bindView();
         }
+        if (consSrc != null) {
+            consIcon.pTabInfo.mTabName = consSrc.pKey;
+        }
+        consIcon.bindView();
+
     }
 
     /**

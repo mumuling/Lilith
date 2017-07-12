@@ -3,28 +3,27 @@
     android:layout_width="match_parent"
     android:id="@+id/root"
     android:layout_height="wrap_content"
+    android:background="@color/cons_share_bg_color"
     android:orientation="vertical">
 
     <com.youloft.lilith.cons.view.LuckView
         android:id="@+id/cons_luck_view"
         android:layout_width="match_parent"
-        android:layout_height="185dp"
-        android:background="@color/cons_share_bg_color" />
+        android:layout_height="185dp" />
 
     <FrameLayout
+        android:id="@+id/cons_luck_bg_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/cons_share_bg_color">
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/cons_luck_msg_bg">
 
         <TextView
             android:id="@+id/cons_luck_msg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/cons_luck_msg_bg"
             android:maxLines="2"
-            android:lines="2"
             android:paddingBottom="4dp"
             android:paddingLeft="8dp"
             android:paddingRight="7dp"
@@ -34,10 +33,10 @@
 
         <ImageView
             android:id="@+id/cons_luck_msg_no_data"
-            android:visibility="gone"
+            android:visibility="visible"
             android:src="@drawable/cons_no_data_no_net"
             android:layout_gravity="center"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="40dp" />
     </FrameLayout>
 </LinearLayout>
