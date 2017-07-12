@@ -53,34 +53,15 @@ public class LogInOrCompleteDialog extends BaseDialog {
     private Context mContext;
     private int status = XZFragment.LOG_IN; //
     private static Bitmap mBlurBitmap = null;
-
-    private static LogInOrCompleteDialog instance = null;
+    private static boolean hisDialogShow = false;
 
     public LogInOrCompleteDialog(@NonNull Context context) {
-        this(context, R.style.DialogTheme);
-    }
-
-    public LogInOrCompleteDialog(@NonNull Context context, @StyleRes int themeResId) {
-        super(context, themeResId);
+        super(context);
         mContext = context;
         setContentView(R.layout.lod_in_jump_dialog);
         ButterKnife.bind(this);
     }
 
-
-    public static LogInOrCompleteDialog getDialog(Context context, boolean withblur, Bitmap blurBitmap){
-        if (instance == null) {
-            synchronized (LogInOrCompleteDialog.class){
-                if (instance == null) {
-                    instance = new LogInOrCompleteDialog(context);
-                }
-            }
-        }
-        if (withblur) {
-        }
-        instance.withBlurBg();
-        return instance;
-    }
 
     @Override
     public void setContentView(@LayoutRes int layoutResID) {
@@ -96,13 +77,7 @@ public class LogInOrCompleteDialog extends BaseDialog {
         dismiss();
     }
 
-    @Override
-    public void dismiss() {
-        if (mBlurBitmap != null) {
-            mBlurBitmap.recycle();
-        }
-        super.dismiss();
-    }
+
 
     /**
      * //是否需要显示背景的模糊图。使用时需要传入模糊图，
@@ -137,13 +112,24 @@ public class LogInOrCompleteDialog extends BaseDialog {
      */
     @Override
     public void show() {
-        initDate();
-        if (isShowing()) {
+        //控制只允许显示一个此dialog，多余的直接dismiss掉；这样就不用在所有地方做连点判断了；
+        if (hisDialogShow) {
+            dismiss();
             return;
         }
+        hisDialogShow = true;
+        initDate();
         super.show();
     }
 
+    @Override
+    public void dismiss() {
+        if (mBlurBitmap != null) {
+            mBlurBitmap.recycle();
+        }
+        hisDialogShow = false;
+        super.dismiss();
+    }
     public static final int TOPIC_IN = 3;
 
     /**

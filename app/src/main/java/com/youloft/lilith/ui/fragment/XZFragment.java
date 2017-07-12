@@ -216,20 +216,19 @@ public class XZFragment extends BaseFragment implements PullToRefreshLayout.OnRe
     }
 
     private void checkUserInfo() {
-        if (!AppConfig.LOGIN_STATUS) {
-            showDialog(LOG_IN);
+        UserBean userInfo = AppSetting.getUserInfo();
+        UserBean.DataBean data = userInfo.data;
+        if (data == null ||
+                data.userInfo == null ||
+                data.userInfo.id == 0 ||
+                TextUtils.isEmpty(data.userInfo.birthDay) ||
+                TextUtils.isEmpty(data.userInfo.birthPlace)) {
+            showDialog(COMPLETE_INFO);
         } else {
-            UserBean userInfo = AppSetting.getUserInfo();
-            UserBean.DataBean data = userInfo.data;
-            if (data == null ||
-                    data.userInfo == null ||
-                    data.userInfo.id == 0 ||
-                    TextUtils.isEmpty(data.userInfo.birthDay) ||
-                    TextUtils.isEmpty(data.userInfo.birthPlace)) {
-                showDialog(COMPLETE_INFO);
-            }
+            showDialog(LOG_IN);
         }
     }
+
 
     /**
      * 初始化viewe
@@ -254,12 +253,13 @@ public class XZFragment extends BaseFragment implements PullToRefreshLayout.OnRe
 
         mConsList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             int totalDy = 0;
+
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 totalDy += dy;
                 if (totalDy <= 0) {
                     mState.setAlpha(0f);
-                }else if (totalDy <= changeStateRange) {
+                } else if (totalDy <= changeStateRange) {
                     mState.setAlpha(totalDy / changeStateRange);
                 }
             }

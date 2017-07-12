@@ -66,7 +66,7 @@ public class TabManager implements NavBarLayout.OnTabChangeListener {
                 continue;
             }
             if (!mFragmentsCache.containsKey(safeData.mIndex)) {
-                Fragment fragment = fragmentCreator(safeData.mTabName);
+                Fragment fragment = fragmentCreator(safeData.mIndex);
                 if (fragment == null) {
                     continue;
                 }
@@ -99,24 +99,20 @@ public class TabManager implements NavBarLayout.OnTabChangeListener {
      * @param tag
      * @return
      */
-    private Fragment fragmentCreator(String tag) {
+    private Fragment fragmentCreator(int tag) {
 
-        if (TextUtils.isEmpty(tag)) {
-            return null;
-        }
         Fragment fragment = null;
         switch (tag) {
-            case "星座":
-
+            case 0:
                 fragment = new XZFragment();
                 break;
-            case "话题":
+            case 1:
                 fragment = new HTFragment();
                 break;
-            case "测测":
+            case 2:
                 fragment = new CCFragment();
                 break;
-            case "我":
+            case 3:
                 fragment = new MEFragment();
                 break;
             default:
