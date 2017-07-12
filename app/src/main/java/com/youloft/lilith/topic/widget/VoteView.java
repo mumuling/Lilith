@@ -65,6 +65,8 @@ public class VoteView extends View {
     private int alpha2 = 255;
     private float changeRadius3 = 00;
     private int alpha3 = 255;
+    private String leftTitle = "正方";
+    private String rightTitle = "反方";
     public OnItemClickListener mItemClickListener;
     public VoteView(Context context) {
         this(context,null);
@@ -176,8 +178,8 @@ public class VoteView extends View {
         Paint.FontMetrics fontMetrics = textPaint.getFontMetrics();
         float top = fontMetrics.top;//为基线到字体上边框的距离,即上图中的top
         float bottom = fontMetrics.bottom;//为基线到字体下边框的距离,即上图中的bott
-        canvas.drawText("相似",leftCenterX,mCenterY-top/2-bottom/2,textPaint);
-        canvas.drawText("互补",rightCenterX,mCenterY-top/2-bottom/2,textPaint);
+        canvas.drawText(leftTitle,leftCenterX,mCenterY-top/2-bottom/2,textPaint);
+        canvas.drawText(rightTitle,rightCenterX,mCenterY-top/2-bottom/2,textPaint);
         if (needDrawRect) {
             drawLeftRect(canvas);
             drawRightRect(canvas);
@@ -240,6 +242,12 @@ public class VoteView extends View {
     public void setChangeValue3(float radius1,int alpha1) {
         this.changeRadius3 = radius1;
         this.alpha3 =  alpha1;
+        invalidate();
+    }
+
+    public void setTitle(String left,String right) {
+        this.leftTitle = left;
+        this.rightTitle = right;
         invalidate();
     }
 
