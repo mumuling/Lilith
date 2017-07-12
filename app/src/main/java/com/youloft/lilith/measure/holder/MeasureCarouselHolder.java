@@ -61,6 +61,7 @@ public class MeasureCarouselHolder extends BaseMeasureHolder {
 
     @Override
     public void bindData(final MeasureBean.DataBean mMeasureData, int position) {
+        mhandler.removeCallbacks(mRunnable);
         //这里也要写,防止下拉刷新的时候数据产生了变化
         for (int i = 0; i < 5; i++) {//小圆点先隐藏起来
             ivDots[i].setVisibility(View.INVISIBLE);
@@ -92,7 +93,7 @@ public class MeasureCarouselHolder extends BaseMeasureHolder {
 
         vpCarousel.setAdapter(new MyAdapter(mData, mContext));
         if(mData.size() == 1){
-            mhandler.removeCallbacksAndMessages(null);
+            mhandler.removeCallbacks(mRunnable);
         }else {
             mhandler.postDelayed(mRunnable, 2500);
             vpCarousel.setCurrentItem(mData.size() * 100000, false);

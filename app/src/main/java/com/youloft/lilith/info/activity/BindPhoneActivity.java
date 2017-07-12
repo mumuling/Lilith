@@ -456,7 +456,7 @@ public class BindPhoneActivity extends BaseActivity{
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        handler.removeCallbacksAndMessages(null);
+        handler.removeCallbacks(runnable);
     }
 
     //点击清除电话号码
