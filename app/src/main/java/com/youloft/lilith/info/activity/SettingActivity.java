@@ -2,6 +2,7 @@ package com.youloft.lilith.info.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -33,6 +34,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -42,6 +45,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 @Route(path = "/test/SettingActivity")
 public class SettingActivity extends BaseActivity {
+    private static final String TAG = "SettingActivity";
     @BindView(R.id.btl_setting)
     BaseToolBar btlSetting;
 
@@ -116,14 +120,17 @@ public class SettingActivity extends BaseActivity {
                     @Override
                     public void onDataSuccess(CheckVersionBean checkVersionBean) {
                         String version = checkVersionBean.data.version;
-                        if (version.equals(AppSetting.getVersionCode())) {//一样
-                            Toaster.showShort("您当前版本为最新版本");
-                        } else {
-                            //弹出对话框,让用户选择是否下载
-                            DownloadSelectDialog downloadSelectDialog = new DownloadSelectDialog(SettingActivity.this);
-                            downloadSelectDialog.show();
-                        }
-                        mVersionCodeDialog.dismiss();
+
+//                        if (version.equals(AppSetting.getVersionCode())) {
+//                            Toaster.showShort("您当前版本为最新版本");
+//                            mVersionCodeDialog.dismiss();
+//                        } else {
+//                            mVersionCodeDialog.dismiss();
+//                            //弹出对话框,让用户选择是否下载
+//                            DownloadSelectDialog downloadSelectDialog = new DownloadSelectDialog(SettingActivity.this);
+//                            downloadSelectDialog.show();
+//                        }
+
                     }
 
                     @Override
@@ -132,6 +139,7 @@ public class SettingActivity extends BaseActivity {
                         mVersionCodeDialog.dismiss();
                         Toaster.showShort("网络错误");
                     }
+
                 });
 
     }

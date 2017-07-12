@@ -24,7 +24,7 @@
         android:name=".LLApplication"
         android:allowBackup="true"
         android:icon="@mipmap/icon_launcher"
-        android:label="@string/app_name"
+        android:label="@string/app_name_ch"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -125,6 +125,8 @@
         <activity android:name=".register.activity.RegisterActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".login.activity.ForgetPasswordActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".info.activity.BindPhoneActivity"
             android:screenOrientation="portrait"/>
     </application>
 

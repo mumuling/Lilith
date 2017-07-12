@@ -30,7 +30,7 @@ import butterknife.OnClick;
 public class ConsTitleHolder extends BaseHolder<String> {
 
     private static String unLoggin = "%s好, 请您完善资料获取准确运势!";
-    private static String loggin = "%s好%s, 您的今日运势如下";
+    private static String loggin = "%s好 %s, 您的今日运势如下";
     @BindView(R.id.cons_title_text)
     TextView mConsTitleText;
     @BindView(R.id.cons_title_root)
@@ -71,7 +71,7 @@ public class ConsTitleHolder extends BaseHolder<String> {
             return;
         }
         SpannableString ss = new SpannableString(String.format(loggin, getStringInDay(), data));
-        ss.setSpan(highLight, 5, ss.length() - 9, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss.setSpan(highLight, 4, ss.length() - 9, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         mConsTitleText.setText(ss);
     }
 

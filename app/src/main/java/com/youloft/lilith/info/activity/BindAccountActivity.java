@@ -3,9 +3,7 @@ package com.youloft.lilith.info.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Base64;
 import android.view.View;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -32,7 +30,6 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -48,6 +45,8 @@ public class BindAccountActivity extends BaseActivity {
 
     @BindView(R.id.tv_phone)
     TextView tvPhone;
+    @BindView(R.id.tv_phone_number)
+    TextView tvPhoneNumber;
 
 
     @Override
@@ -84,17 +83,20 @@ public class BindAccountActivity extends BaseActivity {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onBindAccount(BindAccountEvent bindAccountEvent){
+    public void onBindAccount(BindAccountEvent bindAccountEvent) {
         bindPhoneNumber();
     }
 
     private void bindPhoneNumber() {
         UserBean userInfo = AppSetting.getUserInfo();
-        if(userInfo == null){
+        if (userInfo == null) {
             return;
         }
-        tvPhone.setText(userInfo.data.userInfo.phone);
-        tvPhone.setVisibility(View.VISIBLE);
+        String phone = userInfo.data.userInfo.phone;
+        if (phone.length() != 11) return;
+        phone = phone.substring(0,4)+"****"+phone.substring(8);
+        tvPhoneNumber.setText(phone);
+        tvPhoneNumber.setVisibility(View.VISIBLE);
     }
 
 
@@ -123,7 +125,7 @@ public class BindAccountActivity extends BaseActivity {
         //0.先判断用户信息里面有没有电话
         //1.拉起微信的授权
         //2.发起请求
-        if(AppSetting.getUserInfo() == null){
+        if (AppSetting.getUserInfo() == null) {
             return;
         }
         SocializeApp.get(this).getPlatformInfo(this, SocializePlatform.WEIXIN, new AuthListener() {
@@ -148,6 +150,7 @@ public class BindAccountActivity extends BaseActivity {
 
     /**
      * 三方授权成功  发起绑定
+     *
      * @param plf  目前不需要判断平台,只有微信
      * @param data
      */
@@ -158,7 +161,7 @@ public class BindAccountActivity extends BaseActivity {
         String phone = AppSetting.getUserInfo().data.userInfo.phone;
         String platform = "0";
 
-        UpdateUserRepo.bindWx(openid,unionid,nickName,phone,platform)
+        UpdateUserRepo.bindWx(openid, unionid, nickName, phone, platform)
                 .compose(this.<UserBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
@@ -166,9 +169,9 @@ public class BindAccountActivity extends BaseActivity {
                 .subscribe(new RxObserver<UserBean>() {
                     @Override
                     public void onDataSuccess(UserBean userBean) {
-                        if(userBean.data.result == 0){
+                        if (userBean.data.result == 0) {
                             Toaster.showShort("绑定成功");
-                        }else {
+                        } else {
                             Toaster.showShort("绑定失败");
                         }
                     }

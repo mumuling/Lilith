@@ -12,7 +12,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#282142">
+        android:background="@drawable/lilith_bg">
         <!--圆形的icon-->
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="@dimen/head_portrait"

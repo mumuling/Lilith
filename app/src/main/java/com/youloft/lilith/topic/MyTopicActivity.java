@@ -59,6 +59,28 @@ public class MyTopicActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_topic);
         ButterKnife.bind(this);
+        toolBar.setShowShareBtn(false);
+        toolBar.setOnToolBarItemClickListener(new BaseToolBar.OnToolBarItemClickListener() {
+            @Override
+            public void OnBackBtnClick() {
+                onBackPressed();
+            }
+
+            @Override
+            public void OnTitleBtnClick() {
+
+            }
+
+            @Override
+            public void OnShareBtnClick() {
+
+            }
+
+            @Override
+            public void OnSaveBtnClick() {
+
+            }
+        });
         if (AppConfig.LOGIN_STATUS && AppSetting.getUserInfo() != null) {
             userInfo = AppSetting.getUserInfo().data.userInfo;
         } else {
@@ -199,6 +221,11 @@ public class MyTopicActivity extends BaseActivity {
                 });
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 
     /**
      * 无数据，直接查看话题
