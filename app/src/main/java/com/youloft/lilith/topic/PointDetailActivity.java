@@ -31,6 +31,7 @@ import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.common.utils.ViewUtil;
 import com.youloft.lilith.cons.view.LogInOrCompleteDialog;
 import com.youloft.lilith.login.bean.UserBean;
+import com.youloft.lilith.login.event.LoginEvent;
 import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.topic.adapter.PointAnswerAdapter;
 import com.youloft.lilith.topic.bean.PointAnswerBean;
@@ -41,6 +42,10 @@ import com.youloft.lilith.topic.db.PointAnswerCache;
 import com.youloft.lilith.topic.db.PointAnswerTable;
 import com.youloft.lilith.topic.widget.ScrollFrameLayout;
 import com.youloft.lilith.topic.widget.SoftInputLayout;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,6 +105,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
         overridePendingTransition(R.anim.slide_in_bottom, 0);
         ButterKnife.bind(this);
         ARouter.getInstance().inject(this);
+        EventBus.getDefault().register(this);
         pointAnswerCache = PointAnswerCache.getIns(this);
         imm = (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);
         if (AppConfig.LOGIN_STATUS && AppSetting.getUserInfo() != null) {
@@ -110,7 +116,18 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
         initReplyData();
 
     }
+    /**
+     * 登录状态改变
+     *
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
+    public void onLoddingChagne(LoginEvent event) {
+        if (AppConfig.LOGIN_STATUS && AppSetting.getUserInfo()!=null) {
+            userInfo = AppSetting.getUserInfo().data.userInfo;
+        }
 
+    }
     /**
      * 请求此观点的回复列表
      */
@@ -434,5 +451,11 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
         pointAnswerTable.rid = answerId;
         PointAnswerCache.getIns(this).insertData(pointAnswerTable);
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

@@ -9,9 +9,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
+import com.youloft.lilith.common.event.TabChangeEvent;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.login.bean.UserBean;
@@ -20,7 +22,10 @@ import com.youloft.lilith.topic.adapter.MyTopicAdapter;
 import com.youloft.lilith.topic.bean.MyTopicBean;
 import com.youloft.lilith.topic.db.PointCache;
 import com.youloft.lilith.topic.db.PointTable;
+import com.youloft.lilith.ui.TabManager;
 import com.youloft.lilith.ui.view.BaseToolBar;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
@@ -232,5 +237,7 @@ public class MyTopicActivity extends BaseActivity {
      */
     @OnClick(R.id.text_see_topic)
     public void onClick() {
+        EventBus.getDefault().post(new TabChangeEvent(TabManager.TAB_INDEX_HT));
+        finish();
     }
 }

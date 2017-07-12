@@ -107,7 +107,7 @@ public class TopicRepo extends AbstractDataRepo {
 
 
 
-        return unionFlow(Urls.TOPIC_INFO,null,param,true,TopicDetailBean.class,"topic_info" + tid,2 *1000 *60);
+        return unionFlow(Urls.TOPIC_INFO,null,param,true,TopicDetailBean.class,null,0);
     }
 
     /**
