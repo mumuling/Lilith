@@ -9,11 +9,12 @@
         android:layout_width="match_parent"
         android:layout_height="270dp"
         android:background="@drawable/shp_me_bg">
+
         <ImageView
             android:id="@+id/iv_blur_bg"
-            android:scaleType="centerCrop"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
         <!--中间的头像和小的星座-->
         <FrameLayout
             android:layout_width="wrap_content"
@@ -42,6 +43,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|bottom"
+            android:singleLine="true"
+            android:maxEms="7"
             android:layout_marginBottom="44dp"
             android:textColor="@color/white"
             android:textSize="16dp" />

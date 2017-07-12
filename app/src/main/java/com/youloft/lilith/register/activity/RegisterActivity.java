@@ -25,10 +25,15 @@ import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.login.bean.SendSmsBean;
 import com.youloft.lilith.login.bean.SmsCodeBean;
+import com.youloft.lilith.login.event.LoginEvent;
 import com.youloft.lilith.login.repo.SendSmsRepo;
 import com.youloft.lilith.login.repo.SmsCodeRepo;
 import com.youloft.lilith.register.bean.CheckPhoneBean;
 import com.youloft.lilith.register.repo.CheckPhoneRepo;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.BindViews;
@@ -88,8 +93,21 @@ public class RegisterActivity extends BaseActivity {
         ButterKnife.bind(this);
         phoneNumberSetting();
         verificationCodeSetting();
+        EventBus.getDefault().register(this);
+    }
+
+    //登录成功后,收到事件,关闭本页面
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(LoginEvent loginEvent) {
+        boolean isLogin = loginEvent.isLogin;
+        if (isLogin) {
+            finish();
+        } else {
+            //登出了
+        }
 
     }
+
 
 
     /**
@@ -302,13 +320,14 @@ public class RegisterActivity extends BaseActivity {
         // 2.  给电话号码做正则校验
         // 3.  手机号码验证存在与否的标识
         // 4.  是否在一分钟的重发时间内
+
         String phoneNumber = etPhoneNumber.getText().toString().replaceAll("-", "");
         if (phoneNumber.length() != 11) {
-            Toaster.showShort("电话号码不正确");
+            Toaster.showShort("手机号码不正确");
             return;
         }
         if (isNumberRight) {
-            Toaster.showShort("正在验证手机号码,或者手机号码已经注册");
+            Toaster.showShort("网络错误");
             return;
         }
         String disText = tvGetCode.getText().toString();
@@ -425,6 +444,7 @@ public class RegisterActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         handler.removeCallbacksAndMessages(null);
+        EventBus.getDefault().unregister(this);
     }
 
     //点击清除电话号码

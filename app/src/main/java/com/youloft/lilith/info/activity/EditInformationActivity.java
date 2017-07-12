@@ -53,8 +53,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 @Route(path = "/test/EditInformationActivity")
 public class EditInformationActivity extends BaseActivity {
-    public static final int CODE_PICK_IMAGE = 8;//打开相册的状态码
-    public static final int CODE_CAMERA = 7;//打开相机
+
     GregorianCalendar mCal = new GregorianCalendar();
     public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
     @BindView(R.id.btl_edit_information)
@@ -131,7 +130,9 @@ public class EditInformationActivity extends BaseActivity {
                 if (hasFocus) {
                     etNickName.setCursorVisible(true);
                     etNickName.setSelection(etNickName.length());
+                    etNickName.setCursorVisible(true);
                 } else {
+                    etNickName.setCursorVisible(false);
                     etNickName.setCursorVisible(false);
                 }
             }
@@ -210,48 +211,38 @@ public class EditInformationActivity extends BaseActivity {
         String userId = String.valueOf(userInfo.data.userInfo.id);
         String headImg = userInfo.data.userInfo.headImg;
         final String time = CalendarHelper.format(mCal.getTime(), DATE_FORMAT);
-        String birthLongi = "";//出生经度
-        String birthLati = "";//出生纬度
-        String liveLongi = "";//现居地经度
-        String liveLati = "";//现居地纬度
-
 
         UpdateUserRepo.updateUserInfo(userId, nickName, headImg, sex, time, placeBirth, birthLongi, birthLati, placeNow, liveLongi, liveLati)
-                .compose(this.<UpdateUserInfoBean>bindToLifecycle())
+                .compose(this.<UserBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new RxObserver<UpdateUserInfoBean>() {
+                .subscribe(new RxObserver<UserBean>() {
                     @Override
-                    public void onDataSuccess(UpdateUserInfoBean updateUserInfoBean) {
-                        if (updateUserInfoBean.data.result == 0) {//保存数据成功
+                    public void onDataSuccess(UserBean userBean) {
+                        if (userBean.data.result == 0) {//保存数据成功
                             //把这套数据存一份到本地
-                            UserBean userInfo = AppSetting.getUserInfo();
-                            UserBean.DataBean.UserInfoBean userInfoDetail = userInfo.data.userInfo;
-                            userInfoDetail.nickName = nickName;
-                            userInfoDetail.sex = Integer.parseInt(sex);
-                            userInfoDetail.birthDay = time;
-                            userInfoDetail.birthPlace = placeBirth;
-                            userInfoDetail.livePlace = placeNow;
-                            AppSetting.saveUserInfo(userInfo);
-                            finish();
+                            AppSetting.saveUserInfo(userBean);
                             EventBus.getDefault().post(new UserInfoUpDateEvent());
                             Toaster.showShort("资料保存成功");
+                            finish();
                         } else {
                             Toaster.showShort("资料保存失败");
                         }
 
                     }
+
+                    @Override
+                    protected void onFailed(Throwable e) {
+                        super.onFailed(e);
+                        Toaster.showShort("网络错误");
+                    }
                 });
     }
 
-
-    private final String IMAGE_TYPE = "image/*";
-
+    //头像的点击事件
     @OnClick(R.id.iv_header)
     public void onHeaderClicked() {
-//        PhotoSelectDialog dialog = new PhotoSelectDialog(this);
-//        dialog.show();
         fileHandle = new UserFileHandle(ivHeader, ivBlurBg);
         fileHandle.handle(this, null, null, null, null);
         fileHandle.setOnUpLoadListener(new UserFileHandle.OnUpLoadListener() {
@@ -268,6 +259,11 @@ public class EditInformationActivity extends BaseActivity {
         fileHandle.onActivityResult(this, requestCode, resultCode, data);
     }
 
+    /**
+     * 上传图片的请求
+     * @param upBit 图片的base64
+     * @param nameEx  后缀名
+     */
     private void updateUserImg(String upBit, String nameEx) {
         if (AppSetting.getUserInfo() == null) {
             return;

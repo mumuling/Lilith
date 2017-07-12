@@ -34,6 +34,8 @@ import com.youloft.socialize.SocializePlatform;
 import com.youloft.socialize.wrapper.AuthListener;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Map;
 
@@ -75,6 +77,24 @@ public class LoginActivity extends BaseActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         initEditText();
+        EventBus.getDefault().register(this);
+    }
+
+    //登录成功后,收到事件,关闭本页面
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(LoginEvent loginEvent) {
+        boolean isLogin = loginEvent.isLogin;
+        if (isLogin) {
+            finish();
+        } else {
+            //登出了
+        }
+
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     /**
@@ -238,7 +258,6 @@ public class LoginActivity extends BaseActivity {
         ARouter.getInstance()
                 .build("/test/ForgetPasswordActivity")
                 .navigation();
-        finish();
     }
 
     //注册
@@ -247,7 +266,6 @@ public class LoginActivity extends BaseActivity {
         ARouter.getInstance()
                 .build("/test/RegisterActivity")
                 .navigation();
-        finish();
     }
 
     //快捷登录
@@ -256,7 +274,6 @@ public class LoginActivity extends BaseActivity {
         ARouter.getInstance()
                 .build("/test/UserFunctionActivity")
                 .navigation();
-        finish();
     }
 
     //微信登录
