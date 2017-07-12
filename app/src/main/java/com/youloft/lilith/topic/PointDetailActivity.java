@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
@@ -208,10 +209,6 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
                     isReplyAuthor = true;
 
                 } else {
-                    if (!AppConfig.LOGIN_STATUS) {
-                        new LogInOrCompleteDialog(PointDetailActivity.this).setStatus(LogInOrCompleteDialog.TOPIC_IN).show();
-                        return;
-                    }
                     ////软键盘弹出啦
                     if (isReplyAuthor){
                         replyId = 0;
@@ -249,6 +246,22 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
                         loadMoreReply();
                     }
                 }
+            }
+        });
+        commentEdit.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        if (!AppConfig.LOGIN_STATUS) {
+                            new LogInOrCompleteDialog(PointDetailActivity.this).setStatus(LogInOrCompleteDialog.TOPIC_IN).show();
+                            return true;
+                        }
+                        break;
+                }
+
+                return false;
             }
         });
 
@@ -295,6 +308,10 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
     }
 
     public void clickReply(int replyId,String replyName) {
+        if (!AppConfig.LOGIN_STATUS) {
+            new LogInOrCompleteDialog(PointDetailActivity.this).setStatus(LogInOrCompleteDialog.TOPIC_IN).show();
+            return ;
+        }
         this.replyId = replyId;
         this.replyName = replyName;
         isReplyAuthor = false;

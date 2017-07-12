@@ -1,6 +1,7 @@
 package com.youloft.lilith.topic.widget;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.StyleRes;
 import android.view.View;
@@ -34,6 +35,7 @@ public class VoteDialog extends BaseDialog implements View.OnClickListener {
     public OnClickConfirmListener onClickConfirmListener;
     private int voteId;
     private String voteTitle;
+    private String title;
 
     public VoteDialog(@NonNull Context context) {
         super(context);
@@ -66,10 +68,16 @@ public class VoteDialog extends BaseDialog implements View.OnClickListener {
 
     }
 
-    public void setTitle(String title,int id) {
+    public void setTitle(String shortTitle,String title ,int id) {
         voteId = id;
         voteTitle = title;
+        this.title = title;
         textPointVote.setText(title);
+        if (id % 2 == 1) {
+            textPointVote.setTextColor(Color.parseColor("#ff8282"));
+        } else {
+            textPointVote.setTextColor(Color.parseColor("#5696df"));
+        }
     }
 
     @Override
@@ -81,7 +89,7 @@ public class VoteDialog extends BaseDialog implements View.OnClickListener {
             case R.id.report_confirm:
                 this.dismiss();
                 if (onClickConfirmListener != null) {
-                    onClickConfirmListener.clickConfirm(editVote.getText().toString(),voteId,voteTitle);
+                    onClickConfirmListener.clickConfirm(editVote.getText().toString(),voteId,title);
                 }
                 break;
             default:

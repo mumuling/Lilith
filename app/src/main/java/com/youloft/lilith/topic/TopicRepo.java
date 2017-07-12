@@ -83,6 +83,7 @@ public class TopicRepo extends AbstractDataRepo {
         HashMap<String, String> param = new HashMap();
         if (limit != null)param.put("limit",limit);
         if (skip != null)param.put("skip",skip);
+        param.put("sortby","2");
         if (needCache) {
             if (!LLApplication.getApiCache().isExpired(cacheKey,cacheDuration)) {
                 return LLApplication.getApiCache().readCache(cacheKey,TopicBean.class);
