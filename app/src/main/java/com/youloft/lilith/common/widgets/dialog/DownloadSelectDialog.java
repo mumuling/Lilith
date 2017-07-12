@@ -25,6 +25,7 @@ public class DownloadSelectDialog extends BaseDialog {
     public DownloadSelectDialog(@NonNull Context context) {
         super(context);
         mActivity = (Activity) context;
+        initView();
     }
 
     public DownloadSelectDialog(@NonNull Context context, @StyleRes int themeResId) {
@@ -35,6 +36,7 @@ public class DownloadSelectDialog extends BaseDialog {
         super(context);
         mActivity = (Activity) context;
         this.checkVersionBean = checkVersionBean;
+        initView();
     }
 
     private void initView() {
@@ -50,6 +52,7 @@ public class DownloadSelectDialog extends BaseDialog {
                 Intent intent = new Intent(mActivity, DownloadService.class);
                 intent.putExtra("url",checkVersionBean.data.downPath);
                 mActivity.startService(intent);
+                dismiss();
                 break;
             case R.id.fl_root:
             case R.id.iv_close:
