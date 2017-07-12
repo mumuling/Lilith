@@ -405,6 +405,8 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
                             adapter.setAnswerTop(dataBean);
                             updatePointAnswerDb(dataBean,answerId);
                             Toaster.showShort("评论成功！");
+                        } else {
+                            Toaster.showShort("评论失败!");
                         }
 
                     }
@@ -412,6 +414,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
                     @Override
                     protected void onFailed(Throwable e) {
                         super.onFailed(e);
+                        Toaster.showShort("评论失败!");
                     }
                 });
     }
