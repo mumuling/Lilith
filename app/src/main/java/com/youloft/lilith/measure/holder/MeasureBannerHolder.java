@@ -5,8 +5,10 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
+import com.youloft.lilith.common.utils.SafeUtil;
 import com.youloft.lilith.measure.bean.MeasureBean;
 
 import butterknife.BindView;
@@ -25,7 +27,7 @@ public class MeasureBannerHolder extends BaseMeasureHolder {
 
     @BindView(R.id.iv_banner)
     ImageView ivBanner;
-
+    private MeasureBean.DataBean mMeasureData;
     public MeasureBannerHolder(Context context, ViewGroup parent) {
         super(LayoutInflater.from(context).inflate(R.layout.item_measure_banner, parent, false));
         ButterKnife.bind(this, itemView);
@@ -34,11 +36,23 @@ public class MeasureBannerHolder extends BaseMeasureHolder {
 
     @Override
     public void bindData(MeasureBean.DataBean mMeasureData, int position) {
+        this.mMeasureData = mMeasureData;
+        if(isaBoolean(mMeasureData)){
+            return;
+        }
         GlideApp.with(mContext).load(mMeasureData.ads.get(0).image).into(ivBanner);
+    }
+
+    private boolean isaBoolean(MeasureBean.DataBean mMeasureData) {
+        return mMeasureData == null||mMeasureData.ads == null || mMeasureData.ads.size() == 0;
     }
 
     @OnClick(R.id.root)
     public void onViewClicked() {
-
+        boolean b = isaBoolean(mMeasureData);
+        if (b) return;
+        ARouter.getInstance().build("/ui/web")
+                .withString("url", mMeasureData.ads.get(0).url)
+                .navigation();
     }
 }

@@ -66,7 +66,6 @@ public class MasterMeasureHolder extends BaseMeasureHolder {
 
         int index = (int) view.getTag();
         String url = mData.get(index).url;
-        Toaster.showShort(index+"");
         ARouter.getInstance().build("/ui/web")
                 .withString("url", url)
                 .navigation();
