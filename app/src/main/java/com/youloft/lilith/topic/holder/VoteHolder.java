@@ -70,7 +70,8 @@ public class VoteHolder extends RecyclerView.ViewHolder {
     private int isVote = 0;
     private TopicDetailAdapter adapter;
     private UserBean.DataBean.UserInfoBean userInfo;
-
+    private String leftTitle;
+    private String rightTitle;
     public VoteHolder(View itemView,TopicDetailAdapter adapter) {
         super(itemView);
         initView();
@@ -269,8 +270,16 @@ public class VoteHolder extends RecyclerView.ViewHolder {
      * @param topicInfo
      */
     public void bindView(final TopicDetailBean.DataBean topicInfo) {
-        if (topicInfo == null || topicInfo.option == null )return;
+        if (topicInfo == null || topicInfo.option == null || topicInfo.option.size() == 0 )return;
         this.topicInfo = topicInfo;
+        for (int j = 0; j < topicInfo.option.size(); j ++) {
+            if ( topicInfo.option.get(j).id % 2 == 1) {
+                leftTitle = topicInfo.option.get(j).shortTitle;
+            } else {
+                rightTitle = topicInfo.option.get(j).shortTitle;
+            }
+        }
+        voteView.setTitle(leftTitle,rightTitle);
         voteView.setInterface(new VoteView.OnItemClickListener() {
             @Override
             public void clickLeft() {
@@ -278,8 +287,14 @@ public class VoteHolder extends RecyclerView.ViewHolder {
                 if (!AppConfig.LOGIN_STATUS) {
                     new LogInOrCompleteDialog(itemView.getContext()).setStatus(LogInOrCompleteDialog.TOPIC_IN).show();
                 } else {
-                    voteDialog.show();
-                    voteDialog.setTitle(topicInfo.option.get(0).shortTitle, topicInfo.option.get(0).id);
+                    for (int i = 0 ;i < topicInfo.option.size(); i ++) {
+                        if (topicInfo.option.get(i).id % 2 == 1) {
+                            voteDialog.show();
+                            voteDialog.setTitle(topicInfo.option.get(i).shortTitle,topicInfo.option.get(i).title, topicInfo.option.get(i).id);
+                            return;
+                        }
+                    }
+
                 }
             }
 
@@ -289,8 +304,13 @@ public class VoteHolder extends RecyclerView.ViewHolder {
                 if (!AppConfig.LOGIN_STATUS) {
                     new LogInOrCompleteDialog(itemView.getContext()).setStatus(LogInOrCompleteDialog.TOPIC_IN).show();
                 } else {
-                    voteDialog.show();
-                    voteDialog.setTitle(topicInfo.option.get(1).shortTitle, topicInfo.option.get(1).id);
+                    for (int i = 0 ;i < topicInfo.option.size(); i ++) {
+                        if (topicInfo.option.get(i).id % 2 == 0) {
+                            voteDialog.show();
+                            voteDialog.setTitle(topicInfo.option.get(i).shortTitle,topicInfo.option.get(i).title, topicInfo.option.get(i).id);
+                            return;
+                        }
+                    }
                 }
             }
         });

@@ -46,7 +46,7 @@ public class UpdateUserRepo extends AbstractDataRepo {
     //修改用户信息
     static HashMap<String, String> paramsUpdateUserInfo = new HashMap();
 
-    public static Flowable<UpdateUserInfoBean> updateUserInfo(String uid, String nickName, String headImg,
+    public static Flowable<UserBean> updateUserInfo(String uid, String nickName, String headImg,
                                                               String sex, String birthDay, String birthPlace, String birthLongi,
                                                               String birthLati, String livePlace, String liveLongi, String liveLati) {
         paramsUpdateUserInfo.put("uid", uid);
@@ -61,7 +61,7 @@ public class UpdateUserRepo extends AbstractDataRepo {
         paramsUpdateUserInfo.put("LiveLongi", liveLongi);
         paramsUpdateUserInfo.put("LiveLati", liveLati);
 
-        return post(Urls.UPDATE_USER_INFO, null, paramsUpdateUserInfo, true, UpdateUserInfoBean.class, "update_user_info", 0);
+        return post(Urls.UPDATE_USER_INFO, null, paramsUpdateUserInfo, true, UserBean.class, "update_user_info", 0);
     }
 
 
@@ -79,7 +79,7 @@ public class UpdateUserRepo extends AbstractDataRepo {
         param.put("data", imgBase64);
         param.put("ext", nameEx);
         param.put("uid", uid);
-        return httpFlow(Urls.UPLOAD_FILE, null, param, true, UpLoadHeaderBean.class, "img_user_info", 0);
+        return post(Urls.UPLOAD_FILE, null, param, true, UpLoadHeaderBean.class, "img_user_info", 0);
     }
 
 

@@ -83,6 +83,7 @@ public class TopicRepo extends AbstractDataRepo {
         HashMap<String, String> param = new HashMap();
         if (limit != null)param.put("limit",limit);
         if (skip != null)param.put("skip",skip);
+        param.put("sortby","2");
         if (needCache) {
             if (!LLApplication.getApiCache().isExpired(cacheKey,cacheDuration)) {
                 return LLApplication.getApiCache().readCache(cacheKey,TopicBean.class);
@@ -106,7 +107,7 @@ public class TopicRepo extends AbstractDataRepo {
 
 
 
-        return unionFlow(Urls.TOPIC_INFO,null,param,true,TopicDetailBean.class,"topic_info" + tid,2 *1000 *60);
+        return unionFlow(Urls.TOPIC_INFO,null,param,true,TopicDetailBean.class,null,0);
     }
 
     /**

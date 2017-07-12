@@ -256,6 +256,7 @@ public class SetPasswordActivity extends BaseActivity {
 
                             if (modifyPasswordBean.data.result == 0) {//修改密码成功  打开登录页面
                                 ARouter.getInstance().build("/test/LoginActivity").navigation();
+                                finish();
                             } else {//失败
                                 Toaster.showShort("修改密码失败");
                             }

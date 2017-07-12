@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
@@ -30,6 +31,7 @@ import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.common.utils.ViewUtil;
 import com.youloft.lilith.cons.view.LogInOrCompleteDialog;
 import com.youloft.lilith.login.bean.UserBean;
+import com.youloft.lilith.login.event.LoginEvent;
 import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.topic.adapter.PointAnswerAdapter;
 import com.youloft.lilith.topic.bean.PointAnswerBean;
@@ -40,6 +42,10 @@ import com.youloft.lilith.topic.db.PointAnswerCache;
 import com.youloft.lilith.topic.db.PointAnswerTable;
 import com.youloft.lilith.topic.widget.ScrollFrameLayout;
 import com.youloft.lilith.topic.widget.SoftInputLayout;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,6 +105,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
         overridePendingTransition(R.anim.slide_in_bottom, 0);
         ButterKnife.bind(this);
         ARouter.getInstance().inject(this);
+        EventBus.getDefault().register(this);
         pointAnswerCache = PointAnswerCache.getIns(this);
         imm = (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);
         if (AppConfig.LOGIN_STATUS && AppSetting.getUserInfo() != null) {
@@ -109,7 +116,18 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
         initReplyData();
 
     }
+    /**
+     * 登录状态改变
+     *
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
+    public void onLoddingChagne(LoginEvent event) {
+        if (AppConfig.LOGIN_STATUS && AppSetting.getUserInfo()!=null) {
+            userInfo = AppSetting.getUserInfo().data.userInfo;
+        }
 
+    }
     /**
      * 请求此观点的回复列表
      */
@@ -208,10 +226,6 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
                     isReplyAuthor = true;
 
                 } else {
-                    if (!AppConfig.LOGIN_STATUS) {
-                        new LogInOrCompleteDialog(PointDetailActivity.this).setStatus(LogInOrCompleteDialog.TOPIC_IN).show();
-                        return;
-                    }
                     ////软键盘弹出啦
                     if (isReplyAuthor){
                         replyId = 0;
@@ -249,6 +263,22 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
                         loadMoreReply();
                     }
                 }
+            }
+        });
+        commentEdit.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        if (!AppConfig.LOGIN_STATUS) {
+                            new LogInOrCompleteDialog(PointDetailActivity.this).setStatus(LogInOrCompleteDialog.TOPIC_IN).show();
+                            return true;
+                        }
+                        break;
+                }
+
+                return false;
             }
         });
 
@@ -295,6 +325,10 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
     }
 
     public void clickReply(int replyId,String replyName) {
+        if (!AppConfig.LOGIN_STATUS) {
+            new LogInOrCompleteDialog(PointDetailActivity.this).setStatus(LogInOrCompleteDialog.TOPIC_IN).show();
+            return ;
+        }
         this.replyId = replyId;
         this.replyName = replyName;
         isReplyAuthor = false;
@@ -388,6 +422,8 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
                             adapter.setAnswerTop(dataBean);
                             updatePointAnswerDb(dataBean,answerId);
                             Toaster.showShort("评论成功！");
+                        } else {
+                            Toaster.showShort("评论失败!");
                         }
 
                     }
@@ -395,6 +431,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
                     @Override
                     protected void onFailed(Throwable e) {
                         super.onFailed(e);
+                        Toaster.showShort("评论失败!");
                     }
                 });
     }
@@ -414,5 +451,11 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
         pointAnswerTable.rid = answerId;
         PointAnswerCache.getIns(this).insertData(pointAnswerTable);
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

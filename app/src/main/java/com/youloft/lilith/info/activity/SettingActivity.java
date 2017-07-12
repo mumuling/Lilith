@@ -109,6 +109,11 @@ public class SettingActivity extends BaseActivity {
      * 检查版本
      */
     private void checkVersionCode() {
+        //如果正在下载,就不去检查更新
+        if(AppConfig.DOWNLOAD_STATUS){
+            Toaster.showShort("新版本下载中...");
+            return;
+        }
         final CheckVersionCodeDialog mVersionCodeDialog = new CheckVersionCodeDialog(this);
         mVersionCodeDialog.show();
         UpdateUserRepo.checkVersion()
@@ -121,15 +126,15 @@ public class SettingActivity extends BaseActivity {
                     public void onDataSuccess(CheckVersionBean checkVersionBean) {
                         String version = checkVersionBean.data.version;
 
-//                        if (version.equals(AppSetting.getVersionCode())) {
-//                            Toaster.showShort("您当前版本为最新版本");
-//                            mVersionCodeDialog.dismiss();
-//                        } else {
-//                            mVersionCodeDialog.dismiss();
-//                            //弹出对话框,让用户选择是否下载
-//                            DownloadSelectDialog downloadSelectDialog = new DownloadSelectDialog(SettingActivity.this);
-//                            downloadSelectDialog.show();
-//                        }
+                        if (version.equals(AppSetting.getVersionCode())) {
+                            Toaster.showShort("您当前版本为最新版本");
+                            mVersionCodeDialog.dismiss();
+                        } else {
+                            mVersionCodeDialog.dismiss();
+                            //弹出对话框,让用户选择是否下载
+                            DownloadSelectDialog downloadSelectDialog = new DownloadSelectDialog(SettingActivity.this,checkVersionBean);
+                            downloadSelectDialog.show();
+                        }
 
                     }
 
@@ -186,6 +191,12 @@ public class SettingActivity extends BaseActivity {
                         }else {
                             Toaster.showShort("网络错误");
                         }
+                    }
+
+                    @Override
+                    protected void onFailed(Throwable e) {
+                        super.onFailed(e);
+                        Toaster.showShort("网络错误");
                     }
                 });
     }

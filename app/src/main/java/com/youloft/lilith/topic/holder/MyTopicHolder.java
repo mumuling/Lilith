@@ -99,7 +99,7 @@ public class MyTopicHolder extends RecyclerView.ViewHolder {
      * @param isLast  是否是最后一条数据
      */
     public void bind(MyTopicBean.DataBean point,boolean isLast) {
-
+        if (AppSetting.getUserInfo() == null)return;
         userInfo = AppSetting.getUserInfo().data.userInfo;
         if (userInfo == null)return;
         this.topicBean = point;

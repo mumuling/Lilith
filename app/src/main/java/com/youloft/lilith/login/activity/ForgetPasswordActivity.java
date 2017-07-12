@@ -25,8 +25,13 @@ import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.login.bean.SendSmsBean;
 import com.youloft.lilith.login.bean.SmsCodeBean;
+import com.youloft.lilith.login.event.LoginEvent;
 import com.youloft.lilith.login.repo.SendSmsRepo;
 import com.youloft.lilith.login.repo.SmsCodeRepo;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.BindViews;
@@ -80,9 +85,19 @@ public class ForgetPasswordActivity extends BaseActivity {
         ButterKnife.bind(this);
         phoneNumberSetting();
         verificationCodeSetting();
+        EventBus.getDefault().register(this);
+    }
+    //登录成功后,收到事件,关闭本页面
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(LoginEvent loginEvent) {
+        boolean isLogin = loginEvent.isLogin;
+        if (isLogin) {
+            finish();
+        } else {
+            //登出了
+        }
 
     }
-
 
     /**
      * 号码输入框的设定
@@ -363,6 +378,7 @@ public class ForgetPasswordActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         handler.removeCallbacksAndMessages(null);
+        EventBus.getDefault().unregister(this);
     }
 
     //点击清除电话号码

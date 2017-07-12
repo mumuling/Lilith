@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -13,6 +14,7 @@ import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.login.bean.UserBean;
+import com.youloft.lilith.login.event.LoginEvent;
 import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.topic.adapter.TopicDetailAdapter;
 import com.youloft.lilith.topic.bean.PointBean;
@@ -24,6 +26,10 @@ import com.youloft.lilith.topic.db.TopicInfoCache;
 import com.youloft.lilith.topic.db.TopicTable;
 import com.youloft.lilith.topic.widget.VoteDialog;
 import com.youloft.lilith.ui.view.BaseToolBar;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,6 +77,7 @@ public class TopicDetailActivity extends BaseActivity {
         setContentView(R.layout.activity_topic);
         ButterKnife.bind(this);
         ARouter.getInstance().inject(this);
+        EventBus.getDefault().register(this);
         topicInfoCache = TopicInfoCache.getIns(this);
         pointCache = PointCache.getIns(this);
         initView();
@@ -175,7 +182,7 @@ public class TopicDetailActivity extends BaseActivity {
      */
     private void requestTopicDetail() {
         int userId = -1;
-        if (AppConfig.LOGIN_STATUS &&AppSetting.getUserInfo() != null) {
+        if (AppConfig.LOGIN_STATUS && AppSetting.getUserInfo() != null) {
             userId = AppSetting.getUserInfo().data.userInfo.id;
         }
 
@@ -218,6 +225,16 @@ public class TopicDetailActivity extends BaseActivity {
         }
 
     }
+    /**
+     * 登录状态改变
+     *
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
+    public void onLoddingChagne(LoginEvent event) {
+        requestTopicDetail();
+
+    }
 
     private void initView() {
         toolBar.setTitle("星座话题");
@@ -235,7 +252,7 @@ public class TopicDetailActivity extends BaseActivity {
 
             @Override
             public void OnTitleBtnClick() {
-
+    
             }
 
             @Override
@@ -302,5 +319,6 @@ public class TopicDetailActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }
