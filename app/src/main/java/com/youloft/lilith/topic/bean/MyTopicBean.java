@@ -44,6 +44,8 @@ public class MyTopicBean extends AbsResponse<ArrayList<MyTopicBean.DataBean>> {
         public int reply;
         @JSONField(name = "date")
         public String date;
+        @JSONField(name = "isclose")
+        public int isclose;
         @JSONField(name = "isclick")
         public int isclick;
         @JSONField(name = "sdate")

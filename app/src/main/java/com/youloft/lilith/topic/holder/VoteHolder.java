@@ -183,11 +183,10 @@ public class VoteHolder extends RecyclerView.ViewHolder {
                                 if (poitnID!= -1) {
                                     topicInfo.totalVote++;
                                     int votes = addOptionVote(id);
-
                                     if (id % 2 == 1) {
                                         voteAniamtion((float) votes / topicInfo.totalVote);
                                     } else {
-                                        voteAniamtion((float) 1 - (votes / topicInfo.totalVote));
+                                        voteAniamtion(1 - ((float)votes / topicInfo.totalVote));
                                     }
                                     needVoteAnimation = false;
                                     String time = CalendarHelper.getNowTimeString();
@@ -326,7 +325,7 @@ public class VoteHolder extends RecyclerView.ViewHolder {
                 if (topicInfo.option.get(j).id % 2 == 1) {
                     voteAniamtion((float) topicInfo.option.get(j).vote/topicInfo.totalVote);
                 } else {
-                    voteAniamtion((float) 1 -  (topicInfo.option.get(j).vote/topicInfo.totalVote));
+                    voteAniamtion( 1 -  ((float)topicInfo.option.get(j).vote/topicInfo.totalVote));
                 }
             }
             voteAniamtion((float) topicInfo.option.get(0).vote/topicInfo.totalVote);

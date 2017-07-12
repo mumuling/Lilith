@@ -17,8 +17,10 @@ import com.youloft.lilith.common.event.TabChangeEvent;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.login.bean.UserBean;
+import com.youloft.lilith.login.event.LoginEvent;
 import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.topic.adapter.MyTopicAdapter;
+import com.youloft.lilith.topic.bean.ClickLikeEvent;
 import com.youloft.lilith.topic.bean.MyTopicBean;
 import com.youloft.lilith.topic.db.PointCache;
 import com.youloft.lilith.topic.db.PointTable;
@@ -26,6 +28,8 @@ import com.youloft.lilith.ui.TabManager;
 import com.youloft.lilith.ui.view.BaseToolBar;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
@@ -64,6 +68,7 @@ public class MyTopicActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_topic);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
         toolBar.setShowShareBtn(false);
         toolBar.setOnToolBarItemClickListener(new BaseToolBar.OnToolBarItemClickListener() {
             @Override
@@ -230,6 +235,24 @@ public class MyTopicActivity extends BaseActivity {
     public void onBackPressed() {
         super.onBackPressed();
         finish();
+    }
+
+    /**
+     * 点赞改变
+     *
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
+    public void onLoddingChagne(ClickLikeEvent event) {
+       if (event.type == ClickLikeEvent.TYPE_ANSWER ||adapter == null)return;
+        adapter.notifyDataSetChanged();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     /**
