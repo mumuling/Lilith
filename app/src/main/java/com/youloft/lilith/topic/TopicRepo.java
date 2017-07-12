@@ -193,7 +193,7 @@ public class TopicRepo extends AbstractDataRepo {
      */
     public static Flowable<PointAnswerBean> reply(String vid, String uid, String nickName, String msg, String pid) {
         HashMap<String, String> param = new HashMap();
-        param.put("tid",vid);
+        param.put("vid",vid);
         param.put("uid",uid);
         param.put("NickName",nickName);
         param.put("txt",msg);

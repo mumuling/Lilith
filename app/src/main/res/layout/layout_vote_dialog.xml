@@ -33,14 +33,17 @@
         android:layout_marginTop="12dp"/>
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:id="@+id/edit_vote"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:textColor="@color/white"
         android:layout_below="@id/divider"
         android:textSize="15sp"
+        android:gravity="top|left"
         android:layout_marginTop="11dp"
+        android:paddingBottom="11dp"
+        android:layout_above="@+id/ll_bottom_root"
         android:hint="说说你的看法"
         android:textColorHint="#999999"
         android:textCursorDrawable="@drawable/cursor_bg"

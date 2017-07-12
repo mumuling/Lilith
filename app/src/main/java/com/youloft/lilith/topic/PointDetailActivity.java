@@ -168,11 +168,11 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
         if (userInfo == null)return;
         if (tableArrayList == null || tableArrayList.size() == 0) return;
         PointAnswerTable table = null;
-
             for (int i = 0 ;i < replyList.size(); i ++) {
                  table = pointAnswerCache.getInforByCode(replyList.get(i).id);
                 if (table != null) {
                     pointAnswerCache.deletePointData(point.id);
+                    replyList.remove(i);
                     return;
                 }
             }
@@ -419,6 +419,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
                             dataBean.nickName = userInfo.nickName;
                             dataBean.contents = reply_content;
                             dataBean.headImg = userInfo.headImg;
+                            dataBean.id = answerId;
                             adapter.setAnswerTop(dataBean);
                             updatePointAnswerDb(dataBean,answerId);
                             Toaster.showShort("评论成功！");
