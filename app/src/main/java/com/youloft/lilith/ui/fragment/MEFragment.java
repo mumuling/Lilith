@@ -130,11 +130,13 @@ public class MEFragment extends BaseFragment {
         String headImgUrl = userInfo.data.userInfo.headImg;
         String nickName = userInfo.data.userInfo.nickName;
         if (nickName.length() > 7) {
-            nickName = nickName.substring(0,8)+"...";
+            nickName = nickName.substring(0, 8) + "...";
         }
         tvNickName.setText(nickName);
         if (!TextUtils.isEmpty(headImgUrl)) {
             GlideApp.with(mContext).asBitmap().dontAnimate().load(headImgUrl).into(new GlideBlurTwoViewTarget(ivHeader, ivBlurBg));
+        } else {
+            ivHeader.setImageResource(R.drawable.morentouxiang);
         }
         //根据不同的key设置不同的星座
         String asceSigns = String.valueOf(userInfo.data.userInfo.asceSigns);//上升

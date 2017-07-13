@@ -170,6 +170,8 @@ public class LogInOrCompleteDialog extends BaseDialog {
 
                 if (!TextUtils.isEmpty(info.headImg)) {
                     GlideApp.with(mContext).load(info.headImg).into(mLoginJumpDialogIcon);
+                } else {
+                    mLoginJumpDialogIcon.setImageResource(R.drawable.morentouxiang);
                 }
             }
             mLoginJumpDialogBtn.setText(mContext.getResources().getString(R.string.log_dialog_to_complete_btn));

@@ -151,6 +151,8 @@ public class EditInformationActivity extends BaseActivity {
             UserBean.DataBean.UserInfoBean detail = userInfo.data.userInfo;
             if (!TextUtils.isEmpty(detail.headImg)) {
                 GlideApp.with(this).asBitmap().dontAnimate().load(detail.headImg).into(new GlideBlurTwoViewTarget(ivHeader, ivBlurBg));
+            }else {
+                ivHeader.setImageResource(R.drawable.morentouxiang);
             }
 
             tvNickName.setText(detail.nickName);
