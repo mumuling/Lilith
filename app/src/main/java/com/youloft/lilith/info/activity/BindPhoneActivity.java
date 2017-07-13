@@ -24,6 +24,7 @@ import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.LoginUtils;
 import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.info.repo.UpdateUserRepo;
+import com.youloft.lilith.login.PhoneFocusChangeListener;
 import com.youloft.lilith.login.bean.SendSmsBean;
 import com.youloft.lilith.login.bean.SmsCodeBean;
 import com.youloft.lilith.login.bean.UserBean;
@@ -75,7 +76,7 @@ public class BindPhoneActivity extends BaseActivity{
     @BindView(R.id.iv_number_right)
     ImageView ivNumberRight; //可以使用的手机号码
 
-    private int mPreNumberLength;//电话号码变化之前的长度
+
     private boolean isNumberRight = true;  //验证电话号码是否已经存在之后的标识 true 存在   false 不存在
     private boolean isCodeRight; //验证码是否正确
     private SmsCodeBean mSmsCodeBean; //获取到的验证码的数据模型
@@ -101,31 +102,37 @@ public class BindPhoneActivity extends BaseActivity{
         etPhoneNumber.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                mPreNumberLength = s.toString().length();
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //内容发生变化时,判断是否添加-
-                boolean flag = etPhoneNumber.getText().toString().length() > mPreNumberLength;
-                String text = etPhoneNumber.getText().toString();
-                if (text.length() == 3 && flag || text.length() == 8 && flag) {
-                    etPhoneNumber.setText(s.toString() + "-");
-                    etPhoneNumber.setSelection(etPhoneNumber.getText().toString().length());
+                if (s == null || s.length() == 0) return;
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < s.length(); i++) {
+                    if (i != 3 && i != 8 && s.charAt(i) == '-') {
+                        continue;
+                    } else {
+                        sb.append(s.charAt(i));
+                        if ((sb.length() == 4 || sb.length() == 9) && sb.charAt(sb.length() - 1) != '-') {
+                            sb.insert(sb.length() - 1, '-');
+                        }
+                    }
                 }
-                if (text.length() >= 4 && !String.valueOf(text.charAt(3)).equals("-")) {
-                    String result = text.substring(0, 3) + "-" + text.substring(3);
-                    etPhoneNumber.setText(result);
-                    etPhoneNumber.setSelection(etPhoneNumber.getText().toString().length());
-                }
-                if (text.length() >= 9 && !String.valueOf(text.charAt(8)).equals("-")) {
-                    String result = text.substring(0, 8) + "-" + text.substring(8);
-                    etPhoneNumber.setText(result);
-                    etPhoneNumber.setSelection(etPhoneNumber.getText().toString().length());
-                }
-                if (etPhoneNumber.getText().toString().length() < 13) {//长度不足,一律隐藏后面的提示信息
-                    tvExistNumber.setVisibility(View.INVISIBLE);
-                    ivNumberRight.setVisibility(View.INVISIBLE);
+                if (!sb.toString().equals(s.toString())) {
+                    int index = start + 1;
+                    if (sb.charAt(start) == '-') {
+                        if (before == 0) {
+                            index++;
+                        } else {
+                            index--;
+                        }
+                    } else {
+                        if (before == 1) {
+                            index--;
+                        }
+                    }
+                    etPhoneNumber.setText(sb.toString());
+                    etPhoneNumber.setSelection(index);
                 }
                 //当电话号码已经11位数之后做一系列校验
                 if (etPhoneNumber.getText().toString().length() == 13) {
@@ -138,21 +145,7 @@ public class BindPhoneActivity extends BaseActivity{
 
             }
         });
-        etPhoneNumber.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {//有内容显示,无内容,隐藏
-                    if(android.text.TextUtils.isEmpty(etPhoneNumber.getText().toString())){
-                        ivCleanNumber.setVisibility(View.INVISIBLE);
-                    }else {
-                        ivCleanNumber.setVisibility(View.VISIBLE);
-                    }
-
-                } else {//无脑隐藏
-                    ivCleanNumber.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
+        etPhoneNumber.setOnFocusChangeListener(new PhoneFocusChangeListener(etPhoneNumber,ivCleanNumber));
     }
 
 
@@ -329,15 +322,15 @@ public class BindPhoneActivity extends BaseActivity{
         // 4.  是否在一分钟的重发时间内
         String phoneNumber = etPhoneNumber.getText().toString().replaceAll("-", "");
         if (TextUtils.isEmpty(phoneNumber)){
-            Toaster.showShort("电话号码不能为空");
+            Toaster.showShort("手机码不能为空!");
             return;
         }
         if(!LoginUtils.isPhoneNumber(phoneNumber)){
-            Toaster.showShort("手机号码不正确");
+            Toaster.showShort("手机号码不正确!");
             return;
         }
         if (isNumberRight) {
-            Toaster.showShort("正在验证手机号码,或者手机号码已经注册");
+            Toaster.showShort("该手机号码已绑定！");
             return;
         }
         String disText = tvGetCode.getText().toString();

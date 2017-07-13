@@ -290,6 +290,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="4.5dp"
+                android:layout_marginBottom="55dp"
                 android:text="@string/user_information_desc"
                 android:textColor="@color/white_50"
                 android:textSize="12dp" />

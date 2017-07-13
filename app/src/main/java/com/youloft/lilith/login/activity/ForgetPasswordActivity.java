@@ -24,6 +24,8 @@ import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.LoginUtils;
 import com.youloft.lilith.common.utils.Toaster;
+import com.youloft.lilith.login.PhoneFocusChangeListener;
+import com.youloft.lilith.login.PhoneTextWatcher;
 import com.youloft.lilith.login.bean.SendSmsBean;
 import com.youloft.lilith.login.bean.SmsCodeBean;
 import com.youloft.lilith.login.event.LoginEvent;
@@ -106,76 +108,14 @@ public class ForgetPasswordActivity extends BaseActivity {
      * 号码输入框的设定
      */
     private void phoneNumberSetting() {
-        etPhoneNumber.setFilters(new InputFilter[]{new InputFilter.LengthFilter(13)});
         //电话号码变化的监听
-        etPhoneNumber.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                mPreNumberLength = s.toString().length();
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //内容发生变化时,判断是否添加-
-                boolean flag = etPhoneNumber.getText().toString().length() > mPreNumberLength;
-                String text = etPhoneNumber.getText().toString();
-                if (text.length() == 3 && flag || text.length() == 8 && flag) {
-                    etPhoneNumber.setText(s.toString() + "-");
-                    etPhoneNumber.setSelection(etPhoneNumber.getText().toString().length());
-                }
-                if (text.length() >= 4 && !String.valueOf(text.charAt(3)).equals("-")) {
-                    String result = text.substring(0, 3) + "-" + text.substring(3);
-                    etPhoneNumber.setText(result);
-                    etPhoneNumber.setSelection(etPhoneNumber.getText().toString().length());
-                }
-                if (text.length() >= 9 && !String.valueOf(text.charAt(8)).equals("-")) {
-                    String result = text.substring(0, 8) + "-" + text.substring(8);
-                    etPhoneNumber.setText(result);
-                    etPhoneNumber.setSelection(etPhoneNumber.getText().toString().length());
-                }
-                //当电话号码已经11位数之后做一系列校验
-                if (etPhoneNumber.getText().toString().length() == 13) {
-                    checkNumber();
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-                //变化之后如果有字符串 就显示叉叉, 如果没有就隐藏叉叉
-                if (etPhoneNumber.getText().toString().length() != 0) {
-                    ivCleanNumber.setVisibility(View.VISIBLE);
-                } else {
-                    ivCleanNumber.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
-
-        etPhoneNumber.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {//有内容显示,无内容,隐藏
-                    if(android.text.TextUtils.isEmpty(etPhoneNumber.getText().toString())){
-                        ivCleanNumber.setVisibility(View.INVISIBLE);
-                    }else {
-                        ivCleanNumber.setVisibility(View.VISIBLE);
-                    }
-
-                } else {//无脑隐藏
-                    ivCleanNumber.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
+        etPhoneNumber.setFilters(new InputFilter[]{new InputFilter.LengthFilter(13)});
+        etPhoneNumber.addTextChangedListener(new PhoneTextWatcher(etPhoneNumber,ivCleanNumber));
+        etPhoneNumber.setOnFocusChangeListener(new PhoneFocusChangeListener(etPhoneNumber,ivCleanNumber));
     }
 
 
-    /**
-     * 对电话号码做校验
-     */
-    private void checkNumber() {
 
-
-    }
 
     /**
      * 验证码输入相关

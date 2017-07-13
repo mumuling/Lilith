@@ -373,10 +373,13 @@ public class EditInformationActivity extends BaseActivity {
      * 城市的选择
      *
      * @param tv
-     * @param b  待办来源  true代表出生地   false 现居地
+     * @param b  来源  true代表出生地   false 现居地
      */
     private void cityPick(final TextView tv, final boolean b) {
-        CityPicker.getDefCityPicker(this)
+
+        CityPicker cityPicker = getCityPicker(b);
+
+        cityPicker
                 .setOnCityItemClickListener(new OnPickerSelectListener<CityInfo>() {
                     @Override
                     public void onSelected(CityInfo data) {
@@ -401,6 +404,34 @@ public class EditInformationActivity extends BaseActivity {
                     }
                 })
                 .show();
+    }
+
+    /**
+     * 根据不同的来源获取不同的city picker
+     *
+     * @param b 来源  true代表出生地   false 现居地
+     */
+    private CityPicker getCityPicker(boolean b) {
+        if (b) {
+
+            String content = tvPlaceBirth.getText().toString();
+            if (TextUtils.isEmpty(content)) {
+                return CityPicker.getDefCityPicker(this);
+            } else {
+                String[] split = content.split("-");
+                return CityPicker.getDefCityPicker(this).province(split[0]).city(split[1]).district(split[2]);
+            }
+
+        } else {
+            String content = tvPlaceNow.getText().toString();
+            if (TextUtils.isEmpty(content)) {
+                return CityPicker.getDefCityPicker(this);
+            } else {
+                String[] split = content.split("-");
+                return CityPicker.getDefCityPicker(this).province(split[0]).city(split[1]).district(split[2]);
+            }
+
+        }
     }
 
     /**

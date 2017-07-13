@@ -8,6 +8,7 @@ public class LoginUtils {
 
     private static final String PHONE_REGEX = "^1[3|4|5|7|8][0-9]\\d{8}$";
 
+    //返回true 号码合法  返回false 不合法
     public static boolean isPhoneNumber(String phone) {
         phone = phone.trim();
         if (phone.length() != 11) {
