@@ -52,7 +52,7 @@ public class UserBean extends AbsResponse<UserBean.DataBean> {
             @JSONField(name = "asceSigns")
             public int asceSigns; //上升星座
             @JSONField(name = "birthLongi")
-            public String birthLongi;  //出生地经度
+            public String birthLongi;  //出生地经度  这里还有个额外的作用,判断是不是新用户
             @JSONField(name = "birthLati")
             public String birthLati;   //出生地纬度
             @JSONField(name = "liveLongi")

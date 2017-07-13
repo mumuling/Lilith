@@ -162,7 +162,7 @@ public class VoteHolder extends RecyclerView.ViewHolder {
     }
 
     private void initView() {
-        voteDialog = new VoteDialog(itemView.getContext());
+        voteDialog = new VoteDialog(itemView.getContext(),R.style.VoteDialog);
         voteDialog.setListener(new VoteDialog.OnClickConfirmListener() {
             @Override
             public void clickConfirm(final String msg, final int id,final String voteTitle) {

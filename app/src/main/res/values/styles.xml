@@ -33,6 +33,10 @@
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowSoftInputMode">adjustResize</item>
     </style>
+    <style name="VoteDialog" parent="DialogTheme">
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
 
     <declare-styleable name="BaseToolBar">
         <attr name="show_back_btn" format="boolean"/>

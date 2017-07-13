@@ -68,6 +68,7 @@ public class TopicDetailActivity extends BaseActivity {
     private int isVote = 0;//是否参与过
     private TopicInfoCache topicInfoCache;
     private PointCache pointCache;
+    private boolean needLoadMoreTopic = true;
     @Autowired
     public int tid;
 
@@ -153,6 +154,7 @@ public class TopicDetailActivity extends BaseActivity {
     private void handlePointTableInfo(List<PointBean.DataBean> data) {
         if (!AppConfig.LOGIN_STATUS ||AppSetting.getUserInfo() == null) return;
         UserBean.DataBean.UserInfoBean userInfo = AppSetting.getUserInfo().data.userInfo;
+        int userID = userInfo.id;
         PointTable pointTable = pointCache.getInforByCode(tid);
         if (pointTable != null) {
             PointBean.DataBean dataBean = new PointBean.DataBean();
@@ -173,8 +175,9 @@ public class TopicDetailActivity extends BaseActivity {
             pointList.add(dataBean);
         }
         for (int i = 0; i < data.size(); i ++) {
-            if (data.get(i).userId == AppSetting.getUserInfo().data.userInfo.id){
+            if (data.get(i).userId == userID){
                 pointCache.deleteData(data.get(i).id);
+                data.remove(i);
             }
         }
     }
@@ -256,7 +259,7 @@ public class TopicDetailActivity extends BaseActivity {
         rvTopicDetail.setLayoutManager(mLayoutManager);
         adapter = new TopicDetailAdapter(this);
         rvTopicDetail.setAdapter(adapter);
-        voteDialog = new VoteDialog(this);
+        voteDialog = new VoteDialog(this,R.style.VoteDialog);
         toolBar.setOnToolBarItemClickListener(new BaseToolBar.OnToolBarItemClickListener() {
             @Override
             public void OnBackBtnClick() {
@@ -293,7 +296,7 @@ public class TopicDetailActivity extends BaseActivity {
                         && totalItemCount >=2
                         && lastVisibleItemPosition >= totalItemCount - 2
                         && visibleItemCount > 0) {
-                    if (otherTopicList!= null && otherTopicList.size() >= 4) {
+                    if (otherTopicList!= null && otherTopicList.size() >= 4 && needLoadMoreTopic) {
                         loadMoreTopic();
                     }
                 }
@@ -314,6 +317,7 @@ public class TopicDetailActivity extends BaseActivity {
                     @Override
                     public void onDataSuccess(TopicBean topicBean) {
                         if (topicBean.data != null) {
+                            if (topicBean.data.size() == 0)needLoadMoreTopic = false;
                             otherTopicList.clear();
                             //otherTopicList.addAll(topicBean.data);
                             chekTopic(topicBean.data);

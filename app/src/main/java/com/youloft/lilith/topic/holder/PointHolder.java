@@ -28,6 +28,7 @@ import com.youloft.lilith.common.utils.CalendarHelper;
 import com.youloft.lilith.cons.consmanager.ConsManager;
 import com.youloft.lilith.cons.view.LogInOrCompleteDialog;
 import com.youloft.lilith.glide.GlideBlurTransform;
+import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.topic.PointDetailActivity;
 import com.youloft.lilith.topic.TopicRepo;
@@ -36,6 +37,8 @@ import com.youloft.lilith.topic.bean.ClickLikeBean;
 import com.youloft.lilith.topic.bean.ClickLikeEvent;
 import com.youloft.lilith.topic.bean.PointBean;
 import com.youloft.lilith.topic.bean.TopicDetailBean;
+import com.youloft.lilith.topic.db.PointCache;
+import com.youloft.lilith.topic.db.PointTable;
 import com.youloft.lilith.topic.db.TopicLikeCache;
 import com.youloft.lilith.topic.db.TopicLikingTable;
 import com.youloft.lilith.topic.widget.Rotate3dAnimation;
@@ -44,6 +47,7 @@ import com.youloft.lilith.glide.GlideCircleTransform;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -202,6 +206,7 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
                             imageLoading.clearAnimation();
                             return;
                         }
+                        handlePointTableInfo(pointBean.data);
                         adapter.setPointBeanList(pointBean.data);
                         totalPoint = adapter.pointBeanList.size();
                         textLoadMore.setVisibility(View.VISIBLE);
@@ -223,6 +228,24 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
                 });
 
 
+    }
+    /**
+     *   处理观点信息的数据库。
+     * @param data
+     */
+    private void handlePointTableInfo(List<PointBean.DataBean> data) {
+        if (!AppConfig.LOGIN_STATUS ||AppSetting.getUserInfo() == null) return;
+        UserBean.DataBean.UserInfoBean userInfo = AppSetting.getUserInfo().data.userInfo;
+        int userID = userInfo.id;
+        PointTable pointTable = PointCache.getIns(mContext).getInforByCode(topic.id);
+        if (pointTable == null)return;
+        for (int i = 0; i < data.size(); i ++) {
+            if (data.get(i).userId == userID){
+                PointCache.getIns(mContext).deleteData(data.get(i).id);
+                data.remove(i);
+                return;
+            }
+        }
     }
 
     public void bindNormal(final PointBean.DataBean point, final TopicDetailBean.DataBean option, int position,boolean isLast) {

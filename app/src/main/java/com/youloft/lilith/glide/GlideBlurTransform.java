@@ -51,6 +51,7 @@ public class GlideBlurTransform extends BitmapTransformation {
         bf.sampling = sampling;
         bf.radius = radius;
         return Blur.of(mContext, toTransform, bf);
+     //   return toTransform;
     }
 
     /**

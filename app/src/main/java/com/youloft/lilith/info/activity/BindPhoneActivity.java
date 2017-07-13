@@ -140,6 +140,21 @@ public class BindPhoneActivity extends BaseActivity{
 
             }
         });
+        etPhoneNumber.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {//有内容显示,无内容,隐藏
+                    if(android.text.TextUtils.isEmpty(etPhoneNumber.getText().toString())){
+                        ivCleanNumber.setVisibility(View.INVISIBLE);
+                    }else {
+                        ivCleanNumber.setVisibility(View.VISIBLE);
+                    }
+
+                } else {//无脑隐藏
+                    ivCleanNumber.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
     }
 
 
