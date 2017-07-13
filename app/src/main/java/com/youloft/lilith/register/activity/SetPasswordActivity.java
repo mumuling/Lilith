@@ -232,6 +232,9 @@ public class SetPasswordActivity extends BaseActivity {
                                 AppSetting.saveUserInfo(userBean); //保存用户信息
                                 AppConfig.LOGIN_STATUS = true; //设置登录标识
                                 EventBus.getDefault().post(new LoginEvent(true));//发送登录事件
+                                if (android.text.TextUtils.isEmpty(userBean.data.userInfo.birthLongi)){ //新用户
+                                    ARouter.getInstance().build("/test/EditInformationActivity").navigation();
+                                }
                                 finish();
                             }else {
                                 Toaster.showShort("注册失败");

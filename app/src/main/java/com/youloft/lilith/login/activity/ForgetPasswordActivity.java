@@ -34,6 +34,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.IOException;
+
 import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
@@ -146,8 +148,22 @@ public class ForgetPasswordActivity extends BaseActivity {
                 } else {
                     ivCleanNumber.setVisibility(View.INVISIBLE);
                 }
+            }
+        });
 
+        etPhoneNumber.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {//有内容显示,无内容,隐藏
+                    if(android.text.TextUtils.isEmpty(etPhoneNumber.getText().toString())){
+                        ivCleanNumber.setVisibility(View.INVISIBLE);
+                    }else {
+                        ivCleanNumber.setVisibility(View.VISIBLE);
+                    }
 
+                } else {//无脑隐藏
+                    ivCleanNumber.setVisibility(View.INVISIBLE);
+                }
             }
         });
     }
@@ -275,6 +291,18 @@ public class ForgetPasswordActivity extends BaseActivity {
     private void initBackgroundVedio() {
         String uri = "android.resource://" + getPackageName() + "/" + R.raw.bg_login;
         vvBackground.setVideoURI(Uri.parse(uri));
+
+        vvBackground.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+
+            @Override
+            public boolean onError(MediaPlayer mp, int what, int extra) {
+                // 设置当前播放的位置
+//                play(progress);
+//                isPlaying = false;
+                vvBackground.start();
+                return true;//如果设置true就可以防止他弹出错误的提示框！
+            }
+        });
         vvBackground.start();
         vvBackground.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 

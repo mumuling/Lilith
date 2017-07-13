@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.alibaba.fastjson.JSON;
 import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
@@ -143,6 +144,21 @@ public class UserFunctionActivity extends BaseActivity {
                 }
 
 
+            }
+        });
+        etPhoneNumber.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {//有内容显示,无内容,隐藏
+                    if(android.text.TextUtils.isEmpty(etPhoneNumber.getText().toString())){
+                        ivCleanNumber.setVisibility(View.INVISIBLE);
+                    }else {
+                        ivCleanNumber.setVisibility(View.VISIBLE);
+                    }
+
+                } else {//无脑隐藏
+                    ivCleanNumber.setVisibility(View.INVISIBLE);
+                }
             }
         });
     }
@@ -370,6 +386,9 @@ public class UserFunctionActivity extends BaseActivity {
                             AppSetting.saveUserInfo(userBean); //保存用户信息
                             AppConfig.LOGIN_STATUS = true; //设置登录标识
                             EventBus.getDefault().post(new LoginEvent(true));//发送登录事件
+                            if (TextUtils.isEmpty(userBean.data.userInfo.birthLongi)){ //新用户
+                                ARouter.getInstance().build("/test/EditInformationActivity").navigation();
+                            }
                             finish();
                         } else {
                             Toaster.showShort("验证码错误");
