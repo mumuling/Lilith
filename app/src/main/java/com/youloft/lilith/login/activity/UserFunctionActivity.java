@@ -311,7 +311,7 @@ public class UserFunctionActivity extends BaseActivity {
      * 获取验证码是否正确的请求
      */
     private void getSmsCode() {
-        String smsCode = etVerificationCode.getText().toString();
+        String smsCode = etVerificationCode.getText().toString().trim();
         SmsCodeRepo.getSmsCode(etPhoneNumber.getText().toString().replaceAll("-", ""), "Login", smsCode)
                 .compose(this.<SmsCodeBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
@@ -323,6 +323,12 @@ public class UserFunctionActivity extends BaseActivity {
                         mSmsCodeBean = smsCodeBean;
                         //这里拿回了验证码的相关信息, 在验证码输入框的监听里面验证用户的验证码是否正确
                         checkSmsCode();
+                    }
+
+                    @Override
+                    protected void onFailed(Throwable e) {
+                        super.onFailed(e);
+                        Toaster.showShort("网络错误");
                     }
                 });
     }
@@ -360,6 +366,7 @@ public class UserFunctionActivity extends BaseActivity {
             Toaster.showShort("手机号码不正确");
             return;
         }
+        smsCode = smsCode.trim();
         if (isCodeRight) {  //这里的变量是验证了验证码之后  正确的时候才为true
             quicklyLogin(phoneNumber, smsCode);
         }

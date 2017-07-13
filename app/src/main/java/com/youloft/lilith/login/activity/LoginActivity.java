@@ -254,10 +254,7 @@ public class LoginActivity extends BaseActivity {
             Toaster.showShort("手机号码或者密码不能为空");
             return;
         }
-        if (phoneNumber.length() != 11) {
-            Toaster.showShort("手机号码不正确");
-            return;
-        }
+
         if (!LoginUtils.isPhoneNumber(phoneNumber)) {
             Toaster.showShort("手机号码不正确");
             return;

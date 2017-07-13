@@ -114,7 +114,7 @@ public class MyTopicActivity extends BaseActivity {
                     public void onDataSuccess(MyTopicBean myTopicBean) {
                         if (myTopicBean.data != null) {
                             readDb(myTopicBean.data ,true);
-                            adapter.setMyTopicList(myTopicBean.data);
+                            adapter.setMyTopicList(myTopicList);
                         } else {
                             rvMyTopic.setVisibility(View.GONE);
                             llNoTopic.setVisibility(View.VISIBLE);
