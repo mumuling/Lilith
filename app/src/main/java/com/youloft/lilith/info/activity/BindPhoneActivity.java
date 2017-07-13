@@ -334,10 +334,6 @@ public class BindPhoneActivity extends BaseActivity{
             Toaster.showShort("电话号码不能为空");
             return;
         }
-        if (phoneNumber.length() != 11) {
-            Toaster.showShort("电话号码不正确");
-            return;
-        }
         if(!LoginUtils.isPhoneNumber(phoneNumber)){
             Toaster.showShort("手机号码不正确");
             return;
@@ -426,14 +422,17 @@ public class BindPhoneActivity extends BaseActivity{
             Toaster.showShort("手机号码或者验证码不能为空");
             return;
         }
-        if(phoneNumber.length() != 11 || smsCode.length()!= 6){
-            Toaster.showShort("请检查手机号码或者验证码");
-            return;
-        }
+
         if(!LoginUtils.isPhoneNumber(phoneNumber)){
             Toaster.showShort("手机号码不正确");
             return;
         }
+
+        if(smsCode.trim().length()!= 6){
+            Toaster.showShort("请检查验证码");
+            return;
+        }
+
         final UserBean userInfo = AppSetting.getUserInfo();
         if(userInfo == null){
             Toaster.showShort("内部信息错误");

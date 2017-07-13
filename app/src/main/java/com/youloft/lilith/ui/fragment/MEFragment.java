@@ -108,12 +108,12 @@ public class MEFragment extends BaseFragment {
             setUserInfo();
         } else {
             //登出了  吧所有的图片清空
-            ivRise.setImageBitmap(null);
-            ivSun.setImageBitmap(null);
-            ivMoon.setImageBitmap(null);
-            ivConstellation.setImageBitmap(null);
+            ivRise.setImageResource(R.drawable.div);
+            ivSun.setImageResource(R.drawable.div);
+            ivMoon.setImageResource(R.drawable.div);
+            ivConstellation.setImageResource(R.drawable.div);
             ivBlurBg.setImageBitmap(null);
-            ivHeader.setImageBitmap(null);
+            ivHeader.setImageResource(R.drawable.div);
         }
 
     }
@@ -133,6 +133,9 @@ public class MEFragment extends BaseFragment {
         UserBean userInfo = AppSetting.getUserInfo();
         String headImgUrl = userInfo.data.userInfo.headImg;
         String nickName = userInfo.data.userInfo.nickName;
+        if (nickName.length() > 7) {
+            nickName = nickName.substring(0,8)+"...";
+        }
         tvNickName.setText(nickName);
         if (!TextUtils.isEmpty(headImgUrl)) {
             GlideApp.with(mContext).asBitmap().dontAnimate().load(headImgUrl).into(new GlideBlurTwoViewTarget(ivHeader, ivBlurBg));
