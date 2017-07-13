@@ -131,7 +131,7 @@
                         android:drawableLeft="@drawable/mine_tips_icon"
                         android:drawablePadding="3dp"
                         android:text="@string/select_sex"
-                        android:textColor="@color/white_50"
+                        android:textColor="@color/white"
                         android:textSize="16dp" />
                 </FrameLayout>
                 <!--分割线-->
@@ -167,7 +167,7 @@
                         android:drawableLeft="@drawable/mine_tips_icon"
                         android:drawablePadding="3dp"
                         android:text="@string/select_date_birth"
-                        android:textColor="@color/white_50"
+                        android:textColor="@color/white"
                         android:textSize="16dp" />
                 </FrameLayout>
                 <!--分割线-->
@@ -203,7 +203,7 @@
                         android:drawableLeft="@drawable/mine_tips_icon"
                         android:drawablePadding="3dp"
                         android:text="@string/select_time_birth"
-                        android:textColor="@color/white_50"
+                        android:textColor="@color/white"
                         android:textSize="16dp" />
                 </FrameLayout>
                 <!--分割线-->
@@ -239,7 +239,7 @@
                         android:drawableLeft="@drawable/mine_tips_icon"
                         android:drawablePadding="3dp"
                         android:text="@string/select_place_birth"
-                        android:textColor="@color/white_50"
+                        android:textColor="@color/white"
                         android:textSize="16dp" />
                 </FrameLayout>
                 <!--分割线-->
@@ -275,7 +275,7 @@
                         android:drawableLeft="@drawable/mine_tips_icon"
                         android:drawablePadding="3dp"
                         android:text="@string/select_place_now"
-                        android:textColor="@color/white_50"
+                        android:textColor="@color/white"
                         android:textSize="16dp" />
                 </FrameLayout>
                 <!--分割线-->
