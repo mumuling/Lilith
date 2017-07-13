@@ -141,7 +141,7 @@ public class ScrollFrameLayout extends RecyclerView {
                         mCurrentMarginTop = mCurrentMarginTop + distance;
                         onScroll(mCurrentMarginTop, false);
                         if (iscrollChange != null) {
-                            iscrollChange.move();
+                            iscrollChange.move(mCurrentMarginTop);
                         }
                         return true;
                     }
@@ -157,7 +157,7 @@ public class ScrollFrameLayout extends RecyclerView {
 //                    }
                     onScroll(mCurrentMarginTop, false);
                     if (iscrollChange != null) {
-                        iscrollChange.move();
+                        iscrollChange.move(mCurrentMarginTop);
                     }
                    // iscrollChange.scrolling(mCurrentMarginTop,FINISH_DISTANCE);
                     return true;
@@ -199,7 +199,7 @@ public class ScrollFrameLayout extends RecyclerView {
     public interface IscrollChange{
         void goFinish();
         void recover();
-        void move();
+        void move(float distance);
     }
 
 }
