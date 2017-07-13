@@ -23,7 +23,7 @@ public class PointTable implements Serializable {
     public long time;
 
     public PointTable(){}
-    public PointTable(int oid,int tid,int pid,String viewPoint,String buildDate,String topicTitle,String voteTitle ) {
+    public PointTable(int oid,int tid,int pid,String viewPoint,String buildDate,long time,String topicTitle,String voteTitle ) {
         this.tid = tid;
         this.pid = pid;
         this.oid = oid;
@@ -31,6 +31,7 @@ public class PointTable implements Serializable {
         this.buildDate = buildDate;
         this.topicTitle = topicTitle;
         this.voteTitle = voteTitle;
+        this.time = time;
 
     }
     /**
@@ -62,7 +63,7 @@ public class PointTable implements Serializable {
         contentValues.put(Columns.BUILD_DATE,buildDate);
         contentValues.put(Columns.TOPIC_TITLE,topicTitle);
         contentValues.put(Columns.VOTE_TITLE,voteTitle);
-        contentValues.put(Columns.TIME,System.currentTimeMillis());
+        contentValues.put(Columns.TIME,time);
         return contentValues;
     }
     public PointTable fromCursor(Cursor cursor) {

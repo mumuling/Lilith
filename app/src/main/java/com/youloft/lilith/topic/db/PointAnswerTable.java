@@ -49,7 +49,7 @@ public class PointAnswerTable implements Serializable {
         contentValues.put(Columns.VIEWPOINT,viewPoint);
         contentValues.put(Columns.BUILD_DATE,buildDate);
         contentValues.put(Columns.REPLY_NAME,replyName);
-        contentValues.put(Columns.TIME,System.currentTimeMillis());
+        contentValues.put(Columns.TIME,time);
         return contentValues;
     }
     public PointAnswerTable fromCursor(Cursor cursor) {

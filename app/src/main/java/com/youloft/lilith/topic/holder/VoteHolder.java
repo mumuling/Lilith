@@ -175,7 +175,7 @@ public class VoteHolder extends RecyclerView.ViewHolder {
                             @Override
                             public void onDataSuccess(VoteBean s) {
                                 int poitnID = s.data;
-                                if (poitnID != -1) {
+                                if (poitnID != 0) {
                                     topicInfo.totalVote++;
                                     int votes = addOptionVote(id);
                                     if (id % 2 == 1) {
@@ -185,7 +185,7 @@ public class VoteHolder extends RecyclerView.ViewHolder {
                                     }
                                     needVoteAnimation = false;
                                     String time = CalendarHelper.getNowTimeString();
-                                    updatePointDb(id, topicInfo.id, poitnID, msg, time, topicInfo.title, voteTitle);
+                                    updatePointDb(id, topicInfo.id, poitnID, msg, time,s.t, topicInfo.title, voteTitle);
                                     isVote = 1;
                                     addToDb(topicInfo, id);
                                     Toaster.showShort("投票成功！");
@@ -217,15 +217,15 @@ public class VoteHolder extends RecyclerView.ViewHolder {
      * @param topicTitle 话题title
      * @param voteTitle  选择的title
      */
-    private void updatePointDb(int oid, int tid, int poitnID, String msg, String time, String topicTitle, String voteTitle) {
-        PointTable pointTable = new PointTable(oid, tid, poitnID, msg, time, topicTitle, voteTitle);
+    private void updatePointDb(int oid, int tid, int poitnID, String msg, String buildDate,long time, String topicTitle, String voteTitle) {
+        PointTable pointTable = new PointTable(oid, tid, poitnID, msg, buildDate,time, topicTitle, voteTitle);
         PointCache.getIns(itemView.getContext()).insertData(pointTable);
         UserBean.DataBean.UserInfoBean userInfo = AppSetting.getUserInfo().data.userInfo;
         PointBean.DataBean dataBean = new PointBean.DataBean();
         dataBean.userId = userInfo.id;
         dataBean.isclick = 0;
         dataBean.zan = 0;
-        dataBean.buildDate = time;
+        dataBean.buildDate = buildDate;
         dataBean.nickName = userInfo.nickName;
         dataBean.reply = 0;
         dataBean.headImg = userInfo.headImg;

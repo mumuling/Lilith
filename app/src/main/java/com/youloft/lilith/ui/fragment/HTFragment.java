@@ -61,7 +61,7 @@ public class HTFragment extends BaseFragment implements PullToRefreshLayout.OnRe
      *  请求话题信息
      */
     private void requestTopic(final PullToRefreshLayout layout) {
-        TopicRepo.getTopicList("0","0","10")
+        TopicRepo.getTopicList("0","0","10",true)
                 .compose(this.<TopicBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
@@ -118,7 +118,7 @@ public class HTFragment extends BaseFragment implements PullToRefreshLayout.OnRe
     }
 
     private void loadMoreTopic() {
-        TopicRepo.getTopicList("0",String.valueOf(topicBeanList.size()),"10")
+        TopicRepo.getTopicList("0",String.valueOf(topicBeanList.size()),"10",false)
                 .compose(this.<TopicBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()

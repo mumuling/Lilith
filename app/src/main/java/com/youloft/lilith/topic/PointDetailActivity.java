@@ -315,7 +315,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
                     public void onDataSuccess(ReplyBean replyBean) {
                         if (replyBean.data != null && replyBean.data.size() != 0) {
                             replyBeanList.addAll(replyBean.data);
-                            adapter.setReplyList(replyBeanList);
+                            adapter.setReplyList(replyBean.data);
                         } else {
                             Toaster.showShort("暂无更多评论");
                         }
@@ -428,7 +428,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
                             dataBean.headImg = userInfo.headImg;
                             dataBean.id = answerId;
                             adapter.setAnswerTop(dataBean);
-                            updatePointAnswerDb(dataBean,answerId);
+                            updatePointAnswerDb(result.t,dataBean,answerId);
                             replyCount++;
                             commandNum.setText(String.valueOf(replyCount) + "条回复");
                             Toaster.showShort("评论成功！");
@@ -452,7 +452,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
      * @param dataBean 回复的数据
      * @param answerId 回复的ID
      */
-    private void updatePointAnswerDb(ReplyBean.DataBean dataBean, int answerId) {
+    private void updatePointAnswerDb(long time,ReplyBean.DataBean dataBean, int answerId) {
         PointAnswerTable pointAnswerTable = new PointAnswerTable();
         pointAnswerTable.tid = replyId;
         pointAnswerTable.replyName = replyName;
@@ -460,6 +460,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
         pointAnswerTable.pid = point.id;
         pointAnswerTable.viewPoint = dataBean.contents;
         pointAnswerTable.rid = answerId;
+        pointAnswerTable.time = time;
         PointAnswerCache.getIns(this).insertData(pointAnswerTable);
     }
 
