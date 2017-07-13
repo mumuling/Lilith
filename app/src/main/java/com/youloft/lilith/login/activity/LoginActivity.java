@@ -26,6 +26,10 @@ import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.LoginUtils;
 import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.common.widgets.dialog.PrivacyDialog;
+import com.youloft.lilith.login.PhoneFocusChangeListener;
+import com.youloft.lilith.login.PhoneTextWatcher;
+import com.youloft.lilith.login.PwdFocusChangeListener;
+import com.youloft.lilith.login.PwdTextWatcher;
 import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.login.event.LoginEvent;
 import com.youloft.lilith.login.repo.LoginUserRepo;
@@ -100,107 +104,21 @@ public class LoginActivity extends BaseActivity {
     }
 
     /**
+     * 关于输入框各种乱七八糟的横线,叉叉的显示隐藏,点叉叉删除号码
+     *
      * 输入框的设定
      */
     private void initEditText() {
-        etPhoneNumber.setFilters(new InputFilter[]{new InputFilter.LengthFilter(13)});
+
         //电话号码变化的监听
-        etPhoneNumber.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                mPreNumberLength = s.toString().length();
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //内容发生变化时,判断是否添加-
-                boolean flag = etPhoneNumber.getText().toString().length() > mPreNumberLength;
-                String text = etPhoneNumber.getText().toString();
-                if (text.length() == 3 && flag || text.length() == 8 && flag) {
-                    etPhoneNumber.setText(s.toString() + "-");
-                    etPhoneNumber.setSelection(etPhoneNumber.getText().toString().length());
-                }
-                if (text.length() >= 4 && !String.valueOf(text.charAt(3)).equals("-")) {
-                    String result = text.substring(0, 3) + "-" + text.substring(3);
-                    etPhoneNumber.setText(result);
-                    etPhoneNumber.setSelection(etPhoneNumber.getText().toString().length());
-                }
-                if (text.length() >= 9 && !String.valueOf(text.charAt(8)).equals("-")) {
-                    String result = text.substring(0, 8) + "-" + text.substring(8);
-                    etPhoneNumber.setText(result);
-                    etPhoneNumber.setSelection(etPhoneNumber.getText().toString().length());
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                //变化之后如果有字符串 就显示叉叉, 如果没有就隐藏叉叉
-                if (etPhoneNumber.getText().toString().length() != 0) {
-                    ivCleanNumber.setVisibility(View.VISIBLE);
-                } else {
-                    ivCleanNumber.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
-        etPhoneNumber.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {//有内容显示,无内容,隐藏
-                    if(android.text.TextUtils.isEmpty(etPhoneNumber.getText().toString())){
-                        ivCleanNumber.setVisibility(View.INVISIBLE);
-                    }else {
-                        ivCleanNumber.setVisibility(View.VISIBLE);
-                    }
-
-                } else {//无脑隐藏
-                    ivCleanNumber.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
+        etPhoneNumber.setFilters(new InputFilter[]{new InputFilter.LengthFilter(13)});
+        etPhoneNumber.addTextChangedListener(new PhoneTextWatcher(etPhoneNumber,ivCleanNumber));
+        etPhoneNumber.setOnFocusChangeListener(new PhoneFocusChangeListener(etPhoneNumber,ivCleanNumber));
 
         //密码输入框的监听
         etPassword.setFilters(new InputFilter[]{new InputFilter.LengthFilter(16)});
-        etPassword.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                //变化之后如果有字符串 就显示叉叉和眼睛, 如果没有就隐藏叉叉和眼睛
-                if (etPassword.getText().toString().length() != 0) {
-                    ivCleanPassword.setVisibility(View.VISIBLE);
-                    ivIsShowPwd.setVisibility(View.VISIBLE);
-                } else {
-                    ivCleanPassword.setVisibility(View.INVISIBLE);
-                    ivIsShowPwd.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
-        etPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {//有内容显示,无内容,隐藏
-                    if(android.text.TextUtils.isEmpty(etPhoneNumber.getText().toString())){
-                        ivCleanPassword.setVisibility(View.INVISIBLE);
-                        ivIsShowPwd.setVisibility(View.INVISIBLE);
-                    }else {
-                        ivCleanPassword.setVisibility(View.VISIBLE);
-                        ivIsShowPwd.setVisibility(View.VISIBLE);
-                    }
-
-                } else {//无脑隐藏
-                    ivCleanPassword.setVisibility(View.INVISIBLE);
-                    ivIsShowPwd.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
+        etPassword.addTextChangedListener(new PwdTextWatcher(etPassword,ivCleanPassword,ivIsShowPwd));
+        etPassword.setOnFocusChangeListener(new PwdFocusChangeListener(etPassword,ivCleanPassword,ivIsShowPwd));
     }
 
 
@@ -222,7 +140,6 @@ public class LoginActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         SocializeApp.get(this).onActivityResult(requestCode, resultCode, data);
     }
-
 
     /**
      * 背景视频设置
