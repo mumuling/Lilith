@@ -24,10 +24,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 省市区三级选择
- * 作者：liji on 2015/12/17 10:40
- * 邮箱：lijiwork@sina.com
- */
+ * Desc: 省市区三级选择,带经纬度
+ * Change:
+ *
+ * @version
+ * @author zchao created at 2017/7/13 14:13
+ * @see
+*/
 public class CityPicker implements CanShow, OnWheelChangedListener {
 
     private Context context;
@@ -136,7 +139,7 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
     /**
      * item间距
      */
-    private int padding = 5;
+    private int padding = (int) ViewUtil.dp2px(18);
 
 
     /**
@@ -190,7 +193,7 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
      * @return
      */
     public static CityPicker getDefCityPicker(Context context){
-        return new CityPicker.Builder(context).textSize(20)
+        return new CityPicker(context).textSize(20)
                 .backgroundPop(Color.TRANSPARENT)
                 .textColor(Color.parseColor("#ffffff"))
                 .textSize(16)
@@ -198,36 +201,48 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
                 .cityCyclic(false)
                 .districtCyclic(false)
                 .visibleItemsCount(5)
-                .itemPadding(20)
-                .build();
+                .itemPadding(20);
     }
 
+    /**
+     * 第一次默认的显示省份，一般配合定位，使用
+     *
+     * @param defaultProvinceName
+     * @return
+     */
+    public CityPicker province(String defaultProvinceName) {
+        this.defaultProvinceName = defaultProvinceName;
+        return this;
+    }
+
+    /**
+     * 第一次默认得显示城市，一般配合定位，使用
+     *
+     * @param defaultCityName
+     * @return
+     */
+    public CityPicker city(String defaultCityName) {
+        this.defaultCityName = defaultCityName;
+        return this;
+    }
+
+    /**
+     * 第一次默认地区显示，一般配合定位，使用
+     *
+     * @param defaultDistrict
+     * @return
+     */
+    public CityPicker district(String defaultDistrict) {
+        this.defaultDistrict = defaultDistrict;
+        return this;
+    }
     /**
      * 设置popwindow的背景
      */
     private int backgroundPop = 0xa0000000;
 
-    private CityPicker(Builder builder) {
-        this.textColor = builder.textColor;
-        this.textSize = builder.textSize;
-        this.visibleItems = builder.visibleItems;
-        this.isProvinceCyclic = builder.isProvinceCyclic;
-        this.isDistrictCyclic = builder.isDistrictCyclic;
-        this.isCityCyclic = builder.isCityCyclic;
-        this.context = builder.mContext;
-        this.padding = builder.padding;
-        this.mTitle = builder.mTitle;
-        this.confirmTextColorStr = builder.confirmTextColorStr;
-        this.cancelTextColorStr = builder.cancelTextColorStr;
-
-        this.defaultDistrict = builder.defaultDistrict;
-        this.defaultCityName = builder.defaultCityName;
-        this.defaultProvinceName = builder.defaultProvinceName;
-
-        this.showProvinceAndCity = builder.showProvinceAndCity;
-        this.backgroundPop = builder.backgroundPop;
-        this.titleTextColorStr = builder.titleTextColorStr;
-
+    private CityPicker(Context context) {
+        this.context = context;
         this.mCurrentCityInfo.pProvice = defaultProvinceName;
         this.mCurrentCityInfo.pCity = defaultCityName;
         this.mCurrentCityInfo.pDistrict = defaultDistrict;
@@ -244,10 +259,9 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
         mTvTitle = (TextView) popview.findViewById(R.id.tv_title);
         mTvCancel =  popview.findViewById(R.id.tv_cancel);
 
-
         popwindow = new PopupWindow(popview, LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT);
-        popwindow.setBackgroundDrawable(new ColorDrawable(backgroundPop));
+        popwindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         popwindow.setAnimationStyle(R.style.AnimBottom);
         popwindow.setTouchable(true);
         popwindow.setOutsideTouchable(false);
@@ -313,309 +327,153 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
 
     }
 
-    public static class Builder {
-        /**
-         * Default text color
-         */
-        public static final int DEFAULT_TEXT_COLOR = 0xFF585858;
 
-        /**
-         * Default text size
-         */
-        public static final int DEFAULT_TEXT_SIZE = 18;
-
-        // Text settings
-        private int textColor = DEFAULT_TEXT_COLOR;
-
-        private int textSize = DEFAULT_TEXT_SIZE;
-
-        /**
-         * 滚轮显示的item个数
-         */
-        private static final int DEF_VISIBLE_ITEMS = 5;
-
-        // Count of visible items
-        private int visibleItems = DEF_VISIBLE_ITEMS;
-
-        /**
-         * 省滚轮是否循环滚动
-         */
-        private boolean isProvinceCyclic = true;
-
-        /**
-         * 市滚轮是否循环滚动
-         */
-        private boolean isCityCyclic = true;
-
-        /**
-         * 区滚轮是否循环滚动
-         */
-        private boolean isDistrictCyclic = true;
-
-        private Context mContext;
-
-        /**
-         * item间距
-         */
-        private int padding = 5;
-
-
-        /**
-         * Color.BLACK
-         */
-        private String cancelTextColorStr = "#000000";
-
-
-        /**
-         * Color.BLUE
-         */
-        private String confirmTextColorStr = "#0000FF";
-
-
-        /**
-         * 标题颜色
-         */
-        private String titleTextColorStr = "#E9E9E9";
-
-
-        /**
-         * 第一次默认的显示省份，一般配合定位，使用
-         */
-        private String defaultProvinceName = "北京";
-
-        /**
-         * 第一次默认得显示城市，一般配合定位，使用
-         */
-        private String defaultCityName = "北京";
-
-        /**
-         * 第一次默认得显示，一般配合定位，使用
-         */
-        private String defaultDistrict = "昌平区";
-
-        /**
-         * 标题
-         */
-        private String mTitle = "选择地区";
-
-        /**
-         * 两级联动
-         */
-        private boolean showProvinceAndCity = false;
-
-        /**
-         * 设置popwindow的背景
-         */
-        private int backgroundPop = 0xa0000000;
-
-        public Builder(Context context) {
-            this.mContext = context;
-        }
-
-        /**
-         * 设置popwindow的背景
-         *
-         * @param backgroundPopColor
-         * @return
-         */
-        public Builder backgroundPop(int backgroundPopColor) {
-            this.backgroundPop = backgroundPopColor;
-            return this;
-        }
-
-        /**
-         * 设置标题背景颜色
-         *
-         * @param titleTextColorStr
-         * @return
-         */
-        public Builder titleTextColor(String titleTextColorStr) {
-            this.titleTextColorStr = titleTextColorStr;
-            return this;
-        }
-
-
-        /**
-         * 设置标题
-         *
-         * @param mtitle
-         * @return
-         */
-        public Builder title(String mtitle) {
-            this.mTitle = mtitle;
-            return this;
-        }
-
-        /**
-         * 是否只显示省市两级联动
-         *
-         * @param flag
-         * @return
-         */
-        public Builder onlyShowProvinceAndCity(boolean flag) {
-            this.showProvinceAndCity = flag;
-            return this;
-        }
-
-        /**
-         * 第一次默认的显示省份，一般配合定位，使用
-         *
-         * @param defaultProvinceName
-         * @return
-         */
-        public Builder province(String defaultProvinceName) {
-            this.defaultProvinceName = defaultProvinceName;
-            return this;
-        }
-
-        /**
-         * 第一次默认得显示城市，一般配合定位，使用
-         *
-         * @param defaultCityName
-         * @return
-         */
-        public Builder city(String defaultCityName) {
-            this.defaultCityName = defaultCityName;
-            return this;
-        }
-
-        /**
-         * 第一次默认地区显示，一般配合定位，使用
-         *
-         * @param defaultDistrict
-         * @return
-         */
-        public Builder district(String defaultDistrict) {
-            this.defaultDistrict = defaultDistrict;
-            return this;
-        }
-
-        //        /**
-        //         * 确认按钮文字颜色
-        //         * @param color
-        //         * @return
-        //         */
-        //        public Builder confirTextColor(int color) {
-        //            this.confirmTextColor = color;
-        //            return this;
-        //        }
-
-        /**
-         * 确认按钮文字颜色
-         *
-         * @param color
-         * @return
-         */
-        public Builder confirTextColor(String color) {
-            this.confirmTextColorStr = color;
-            return this;
-        }
-
-        //        /**
-        //         * 取消按钮文字颜色
-        //         * @param color
-        //         * @return
-        //         */
-        //        public Builder cancelTextColor(int color) {
-        //            this.cancelTextColor = color;
-        //            return this;
-        //        }
-
-        /**
-         * 取消按钮文字颜色
-         *
-         * @param color
-         * @return
-         */
-        public Builder cancelTextColor(String color) {
-            this.cancelTextColorStr = color;
-            return this;
-        }
-
-        /**
-         * item文字颜色
-         *
-         * @param textColor
-         * @return
-         */
-        public Builder textColor(int textColor) {
-            this.textColor = textColor;
-            return this;
-        }
-
-        /**
-         * item文字大小
-         *
-         * @param textSize
-         * @return
-         */
-        public Builder textSize(int textSize) {
-            this.textSize = textSize;
-            return this;
-        }
-
-        /**
-         * 滚轮显示的item个数
-         *
-         * @param visibleItems
-         * @return
-         */
-        public Builder visibleItemsCount(int visibleItems) {
-            this.visibleItems = visibleItems;
-            return this;
-        }
-
-        /**
-         * 省滚轮是否循环滚动
-         *
-         * @param isProvinceCyclic
-         * @return
-         */
-        public Builder provinceCyclic(boolean isProvinceCyclic) {
-            this.isProvinceCyclic = isProvinceCyclic;
-            return this;
-        }
-
-        /**
-         * 市滚轮是否循环滚动
-         *
-         * @param isCityCyclic
-         * @return
-         */
-        public Builder cityCyclic(boolean isCityCyclic) {
-            this.isCityCyclic = isCityCyclic;
-            return this;
-        }
-
-        /**
-         * 区滚轮是否循环滚动
-         *
-         * @param isDistrictCyclic
-         * @return
-         */
-        public Builder districtCyclic(boolean isDistrictCyclic) {
-            this.isDistrictCyclic = isDistrictCyclic;
-            return this;
-        }
-
-        /**
-         * item间距
-         *
-         * @param itemPadding
-         * @return
-         */
-        public Builder itemPadding(int itemPadding) {
-            this.padding = itemPadding;
-            return this;
-        }
-
-        public CityPicker build() {
-            CityPicker cityPicker = new CityPicker(this);
-            return cityPicker;
-        }
-
+    /**
+     * 设置popwindow的背景
+     *
+     * @param backgroundPopColor
+     * @return
+     */
+    public CityPicker backgroundPop(int backgroundPopColor) {
+        this.backgroundPop = backgroundPopColor;
+        return this;
     }
 
+    /**
+     * 设置标题背景颜色
+     *
+     * @param titleTextColorStr
+     * @return
+     */
+    public CityPicker titleTextColor(String titleTextColorStr) {
+        this.titleTextColorStr = titleTextColorStr;
+        return this;
+    }
+
+
+    /**
+     * 设置标题
+     *
+     * @param mtitle
+     * @return
+     */
+    public CityPicker title(String mtitle) {
+        this.mTitle = mtitle;
+        return this;
+    }
+
+    /**
+     * 是否只显示省市两级联动
+     *
+     * @param flag
+     * @return
+     */
+    public CityPicker onlyShowProvinceAndCity(boolean flag) {
+        this.showProvinceAndCity = flag;
+        return this;
+    }
+
+
+
+    /**
+     * 确认按钮文字颜色
+     *
+     * @param color
+     * @return
+     */
+    public CityPicker confirTextColor(String color) {
+        this.confirmTextColorStr = color;
+        return this;
+    }
+
+
+    /**
+     * 取消按钮文字颜色
+     *
+     * @param color
+     * @return
+     */
+    public CityPicker cancelTextColor(String color) {
+        this.cancelTextColorStr = color;
+        return this;
+    }
+
+    /**
+     * item文字颜色
+     *
+     * @param textColor
+     * @return
+     */
+    public CityPicker textColor(int textColor) {
+        this.textColor = textColor;
+        return this;
+    }
+
+    /**
+     * item文字大小
+     *
+     * @param textSize
+     * @return
+     */
+    public CityPicker textSize(int textSize) {
+        this.textSize = textSize;
+        return this;
+    }
+
+    /**
+     * 滚轮显示的item个数
+     *
+     * @param visibleItems
+     * @return
+     */
+    public CityPicker visibleItemsCount(int visibleItems) {
+        this.visibleItems = visibleItems;
+        return this;
+    }
+
+    /**
+     * 省滚轮是否循环滚动
+     *
+     * @param isProvinceCyclic
+     * @return
+     */
+    public CityPicker provinceCyclic(boolean isProvinceCyclic) {
+        this.isProvinceCyclic = isProvinceCyclic;
+        return this;
+    }
+
+    /**
+     * 市滚轮是否循环滚动
+     *
+     * @param isCityCyclic
+     * @return
+     */
+    public CityPicker cityCyclic(boolean isCityCyclic) {
+        this.isCityCyclic = isCityCyclic;
+        return this;
+    }
+
+    /**
+     * 区滚轮是否循环滚动
+     *
+     * @param isDistrictCyclic
+     * @return
+     */
+    public CityPicker districtCyclic(boolean isDistrictCyclic) {
+        this.isDistrictCyclic = isDistrictCyclic;
+        return this;
+    }
+
+    /**
+     * item间距
+     *
+     * @param itemPadding
+     * @return
+     */
+    public CityPicker itemPadding(int itemPadding) {
+        this.padding = itemPadding;
+        return this;
+    }
     private void setUpData() {
         int provinceDefault = -1;
         if (!TextUtils.isEmpty(defaultProvinceName) && mProvinceDatas.length > 0) {

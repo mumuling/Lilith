@@ -108,6 +108,14 @@ public class XZFragment extends BaseFragment implements PullToRefreshLayout.OnRe
         }
     }
 
+    /**
+     * 请求数据
+     * @param birdt
+     * @param birtm
+     * @param birlongi
+     * @param birlati
+     * @param pullToRefreshLayout
+     */
     private void getData(String birdt, String birtm, String birlongi, String birlati, final PullToRefreshLayout pullToRefreshLayout) {
         ConsRepo.getConsPredicts(birdt, birtm, birlongi, birlati)
                 .compose(this.<ConsPredictsBean>bindToLifecycle())
@@ -123,10 +131,7 @@ public class XZFragment extends BaseFragment implements PullToRefreshLayout.OnRe
                                 EventBus.getDefault().post(new ConsChangeEvent(bean.data.signs));
                             }
                         }
-
-                        if (pullToRefreshLayout != null) {
-                            pullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
-                        }
+                        sendFinish(pullToRefreshLayout);
                     }
 
                     @Override

@@ -62,12 +62,12 @@ public abstract class AbstractDataRepo implements IProvider {
      * @return
      */
     public static <T extends AbsResponse> Flowable<T> unionFlow(String url,
-                                            HashMap<String, String> header,
-                                            HashMap<String, String> params,
-                                            boolean usePublic,
-                                            Class<T> clz,
-                                            String cacheKey,
-                                            long cacheDuration) {
+                                                                HashMap<String, String> header,
+                                                                HashMap<String, String> params,
+                                                                boolean usePublic,
+                                                                Class<T> clz,
+                                                                String cacheKey,
+                                                                long cacheDuration) {
         return Flowable
                 .concat(cacheFlow(cacheKey, clz),
                         httpFlow(url, header, params, usePublic, clz, cacheKey, cacheDuration));
@@ -171,6 +171,7 @@ public abstract class AbstractDataRepo implements IProvider {
 
     /**
      * post请求
+     *
      * @param url
      * @param header
      * @param params
@@ -178,18 +179,18 @@ public abstract class AbstractDataRepo implements IProvider {
      * @param clz
      * @param cacheKey
      * @param cacheDuration
-     * @param files 上传的文件
+     * @param files         上传的文件
      * @param <T>
      * @return
      */
     public static <T extends AbsResponse> Flowable<T> post(final String url,
-                                       final Map<String, String> header,
-                                       final Map<String, String> params,
-                                       final boolean usePublic,
-                                       final Class<T> clz,
-                                       final String cacheKey,
-                                       final long cacheDuration,
-                                       final File...files) {
+                                                           final Map<String, String> header,
+                                                           final Map<String, String> params,
+                                                           final boolean usePublic,
+                                                           final Class<T> clz,
+                                                           final String cacheKey,
+                                                           final long cacheDuration,
+                                                           final File... files) {
         Flowable<T> compose = Flowable.just(url)
                 .filter(new Predicate<String>() {
                     @Override
@@ -259,12 +260,12 @@ public abstract class AbstractDataRepo implements IProvider {
      * @return
      */
     public static <T extends AbsResponse> Flowable<T> httpFlow(final String url,
-                                           final Map<String, String> header,
-                                           final Map<String, String> params,
-                                           final boolean usePublic,
-                                           final Class<T> clz,
-                                           final String cacheKey,
-                                           final long cacheDuration) {
+                                                               final Map<String, String> header,
+                                                               final Map<String, String> params,
+                                                               final boolean usePublic,
+                                                               final Class<T> clz,
+                                                               final String cacheKey,
+                                                               final long cacheDuration) {
 
         Flowable<T> compose = Flowable.just(url)
                 .filter(new Predicate<String>() {
