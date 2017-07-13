@@ -135,8 +135,11 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     public class NoPointHolder extends RecyclerView.ViewHolder {
+        public TextView textView;
         public NoPointHolder(View itemView) {
             super(itemView);
+            textView = (TextView) itemView.findViewById(R.id.text_no_data);
+            textView.setText("快来投票当意见领袖");
         }
     }
 

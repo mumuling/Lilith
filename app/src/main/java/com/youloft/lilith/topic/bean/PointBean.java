@@ -80,4 +80,5 @@ public class PointBean extends AbsResponse<List<PointBean.DataBean>> implements 
 //            point.isclick
 //        }
     }
+
 }

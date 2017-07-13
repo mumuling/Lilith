@@ -19,6 +19,7 @@ public class PointAnswerTable implements Serializable {
     public int tid;//回复的谁
     public String replyName;//回复人的名字
     public String buildDate;//回复时间
+    public long time;
     public PointAnswerTable(){}
 
     /**
@@ -27,12 +28,13 @@ public class PointAnswerTable implements Serializable {
      */
     public static void createTable(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + TABLE_NAME + "(" + PointAnswerTable.Columns._ID + " INTEGER PRIMARY KEY,"
-                + PointAnswerTable.Columns.REPLY_ID + " INTEGER,"
-                + PointAnswerTable.Columns.PID + " INTEGER,"
-                + PointAnswerTable.Columns.RID + " INTEGER,"
-                + PointAnswerTable.Columns.BUILD_DATE + " TEXT,"
-                + PointAnswerTable.Columns.REPLY_NAME + " TEXT,"
-                + PointAnswerTable.Columns.VIEWPOINT + " TEXT" + ");");
+                + Columns.REPLY_ID + " INTEGER,"
+                + Columns.PID + " INTEGER,"
+                + Columns.RID + " INTEGER,"
+                + Columns.BUILD_DATE + " TEXT,"
+                + Columns.REPLY_NAME + " TEXT,"
+                + Columns.TIME + " LONG,"
+                + Columns.VIEWPOINT + " TEXT" + ");");
     }
 
     /**
@@ -47,6 +49,7 @@ public class PointAnswerTable implements Serializable {
         contentValues.put(Columns.VIEWPOINT,viewPoint);
         contentValues.put(Columns.BUILD_DATE,buildDate);
         contentValues.put(Columns.REPLY_NAME,replyName);
+        contentValues.put(Columns.TIME,System.currentTimeMillis());
         return contentValues;
     }
     public PointAnswerTable fromCursor(Cursor cursor) {
@@ -56,6 +59,7 @@ public class PointAnswerTable implements Serializable {
         this.rid = cursor.getInt(cursor.getColumnIndex(Columns.RID));
         this.replyName =  cursor.getString(cursor.getColumnIndex(Columns.REPLY_NAME));
         this.buildDate = cursor.getString(cursor.getColumnIndex(PointAnswerTable.Columns.BUILD_DATE));
+        this.time = cursor.getLong(cursor.getColumnIndex(Columns.TIME));
 
         return this;
     }
@@ -67,5 +71,6 @@ public class PointAnswerTable implements Serializable {
         String REPLY_ID = "tid";//回复的谁
         String REPLY_NAME = "reply_name";//回复人的名字
         String BUILD_DATE = "build_date";
+        String TIME = "time";
     }
 }

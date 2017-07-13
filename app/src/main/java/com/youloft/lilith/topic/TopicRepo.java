@@ -38,7 +38,7 @@ public class TopicRepo extends AbstractDataRepo {
      */
     public static Flowable<ReplyBean> getPointReply(String vid,String uid,String limit,String skip,boolean needCache) {
         String cacheKey = "point_reply" + vid;
-        long cacheDuration = 2 * 1000;
+        long cacheDuration = 2 * 1000 * 60;
         HashMap<String, String> param = new HashMap();
         param.put("vid",vid);
         if (uid != null)  param.put("uid",uid);

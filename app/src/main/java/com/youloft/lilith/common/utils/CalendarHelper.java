@@ -72,6 +72,8 @@ public class CalendarHelper {
         }
     }
 
+
+
     public static long getTimeMillisByString(String time) {
         try {
             Date date = formatAll.parse(time);
