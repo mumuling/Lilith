@@ -70,6 +70,9 @@ public class ConsYSHolder extends ConsBaseHolder {
     @Override
     public void bindData(ConsPredictsBean data) {
         super.bindData(data);
+        if (data == null || data.data == null) {
+            return;
+        }
         ConsPredictsBean.DataBean detailData = data.data;
         String msg = "";
         switch (type) {

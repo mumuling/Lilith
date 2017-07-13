@@ -227,6 +227,43 @@ public class ConsManager {
         }
 
     }
+
+    /**
+     * 获取首页星座信息，英文模糊字
+     * @param index
+     * @return
+     */
+    public static int getConsBlurWord(int index){
+        switch (index) {
+            case 1: //水瓶座
+                return R.drawable.aquarius;
+            case 2: //双鱼座
+                return R.drawable.pisces;
+            case 3:  //白羊座
+                return R.drawable.aries;
+            case 4:  //金牛座
+                return R.drawable.taurus;
+            case 5:  //双子座
+                return R.drawable.gemini;
+            case 6: //巨蟹座
+                return R.drawable.cancer;
+            case 7:  //狮子座
+                return R.drawable.leo;
+            case 8:  //处女座
+                return R.drawable.virgo;
+            case 9:  //天秤座
+                return R.drawable.libra;
+            case 10:  //天蝎座
+                return R.drawable.scorpio;
+            case 11:  //射手座
+                return R.drawable.sagittarius;
+            case 12:  //摩羯座
+                return R.drawable.capricorn;
+            default:  //默认返回白羊座
+                return R.drawable.aries;
+        }
+
+    }
     /**
      * 初始化tab数据
      */

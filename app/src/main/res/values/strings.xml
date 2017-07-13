@@ -68,6 +68,28 @@
     <string name="about_me">关于我们</string>
     <string name="net_err">网络异常</string>
     <string name="out_program">再按一次退出程序</string>
+    <string name="cons_my_info_default_cn_word">喜怒哀乐喜欢表现在脸上，让人一看便知道，把心中的苦闷说出来会舒服一些。</string>
+    <string name="cons_my_info_default_en_word">Sorrow and happiness, like the expression on the face, let people see, you know, the heart of the depression will be comfortable.</string>
+
+    <!--运势title-->
+    <string name="cons_ys_title_total">运势概括</string>
+    <string name="cons_ys_title_love">感情运</string>
+    <string name="cons_ys_title_work">工作运</string>
+    <string name="cons_ys_title_money">财富运</string>
+
+    <!--星座-->
+    <string name="aries">白羊座</string>
+    <string name="taurus">金牛座</string>
+    <string name="gemini">双子座</string>
+    <string name="cancer">巨蟹座</string>
+    <string name="leo">狮子座</string>
+    <string name="virgo">处女座</string>
+    <string name="libra">天秤座</string>
+    <string name="scorpio">天蝎座</string>
+    <string name="sagittarius">射手座</string>
+    <string name="capricorn">摩羯座</string>
+    <string name="aquarius">水瓶座</string>
+    <string name="pisces">双鱼座</string>
 
     <string-array name="cons_luck_line_color">
         <item>#de5deb,#99de5deb,#0fde5deb</item>
