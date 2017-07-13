@@ -19,15 +19,12 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
-import com.youloft.lilith.common.net.AbsResponse;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.CalendarHelper;
 import com.youloft.lilith.cons.consmanager.ConsManager;
 import com.youloft.lilith.cons.view.LogInOrCompleteDialog;
-import com.youloft.lilith.glide.GlideBlurTransform;
 import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.topic.PointDetailActivity;
@@ -54,14 +51,16 @@ import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-/**     话题观点的holder
- *version
- *@author  slj
- *@time    2017/7/4 16:41
- *@class   PointHolder
+/**
+ * 话题观点的holder
+ * version
+ *
+ * @author slj
+ * @time 2017/7/4 16:41
+ * @class PointHolder
  */
 
-public class PointHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+public class PointHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     @BindView(R.id.image_comment_user)
     ImageView imageCommentUser;
     @BindView(R.id.text_user_name)
@@ -107,12 +106,12 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
     private Context mContext;
     private TopicDetailAdapter adapter;
     private TopicDetailBean.DataBean topic;
-    private  int totalPoint;
-    private  int zanCount =0;
+    private int totalPoint;
+    private int zanCount = 0;
 
     public PointHolder(View itemView, TopicDetailAdapter adapter) {
         super(itemView);
-        ButterKnife.bind(this,itemView);
+        ButterKnife.bind(this, itemView);
         this.adapter = adapter;
         this.mContext = itemView.getContext();
         initView();
@@ -125,7 +124,7 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
         imageZan.setOnClickListener(this);
         textZanCount.setOnClickListener(this);
         llLoadMore.setOnClickListener(this);
-        loadAnimation = AnimationUtils.loadAnimation(itemView.getContext(),R.anim.rotate_animation);
+        loadAnimation = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.rotate_animation);
     }
 
     @Override
@@ -133,7 +132,7 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
         switch (v.getId()) {
             case R.id.image_zan:
             case R.id.text_zan_count:
-                if (!AppConfig.LOGIN_STATUS) {
+                if (AppSetting.getUserInfo() == null) {
                     new LogInOrCompleteDialog(mContext).setStatus(LogInOrCompleteDialog.TOPIC_IN).show();
                     return;
                 }
@@ -155,6 +154,7 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
                     public void onAnimationStart(Animation animation) {
 
                     }
+
                     @Override
                     public void onAnimationEnd(Animation animation) {
                         if (isZan == 0) {
@@ -187,19 +187,19 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
     }
 
     /**
-     *   加载更多观点
+     * 加载更多观点
      */
 
     public void loadMorePiont() {
 
-        TopicRepo.getPointList(String.valueOf(topic.id),null,"10",String.valueOf(totalPoint),false)
+        TopicRepo.getPointList(String.valueOf(topic.id), null, "10", String.valueOf(totalPoint), false)
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new RxObserver<PointBean>() {
                     @Override
                     public void onDataSuccess(PointBean pointBean) {
-                        if (pointBean.data == null || pointBean.data.size() == 0 ) {
+                        if (pointBean.data == null || pointBean.data.size() == 0) {
                             textLoadMore.setVisibility(View.VISIBLE);
                             textLoadMore.setText("没有更多数据");
                             imageLoading.setVisibility(View.GONE);
@@ -229,18 +229,21 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
 
 
     }
+
     /**
-     *   处理观点信息的数据库。
+     * 处理观点信息的数据库。
+     *
      * @param data
      */
     private void handlePointTableInfo(List<PointBean.DataBean> data) {
-        if (!AppConfig.LOGIN_STATUS ||AppSetting.getUserInfo() == null) return;
-        UserBean.DataBean.UserInfoBean userInfo = AppSetting.getUserInfo().data.userInfo;
+        UserBean userBean = AppSetting.getUserInfo();
+        if (userBean == null) return;
+        UserBean.DataBean.UserInfoBean userInfo = userBean.data.userInfo;
         int userID = userInfo.id;
         PointTable pointTable = PointCache.getIns(mContext).getInforByCode(topic.id);
-        if (pointTable == null)return;
-        for (int i = 0; i < data.size(); i ++) {
-            if (data.get(i).userId == userID){
+        if (pointTable == null) return;
+        for (int i = 0; i < data.size(); i++) {
+            if (data.get(i).userId == userID) {
                 PointCache.getIns(mContext).deleteData(data.get(i).id);
                 data.remove(i);
                 return;
@@ -248,8 +251,8 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
         }
     }
 
-    public void bindNormal(final PointBean.DataBean point, final TopicDetailBean.DataBean option, int position,boolean isLast) {
-        if (point == null || option == null)return;
+    public void bindNormal(final PointBean.DataBean point, final TopicDetailBean.DataBean option, int position, boolean isLast) {
+        if (point == null || option == null) return;
         this.topic = option;
         this.point = point;
         this.totalPoint = adapter.pointBeanList.size();
@@ -258,9 +261,9 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
             @Override
             public void onClick(View v) {
                 ARouter.getInstance().build("/test/PointDetailActivity")
-                        .withObject("point",point)
-                        .withObject("topic",option)
-                .navigation();
+                        .withObject("point", point)
+                        .withObject("topic", option)
+                        .navigation();
             }
         });
         //头像
@@ -289,7 +292,7 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
         //用户名字
         textUserName.setText(point.nickName);
         //点赞数
-       bindZan(point);
+        bindZan(point);
         bindTime(point);
 
         //性别
@@ -299,13 +302,13 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
             imageUserSex.setImageResource(R.drawable.topic_male_icon);
         }
         //支持的观点
-        for (int i = 0; i < topic.size();i ++) {
+        for (int i = 0; i < topic.size(); i++) {
             TopicDetailBean.DataBean.OptionBean optionBean = topic.get(i);
             if (optionBean.id == point.topicOptionId) {
                 textVoteResult.setText("投票给: " + optionBean.title);//投票
             }
         }
-        if (point.topicOptionId % 2 ==1) {
+        if (point.topicOptionId % 2 == 1) {
             textVoteResult.setTextColor(Color.parseColor("#ff8282"));
         } else {
             textVoteResult.setTextColor(Color.parseColor("#5696df"));
@@ -313,7 +316,7 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
         //星座
         textUserConstellation.setText(ConsManager.CONS_NAME[point.signs]);
         //观点
-        textCommentContent.setText( point.viewpoint);
+        textCommentContent.setText(point.viewpoint);
         //是否有底部的加载更多
         if (isLast) {
             llLoadMore.setVisibility(View.VISIBLE);
@@ -329,9 +332,9 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
         }
         textCommentAnswerCount.setText(String.valueOf(point.reply));
         //用户评论，最多显示3条
-        if (point.replyList!= null && point.replyList.size() > 0) {
-            for (int i = 0 ; i < point.replyList.size();i++) {
-                if (i >= 3)break;
+        if (point.replyList != null && point.replyList.size() > 0) {
+            for (int i = 0; i < point.replyList.size(); i++) {
+                if (i >= 3) break;
                 PointBean.DataBean.ReplyListBean reply = point.replyList.get(i);
                 if (reply != null) {
                     replyTextArray[i].setText(reply.nickName + ": " + reply.contents);
@@ -343,7 +346,7 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
                 textCommentAnswerRemain.setText("查看全部" + point.reply + "条");
             } else {
                 textCommentAnswerRemain.setVisibility(View.GONE);
-                for (int j = point.replyList.size(); j < 3 ;j ++) {
+                for (int j = point.replyList.size(); j < 3; j++) {
                     replyTextArray[j].setVisibility(View.GONE);
                 }
             }
@@ -355,7 +358,7 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
 
     private void bindTime(PointBean.DataBean point) {
         long time = CalendarHelper.getTimeMillisByString(point.buildDate);
-        textCommentTime.setText(CalendarHelper.getInterValTime(time,System.currentTimeMillis()));
+        textCommentTime.setText(CalendarHelper.getInterValTime(time, System.currentTimeMillis()));
     }
 
     private void bindZan(PointBean.DataBean dataBean) {
@@ -363,20 +366,20 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
         PointBean.DataBean point = new PointBean.DataBean();
 
         int id = dataBean.id;
-        TopicLikingTable table = TopicLikeCache.getIns(mContext).getInforByCode(id,PointDetailActivity.TYPE_POINT);
+        TopicLikingTable table = TopicLikeCache.getIns(mContext).getInforByCode(id, PointDetailActivity.TYPE_POINT);
         zanCount = dataBean.zan;
         if (table == null) {
             isZan = dataBean.isclick;
         } else {
             isZan = table.mIsLike;
             if (table.mIsLike == dataBean.isclick) {
-                TopicLikeCache.getIns(mContext).deleteData(id,PointDetailActivity.TYPE_POINT);
-            } else{
-                if (table.mIsPost != 1)clickLike();
-               // dataBean.isclick = table.mIsLike;
+                TopicLikeCache.getIns(mContext).deleteData(id, PointDetailActivity.TYPE_POINT);
+            } else {
+                if (table.mIsPost != 1) clickLike();
+                // dataBean.isclick = table.mIsLike;
                 if (table.mIsLike == 1) {
-                  zanCount = dataBean.zan +1;
-              }
+                    zanCount = dataBean.zan + 1;
+                }
             }
         }
         point.zan = dataBean.zan;
@@ -389,8 +392,9 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
     }
 
     public void clickLike() {
-        if (AppConfig.LOGIN_STATUS && AppSetting.getUserInfo() != null) {
-            TopicRepo.likePoint(String.valueOf(point.id), String.valueOf(AppSetting.getUserInfo().data.userInfo.id))
+        UserBean userBean = AppSetting.getUserInfo();
+        if (userBean != null) {
+            TopicRepo.likePoint(String.valueOf(point.id), String.valueOf(userBean.data.userInfo.id))
                     .subscribeOn(Schedulers.newThread())
                     .toObservable()
                     .observeOn(AndroidSchedulers.mainThread())
@@ -412,17 +416,18 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
                     });
         }
     }
-public void updateClickTable(int ispost) {
-    TopicLikingTable topicLikingTable;
-    if (isZan == 0) {
-        topicLikingTable = new TopicLikingTable(point.id,0, PointDetailActivity.TYPE_POINT,ispost);
-    } else {
 
-        topicLikingTable = new TopicLikingTable(point.id,1,PointDetailActivity.TYPE_POINT,ispost);
+    public void updateClickTable(int ispost) {
+        TopicLikingTable topicLikingTable;
+        if (isZan == 0) {
+            topicLikingTable = new TopicLikingTable(point.id, 0, PointDetailActivity.TYPE_POINT, ispost);
+        } else {
 
+            topicLikingTable = new TopicLikingTable(point.id, 1, PointDetailActivity.TYPE_POINT, ispost);
+
+        }
+        TopicLikeCache.getIns(itemView.getContext()).insertData(topicLikingTable);
+
+        EventBus.getDefault().post(new ClickLikeEvent(ClickLikeEvent.TYPE_POINT));
     }
-    TopicLikeCache.getIns(itemView.getContext()).insertData(topicLikingTable);
-
-    EventBus.getDefault().post(new ClickLikeEvent(ClickLikeEvent.TYPE_POINT));
-}
 }

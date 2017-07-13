@@ -2,12 +2,9 @@ package com.youloft.lilith.cons.card;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.text.TextUtils;
 import android.view.ViewGroup;
 
-import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
-import com.youloft.lilith.common.utils.ViewUtil;
 import com.youloft.lilith.cons.ConsCalDetailActivity;
 import com.youloft.lilith.cons.bean.ConsPredictsBean;
 import com.youloft.lilith.cons.consmanager.LoddingCheckEvent;
@@ -49,13 +46,8 @@ public class ConsCalWeekHolder extends ConsBaseHolder implements ConsCalendar.On
 
     @Override
     public void onClick() {
-        UserBean userInfo = AppSetting.getUserInfo();
-        if (userInfo == null ||
-                userInfo.data == null ||
-                userInfo.data.userInfo == null ||
-                userInfo.data.userInfo.id == 0 ||
-                TextUtils.isEmpty(userInfo.data.userInfo.birthDay) ||
-                TextUtils.isEmpty(userInfo.data.userInfo.birthPlace)) {
+        UserBean userInfo = AppSetting.userDataIsComplete();
+        if (userInfo == null) {
             EventBus.getDefault().post(new LoddingCheckEvent());
             return;
         }

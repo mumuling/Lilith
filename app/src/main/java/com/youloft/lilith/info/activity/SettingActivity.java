@@ -2,7 +2,6 @@ package com.youloft.lilith.info.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -34,8 +33,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -153,15 +150,12 @@ public class SettingActivity extends BaseActivity {
      * 退出登录
      */
     private void logoutUser() {
-        if (!AppConfig.LOGIN_STATUS) {
-            return;     //未登陆直接return
-        }
-        UserBean userInfo = AppSetting.getUserInfo();
-        if (userInfo == null) {
+        UserBean userBean = AppSetting.getUserInfo();
+        if (userBean == null) {
             return;
         }
-        String uid = String.valueOf(userInfo.data.userInfo.id);
-        String accessToken = userInfo.data.userInfo.accessToken;
+        String uid = String.valueOf(userBean.data.userInfo.id);
+        String accessToken = userBean.data.userInfo.accessToken;
         UpdateUserRepo.logoutUser(uid, accessToken)
                 .compose(this.<LogoutBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
@@ -177,10 +171,8 @@ public class SettingActivity extends BaseActivity {
                             //3.把存好的user信息情况  把登录状态设置为false
                             //4.关闭当前页面
                             //通知大家登出的事件
-                            AppConfig.LOGIN_STATUS = false;
                             //tab设置到首页的事件
-                            AppConfig.LOGIN_STATUS = false;
-                            AppSetting.saveUserInfo(new UserBean());
+                            AppSetting.clearUserInfo();
                             PointCache.getIns(SettingActivity.this).deleteTable();
                             TopicLikeCache.getIns(SettingActivity.this).deleteTable();
                             PointAnswerCache.getIns(SettingActivity.this).deleteTable();

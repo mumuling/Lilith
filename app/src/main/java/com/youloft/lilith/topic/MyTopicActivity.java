@@ -9,15 +9,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.alibaba.android.arouter.launcher.ARouter;
-import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.event.TabChangeEvent;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.login.bean.UserBean;
-import com.youloft.lilith.login.event.LoginEvent;
 import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.topic.adapter.MyTopicAdapter;
 import com.youloft.lilith.topic.bean.ClickLikeEvent;
@@ -91,8 +88,9 @@ public class MyTopicActivity extends BaseActivity {
 
             }
         });
-        if (AppConfig.LOGIN_STATUS && AppSetting.getUserInfo() != null) {
-            userInfo = AppSetting.getUserInfo().data.userInfo;
+        UserBean userBean = AppSetting.getUserInfo();
+        if (userBean  != null) {
+            userInfo = userBean.data.userInfo;
         } else {
             userInfo = null;
         }

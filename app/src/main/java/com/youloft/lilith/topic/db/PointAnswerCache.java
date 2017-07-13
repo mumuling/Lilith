@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.youloft.lilith.AppConfig;
+import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.topic.bean.PointBean;
 
@@ -44,9 +44,10 @@ public class PointAnswerCache {
         }
     }
     public void handlePointTableInfo(List<PointBean.DataBean> data) {
-        if (!AppConfig.LOGIN_STATUS || AppSetting.getUserInfo() == null) return;
+        UserBean userInfo = AppSetting.getUserInfo();
+        if (userInfo == null) return;
         for (int i = 0; i < data.size(); i ++) {
-            if (data.get(i).userId == AppSetting.getUserInfo().data.userInfo.id){
+            if (data.get(i).userId == userInfo.data.userInfo.id){
                 deleteData(data.get(i).id);
             }
         }
@@ -59,7 +60,7 @@ public class PointAnswerCache {
     public int updateDataByCode(PointAnswerTable pointAnswerTable) {
         if (pointAnswerTable == null)return -1;
         SQLiteDatabase db = PointAnswerTableHelper.getInstance(mContext).getWritableDatabase();
-        return db.update(pointAnswerTable.TABLE_NAME, pointAnswerTable.createContentValues(),
+        return db.update(PointAnswerTable.TABLE_NAME, pointAnswerTable.createContentValues(),
                 PointAnswerTable.Columns.RID+ " =? "
                 , new String[]{String.valueOf(pointAnswerTable.rid)});
     }

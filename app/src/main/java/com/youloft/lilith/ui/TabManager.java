@@ -4,10 +4,8 @@ import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.text.TextUtils;
 
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.utils.SafeUtil;
 import com.youloft.lilith.login.bean.UserBean;
@@ -20,7 +18,6 @@ import com.youloft.lilith.ui.view.NavBarLayout;
 import com.youloft.lilith.ui.view.TabItemBean;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -175,10 +172,7 @@ public class TabManager implements NavBarLayout.OnTabChangeListener {
     public boolean selectChange(int index) {
         if (index == TabManager.TAB_INDEX_SZ) {
             UserBean userInfo = AppSetting.getUserInfo();
-            if (userInfo == null||
-                    userInfo.data == null||
-                    userInfo.data.userInfo == null||
-                    userInfo.data.userInfo.id== 0) {
+            if (userInfo == null) {
                 ARouter.getInstance().build("/test/LoginActivity")
                         .navigation();
                 return true;

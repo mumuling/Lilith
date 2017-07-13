@@ -1,23 +1,14 @@
 package com.youloft.lilith.topic.holder;
 
 import android.animation.ValueAnimator;
-import android.content.ContentValues;
-import android.graphics.Bitmap;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
-import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
-import com.youloft.lilith.common.net.AbsResponse;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.CalendarHelper;
 import com.youloft.lilith.common.utils.Toaster;
@@ -35,21 +26,20 @@ import com.youloft.lilith.topic.db.PointCache;
 import com.youloft.lilith.topic.db.PointTable;
 import com.youloft.lilith.topic.db.TopicInfoCache;
 import com.youloft.lilith.topic.db.TopicTable;
-import com.youloft.lilith.topic.widget.BlurFactor;
 import com.youloft.lilith.topic.widget.VoteDialog;
 import com.youloft.lilith.topic.widget.VoteView;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- *version   投票的Holder
- *@author  slj
- *@time    2017/7/11 14:11
- *@class   VoteHolder
+ * version   投票的Holder
+ *
+ * @author slj
+ * @time 2017/7/11 14:11
+ * @class VoteHolder
  */
 
 
@@ -62,7 +52,7 @@ public class VoteHolder extends RecyclerView.ViewHolder {
     private VoteView voteView;
 
     private TopicDetailBean.DataBean topicInfo;
-    private VoteDialog voteDialog ;
+    private VoteDialog voteDialog;
     private ValueAnimator firstAnimation;
     private ValueAnimator secondAnimation;
     private ValueAnimator thirdAnimation;
@@ -72,10 +62,11 @@ public class VoteHolder extends RecyclerView.ViewHolder {
     private UserBean.DataBean.UserInfoBean userInfo;
     private String leftTitle;
     private String rightTitle;
-    public VoteHolder(View itemView,TopicDetailAdapter adapter) {
+
+    public VoteHolder(View itemView, TopicDetailAdapter adapter) {
         super(itemView);
         initView();
-        this.adapter =  adapter;
+        this.adapter = adapter;
         firstAnimation = new ValueAnimator();
         firstAnimation.setFloatValues(0.0f, 1.0f);
         firstAnimation.setDuration(4000);
@@ -91,7 +82,7 @@ public class VoteHolder extends RecyclerView.ViewHolder {
             }
         });
 
-         secondAnimation = new ValueAnimator();
+        secondAnimation = new ValueAnimator();
         secondAnimation.setFloatValues(0.0f, 1.0f);
         secondAnimation.setDuration(4000);
         secondAnimation.setRepeatMode(ValueAnimator.RESTART);
@@ -111,7 +102,7 @@ public class VoteHolder extends RecyclerView.ViewHolder {
                 voteView.setChangeValue2(changeWidth * value * 2, (int) (255 * (1 - value)));
             }
         });
-         thirdAnimation = new ValueAnimator();
+        thirdAnimation = new ValueAnimator();
         thirdAnimation.setFloatValues(0.0f, 1.0f);
         thirdAnimation.setDuration(4000);
         thirdAnimation.setRepeatMode(ValueAnimator.RESTART);
@@ -139,7 +130,8 @@ public class VoteHolder extends RecyclerView.ViewHolder {
     }
 
     /**
-     *   投票完成的动画
+     * 投票完成的动画
+     *
      * @param scale
      */
     private void voteAniamtion(final float scale) {
@@ -148,12 +140,12 @@ public class VoteHolder extends RecyclerView.ViewHolder {
         thirdAnimation.cancel();
         ValueAnimator rectAnimater = new ValueAnimator();
         rectAnimater.setDuration(2000);
-        rectAnimater.setFloatValues(0.0f,1.0f);
+        rectAnimater.setFloatValues(0.0f, 1.0f);
         rectAnimater.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 float value = (float) animation.getAnimatedValue();
-                voteView.setRectProportion(value,scale);
+                voteView.setRectProportion(value, scale);
 
 
             }
@@ -162,37 +154,40 @@ public class VoteHolder extends RecyclerView.ViewHolder {
     }
 
     private void initView() {
-        voteDialog = new VoteDialog(itemView.getContext(),R.style.VoteDialog);
+        voteDialog = new VoteDialog(itemView.getContext(), R.style.VoteDialog);
         voteDialog.setListener(new VoteDialog.OnClickConfirmListener() {
             @Override
-            public void clickConfirm(final String msg, final int id,final String voteTitle) {
-                if (topicInfo !=null && topicInfo.isVote ==1)return;
+            public void clickConfirm(final String msg, final int id, final String voteTitle) {
+                if (topicInfo != null && topicInfo.isVote == 1) return;
                 if (topicInfo == null) return;
-                if (isVote == 1 )return;
-                userInfo = AppSetting.getUserInfo().data.userInfo;
-                if (userInfo == null)return;
+                if (isVote == 1) return;
+                UserBean userBean = AppSetting.getUserInfo();
+                if (userBean == null) {
+                    return;
+                }
+                userInfo = userBean.data.userInfo;
 
-                TopicRepo.postVote(String.valueOf(topicInfo.id),String.valueOf(id),String.valueOf(userInfo.id),msg)
+                TopicRepo.postVote(String.valueOf(topicInfo.id), String.valueOf(id), String.valueOf(userInfo.id), msg)
                         .subscribeOn(Schedulers.newThread())
                         .toObservable()
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new RxObserver<VoteBean>() {
                             @Override
                             public void onDataSuccess(VoteBean s) {
-                                int poitnID =  s.data;
-                                if (poitnID!= -1) {
+                                int poitnID = s.data;
+                                if (poitnID != -1) {
                                     topicInfo.totalVote++;
                                     int votes = addOptionVote(id);
                                     if (id % 2 == 1) {
                                         voteAniamtion((float) votes / topicInfo.totalVote);
                                     } else {
-                                        voteAniamtion(1 - ((float)votes / topicInfo.totalVote));
+                                        voteAniamtion(1 - ((float) votes / topicInfo.totalVote));
                                     }
                                     needVoteAnimation = false;
                                     String time = CalendarHelper.getNowTimeString();
-                                    updatePointDb(id,topicInfo.id,poitnID,msg,time,topicInfo.title,voteTitle);
+                                    updatePointDb(id, topicInfo.id, poitnID, msg, time, topicInfo.title, voteTitle);
                                     isVote = 1;
-                                    addToDb(topicInfo,id);
+                                    addToDb(topicInfo, id);
                                     Toaster.showShort("投票成功！");
                                 }
                             }
@@ -212,21 +207,22 @@ public class VoteHolder extends RecyclerView.ViewHolder {
     }
 
     /**
-     *     投票完成后更新本地观点的数据库
-     * @param oid  选择的ID
-     * @param tid   话题的id
-     * @param poitnID  生成的观点的id
-     * @param msg    观点
-     * @param time  时间
-     * @param topicTitle  话题title
-     * @param voteTitle   选择的title
+     * 投票完成后更新本地观点的数据库
+     *
+     * @param oid        选择的ID
+     * @param tid        话题的id
+     * @param poitnID    生成的观点的id
+     * @param msg        观点
+     * @param time       时间
+     * @param topicTitle 话题title
+     * @param voteTitle  选择的title
      */
-    private void updatePointDb(int oid ,int tid, int poitnID, String msg,String time,String topicTitle,String voteTitle) {
-        PointTable pointTable = new PointTable(oid,tid,poitnID,msg,time,topicTitle,voteTitle);
+    private void updatePointDb(int oid, int tid, int poitnID, String msg, String time, String topicTitle, String voteTitle) {
+        PointTable pointTable = new PointTable(oid, tid, poitnID, msg, time, topicTitle, voteTitle);
         PointCache.getIns(itemView.getContext()).insertData(pointTable);
         UserBean.DataBean.UserInfoBean userInfo = AppSetting.getUserInfo().data.userInfo;
         PointBean.DataBean dataBean = new PointBean.DataBean();
-        dataBean.userId =  userInfo.id;
+        dataBean.userId = userInfo.id;
         dataBean.isclick = 0;
         dataBean.zan = 0;
         dataBean.buildDate = time;
@@ -245,24 +241,26 @@ public class VoteHolder extends RecyclerView.ViewHolder {
     }
 
     /**
-     *      更新数据库
+     * 更新数据库
+     *
      * @param info 观点信息
-     * @param id  观点id
+     * @param id   观点id
      */
-    private void addToDb(TopicDetailBean.DataBean info,int id) {
-        TopicTable table = new TopicTable(info,id);
+    private void addToDb(TopicDetailBean.DataBean info, int id) {
+        TopicTable table = new TopicTable(info, id);
         TopicInfoCache.getIns(itemView.getContext()).insertData(table);
 
     }
 
     /**
-     *   增加投票数
+     * 增加投票数
+     *
      * @param id
      */
     private int addOptionVote(int id) {
         int vote = 0;
-        if (topicInfo.option == null || topicInfo.option.size() == 0 )return 0;
-        for (int i =0; i < topicInfo.option.size();i ++) {
+        if (topicInfo.option == null || topicInfo.option.size() == 0) return 0;
+        for (int i = 0; i < topicInfo.option.size(); i++) {
             if (id == topicInfo.option.get(i).id) {
                 topicInfo.option.get(i).vote++;
                 return topicInfo.option.get(i).vote;
@@ -272,31 +270,32 @@ public class VoteHolder extends RecyclerView.ViewHolder {
     }
 
     /**
-     *   绑定holder
+     * 绑定holder
+     *
      * @param topicInfo
      */
     public void bindView(final TopicDetailBean.DataBean topicInfo) {
-        if (topicInfo == null || topicInfo.option == null || topicInfo.option.size() == 0 )return;
+        if (topicInfo == null || topicInfo.option == null || topicInfo.option.size() == 0) return;
         this.topicInfo = topicInfo;
-        for (int j = 0; j < topicInfo.option.size(); j ++) {
-            if ( topicInfo.option.get(j).id % 2 == 1) {
+        for (int j = 0; j < topicInfo.option.size(); j++) {
+            if (topicInfo.option.get(j).id % 2 == 1) {
                 leftTitle = topicInfo.option.get(j).shortTitle;
             } else {
                 rightTitle = topicInfo.option.get(j).shortTitle;
             }
         }
-        voteView.setTitle(leftTitle,rightTitle);
+        voteView.setTitle(leftTitle, rightTitle);
         voteView.setInterface(new VoteView.OnItemClickListener() {
             @Override
             public void clickLeft() {
-                if (topicInfo.isVote == 1|| isVote == 1)return;
-                if (!AppConfig.LOGIN_STATUS) {
+                if (topicInfo.isVote == 1 || isVote == 1) return;
+                if (AppSetting.getUserInfo() == null) {
                     new LogInOrCompleteDialog(itemView.getContext()).setStatus(LogInOrCompleteDialog.TOPIC_IN).show();
                 } else {
-                    for (int i = 0 ;i < topicInfo.option.size(); i ++) {
+                    for (int i = 0; i < topicInfo.option.size(); i++) {
                         if (topicInfo.option.get(i).id % 2 == 1) {
                             voteDialog.show();
-                            voteDialog.setTitle(topicInfo.option.get(i).shortTitle,topicInfo.option.get(i).title, topicInfo.option.get(i).id);
+                            voteDialog.setTitle(topicInfo.option.get(i).shortTitle, topicInfo.option.get(i).title, topicInfo.option.get(i).id);
                             return;
                         }
                     }
@@ -306,29 +305,29 @@ public class VoteHolder extends RecyclerView.ViewHolder {
 
             @Override
             public void clickRight() {
-                if (topicInfo.isVote == 1|| isVote == 1)return;
-                if (!AppConfig.LOGIN_STATUS) {
+                if (topicInfo.isVote == 1 || isVote == 1) return;
+                if (AppSetting.getUserInfo() == null) {
                     new LogInOrCompleteDialog(itemView.getContext()).setStatus(LogInOrCompleteDialog.TOPIC_IN).show();
                 } else {
-                    for (int i = 0 ;i < topicInfo.option.size(); i ++) {
+                    for (int i = 0; i < topicInfo.option.size(); i++) {
                         if (topicInfo.option.get(i).id % 2 == 0) {
                             voteDialog.show();
-                            voteDialog.setTitle(topicInfo.option.get(i).shortTitle,topicInfo.option.get(i).title, topicInfo.option.get(i).id);
+                            voteDialog.setTitle(topicInfo.option.get(i).shortTitle, topicInfo.option.get(i).title, topicInfo.option.get(i).id);
                             return;
                         }
                     }
                 }
             }
         });
-        if (topicInfo.isVote ==1 && needVoteAnimation) {
-            for (int j = 0 ; j < topicInfo.option.size(); j ++) {
+        if (topicInfo.isVote == 1 && needVoteAnimation) {
+            for (int j = 0; j < topicInfo.option.size(); j++) {
                 if (topicInfo.option.get(j).id % 2 == 1) {
-                    voteAniamtion((float) topicInfo.option.get(j).vote/topicInfo.totalVote);
+                    voteAniamtion((float) topicInfo.option.get(j).vote / topicInfo.totalVote);
                 } else {
-                    voteAniamtion( 1 -  ((float)topicInfo.option.get(j).vote/topicInfo.totalVote));
+                    voteAniamtion(1 - ((float) topicInfo.option.get(j).vote / topicInfo.totalVote));
                 }
             }
-            voteAniamtion((float) topicInfo.option.get(0).vote/topicInfo.totalVote);
+            voteAniamtion((float) topicInfo.option.get(0).vote / topicInfo.totalVote);
             needVoteAnimation = false;
         }
         GlideApp.with(itemView.getContext())

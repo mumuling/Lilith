@@ -1,12 +1,13 @@
 package com.youloft.lilith.topic.bean;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.youloft.lilith.common.net.AbsResponse;
 
 /**
  *
  */
 
-public class PointAnswerBean  {
+public class PointAnswerBean  extends AbsResponse{
 
     /**
      * data : 26
@@ -15,8 +16,4 @@ public class PointAnswerBean  {
      */
     @JSONField(name = "data")
     public int data;
-    @JSONField(name = "status")
-    public int status;
-    @JSONField(name = "sign")
-    public String sign;
 }

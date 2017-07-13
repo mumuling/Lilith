@@ -61,7 +61,7 @@ public abstract class AbstractDataRepo implements IProvider {
      * @param <T>
      * @return
      */
-    public static <T> Flowable<T> unionFlow(String url,
+    public static <T extends AbsResponse> Flowable<T> unionFlow(String url,
                                             HashMap<String, String> header,
                                             HashMap<String, String> params,
                                             boolean usePublic,
@@ -182,7 +182,7 @@ public abstract class AbstractDataRepo implements IProvider {
      * @param <T>
      * @return
      */
-    public static <T> Flowable<T> post(final String url,
+    public static <T extends AbsResponse> Flowable<T> post(final String url,
                                        final Map<String, String> header,
                                        final Map<String, String> params,
                                        final boolean usePublic,
@@ -215,7 +215,11 @@ public abstract class AbstractDataRepo implements IProvider {
                     public T apply(@NonNull Response response) throws Exception {
                         if (response.code() == 200) {
                             String string = response.body().string();
-                            return JSON.parseObject(string, clz);
+                            T t = JSON.parseObject(string, clz);
+                            if (t.status == 200) {
+                                return t;
+                            }
+                            return null;
                         } else {
                             throw new RuntimeException("No Content");
                         }
@@ -253,7 +257,7 @@ public abstract class AbstractDataRepo implements IProvider {
      * @param cacheDuration
      * @return
      */
-    public static <T> Flowable<T> httpFlow(final String url,
+    public static <T extends AbsResponse> Flowable<T> httpFlow(final String url,
                                            final Map<String, String> header,
                                            final Map<String, String> params,
                                            final boolean usePublic,
@@ -286,13 +290,18 @@ public abstract class AbstractDataRepo implements IProvider {
                     public T apply(@NonNull Response response) throws Exception {
                         if (response.code() == 200) {
                             String string = response.body().string();
-                            return JSON.parseObject(string, clz);
+                            T t = JSON.parseObject(string, clz);
+                            if (t.status == 200) {
+                                return t;
+                            }
+                            return null;
                         } else {
                             throw new RuntimeException("No Content");
                         }
                     }
                 })
                 .compose(LLApplication.getApiCache().<T>cacheTransform(cacheKey));
+
         if (TextUtils.isEmpty(cacheKey)
                 || !LLApplication.getApiCache().hasCache(cacheKey)) {
             return compose;

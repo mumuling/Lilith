@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseFragment;
 import com.youloft.lilith.common.event.ConsChangeEvent;
@@ -56,7 +55,8 @@ public class XZFragment extends BaseFragment implements PullToRefreshLayout.OnRe
     private RecyclerView mConsList;
     private ConsFragmentCardAdapter mCardAdapter;
     private GregorianCalendar mCal = new GregorianCalendar();
-    private float changeStateRange =  ViewUtil.dp2px(200);
+    private float changeStateRange = ViewUtil.dp2px(200);
+
     public XZFragment() {
         super(R.layout.fragment_xz);
     }
@@ -93,11 +93,7 @@ public class XZFragment extends BaseFragment implements PullToRefreshLayout.OnRe
      */
     private void refreshDate(PullToRefreshLayout pullToRefreshLayout) {
         UserBean userInfo = AppSetting.getUserInfo();
-        if (userInfo == null ||
-                userInfo.data == null ||
-                userInfo.data.userInfo == null ||
-                userInfo.data.userInfo.id == 0 ||
-                TextUtils.isEmpty(userInfo.data.userInfo.birthDay)) {       //需要登录
+        if (userInfo == null) {       //需要登录
             String date = "1990-04-02";
             String time = "12:00:00";
             mCardAdapter.setTitle("");
@@ -217,13 +213,10 @@ public class XZFragment extends BaseFragment implements PullToRefreshLayout.OnRe
 
     private void checkUserInfo() {
         UserBean userInfo = AppSetting.getUserInfo();
-        if (userInfo == null||
-                userInfo.data == null ||
-                userInfo.data.userInfo == null ||
-                userInfo.data.userInfo.id == 0 ) {
+        if (userInfo == null) {
             showDialog(LOG_IN);
-        } else if (TextUtils.isEmpty(userInfo.data.userInfo.birthDay) ||
-                TextUtils.isEmpty(userInfo.data.userInfo.birthPlace)) {
+        } else if (TextUtils.isEmpty(userInfo.data.userInfo.birthLongi) ||
+                TextUtils.isEmpty(userInfo.data.userInfo.birthLati)) {
             showDialog(COMPLETE_INFO);
         }
     }

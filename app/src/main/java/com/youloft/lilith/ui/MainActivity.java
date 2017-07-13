@@ -1,29 +1,11 @@
 package com.youloft.lilith.ui;
 
-import android.app.Activity;
-import android.app.ActivityManager;
-import android.content.ComponentName;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.util.LruCache;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.ViewUtils;
-import android.text.TextUtils;
-import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.event.ConsChangeEvent;
@@ -32,9 +14,7 @@ import com.youloft.lilith.common.net.OnlineConfigAgent;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.NetUtil;
 import com.youloft.lilith.common.utils.Toaster;
-import com.youloft.lilith.common.utils.ViewUtil;
 import com.youloft.lilith.cons.ConsRepo;
-import com.youloft.lilith.cons.consmanager.LoddingCheckEvent;
 import com.youloft.lilith.info.bean.CheckLoginBean;
 import com.youloft.lilith.info.repo.UpdateUserRepo;
 import com.youloft.lilith.login.bean.UserBean;
@@ -47,12 +27,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -94,10 +70,7 @@ public class MainActivity extends BaseActivity {
      */
     private void checkLogin() {
         final UserBean userInfo = AppSetting.getUserInfo();
-        if(userInfo == null || userInfo.data == null || userInfo.data.userInfo == null){
-            return;
-        }
-        if(userInfo.data.userInfo.id == 0){
+        if(userInfo == null){
             return;
         }
         UpdateUserRepo.checkLoginStatus(String.valueOf(userInfo.data.userInfo.id))
@@ -108,14 +81,13 @@ public class MainActivity extends BaseActivity {
                 .subscribe(new RxObserver<CheckLoginBean>() {
                     @Override
                     public void onDataSuccess(CheckLoginBean checkLoginBean) {
-                        String token = checkLoginBean.data;
-                        String accessToken = userInfo.data.userInfo.accessToken;
-                        if(token.equals(accessToken)){
-                            AppConfig.LOGIN_STATUS = true;//登录状态设置为 登录
-                            EventBus.getDefault().post(new LoginEvent(true));
-                        } else {
-                            AppConfig.LOGIN_STATUS = false;//登录状态置为 未登录
-                            EventBus.getDefault().post(new LoginEvent(false));
+                        if (checkLoginBean != null) {
+                            String token = checkLoginBean.data;
+                            String accessToken = userInfo.data.userInfo.accessToken;
+                            if (!token.equals(accessToken)) {
+                                AppSetting.clearUserInfo();
+                                EventBus.getDefault().post(new LoginEvent(false));
+                            }
                         }
                     }
                 });

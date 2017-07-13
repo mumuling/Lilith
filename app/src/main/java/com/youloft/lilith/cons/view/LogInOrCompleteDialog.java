@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
-import android.support.annotation.StyleRes;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -164,7 +163,7 @@ public class LogInOrCompleteDialog extends BaseDialog {
 
         } else if (status == XZFragment.COMPLETE_INFO) {
             UserBean userInfo = AppSetting.getUserInfo();
-            if (userInfo != null && userInfo.data != null && userInfo.data.userInfo != null) {
+            if (userInfo != null) {
                 UserBean.DataBean.UserInfoBean info = userInfo.data.userInfo;
                 String nickName = TextUtils.isDigitsOnly(info.nickName) ? (TextUtils.isEmpty(info.phone) ? mContext.getResources().getString(R.string.app_name_ch) : info.phone) : info.nickName;
                 mLoginJumpDialogNickname.setText(nickName);

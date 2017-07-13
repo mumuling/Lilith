@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.base.BaseActivity;
@@ -142,10 +141,10 @@ public class EditInformationActivity extends BaseActivity {
      * 根据数据做对应的初始化
      */
     private void initView() {
-        if (AppConfig.LOGIN_STATUS) {//处于登录状态
-            //获取用户信息,并且展示
 
-            UserBean userInfo = AppSetting.getUserInfo();
+        UserBean userInfo = AppSetting.getUserInfo();
+        if (userInfo != null) {//处于登录状态
+            //获取用户信息,并且展示
             if (userInfo == null || userInfo.data == null || userInfo.data.userInfo == null) {
                 return;
             }
@@ -269,10 +268,10 @@ public class EditInformationActivity extends BaseActivity {
      * @param nameEx 后缀名
      */
     private void updateUserImg(String upBit, String nameEx) {
-        if (AppSetting.getUserInfo() == null) {
+        final UserBean userInfo = AppSetting.getUserInfo();
+        if (userInfo == null) {
             return;
         }
-        final UserBean userInfo = AppSetting.getUserInfo();
         UpdateUserRepo.updateImg(upBit, nameEx, String.valueOf(userInfo.data.userInfo.id))
                 .compose(this.<UpLoadHeaderBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())

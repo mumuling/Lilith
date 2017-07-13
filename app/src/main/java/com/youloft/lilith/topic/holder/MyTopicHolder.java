@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,13 +14,11 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.CalendarHelper;
 import com.youloft.lilith.cons.consmanager.ConsManager;
-import com.youloft.lilith.glide.GlideBlurTransform;
 import com.youloft.lilith.glide.GlideCircleTransform;
 import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.setting.AppSetting;
@@ -31,7 +28,6 @@ import com.youloft.lilith.topic.bean.ClickLikeBean;
 import com.youloft.lilith.topic.bean.MyTopicBean;
 import com.youloft.lilith.topic.bean.PointBean;
 import com.youloft.lilith.topic.bean.TopicDetailBean;
-import com.youloft.lilith.topic.bean.VoteBean;
 import com.youloft.lilith.topic.db.TopicLikeCache;
 import com.youloft.lilith.topic.db.TopicLikingTable;
 
@@ -82,54 +78,57 @@ public class MyTopicHolder extends RecyclerView.ViewHolder {
     private MyTopicBean.DataBean topicBean;
     private TopicDetailBean.DataBean topicInfo;
     private UserBean.DataBean.UserInfoBean userInfo;
-    private   PointBean.DataBean pointInfo;
+    private PointBean.DataBean pointInfo;
     private int isZan;
+
     public MyTopicHolder(View itemView) {
 
         super(itemView);
-        ButterKnife.bind(this,itemView);
+        ButterKnife.bind(this, itemView);
         mContext = itemView.getContext();
 
 
     }
 
     /**
-     *   绑定数据
-     * @param point   观点信息
-     * @param isLast  是否是最后一条数据
+     * 绑定数据
+     *
+     * @param point  观点信息
+     * @param isLast 是否是最后一条数据
      */
-    public void bind(MyTopicBean.DataBean point,boolean isLast) {
-        if (AppSetting.getUserInfo() == null)return;
-        userInfo = AppSetting.getUserInfo().data.userInfo;
-        if (userInfo == null)return;
+    public void bind(MyTopicBean.DataBean point, boolean isLast) {
+        UserBean userBean = AppSetting.getUserInfo();
+        if (userBean == null) return;
+        userInfo = userBean.data.userInfo;
+        if (userInfo == null) return;
         this.topicBean = point;
         initPointAndTopic(point);
         if (isLast) {
             commentDividerBottom.setVisibility(View.GONE);
-        }else {
+        } else {
             commentDividerBottom.setVisibility(View.VISIBLE);
         }
-            //头像
-            GlideApp.with(mContext)
-                    .asBitmap().transform(new GlideCircleTransform())
-                    .load(userInfo.headImg)
-                    .listener(new RequestListener<Bitmap>() {
-                        @Override
-                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                            GlideApp.with(mContext)
-                                    .asBitmap()
-                                    .transform(new GlideCircleTransform())
-                                    .load(R.drawable.calendar_work_icon)
-                                    .into(imageCommentUser);
-                            return false;
-                        }
+        //头像
+        GlideApp.with(mContext)
+                .asBitmap().transform(new GlideCircleTransform())
+                .load(userInfo.headImg)
+                .listener(new RequestListener<Bitmap>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                        GlideApp.with(mContext)
+                                .asBitmap()
+                                .transform(new GlideCircleTransform())
+                                .load(R.drawable.calendar_work_icon)
+                                .into(imageCommentUser);
+                        return false;
+                    }
 
-                        @Override
-                        public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                            return false;
-                        }
-                    })
-                    .into(imageCommentUser);
+                    @Override
+                    public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                        return false;
+                    }
+                })
+                .into(imageCommentUser);
 
         //昵称
         textUserName.setText(userInfo.nickName);
@@ -146,20 +145,21 @@ public class MyTopicHolder extends RecyclerView.ViewHolder {
         textVoteResult.setText("投票给：" + point.optionTitle);
         if (point.isclose != 1) {
             textTopicTitle.setText(point.topicIdTitle);
-        }else {
+        } else {
             textTopicTitle.setText("抱歉！此话题已关闭");
         }
-        if (point.topicOptionId%2 ==1) {
+        if (point.topicOptionId % 2 == 1) {
             textVoteResult.setTextColor(Color.parseColor("#ff8282"));
         } else {
             textVoteResult.setTextColor(Color.parseColor("#5696df"));
         }
-        textCommentTime.setText(CalendarHelper.getInterValTime(CalendarHelper.getTimeMillisByString(point.date),System.currentTimeMillis()));
+        textCommentTime.setText(CalendarHelper.getInterValTime(CalendarHelper.getTimeMillisByString(point.date), System.currentTimeMillis()));
         textCommentAnswerCount.setText(String.valueOf(point.reply));
     }
 
     /**
-     *    绑定赞的数据
+     * 绑定赞的数据
+     *
      * @param point
      */
     private void bindZan(MyTopicBean.DataBean point) {
@@ -170,15 +170,15 @@ public class MyTopicHolder extends RecyclerView.ViewHolder {
         zanCount = point.zan;
         if (table == null) {
             isZan = point.isclick;
-        }else {
+        } else {
             isZan = table.mIsLike;
             if (table.mIsLike == point.isclick) {
-                TopicLikeCache.getIns(mContext).deleteData(id,PointDetailActivity.TYPE_POINT);
-            } else{
-                if (table.mIsPost != 1)clickLike();
+                TopicLikeCache.getIns(mContext).deleteData(id, PointDetailActivity.TYPE_POINT);
+            } else {
+                if (table.mIsPost != 1) clickLike();
                 // dataBean.isclick = table.mIsLike;
                 if (table.mIsLike == 1) {
-                    zanCount = point.zan +1;
+                    zanCount = point.zan + 1;
                 }
             }
         }
@@ -191,8 +191,9 @@ public class MyTopicHolder extends RecyclerView.ViewHolder {
     }
 
     private void clickLike() {
-        if (AppConfig.LOGIN_STATUS && AppSetting.getUserInfo() != null) {
-            int userId = AppSetting.getUserInfo().data.userInfo.id;
+        UserBean userInfo = AppSetting.getUserInfo();
+        if (userInfo != null) {
+            int userId = userInfo.data.userInfo.id;
             TopicRepo.likeReply(String.valueOf(topicBean.id), String.valueOf(userId))
                     .subscribeOn(Schedulers.newThread())
                     .toObservable()
@@ -200,7 +201,7 @@ public class MyTopicHolder extends RecyclerView.ViewHolder {
                     .subscribe(new RxObserver<ClickLikeBean>() {
                         @Override
                         public void onDataSuccess(ClickLikeBean s) {
-                            if ( s.data) {
+                            if (s.data) {
                                 updateClickTable(1);
                             } else {
                                 updateClickTable(0);
@@ -219,15 +220,15 @@ public class MyTopicHolder extends RecyclerView.ViewHolder {
     public void updateClickTable(int ispost) {
         TopicLikingTable topicLikingTable;
         if (isZan == 0) {
-            topicLikingTable = new TopicLikingTable(topicBean.id,0, PointDetailActivity.TYPE_POINT,ispost);
+            topicLikingTable = new TopicLikingTable(topicBean.id, 0, PointDetailActivity.TYPE_POINT, ispost);
         } else {
-            topicLikingTable = new TopicLikingTable(topicBean.id,1,PointDetailActivity.TYPE_POINT,ispost);
+            topicLikingTable = new TopicLikingTable(topicBean.id, 1, PointDetailActivity.TYPE_POINT, ispost);
         }
         TopicLikeCache.getIns(itemView.getContext()).insertData(topicLikingTable);
     }
 
     private void initPointAndTopic(MyTopicBean.DataBean point) {
-         pointInfo = new PointBean.DataBean();
+        pointInfo = new PointBean.DataBean();
         pointInfo.id = point.id;
         pointInfo.reply = point.reply;
         pointInfo.viewpoint = point.Viewpoint;
@@ -248,24 +249,24 @@ public class MyTopicHolder extends RecyclerView.ViewHolder {
         TopicDetailBean.DataBean.OptionBean optionBean2 = new TopicDetailBean.DataBean.OptionBean();
         int option1_id;
         int option2_id;
-        if (point.topicOptionId/2 == 0){
-            option1_id = point.topicOptionId -1;
+        if (point.topicOptionId / 2 == 0) {
+            option1_id = point.topicOptionId - 1;
             option2_id = point.topicOptionId;
         } else {
             option1_id = point.topicOptionId;
-            option2_id = point.topicOptionId +1;
+            option2_id = point.topicOptionId + 1;
         }
         if (option1_id == point.topicOptionId) {
-        optionBean1.vote = 0;
-        optionBean1.id = option1_id;
-        optionBean1.buildDate = point.date;
-        optionBean1.shortTitle = "";
-        optionBean1.title = point.optionTitle;
-        optionBean2.vote = 0;
-        optionBean2.id = option2_id;
-        optionBean2.buildDate = point.date;
-        optionBean2.shortTitle = "";
-        optionBean2.title = "";
+            optionBean1.vote = 0;
+            optionBean1.id = option1_id;
+            optionBean1.buildDate = point.date;
+            optionBean1.shortTitle = "";
+            optionBean1.title = point.optionTitle;
+            optionBean2.vote = 0;
+            optionBean2.id = option2_id;
+            optionBean2.buildDate = point.date;
+            optionBean2.shortTitle = "";
+            optionBean2.title = "";
         } else {
             optionBean2.vote = 0;
             optionBean2.id = option2_id;
@@ -291,7 +292,7 @@ public class MyTopicHolder extends RecyclerView.ViewHolder {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.text_topic_title:
-                if (topicBean.isclose ==1)return;
+                if (topicBean.isclose == 1) return;
                 ARouter.getInstance().build("/test/TopicDetailActivity")
                         .withInt("tid", topicBean.topicId)
                         .navigation();
@@ -299,8 +300,8 @@ public class MyTopicHolder extends RecyclerView.ViewHolder {
             case R.id.text_comment_time:
             case R.id.text_comment_answer_count:
                 ARouter.getInstance().build("/test/PointDetailActivity")
-                        .withObject("point",pointInfo)
-                        .withObject("topic",topicInfo)
+                        .withObject("point", pointInfo)
+                        .withObject("topic", topicInfo)
                         .navigation();
                 break;
         }

@@ -4,12 +4,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.rx.RxObserver;
@@ -89,10 +87,10 @@ public class TopicDetailActivity extends BaseActivity {
     }
 
     /**
-     *  第一次请求其他话题列表
+     * 第一次请求其他话题列表
      */
     private void requestOtherTopicList() {
-        TopicRepo.getTopicListBottom("5",null,true)
+        TopicRepo.getTopicListBottom("5", null, true)
                 .compose(this.<TopicBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
@@ -116,16 +114,17 @@ public class TopicDetailActivity extends BaseActivity {
     }
 
     /**
-     *   第一次请求观点列表
+     * 第一次请求观点列表
      */
     private void requestPointList() {
         int userId = 0;
-        if (AppConfig.LOGIN_STATUS && AppSetting.getUserInfo() != null) {
-            userId = AppSetting.getUserInfo().data.userInfo.id;
+        UserBean userBean = AppSetting.getUserInfo();
+        if (userBean != null) {
+            userId = userBean.data.userInfo.id;
         } else {
             userId = 0;
         }
-        TopicRepo.getPointList(String.valueOf(tid),String.valueOf(userId),"10",null,true)
+        TopicRepo.getPointList(String.valueOf(tid), String.valueOf(userId), "10", null, true)
                 .compose(this.<PointBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
@@ -133,7 +132,7 @@ public class TopicDetailActivity extends BaseActivity {
                 .subscribe(new RxObserver<PointBean>() {
                     @Override
                     public void onDataSuccess(PointBean pointBean) {
-                        if (pointBean.data == null ||pointBean.data.size() == 0)return;
+                        if (pointBean.data == null || pointBean.data.size() == 0) return;
                         handlePointTableInfo(pointBean.data);
                         pointList.addAll(pointBean.data);
                         adapter.setPointBeanList(pointList);
@@ -148,17 +147,19 @@ public class TopicDetailActivity extends BaseActivity {
     }
 
     /**
-     *   处理观点信息的数据库。
+     * 处理观点信息的数据库。
+     *
      * @param data
      */
     private void handlePointTableInfo(List<PointBean.DataBean> data) {
-        if (!AppConfig.LOGIN_STATUS ||AppSetting.getUserInfo() == null) return;
-        UserBean.DataBean.UserInfoBean userInfo = AppSetting.getUserInfo().data.userInfo;
+        UserBean userBean = AppSetting.getUserInfo();
+        if (userBean == null) return;
+        UserBean.DataBean.UserInfoBean userInfo = userBean.data.userInfo;
         int userID = userInfo.id;
         PointTable pointTable = pointCache.getInforByCode(tid);
         if (pointTable != null) {
             PointBean.DataBean dataBean = new PointBean.DataBean();
-            dataBean.userId =  userInfo.id;
+            dataBean.userId = userInfo.id;
             dataBean.isclick = 0;
             dataBean.zan = 0;
             dataBean.buildDate = pointTable.buildDate;
@@ -174,8 +175,8 @@ public class TopicDetailActivity extends BaseActivity {
             dataBean.id = pointTable.pid;
             pointList.add(dataBean);
         }
-        for (int i = 0; i < data.size(); i ++) {
-            if (data.get(i).userId == userID){
+        for (int i = 0; i < data.size(); i++) {
+            if (data.get(i).userId == userID) {
                 pointCache.deleteData(data.get(i).id);
                 data.remove(i);
             }
@@ -183,15 +184,16 @@ public class TopicDetailActivity extends BaseActivity {
     }
 
     /**
-     *   请求话题详细信息
+     * 请求话题详细信息
      */
     private void requestTopicDetail() {
         int userId = -1;
-        if (AppConfig.LOGIN_STATUS && AppSetting.getUserInfo() != null) {
-            userId = AppSetting.getUserInfo().data.userInfo.id;
+        UserBean userBean = AppSetting.getUserInfo();
+        if (userBean != null) {
+            userId = userBean.data.userInfo.id;
         }
 
-        TopicRepo.getTopicDetail(String.valueOf(tid),userId== -1?null:String.valueOf(userId))
+        TopicRepo.getTopicDetail(String.valueOf(tid), userId == -1 ? null : String.valueOf(userId))
                 .compose(this.<TopicDetailBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
@@ -200,11 +202,12 @@ public class TopicDetailActivity extends BaseActivity {
                     @Override
                     public void onDataSuccess(TopicDetailBean topicDetailBean) {
                         TopicDetailBean.DataBean data = topicDetailBean.data;
-                        if (data == null ||data.option ==null || data.option.size() == 0)return;
+                        if (data == null || data.option == null || data.option.size() == 0) return;
                         handleTopicInfoTable(data);
-                        topicDtailInfo= data;
+                        topicDtailInfo = data;
                         adapter.setTopicInfo(topicDtailInfo);
                     }
+
                     @Override
                     protected void onFailed(Throwable e) {
                         super.onFailed(e);
@@ -221,15 +224,16 @@ public class TopicDetailActivity extends BaseActivity {
             } else {
                 data.isVote = isVote;
                 data.totalVote++;
-                for (int i = 0;i < data.option.size();i ++) {
+                for (int i = 0; i < data.option.size(); i++) {
                     if (topicTable.vote_id == data.option.get(i).id) {
-                        data.option.get(i).vote ++;
+                        data.option.get(i).vote++;
                     }
                 }
             }
         }
 
     }
+
     /**
      * 登录状态改变
      *
@@ -240,6 +244,7 @@ public class TopicDetailActivity extends BaseActivity {
         requestTopicDetail();
 
     }
+
     /**
      * 点赞状态
      *
@@ -247,7 +252,7 @@ public class TopicDetailActivity extends BaseActivity {
      */
     @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
     public void onLikeChagne(ClickLikeEvent event) {
-        if (event.type != ClickLikeEvent.TYPE_AUTHOR || adapter == null)return;
+        if (event.type != ClickLikeEvent.TYPE_AUTHOR || adapter == null) return;
         adapter.notifyDataSetChanged();
 
     }
@@ -259,7 +264,7 @@ public class TopicDetailActivity extends BaseActivity {
         rvTopicDetail.setLayoutManager(mLayoutManager);
         adapter = new TopicDetailAdapter(this);
         rvTopicDetail.setAdapter(adapter);
-        voteDialog = new VoteDialog(this,R.style.VoteDialog);
+        voteDialog = new VoteDialog(this, R.style.VoteDialog);
         toolBar.setOnToolBarItemClickListener(new BaseToolBar.OnToolBarItemClickListener() {
             @Override
             public void OnBackBtnClick() {
@@ -268,7 +273,7 @@ public class TopicDetailActivity extends BaseActivity {
 
             @Override
             public void OnTitleBtnClick() {
-    
+
             }
 
             @Override
@@ -293,10 +298,10 @@ public class TopicDetailActivity extends BaseActivity {
                 int visibleItemCount = recyclerView.getChildCount();
 
                 if (newState == RecyclerView.SCROLL_STATE_IDLE
-                        && totalItemCount >=2
+                        && totalItemCount >= 2
                         && lastVisibleItemPosition >= totalItemCount - 2
                         && visibleItemCount > 0) {
-                    if (otherTopicList!= null && otherTopicList.size() >= 4 && needLoadMoreTopic) {
+                    if (otherTopicList != null && otherTopicList.size() >= 4 && needLoadMoreTopic) {
                         loadMoreTopic();
                     }
                 }
@@ -305,10 +310,10 @@ public class TopicDetailActivity extends BaseActivity {
     }
 
     /**
-     *  加载更多其他话题
+     * 加载更多其他话题
      */
     public void loadMoreTopic() {
-        TopicRepo.getTopicListBottom("5",String.valueOf(totalTopic),false)
+        TopicRepo.getTopicListBottom("5", String.valueOf(totalTopic), false)
                 .compose(this.<TopicBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
@@ -317,7 +322,7 @@ public class TopicDetailActivity extends BaseActivity {
                     @Override
                     public void onDataSuccess(TopicBean topicBean) {
                         if (topicBean.data != null) {
-                            if (topicBean.data.size() == 0)needLoadMoreTopic = false;
+                            if (topicBean.data.size() == 0) needLoadMoreTopic = false;
                             otherTopicList.clear();
                             //otherTopicList.addAll(topicBean.data);
                             chekTopic(topicBean.data);
@@ -334,11 +339,12 @@ public class TopicDetailActivity extends BaseActivity {
     }
 
     /**
-     *   检查话题是否重复
+     * 检查话题是否重复
+     *
      * @param data
      */
     private void chekTopic(List<TopicBean.DataBean> data) {
-        for (int i = 0; i < data.size(); i ++) {
+        for (int i = 0; i < data.size(); i++) {
             if (data.get(i).id == tid) {
                 data.remove(i);
                 return;

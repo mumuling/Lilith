@@ -60,18 +60,43 @@ public class AppSetting {
     }
 
     /**
-     * 获取登录成功后的信息
+     * 清除用户登录信息
+     */
+    public static void clearUserInfo() {
+        SettingProvider.save(sContext, "user_login_info", "");
+    }
+
+    /**
+     * 检查user登录状态
      *
-     * @return
+     * @return 返回为null是表示没有登录
      */
     public static UserBean getUserInfo() {
         String userInfo = SettingProvider.getString(sContext, "user_login_info", null);
         JSONObject parse = (JSONObject) JSON.parse(userInfo);
         UserBean userBean = JSONObject.toJavaObject(parse, UserBean.class);
-        if(userBean == null || userBean.data == null || userBean.data.userInfo == null){
+        if (userBean == null ||
+                userBean.data == null ||
+                userBean.data.userInfo == null ||
+                userBean.data.userInfo.id == 0) {
             return null;
         }
         return userBean;
+    }
+
+    /**
+     * 检查user信息是否完整，服务器就是要这样玩
+     *
+     * @return 返回为NULL时，表示用户信息不完整
+     */
+    public static UserBean userDataIsComplete() {
+        UserBean userInfo = getUserInfo();
+        if (userInfo == null ||
+                TextUtils.isEmpty(userInfo.data.userInfo.birthLongi) ||
+                TextUtils.isEmpty(userInfo.data.userInfo.birthLati)) {
+            return null;
+        }
+        return userInfo;
     }
 
 }

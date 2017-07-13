@@ -15,14 +15,13 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
-import com.youloft.lilith.common.net.AbsResponse;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.CalendarHelper;
 import com.youloft.lilith.cons.consmanager.ConsManager;
 import com.youloft.lilith.cons.view.LogInOrCompleteDialog;
+import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.topic.PointDetailActivity;
 import com.youloft.lilith.topic.TopicRepo;
@@ -84,7 +83,7 @@ public class AuthorPointHolder extends RecyclerView.ViewHolder implements View.O
 
     public AuthorPointHolder(View itemView) {
         super(itemView);
-        ButterKnife.bind(this,itemView);
+        ButterKnife.bind(this, itemView);
         mContext = itemView.getContext();
         imageZan.setOnClickListener(this);
         textZanCount.setOnClickListener(this);
@@ -92,9 +91,8 @@ public class AuthorPointHolder extends RecyclerView.ViewHolder implements View.O
     }
 
 
-
     public void bindView(PointBean.DataBean point, ArrayList<TopicDetailBean.DataBean.OptionBean> topic) {
-        if (point == null || topic == null )return;
+        if (point == null || topic == null) return;
         this.point = point;
         anthorId = point.id;
         //头像
@@ -131,13 +129,13 @@ public class AuthorPointHolder extends RecyclerView.ViewHolder implements View.O
             imageUserSex.setImageResource(R.drawable.topic_male_icon);
         }
         //支持的观点
-        for (int i = 0; i < topic.size();i ++) {
+        for (int i = 0; i < topic.size(); i++) {
             TopicDetailBean.DataBean.OptionBean optionBean = topic.get(i);
             if (optionBean.id == point.topicOptionId) {
                 textVoteResult.setText("投票给" + optionBean.title);//投票
             }
         }
-        if (point.topicOptionId % 2 ==1) {
+        if (point.topicOptionId % 2 == 1) {
             textVoteResult.setTextColor(Color.parseColor("#ff8282"));
         } else {
             textVoteResult.setTextColor(Color.parseColor("#5696df"));
@@ -145,10 +143,9 @@ public class AuthorPointHolder extends RecyclerView.ViewHolder implements View.O
         //星座
         textUserConstellation.setText(ConsManager.CONS_NAME[point.signs]);
         //观点
-        textCommentContent.setText( point.viewpoint);
+        textCommentContent.setText(point.viewpoint);
         //时间
-        textCommentTime.setText(CalendarHelper.getInterValTime(CalendarHelper.getTimeMillisByString(point.buildDate),System.currentTimeMillis()));
-
+        textCommentTime.setText(CalendarHelper.getInterValTime(CalendarHelper.getTimeMillisByString(point.buildDate), System.currentTimeMillis()));
 
 
     }
@@ -156,15 +153,15 @@ public class AuthorPointHolder extends RecyclerView.ViewHolder implements View.O
     private void bindZan(PointBean.DataBean dataBean) {
         int id = dataBean.id;
         zanCount = dataBean.zan;
-        TopicLikingTable table = TopicLikeCache.getIns(mContext).getInforByCode(id,PointDetailActivity.TYPE_POINT);
+        TopicLikingTable table = TopicLikeCache.getIns(mContext).getInforByCode(id, PointDetailActivity.TYPE_POINT);
         if (table == null) {
             isZan = dataBean.isclick;
         } else {
             isZan = table.mIsLike;
             if (table.mIsLike == dataBean.isclick) {
-                TopicLikeCache.getIns(mContext).deleteData(id,PointDetailActivity.TYPE_POINT);
+                TopicLikeCache.getIns(mContext).deleteData(id, PointDetailActivity.TYPE_POINT);
             } else {
-                if (table.mIsPost != 1)clickLike();
+                if (table.mIsPost != 1) clickLike();
                 if (table.mIsLike == 1) {
                     zanCount++;
                 }
@@ -183,7 +180,7 @@ public class AuthorPointHolder extends RecyclerView.ViewHolder implements View.O
         switch (v.getId()) {
             case R.id.image_zan:
             case R.id.text_zan_count:
-                if (!AppConfig.LOGIN_STATUS) {
+                if (AppSetting.getUserInfo() == null) {
                     new LogInOrCompleteDialog(mContext).setStatus(LogInOrCompleteDialog.TOPIC_IN).show();
                     return;
                 }
@@ -205,6 +202,7 @@ public class AuthorPointHolder extends RecyclerView.ViewHolder implements View.O
                     public void onAnimationStart(Animation animation) {
 
                     }
+
                     @Override
                     public void onAnimationEnd(Animation animation) {
                         if (isZan == 0) {
@@ -230,8 +228,9 @@ public class AuthorPointHolder extends RecyclerView.ViewHolder implements View.O
     }
 
     public void clickLike() {
-        if (AppConfig.LOGIN_STATUS && AppSetting.getUserInfo() != null) {
-            int userId = AppSetting.getUserInfo().data.userInfo.id;
+        UserBean userInfo = AppSetting.getUserInfo();
+        if (userInfo != null) {
+            int userId = userInfo.data.userInfo.id;
             TopicRepo.likePoint(String.valueOf(point.id), String.valueOf(userId))
                     .subscribeOn(Schedulers.newThread())
                     .toObservable()
@@ -239,7 +238,7 @@ public class AuthorPointHolder extends RecyclerView.ViewHolder implements View.O
                     .subscribe(new RxObserver<ClickLikeBean>() {
                         @Override
                         public void onDataSuccess(ClickLikeBean s) {
-                            if ( s.data) {
+                            if (s.data) {
                                 updateClickTable(1);
                             } else {
                                 updateClickTable(0);
@@ -259,11 +258,11 @@ public class AuthorPointHolder extends RecyclerView.ViewHolder implements View.O
         TopicLikingTable topicLikingTable;
         if (isZan == 1) {
 
-            topicLikingTable = new TopicLikingTable(anthorId,1, PointDetailActivity.TYPE_POINT,ispost);
+            topicLikingTable = new TopicLikingTable(anthorId, 1, PointDetailActivity.TYPE_POINT, ispost);
 
         } else {
 
-            topicLikingTable = new TopicLikingTable(anthorId,0,PointDetailActivity.TYPE_POINT,ispost);
+            topicLikingTable = new TopicLikingTable(anthorId, 0, PointDetailActivity.TYPE_POINT, ispost);
 
         }
         TopicLikeCache.getIns(itemView.getContext()).insertData(topicLikingTable);

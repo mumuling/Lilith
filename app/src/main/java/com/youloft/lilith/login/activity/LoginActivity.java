@@ -270,9 +270,10 @@ public class LoginActivity extends BaseActivity {
                 .subscribe(new RxObserver<UserBean>() {
                     @Override
                     public void onDataSuccess(UserBean userBean) {
-                        if (userBean.data.result == 0) {
+                        if (userBean != null &&
+                                userBean.data != null&&
+                                userBean.data.result == 0) {
                             AppSetting.saveUserInfo(userBean); //保存用户信息
-                            AppConfig.LOGIN_STATUS = true; //设置登录标识
                             EventBus.getDefault().post(new LoginEvent(true));//发送登录事件
                             finish();
 
@@ -375,7 +376,6 @@ public class LoginActivity extends BaseActivity {
                     public void onDataSuccess(UserBean userBean) {
                         if (userBean.data.result == 0) {
                             AppSetting.saveUserInfo(userBean); //保存用户信息
-                            AppConfig.LOGIN_STATUS = true; //设置登录标识
                             EventBus.getDefault().post(new LoginEvent(true));//发送登录事件
                             if (android.text.TextUtils.isEmpty(userBean.data.userInfo.birthLongi)){ //新用户
                                 ARouter.getInstance().build("/test/EditInformationActivity").navigation();

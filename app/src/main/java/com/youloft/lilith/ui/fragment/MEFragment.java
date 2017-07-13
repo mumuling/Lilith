@@ -10,16 +10,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.target.ViewTarget;
-import com.bumptech.glide.request.transition.Transition;
-import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.base.BaseFragment;
 import com.youloft.lilith.cons.consmanager.ConsManager;
-import com.youloft.lilith.common.utils.ViewUtil;
 import com.youloft.lilith.glide.GlideBlurTwoViewTarget;
 import com.youloft.lilith.info.event.UserInfoUpDateEvent;
 import com.youloft.lilith.login.bean.UserBean;
@@ -35,7 +29,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import de.hdodenhof.circleimageview.CircleImageView;
-import jp.wasabeef.blurry.Blurry;
 
 /**
  * Created by zchao on 2017/6/27.
@@ -129,8 +122,11 @@ public class MEFragment extends BaseFragment {
      * 填充用户数据
      */
     private void setUserInfo() {
-
+        //TODO 做空判断，不然又可能GG
         UserBean userInfo = AppSetting.getUserInfo();
+        if (userInfo == null) {
+            return;
+        }
         String headImgUrl = userInfo.data.userInfo.headImg;
         String nickName = userInfo.data.userInfo.nickName;
         tvNickName.setText(nickName);
@@ -167,7 +163,7 @@ public class MEFragment extends BaseFragment {
         unbinder = ButterKnife.bind(this, rootView);
 
         //view创建完成之后,检查登录状态,如果是登录的状态,那么把用户数据填上去
-        if (AppConfig.LOGIN_STATUS) {
+        if (AppSetting.getUserInfo() != null) {
             setUserInfo();
         }
         return rootView;

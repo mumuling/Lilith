@@ -74,16 +74,16 @@ public class ConsYSHolder extends ConsBaseHolder {
         String msg = "";
         switch (type) {
             case CONS_YS:
-                msg = String.valueOf(detailData.msgAvg);
+                msg = detailData.msgAvg;
                 break;
             case CONS_LOVE:
-                msg = String.valueOf(detailData.msglove);
+                msg = detailData.msglove;
                 break;
             case CONS_WORK:
-                msg = String.valueOf(detailData.msgcareer);
+                msg = detailData.msgcareer;
                 break;
             case CONS_MONEY:
-                msg = String.valueOf(detailData.msgwealth);
+                msg = detailData.msgwealth;
                 break;
         }
         mConsLuckMsg.setText(msg);

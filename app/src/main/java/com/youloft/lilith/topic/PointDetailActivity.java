@@ -1,5 +1,6 @@
 package com.youloft.lilith.topic;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -21,10 +22,8 @@ import android.widget.Toast;
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
-import com.youloft.lilith.common.net.AbsResponse;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.CalendarHelper;
 import com.youloft.lilith.common.utils.Toaster;
@@ -95,9 +94,10 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
     public int replyId = 0;
     public String replyName;
     private PointAnswerCache pointAnswerCache;
-    private InputMethodManager imm ;
+    private InputMethodManager imm;
     private UserBean.DataBean.UserInfoBean userInfo = null;
     private boolean isReplyAuthor = true;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,15 +107,18 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
         ARouter.getInstance().inject(this);
         EventBus.getDefault().register(this);
         pointAnswerCache = PointAnswerCache.getIns(this);
-        imm = (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);
-        if (AppConfig.LOGIN_STATUS && AppSetting.getUserInfo() != null) {
-            userInfo = AppSetting.getUserInfo().data.userInfo;
+        imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+
+        UserBean userBean = AppSetting.getUserInfo();
+        if (userBean != null) {
+            userInfo = userBean.data.userInfo;
         }
 
         initView();
         initReplyData();
 
     }
+
     /**
      * 登录状态改变
      *
@@ -123,17 +126,19 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
      */
     @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
     public void onLoddingChagne(LoginEvent event) {
-        if (AppConfig.LOGIN_STATUS && AppSetting.getUserInfo()!=null) {
-            userInfo = AppSetting.getUserInfo().data.userInfo;
+        UserBean userBean = AppSetting.getUserInfo();
+        if (userBean != null) {
+            userInfo = userBean.data.userInfo;
         }
 
     }
+
     /**
      * 请求此观点的回复列表
      */
     public void initReplyData() {
         int userId;
-        if (userInfo == null){
+        if (userInfo == null) {
             userId = 0;
         } else {
             userId = userInfo.id;
@@ -160,23 +165,24 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
     }
 
     /**
-     *   处理回复列表的数据库
+     * 处理回复列表的数据库
+     *
      * @param replyList
      */
     private void handleAnswerDb(List<ReplyBean.DataBean> replyList) {
         ArrayList<PointAnswerTable> tableArrayList = pointAnswerCache.getAnswerListByCode(point.id);
-        if (userInfo == null)return;
+        if (userInfo == null) return;
         if (tableArrayList == null || tableArrayList.size() == 0) return;
         PointAnswerTable table = null;
-            for (int i = 0 ;i < replyList.size(); i ++) {
-                 table = pointAnswerCache.getInforByCode(replyList.get(i).id);
-                if (table != null) {
-                    pointAnswerCache.deletePointData(point.id);
-                    replyList.remove(i);
-                    return;
-                }
+        for (int i = 0; i < replyList.size(); i++) {
+            table = pointAnswerCache.getInforByCode(replyList.get(i).id);
+            if (table != null) {
+                pointAnswerCache.deletePointData(point.id);
+                replyList.remove(i);
+                return;
             }
-        for (int j = 0; j < tableArrayList.size();j++) {
+        }
+        for (int j = 0; j < tableArrayList.size(); j++) {
             PointAnswerTable pointAnswerTable = tableArrayList.get(j);
             ReplyBean.DataBean dataBean = new ReplyBean.DataBean();
             dataBean.headImg = userInfo.headImg;
@@ -190,12 +196,12 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
             dataBean.pid = pointAnswerTable.tid;
             dataBean.uid = userInfo.id;
             dataBean.nickName = userInfo.nickName;
-            replyList.add(0,dataBean);
+            replyList.add(0, dataBean);
         }
     }
 
     private void initView() {
-        replyName ="";
+        replyName = "";
         int statusHeight = ViewUtil.getStatusHeight();
         FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) llTopRoot.getLayoutParams();
         params.topMargin = statusHeight;
@@ -228,7 +234,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
 
                 } else {
                     ////软键盘弹出啦
-                    if (isReplyAuthor){
+                    if (isReplyAuthor) {
                         replyId = 0;
                         replyName = "";
                     }
@@ -242,7 +248,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
         if (point != null) {
             if (point.reply == 0) {
                 commandNum.setText("暂无评论");
-            }else {
+            } else {
                 commandNum.setText(point.reply + "条回复");
             }
         }
@@ -260,7 +266,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
                 if (newState == RecyclerView.SCROLL_STATE_IDLE
                         && lastVisibleItemPosition == totalItemCount - 1
                         && visibleItemCount > 0) {
-                    if (replyBeanList!= null && replyBeanList.size() >= 10) {
+                    if (replyBeanList != null && replyBeanList.size() >= 10) {
                         loadMoreReply();
                     }
                 }
@@ -272,7 +278,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_UP:
                     case MotionEvent.ACTION_CANCEL:
-                        if (!AppConfig.LOGIN_STATUS) {
+                        if (AppSetting.getUserInfo() == null) {
                             new LogInOrCompleteDialog(PointDetailActivity.this).setStatus(LogInOrCompleteDialog.TOPIC_IN).show();
                             return true;
                         }
@@ -284,22 +290,21 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
         });
 
 
-
     }
 
     /**
-     *   滑动到底部加载更多
+     * 滑动到底部加载更多
      */
     private void loadMoreReply() {
-        if (point == null)return;
+        if (point == null) return;
         int userId;
-        if (userInfo == null){
-             userId = 0;
+        if (userInfo == null) {
+            userId = 0;
         } else {
             userId = userInfo.id;
         }
 
-        TopicRepo.getPointReply(String.valueOf(point.id),String.valueOf(userId),"10",replyBeanList.size() + "",false)
+        TopicRepo.getPointReply(String.valueOf(point.id), String.valueOf(userId), "10", replyBeanList.size() + "", false)
                 .compose(this.<ReplyBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
@@ -325,17 +330,17 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
 
     }
 
-    public void clickReply(int replyId,String replyName) {
-        if (!AppConfig.LOGIN_STATUS) {
+    public void clickReply(int replyId, String replyName) {
+        if (AppSetting.getUserInfo() == null) {
             new LogInOrCompleteDialog(PointDetailActivity.this).setStatus(LogInOrCompleteDialog.TOPIC_IN).show();
-            return ;
+            return;
         }
         this.replyId = replyId;
         this.replyName = replyName;
         isReplyAuthor = false;
         if (imm != null) {
             commentEdit.requestFocus();
-            imm.showSoftInput(commentEdit,0);
+            imm.showSoftInput(commentEdit, 0);
         }
 
         commentEdit.setHint("回复 " + replyName + ":");
@@ -375,15 +380,15 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.text_confirm:
-                if (!AppConfig.LOGIN_STATUS) {
+                if (AppSetting.getUserInfo() == null) {
                     new LogInOrCompleteDialog(this).setStatus(LogInOrCompleteDialog.TOPIC_IN).show();
                     return;
                 }
                 if (TextUtils.isEmpty(commentEdit.getText().toString())) {
-                    Toast.makeText(this,"请输入内容！",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "请输入内容！", Toast.LENGTH_SHORT).show();
                 } else {
                     replyConfirm();
-                    InputMethodManager imm = (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);
+                    InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                     imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                 }
                 break;
@@ -395,13 +400,13 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
     }
 
     /**
-     *   回复
+     * 回复
      */
     private void replyConfirm() {
-        if (userInfo == null)return;
+        if (userInfo == null) return;
         final String reply_content = commentEdit.getText().toString();
 
-        TopicRepo.reply(String.valueOf(point.id),String.valueOf(userInfo.id),userInfo.nickName,reply_content,String.valueOf(replyId))
+        TopicRepo.reply(String.valueOf(point.id), String.valueOf(userInfo.id), userInfo.nickName, reply_content, String.valueOf(replyId))
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -409,7 +414,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
                     @Override
                     public void onDataSuccess(PointAnswerBean result) {
                         int answerId = result.data;
-                        if (answerId!=0){
+                        if (answerId != 0) {
                             ReplyBean.DataBean dataBean = new ReplyBean.DataBean();
                             dataBean.date = CalendarHelper.getNowTimeString();
                             dataBean.zan = 0;
@@ -422,7 +427,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
                             dataBean.headImg = userInfo.headImg;
                             dataBean.id = answerId;
                             adapter.setAnswerTop(dataBean);
-                            updatePointAnswerDb(dataBean,answerId);
+                            updatePointAnswerDb(dataBean, answerId);
                             Toaster.showShort("评论成功！");
                         } else {
                             Toaster.showShort("评论失败!");
@@ -439,16 +444,17 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
     }
 
     /**
-     *   更新数据库
+     * 更新数据库
+     *
      * @param dataBean 回复的数据
-     * @param answerId   回复的ID
+     * @param answerId 回复的ID
      */
-    private void updatePointAnswerDb(ReplyBean.DataBean dataBean,int answerId) {
+    private void updatePointAnswerDb(ReplyBean.DataBean dataBean, int answerId) {
         PointAnswerTable pointAnswerTable = new PointAnswerTable();
         pointAnswerTable.tid = replyId;
         pointAnswerTable.replyName = replyName;
         pointAnswerTable.buildDate = dataBean.date;
-        pointAnswerTable.pid  = point.id;
+        pointAnswerTable.pid = point.id;
         pointAnswerTable.viewPoint = dataBean.contents;
         pointAnswerTable.rid = answerId;
         PointAnswerCache.getIns(this).insertData(pointAnswerTable);

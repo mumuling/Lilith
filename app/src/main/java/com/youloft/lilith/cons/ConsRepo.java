@@ -46,7 +46,7 @@ public class ConsRepo extends AbstractDataRepo {
             mParam.put("curlati", location[1]);
         }
         String cacheKey = "cons_predicts" + birdt + birtm + birlongi + birlati;
-        return unionFlow(Urls.CONS_PREDICTS, null, mParam, true, ConsPredictsBean.class, cacheKey , 8 * 60 * 60 * 1000);
+        return unionFlow(Urls.CONS_PREDICTS, null, mParam, true, ConsPredictsBean.class, cacheKey , 1);
     }
 
 

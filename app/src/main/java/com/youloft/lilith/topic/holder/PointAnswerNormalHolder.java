@@ -16,13 +16,12 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.CalendarHelper;
 import com.youloft.lilith.cons.view.LogInOrCompleteDialog;
-import com.youloft.lilith.glide.GlideBlurTransform;
+import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.topic.PointDetailActivity;
 import com.youloft.lilith.topic.TopicRepo;
@@ -30,7 +29,6 @@ import com.youloft.lilith.topic.adapter.PointAnswerAdapter;
 import com.youloft.lilith.topic.bean.ClickLikeBean;
 import com.youloft.lilith.topic.bean.ClickLikeEvent;
 import com.youloft.lilith.topic.bean.ReplyBean;
-import com.youloft.lilith.topic.bean.VoteBean;
 import com.youloft.lilith.topic.db.TopicLikeCache;
 import com.youloft.lilith.topic.db.TopicLikingTable;
 import com.youloft.lilith.topic.widget.Rotate3dAnimation;
@@ -174,7 +172,7 @@ public class PointAnswerNormalHolder extends RecyclerView.ViewHolder implements 
         switch (v.getId()) {
             case R.id.image_zan:
             case R.id.text_zan_count:
-                if (!AppConfig.LOGIN_STATUS) {
+                if (AppSetting.getUserInfo() == null) {
                     new LogInOrCompleteDialog(mContext).setStatus(LogInOrCompleteDialog.TOPIC_IN).show();
                     return;
                 }
@@ -227,8 +225,9 @@ public class PointAnswerNormalHolder extends RecyclerView.ViewHolder implements 
     }
 
     private void clickLike() {
-        if (AppConfig.LOGIN_STATUS && AppSetting.getUserInfo() != null) {
-            int userId = AppSetting.getUserInfo().data.userInfo.id;
+        UserBean userInfo = AppSetting.getUserInfo();
+        if (userInfo != null) {
+            int userId = userInfo.data.userInfo.id;
             TopicRepo.likeReply(String.valueOf(mData.id), String.valueOf(userId))
                     .subscribeOn(Schedulers.newThread())
                     .toObservable()
