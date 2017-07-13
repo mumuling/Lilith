@@ -12,6 +12,7 @@ import android.graphics.Canvas;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.jakewharton.rxbinding2.view.RxView;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.base.BaseActivity;
@@ -29,6 +31,10 @@ import com.youloft.lilith.common.utils.SafeUtil;
 import com.youloft.lilith.cons.bean.ConsPredictsBean;
 import com.youloft.lilith.cons.view.ConsCalendar;
 import com.youloft.lilith.share.ShareBuilder;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -40,8 +46,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Flowable;
+import io.reactivex.FlowableOnSubscribe;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 
 /**
@@ -104,33 +115,7 @@ public class ConsCalDetailActivity extends BaseActivity {
         bindClick();
     }
 
-    @OnClick(R.id.cons_detail_share_root)
-    public void shareClick(){
-        Flowable.just("share")
-                .throttleFirst(2000, TimeUnit.MILLISECONDS)
-                .toObservable()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<String>() {
-                    @Override
-                    public void accept(@NonNull String linearLayout) throws Exception {
-                        share();
-                    }
-                });
-    }
 
-    @OnClick(R.id.cons_detail_close)
-    public void closeClick(){
-        Flowable.just(mConsDetailClose)
-                .throttleFirst(800, TimeUnit.MILLISECONDS)
-                .toObservable()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<ImageView>() {
-                    @Override
-                    public void accept(@NonNull ImageView view) throws Exception {
-                        openAnim(false, distance);
-                    }
-                });
-    }
 
     /**
      * 点击事件，使用RxBinding来做连点过滤
@@ -138,21 +123,22 @@ public class ConsCalDetailActivity extends BaseActivity {
     private void bindClick() {
 
 
-//        RxView.clicks(mConsShare)
-//                .throttleFirst(800, TimeUnit.MILLISECONDS)
-//                .subscribe(new Consumer<Object>() {
-//                    @Override
-//                    public void accept(@NonNull Object o) throws Exception {
-//                    }
-//                });
-//        RxView.clicks(mConsDetailClose)
-//                .throttleFirst(800, TimeUnit.MILLISECONDS)
-//                .subscribe(new Consumer<Object>() {
-//                    @Override
-//                    public void accept(@NonNull Object o) throws Exception {
-//
-//                    }
-//                });
+        RxView.clicks(mConsShare)
+                .throttleFirst(800, TimeUnit.MILLISECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(@NonNull Object o) throws Exception {
+                        share();
+                    }
+                });
+        RxView.clicks(mConsDetailClose)
+                .throttleFirst(800, TimeUnit.MILLISECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(@NonNull Object o) throws Exception {
+                        openAnim(false, distance);
+                    }
+                });
     }
 
     /**

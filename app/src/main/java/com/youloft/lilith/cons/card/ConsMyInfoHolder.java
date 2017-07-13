@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.jakewharton.rxbinding2.view.RxView;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.utils.CalendarHelper;
@@ -22,10 +23,13 @@ import com.youloft.lilith.cons.view.ConstellationViewFactory;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.GregorianCalendar;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
 
 /**
  * Created by zchao on 2017/7/4.
@@ -59,13 +63,6 @@ public class ConsMyInfoHolder extends ConsBaseHolder {
     private final GregorianCalendar pCalendar;
 
 
-    /**
-     * 分享运势，订阅在XZFragment中
-     */
-    @OnClick(R.id.cons_my_info_share_icon)
-    public void shareCons() {
-        EventBus.getDefault().post(new ShareConsEvent("1"));
-    }
     /**
      * 检查登录状态
      */
@@ -130,6 +127,15 @@ public class ConsMyInfoHolder extends ConsBaseHolder {
         GregorianCalendar date = new GregorianCalendar();
         mConsMyInfoDate.setText(CalendarHelper.format(date.getTime(), formatDate));
         mConsMyInfoWeek.setText(CalendarHelper.getWeekInEN(date));
+
+        RxView.clicks(mConsMyInfoShareIcon)
+                .throttleFirst(800, TimeUnit.MILLISECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(@NonNull Object o) throws Exception {
+                        EventBus.getDefault().post(new ShareConsEvent("1"));
+                    }
+                });
     }
 
 }
