@@ -1,6 +1,8 @@
 package com.youloft.lilith.cons.consmanager;
 
+import com.bumptech.glide.util.Util;
 import com.youloft.lilith.R;
+import com.youloft.lilith.common.utils.Utils;
 
 import java.util.HashMap;
 
@@ -227,6 +229,43 @@ public class ConsManager {
         }
 
     }
+
+    /**
+     * 获取首页星座信息，英文模糊字
+     * @param index
+     * @return
+     */
+    public static int getConsBlurWord(int index){
+        switch (index) {
+            case 1: //水瓶座
+                return R.drawable.aquarius;
+            case 2: //双鱼座
+                return R.drawable.pisces;
+            case 3:  //白羊座
+                return R.drawable.aries;
+            case 4:  //金牛座
+                return R.drawable.taurus;
+            case 5:  //双子座
+                return R.drawable.gemini;
+            case 6: //巨蟹座
+                return R.drawable.cancer;
+            case 7:  //狮子座
+                return R.drawable.leo;
+            case 8:  //处女座
+                return R.drawable.virgo;
+            case 9:  //天秤座
+                return R.drawable.libra;
+            case 10:  //天蝎座
+                return R.drawable.scorpio;
+            case 11:  //射手座
+                return R.drawable.sagittarius;
+            case 12:  //摩羯座
+                return R.drawable.capricorn;
+            default:  //默认返回白羊座
+                return R.drawable.aries;
+        }
+
+    }
     /**
      * 初始化tab数据
      */
@@ -254,21 +293,59 @@ public class ConsManager {
      */
     private static synchronized void initConsMap() {
         if (mConsImg.isEmpty()) {
-            mConsImg.put("0", new ConsInfo("双鱼座", "2.19-3.20", R.drawable.constellation_pisces_pic, new float[]{344 / 386f, 190.5f / 232f, 111 / 386f, 189.5f / 232f, 85 / 386f, 40.5f / 232f}));
-            mConsImg.put("1", new ConsInfo("水瓶座", "1.20-2.18", R.drawable.constellation_aquarius_pic, new float[]{224 / 386f, 131.5f / 232f, 312 / 386f, 128.5f / 232f, 45.5f / 386f, 87.5f / 232f}));
-            mConsImg.put("2", new ConsInfo("双鱼座", "2.19-3.20", R.drawable.constellation_pisces_pic, new float[]{344 / 386f, 190.5f / 232f, 111 / 386f, 189.5f / 232f, 85 / 386f, 40.5f / 232f}));
-            mConsImg.put("3", new ConsInfo("白羊座", "3.21-4.20", R.drawable.constellation_aries_pic, new float[]{211 / 386f, 92.5f / 232f, 314 / 386f, 189.5f / 232f, 71 / 386f, 42.5f / 232f}));
-            mConsImg.put("4", new ConsInfo("金牛座", "4.21-5.21", R.drawable.constellation_taurus_pic, new float[]{162 / 386f, 138.5f / 232f, 347 / 386f, 192.5f / 232f, 95 / 386f, 40.5f / 232f}));
-            mConsImg.put("5", new ConsInfo("双子座", "5.22-6.21", R.drawable.constellation_gemini_pic, new float[]{297 / 386f, 173.5f / 232f, 319 / 386f, 48.5f / 232f, 46 / 386f, 160.5f / 232f}));
-            mConsImg.put("6", new ConsInfo("巨蟹座", "6.22-7.22", R.drawable.constellation_cancer_pic, new float[]{184 / 386f, 97.5f / 232f, 325 / 386f, 183.5f / 232f, 61 / 386f, 37.5f / 232f}));
-            mConsImg.put("7", new ConsInfo("狮子座", "7.23-8.22", R.drawable.constellation_leo_pic, new float[]{93 / 386f, 194.5f / 232f, 320 / 386f, 122.5f / 232f, 207 / 386f, 83.5f / 232f}));
-            mConsImg.put("8", new ConsInfo("处女座", "8.23-9.22", R.drawable.constellation_virgo_pic, new float[]{350 / 386f, 161.5f / 232f, 248 / 386f, 67.5f / 232f, 89 / 386f, 108.5f / 232f}));
-            mConsImg.put("9", new ConsInfo("天秤座", "9.23-10.23", R.drawable.constellation_libra_pic, new float[]{192 / 386f, 34.5f / 232f, 294 / 386f, 161.5f / 232f, 119 / 386f, 109.5f / 232f}));
-            mConsImg.put("10", new ConsInfo("天蝎座", "10.24-11.22", R.drawable.constellation_scorpio_pic, new float[]{236 / 386f, 143.5f / 232f, 352 / 386f, 57.5f / 232f, 108 / 386f, 109.5f / 232f}));
-            mConsImg.put("11", new ConsInfo("射手座", "11.23-12.21", R.drawable.constellation_sagittarius_pic, new float[]{227 / 386f, 75.5f / 232f, 175 / 386f, 196.5f / 232f, 42 / 386f, 112.5f / 232f}));
-            mConsImg.put("12", new ConsInfo("摩羯座", "12.22-1.19", R.drawable.constellation_capricorn_pic, new float[]{333 / 386f, 116.5f / 232f, 248 / 386f, 37.5f / 232f, 53 / 386f, 193.5f / 232f}));
+            mConsImg.put("0", new ConsInfo(getConsName(0), "2.19-3.20", R.drawable.constellation_pisces_pic, new float[]{344 / 386f, 190.5f / 232f, 111 / 386f, 189.5f / 232f, 85 / 386f, 40.5f / 232f}));
+            mConsImg.put("1", new ConsInfo(getConsName(1), "1.20-2.18", R.drawable.constellation_aquarius_pic, new float[]{224 / 386f, 131.5f / 232f, 312 / 386f, 128.5f / 232f, 45.5f / 386f, 87.5f / 232f}));
+            mConsImg.put("2", new ConsInfo(getConsName(2), "2.19-3.20", R.drawable.constellation_pisces_pic, new float[]{344 / 386f, 190.5f / 232f, 111 / 386f, 189.5f / 232f, 85 / 386f, 40.5f / 232f}));
+            mConsImg.put("3", new ConsInfo(getConsName(3), "3.21-4.20", R.drawable.constellation_aries_pic, new float[]{211 / 386f, 92.5f / 232f, 314 / 386f, 189.5f / 232f, 71 / 386f, 42.5f / 232f}));
+            mConsImg.put("4", new ConsInfo(getConsName(4), "4.21-5.21", R.drawable.constellation_taurus_pic, new float[]{162 / 386f, 138.5f / 232f, 347 / 386f, 192.5f / 232f, 95 / 386f, 40.5f / 232f}));
+            mConsImg.put("5", new ConsInfo(getConsName(5), "5.22-6.21", R.drawable.constellation_gemini_pic, new float[]{297 / 386f, 173.5f / 232f, 319 / 386f, 48.5f / 232f, 46 / 386f, 160.5f / 232f}));
+            mConsImg.put("6", new ConsInfo(getConsName(6), "6.22-7.22", R.drawable.constellation_cancer_pic, new float[]{184 / 386f, 97.5f / 232f, 325 / 386f, 183.5f / 232f, 61 / 386f, 37.5f / 232f}));
+            mConsImg.put("7", new ConsInfo(getConsName(7), "7.23-8.22", R.drawable.constellation_leo_pic, new float[]{93 / 386f, 194.5f / 232f, 320 / 386f, 122.5f / 232f, 207 / 386f, 83.5f / 232f}));
+            mConsImg.put("8", new ConsInfo(getConsName(8), "8.23-9.22", R.drawable.constellation_virgo_pic, new float[]{350 / 386f, 161.5f / 232f, 248 / 386f, 67.5f / 232f, 89 / 386f, 108.5f / 232f}));
+            mConsImg.put("9", new ConsInfo(getConsName(9), "9.23-10.23", R.drawable.constellation_libra_pic, new float[]{192 / 386f, 34.5f / 232f, 294 / 386f, 161.5f / 232f, 119 / 386f, 109.5f / 232f}));
+            mConsImg.put("10", new ConsInfo(getConsName(10), "10.24-11.22", R.drawable.constellation_scorpio_pic, new float[]{236 / 386f, 143.5f / 232f, 352 / 386f, 57.5f / 232f, 108 / 386f, 109.5f / 232f}));
+            mConsImg.put("11", new ConsInfo(getConsName(11), "11.23-12.21", R.drawable.constellation_sagittarius_pic, new float[]{227 / 386f, 75.5f / 232f, 175 / 386f, 196.5f / 232f, 42 / 386f, 112.5f / 232f}));
+            mConsImg.put("12", new ConsInfo(getConsName(12), "12.22-1.19", R.drawable.constellation_capricorn_pic, new float[]{333 / 386f, 116.5f / 232f, 248 / 386f, 37.5f / 232f, 53 / 386f, 193.5f / 232f}));
 
         }
+    }
+
+    /**
+     * 获取星座国际化的名字
+     * @param consKey
+     * @return
+     */
+    public static String getConsName(int consKey){
+        int consStringSrc = 0;
+        switch (consKey) {
+            case 1: //水瓶座
+                consStringSrc= R.string.aquarius;
+            case 2: //双鱼座
+                consStringSrc= R.string.pisces;
+            case 3:  //白羊座
+                consStringSrc= R.string.aries;
+            case 4:  //金牛座
+                consStringSrc= R.string.taurus;
+            case 5:  //双子座
+                consStringSrc= R.string.gemini;
+            case 6: //巨蟹座
+                consStringSrc= R.string.cancer;
+            case 7:  //狮子座
+                consStringSrc= R.string.leo;
+            case 8:  //处女座
+                consStringSrc= R.string.virgo;
+            case 9:  //天秤座
+                consStringSrc= R.string.libra;
+            case 10:  //天蝎座
+                consStringSrc= R.string.scorpio;
+            case 11:  //射手座
+                consStringSrc= R.string.sagittarius;
+            case 12:  //摩羯座
+                consStringSrc= R.string.capricorn;
+            default:  //默认返回白羊座
+                consStringSrc= R.string.aries;
+        }
+        return Utils.getContext().getResources().getString(consStringSrc);
     }
 
     /**

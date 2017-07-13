@@ -44,6 +44,6 @@ public class LoginUserRepo extends AbstractDataRepo{
         paramsWeChatLogin.put("headimgurl",headimgurl);
         paramsWeChatLogin.put("openId",openId);
         paramsWeChatLogin.put("gender",gender);
-        return post(Urls.WE_CHAT_LOGIN, null, paramsWeChatLogin, true, UserBean.class, "login_user_info_wechat", 0);
+        return post(Urls.WE_CHAT_LOGIN, null, paramsWeChatLogin, true, true, UserBean.class, "login_user_info_wechat", 0);
     }
 }

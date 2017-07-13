@@ -133,7 +133,7 @@ public class TopicDetailActivity extends BaseActivity {
                     @Override
                     public void onDataSuccess(PointBean pointBean) {
                         if (pointBean.data == null || pointBean.data.size() == 0) return;
-                        handlePointTableInfo(pointBean.data);
+                        handlePointTableInfo(pointBean);
                         pointList.addAll(pointBean.data);
                         adapter.setPointBeanList(pointList);
                         totalPoint = pointBean.data.size();
@@ -149,15 +149,15 @@ public class TopicDetailActivity extends BaseActivity {
     /**
      * 处理观点信息的数据库。
      *
-     * @param data
+     * @param pointBeen
      */
-    private void handlePointTableInfo(List<PointBean.DataBean> data) {
+    private void handlePointTableInfo(PointBean pointBeen) {
         UserBean userBean = AppSetting.getUserInfo();
         if (userBean == null) return;
         UserBean.DataBean.UserInfoBean userInfo = userBean.data.userInfo;
         int userID = userInfo.id;
         PointTable pointTable = pointCache.getInforByCode(tid);
-        if (pointTable != null) {
+        if (pointTable != null && pointTable.time < pointBeen.t) {
             PointBean.DataBean dataBean = new PointBean.DataBean();
             dataBean.userId = userInfo.id;
             dataBean.isclick = 0;
@@ -174,13 +174,10 @@ public class TopicDetailActivity extends BaseActivity {
             dataBean.viewpoint = pointTable.viewPoint;
             dataBean.id = pointTable.pid;
             pointList.add(dataBean);
+        } else {
+            pointCache.deleteData(tid);
         }
-        for (int i = 0; i < data.size(); i++) {
-            if (data.get(i).userId == userID) {
-                pointCache.deleteData(data.get(i).id);
-                data.remove(i);
-            }
-        }
+
     }
 
     /**

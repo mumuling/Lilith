@@ -1,12 +1,12 @@
 package com.youloft.lilith.common.net;
 
 
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.common.utils.DeviceUtil;
 
@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -327,7 +326,7 @@ public class OkHttpUtils {
      * @return
      * @throws IOException
      */
-    public Response post(String baseUrl, Map<String, String> headers, Map<String, String> params, boolean usePublicParam, File... files) throws IOException {
+    public Response post(String baseUrl, Map<String, String> headers, Map<String, String> params ,boolean usePublicParam, File... files) throws IOException {
 
         RequestBody mBody = null;
         if (files.length > 0) {
@@ -348,6 +347,37 @@ public class OkHttpUtils {
             }
             mBody = builder.build();
         }
+
+        Request.Builder builder = new Request.Builder().url(baseUrl).post(mBody);
+
+        if (headers != null) {
+            for (Map.Entry<String, String> header : headers.entrySet()) {
+                builder.addHeader(header.getKey(), header.getValue());
+            }
+        }
+        builder.tag(usePublicParam);
+        Request request = builder.build();
+        return client.newCall(request).execute();
+    }
+
+    /**
+     * post方法请求
+     *
+     * @param baseUrl
+     * @param params         表单参数
+     * @param usePublicParam 是否需要添加公共参数
+     * @param files          需要上传的文件
+     * @return
+     * @throws IOException
+     */
+    public Response postByJsonType(String baseUrl, Map<String, String> headers, Map<String, String> params, boolean usePublicParam, File... files) throws IOException {
+
+        JSONObject json = new JSONObject();
+        for (Map.Entry<String, String> param : params.entrySet()) {
+            json.put(param.getKey(), param.getValue());
+        }
+
+        RequestBody mBody = RequestBody.create(MediaType.parse("application/json"), json.toJSONString());
 
         Request.Builder builder = new Request.Builder().url(baseUrl).post(mBody);
 

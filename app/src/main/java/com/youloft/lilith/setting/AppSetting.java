@@ -99,4 +99,19 @@ public class AppSetting {
         return userInfo;
     }
 
+    /**
+     * 城市数据库版本
+     *
+     * @param version
+     */
+    public static void saveCityDBVersion(int version) {
+        SettingProvider.save(sContext, "city_info_db_version", version);
+    }
+    /**
+     * 城市数据库版本
+     *
+     */
+    public static int getCityDBVersion() {
+        return SettingProvider.getInt(sContext, "city_info_db_version", 0);
+    }
 }

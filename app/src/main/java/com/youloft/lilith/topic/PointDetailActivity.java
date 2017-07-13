@@ -94,10 +94,11 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
     public int replyId = 0;
     public String replyName;
     private PointAnswerCache pointAnswerCache;
-    private InputMethodManager imm;
+    private InputMethodManager imm ;
     private UserBean.DataBean.UserInfoBean userInfo = null;
     private boolean isReplyAuthor = true;
 
+    private int replyCount = 0;//回复的条数
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -153,7 +154,8 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
                     public void onDataSuccess(ReplyBean list) {
                         replyBeanList.clear();
                         replyBeanList.addAll(list.data);
-                        handleAnswerDb(replyBeanList);
+                        handleAnswerDb(list);
+                        commandNum.setText(String.valueOf(replyCount) + "条回复");
                         adapter.setReplyList(replyBeanList);
                     }
 
@@ -165,43 +167,40 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
     }
 
     /**
-     * 处理回复列表的数据库
-     *
-     * @param replyList
+     *   处理回复列表的数据库
+     * @param replyBean
      */
-    private void handleAnswerDb(List<ReplyBean.DataBean> replyList) {
+    private void handleAnswerDb(ReplyBean replyBean) {
         ArrayList<PointAnswerTable> tableArrayList = pointAnswerCache.getAnswerListByCode(point.id);
-        if (userInfo == null) return;
+        if (userInfo == null)return;
         if (tableArrayList == null || tableArrayList.size() == 0) return;
-        PointAnswerTable table = null;
-        for (int i = 0; i < replyList.size(); i++) {
-            table = pointAnswerCache.getInforByCode(replyList.get(i).id);
-            if (table != null) {
-                pointAnswerCache.deletePointData(point.id);
-                replyList.remove(i);
-                return;
+        PointAnswerTable pointAnswerTable = null;
+
+        for (int j = 0; j < tableArrayList.size();j++) {
+             pointAnswerTable = tableArrayList.get(j);
+            if (pointAnswerTable.time < replyBean.t){
+                pointAnswerCache.deleteData(pointAnswerTable.rid);
+            } else {
+                ReplyBean.DataBean dataBean = new ReplyBean.DataBean();
+                dataBean.headImg = userInfo.headImg;
+                dataBean.pName = pointAnswerTable.replyName;
+                dataBean.contents = pointAnswerTable.viewPoint;
+                dataBean.isclick = 0;
+                dataBean.zan = 0;
+                dataBean.sex = userInfo.sex;
+                dataBean.date = pointAnswerTable.buildDate;
+                dataBean.id = pointAnswerTable.rid;
+                dataBean.pid = pointAnswerTable.tid;
+                dataBean.uid = userInfo.id;
+                dataBean.nickName = userInfo.nickName;
+                replyBeanList.add(0, dataBean);
+                replyCount ++;
             }
-        }
-        for (int j = 0; j < tableArrayList.size(); j++) {
-            PointAnswerTable pointAnswerTable = tableArrayList.get(j);
-            ReplyBean.DataBean dataBean = new ReplyBean.DataBean();
-            dataBean.headImg = userInfo.headImg;
-            dataBean.pName = pointAnswerTable.replyName;
-            dataBean.contents = pointAnswerTable.viewPoint;
-            dataBean.isclick = 0;
-            dataBean.zan = 0;
-            dataBean.sex = userInfo.sex;
-            dataBean.date = pointAnswerTable.buildDate;
-            dataBean.id = pointAnswerTable.rid;
-            dataBean.pid = pointAnswerTable.tid;
-            dataBean.uid = userInfo.id;
-            dataBean.nickName = userInfo.nickName;
-            replyList.add(0, dataBean);
         }
     }
 
     private void initView() {
-        replyName = "";
+        replyName ="";
         int statusHeight = ViewUtil.getStatusHeight();
         FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) llTopRoot.getLayoutParams();
         params.topMargin = statusHeight;
@@ -234,7 +233,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
 
                 } else {
                     ////软键盘弹出啦
-                    if (isReplyAuthor) {
+                    if (isReplyAuthor){
                         replyId = 0;
                         replyName = "";
                     }
@@ -248,9 +247,10 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
         if (point != null) {
             if (point.reply == 0) {
                 commandNum.setText("暂无评论");
-            } else {
+            }else {
                 commandNum.setText(point.reply + "条回复");
             }
+            replyCount = point.reply;
         }
         /** 滑动到底部的监听
          *
@@ -266,7 +266,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
                 if (newState == RecyclerView.SCROLL_STATE_IDLE
                         && lastVisibleItemPosition == totalItemCount - 1
                         && visibleItemCount > 0) {
-                    if (replyBeanList != null && replyBeanList.size() >= 10) {
+                    if (replyBeanList!= null && replyBeanList.size() >= 10) {
                         loadMoreReply();
                     }
                 }
@@ -290,21 +290,22 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
         });
 
 
+
     }
 
     /**
-     * 滑动到底部加载更多
+     *   滑动到底部加载更多
      */
     private void loadMoreReply() {
-        if (point == null) return;
+        if (point == null)return;
         int userId;
-        if (userInfo == null) {
-            userId = 0;
+        if (userInfo == null){
+             userId = 0;
         } else {
             userId = userInfo.id;
         }
 
-        TopicRepo.getPointReply(String.valueOf(point.id), String.valueOf(userId), "10", replyBeanList.size() + "", false)
+        TopicRepo.getPointReply(String.valueOf(point.id),String.valueOf(userId),"10",replyBeanList.size() + "",false)
                 .compose(this.<ReplyBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
@@ -314,7 +315,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
                     public void onDataSuccess(ReplyBean replyBean) {
                         if (replyBean.data != null && replyBean.data.size() != 0) {
                             replyBeanList.addAll(replyBean.data);
-                            adapter.setReplyList(replyBeanList);
+                            adapter.setReplyList(replyBean.data);
                         } else {
                             Toaster.showShort("暂无更多评论");
                         }
@@ -340,7 +341,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
         isReplyAuthor = false;
         if (imm != null) {
             commentEdit.requestFocus();
-            imm.showSoftInput(commentEdit, 0);
+            imm.showSoftInput(commentEdit,0);
         }
 
         commentEdit.setHint("回复 " + replyName + ":");
@@ -427,7 +428,9 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
                             dataBean.headImg = userInfo.headImg;
                             dataBean.id = answerId;
                             adapter.setAnswerTop(dataBean);
-                            updatePointAnswerDb(dataBean, answerId);
+                            updatePointAnswerDb(result.t,dataBean,answerId);
+                            replyCount++;
+                            commandNum.setText(String.valueOf(replyCount) + "条回复");
                             Toaster.showShort("评论成功！");
                         } else {
                             Toaster.showShort("评论失败!");
@@ -449,7 +452,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
      * @param dataBean 回复的数据
      * @param answerId 回复的ID
      */
-    private void updatePointAnswerDb(ReplyBean.DataBean dataBean, int answerId) {
+    private void updatePointAnswerDb(long time,ReplyBean.DataBean dataBean, int answerId) {
         PointAnswerTable pointAnswerTable = new PointAnswerTable();
         pointAnswerTable.tid = replyId;
         pointAnswerTable.replyName = replyName;
@@ -457,6 +460,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
         pointAnswerTable.pid = point.id;
         pointAnswerTable.viewPoint = dataBean.contents;
         pointAnswerTable.rid = answerId;
+        pointAnswerTable.time = time;
         PointAnswerCache.getIns(this).insertData(pointAnswerTable);
     }
 

@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cons_my_info_root"
     android:layout_width="match_parent"
-    android:background="@drawable/cons_detail_content_bg_top"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@drawable/cons_detail_content_bg_top">
 
     <com.youloft.lilith.common.widgets.view.RoundImageView
         android:id="@+id/cons_my_info_bg"
@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         app:radius_left_top="5dp"
-        app:radius_right_top="5dp"/>
+        app:radius_right_top="5dp" />
 
     <LinearLayout
         android:id="@+id/cons_my_info_content_root"
@@ -69,56 +69,84 @@
             android:layout_gravity="center_horizontal"
             android:src="@drawable/constellation_pisces_pic" />
 
-        <TextView
-            android:id="@+id/cons_my_info_xz"
+        <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="3dp"
-            android:text="白羊座"
-            android:textColor="@android:color/white"
-            android:textSize="24dp" />
+            android:layout_gravity="center_horizontal">
 
-        <TextView
-            android:id="@+id/cons_my_info_date_range"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="2dp"
-            android:text="3.21-4.19"
-            android:textColor="@android:color/white"
-            android:textSize="10dp"
-            android:textStyle="italic" />
+            <ImageView
+                android:id="@+id/cons_my_info_en_blur_word"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
 
-        <TextView
-            android:id="@+id/cons_my_info_en_word"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="11dp"
-            android:gravity="center"
-            android:lineSpacingExtra="7dp"
-            android:text="Sorrow and happiness, like the expression on the face, let people see, you know, the heart of the depression will be comfortable."
-            android:textColor="@color/cons_my_info_en_word_color"
-            android:textSize="16dp"
-            android:textStyle="italic" />
+                android:src="@drawable/aries"/>
 
-        <TextView
-            android:id="@+id/cons_my_info_cn_word"
-            android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/cons_my_info_xz"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="3dp"
+                    android:text="@string/aries"
+                    android:textColor="@android:color/white"
+                    android:textSize="24dp" />
+
+                <TextView
+                    android:id="@+id/cons_my_info_date_range"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="2dp"
+                    android:text="3.21-4.19"
+                    android:textColor="@android:color/white"
+                    android:textSize="10dp"
+                    android:textStyle="italic" />
+            </LinearLayout>
+        </FrameLayout>
+
+        <LinearLayout
+            android:background="@drawable/cons_my_info_bottom_shadow"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:lineSpacingExtra="7dp"
-            android:paddingBottom="10dp"
-            android:text="喜怒哀乐喜欢表现在脸上，让人一看便知道，把心中的苦闷说出来会舒服一些。"
-            android:textColor="@android:color/white"
-            android:textSize="16dp" />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/cons_my_info_en_word"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="11dp"
+                android:gravity="center"
+                android:lineSpacingExtra="7dp"
+                android:text="@string/cons_my_info_default_en_word"
+                android:textColor="@color/cons_my_info_en_word_color"
+                android:textSize="16dp"
+                android:textStyle="italic" />
+
+            <TextView
+                android:id="@+id/cons_my_info_cn_word"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:lineSpacingExtra="7dp"
+                android:paddingBottom="10dp"
+                android:text="@string/cons_my_info_default_cn_word"
+                android:textColor="@android:color/white"
+                android:textSize="16dp" />
+        </LinearLayout>
     </LinearLayout>
 
     <ImageView

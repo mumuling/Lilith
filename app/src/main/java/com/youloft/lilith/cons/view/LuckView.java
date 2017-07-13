@@ -251,28 +251,30 @@ public class LuckView extends View {
      */
     private void initTitle() {
         int iconRes = 0;
+        int titleRes = 0;
         switch (mType) {
             case 1:
-                mTitle = "运势概括";
+                titleRes = R.string.cons_ys_title_total;
                 iconRes = R.drawable.constellation_luck_icon;
                 break;
             case 2:
-                mTitle = "感情运";
+                titleRes = R.string.cons_ys_title_love;
                 iconRes = R.drawable.constellation_love_icon;
                 break;
             case 3:
-                mTitle = "工作运";
+                titleRes = R.string.cons_ys_title_work;
                 iconRes = R.drawable.constellation_work_icon;
                 break;
             case 4:
-                mTitle = "财富运";
+                titleRes = R.string.cons_ys_title_money;
                 iconRes = R.drawable.constellation_money_icon;
                 break;
             default:
-                mTitle = "运势概括";
+                titleRes = R.string.cons_ys_title_total;
                 iconRes = R.drawable.constellation_luck_icon;
         }
 
+        mTitle = getResources().getString(titleRes);
         mColor = getColor(mType, 0);
         mShader = new LinearGradient(0, -mBsLineWidth, 0, mPathRectHeight, getColor(mType, 1), getColor(mType, 2), Shader.TileMode.REPEAT);
 

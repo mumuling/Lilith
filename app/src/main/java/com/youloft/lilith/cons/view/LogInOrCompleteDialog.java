@@ -139,13 +139,13 @@ public class LogInOrCompleteDialog extends BaseDialog {
             if (mBlurBitmap != null && !mBlurBitmap.isRecycled()) {
                 mLoginJumpDialog.setImageBitmap(mBlurBitmap);
             } else if (mContext instanceof BaseActivity) {
-                Bitmap bitmap = ((BaseActivity) mContext).takeScreenShot(false, 4);
+                Bitmap bitmap = ((BaseActivity) mContext).takeScreenShot(false, 0);
                 if (bitmap != null && !bitmap.isRecycled()) {
                     BlurFactor bf = new BlurFactor();
                     bf.width = bitmap.getWidth();
                     bf.height = bitmap.getHeight();
-                    bf.sampling = 1;
-                    bf.radius = 5;
+                    bf.sampling = 10;
+                    bf.radius = 10;
                     bitmap = Blur.of(mContext, bitmap, bf);
                     mLoginJumpDialog.setImageBitmap(bitmap);
                 } else {

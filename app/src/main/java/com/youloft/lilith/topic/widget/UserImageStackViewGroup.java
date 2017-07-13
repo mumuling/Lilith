@@ -75,6 +75,7 @@ public class UserImageStackViewGroup extends RelativeLayout {
      * @param imageList
      */
     public void bindData(List<TopicBean.DataBean.VoteUserBean> imageList) {
+        if (imageList == null)return;
         for (int i = 0; i < mUserImageList.size() ; i++) {
             ImageView safeData = SafeUtil.getSafeData(mUserImageList, i);
             if (safeData != null) {

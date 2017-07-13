@@ -206,7 +206,7 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
                             imageLoading.clearAnimation();
                             return;
                         }
-                        handlePointTableInfo(pointBean.data);
+                       // handlePointTableInfo(pointBean.data);
                         adapter.setPointBeanList(pointBean.data);
                         totalPoint = adapter.pointBeanList.size();
                         textLoadMore.setVisibility(View.VISIBLE);

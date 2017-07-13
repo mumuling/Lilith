@@ -113,7 +113,8 @@ public class MyTopicActivity extends BaseActivity {
                     @Override
                     public void onDataSuccess(MyTopicBean myTopicBean) {
                         if (myTopicBean.data != null) {
-                            readDb(myTopicBean.data ,true);
+                            readDb(myTopicBean);
+                            myTopicList.addAll(myTopicBean.data);
                             adapter.setMyTopicList(myTopicList);
                         } else {
                             rvMyTopic.setVisibility(View.GONE);
@@ -133,45 +134,37 @@ public class MyTopicActivity extends BaseActivity {
      *
      * @param data
      */
-    private void readDb(ArrayList<MyTopicBean.DataBean> data,boolean needDb) {
+    private void readDb(MyTopicBean data) {
 
         ArrayList<PointTable> pointTables = pointCache.getAllTablePoint();
         if (pointTables == null || pointTables.size() == 0) {
-            myTopicList.addAll(data);
+            return;
         } else {
             //如果需要数据库的数据。只有第一次请求需要
-            if (needDb) {
-                for (int i = 0; i < pointTables.size(); i++) {
-                    PointTable pointTable = pointTables.get(i);
-                    MyTopicBean.DataBean topic = new MyTopicBean.DataBean();
-                    topic.date = pointTable.buildDate;
-                    topic.id = pointTable.pid;
-                    topic.optionTitle = pointTable.voteTitle;
-                    topic.reply = 0;
-                    topic.zan = 0;
-                    topic.topicOptionId = pointTable.oid;
-                    topic.topicIdTitle = pointTable.topicTitle;
-                    topic.Viewpoint = pointTable.viewPoint;
-                    topic.topicId = pointTable.tid;
-                    topic.isclick = 0;
-                    myTopicList.add(topic);
-                }
+            PointTable pointTable = null;
+                for(int i = 0; i < pointTables.size(); i++) {
+                    pointTable = pointTables.get(i);
+                    if (pointTable.time < data.t) {
+                        pointCache.deletaDataByPid(pointTable.pid);
+                    } else {
+                        MyTopicBean.DataBean topic = new MyTopicBean.DataBean();
+                        topic.date = pointTable.buildDate;
+                        topic.id = pointTable.pid;
+                        topic.optionTitle = pointTable.voteTitle;
+                        topic.reply = 0;
+                        topic.zan = 0;
+                        topic.topicOptionId = pointTable.oid;
+                        topic.topicIdTitle = pointTable.topicTitle;
+                        topic.Viewpoint = pointTable.viewPoint;
+                        topic.topicId = pointTable.tid;
+                        topic.isclick = 0;
+                        myTopicList.add(topic);
+                    }
             }
-            //与数据库数据做对比，如果存在就删除，避免重复显示。
-            ArrayList<MyTopicBean.DataBean> list = new ArrayList<>();
-            list.addAll(data);
-            for (int j = 0; j < list.size(); j++) {
-                MyTopicBean.DataBean dataBean = list.get(j);
-                if (pointCache.getPointByPid(dataBean.id) != null) {
-                    pointCache.deletaDataByPid(dataBean.id);
-                    list.remove(dataBean);
-                }
-            }
-
-            myTopicList.addAll(list);
         }
 
     }
+
 
     private void initView() {
         toolBar.setTitle("星座话题");
@@ -214,7 +207,6 @@ public class MyTopicActivity extends BaseActivity {
                     @Override
                     public void onDataSuccess(MyTopicBean myTopicBean) {
                         if (myTopicBean.data != null) {
-                            readDb(myTopicBean.data ,false);
                             adapter.setMyTopicList(myTopicBean.data);
                         } else {
                             Toaster.showShort("没有更多观点了。");

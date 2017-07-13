@@ -169,6 +169,17 @@ public abstract class AbstractDataRepo implements IProvider {
 
     }
 
+    public static <T extends AbsResponse> Flowable<T> post(final String url,
+                                                           final Map<String, String> header,
+                                                           final Map<String, String> params,
+                                                           final boolean usePublic,
+                                                           final Class<T> clz,
+                                                           final String cacheKey,
+                                                           final long cacheDuration,
+                                                           final File... files) {
+        return post(url, header, params, usePublic, false, clz, cacheKey, cacheDuration, files);
+    }
+
     /**
      * post请求
      *
@@ -187,6 +198,7 @@ public abstract class AbstractDataRepo implements IProvider {
                                                            final Map<String, String> header,
                                                            final Map<String, String> params,
                                                            final boolean usePublic,
+                                                           final boolean jsonMeidaType,
                                                            final Class<T> clz,
                                                            final String cacheKey,
                                                            final long cacheDuration,
@@ -207,7 +219,11 @@ public abstract class AbstractDataRepo implements IProvider {
                 .map(new Function<String, Response>() {
                     @Override
                     public Response apply(@NonNull String s) throws Exception {
-                        return OkHttpUtils.getInstance().post(url, header, params, usePublic, files);
+                        if (jsonMeidaType) {
+                            return OkHttpUtils.getInstance().postByJsonType(url, header, params, usePublic, files);
+                        } else {
+                            return OkHttpUtils.getInstance().post(url, header, params, usePublic, files);
+                        }
                     }
                 })
                 .compose(RxFlowableUtil.<Response>applyNetIoSchedulers())//线程切换

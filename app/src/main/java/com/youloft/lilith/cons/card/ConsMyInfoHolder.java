@@ -58,6 +58,8 @@ public class ConsMyInfoHolder extends ConsBaseHolder {
     TextView mConsMyInfoCnWord;
     @BindView(R.id.cons_my_info_content_root)
     LinearLayout mConsMyInfoContentRoot;
+    @BindView(R.id.cons_my_info_en_blur_word)
+    ImageView mConsBlurEnWord;
     @BindView(R.id.cons_my_info_share_icon)
     ImageView mConsMyInfoShareIcon;
     private final GregorianCalendar pCalendar;
@@ -117,7 +119,7 @@ public class ConsMyInfoHolder extends ConsBaseHolder {
             mConsMyInfoXz.setText(consSrc.pKey);
             mConsMyInfoDateRange.setText(consSrc.pRang);
         }
-
+        mConsBlurEnWord.setImageResource(ConsManager.getConsBlurWord(detailInfo.signs));
         mConsMyInfoEnWord.setText(detailInfo.eMsg);
         mConsMyInfoCnWord.setText(detailInfo.msg);
         GlideApp.with(mContext).load(detailInfo.bgImg).into(mConsMyInfoBg);

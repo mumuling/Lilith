@@ -38,7 +38,7 @@ public class TopicRepo extends AbstractDataRepo {
      */
     public static Flowable<ReplyBean> getPointReply(String vid,String uid,String limit,String skip,boolean needCache) {
         String cacheKey = "point_reply" + vid;
-        long cacheDuration = 2 * 1000;
+        long cacheDuration = 1000 * 60;
         HashMap<String, String> param = new HashMap();
         param.put("vid",vid);
         if (uid != null)  param.put("uid",uid);
@@ -61,14 +61,23 @@ public class TopicRepo extends AbstractDataRepo {
      * @param limit   获取条数 默认10条
      * @return
      */
-    public static  Flowable<TopicBean> getTopicList(String sortby,String skip ,String limit) {
+    public static  Flowable<TopicBean> getTopicList(String sortby,String skip ,String limit,Boolean needCache) {
         String cacheKey = "topic_list" + sortby;
+        long cacheDuration = 1000 * 60;
         HashMap<String, String> param = new HashMap();
         param.put("sortby",sortby);
         if (limit != null)param.put("limit",limit);
         if (skip != null)param.put("skip",skip);
 
-        return httpFlow(Urls.TOPIC_LIST,null,param,true,TopicBean.class,null,0);
+        if (needCache) {
+            if (!LLApplication.getApiCache().isExpired(cacheKey,cacheDuration)) {
+                return LLApplication.getApiCache().readCache(cacheKey,TopicBean.class);
+            } else {
+                return httpFlow(Urls.TOPIC_LIST, null, param, true, TopicBean.class, cacheKey, cacheDuration);
+            }
+        } else {
+            return httpFlow(Urls.TOPIC_LIST, null, param, true, TopicBean.class, null, 0);
+        }
     }
 
     /**  底部其他话题推荐请求
