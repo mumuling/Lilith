@@ -8,18 +8,20 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.ImageView;
 import android.widget.Scroller;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.measure.bean.MeasureBean;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
 import butterknife.BindView;
+import butterknife.BindViews;
 import butterknife.ButterKnife;
 
 /**
@@ -31,45 +33,71 @@ import butterknife.ButterKnife;
 public class MeasureCarouselHolder extends BaseMeasureHolder {
     @BindView(R.id.vp_carousel)
     ViewPager vpCarousel; //viewpager
-    @BindView(R.id.iv_dot01)
-    ImageView ivDot01;  //第一个原点
-    @BindView(R.id.iv_dot02)
-    ImageView ivDot02;  //第二原点
-    @BindView(R.id.iv_dot03)
-    ImageView ivDot03;  //第三个原点
-    private MeasureBean.DataBean mMeasureData;
+    @BindViews({R.id.iv_dot01, R.id.iv_dot02, R.id.iv_dot03, R.id.iv_dot04, R.id.iv_dot05})
+    ImageView[] ivDots;  //原点
+
+    //下面的handler是玩轮播的
     private Handler mhandler = new Handler();
     private Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
             int index = vpCarousel.getCurrentItem() + 1;
             vpCarousel.setCurrentItem(index);
-            mhandler.postDelayed(mRunnable, 2500);
+            if(mData.size()!=1){
+                mhandler.postDelayed(mRunnable, 2500);
+            }
         }
     };
+    //数据集合
+    private List<MeasureBean.DataBean.AdsBean> mData;
 
     public MeasureCarouselHolder(Context context, ViewGroup parent) {
         super(LayoutInflater.from(context).inflate(R.layout.item_measure_carousel, parent, false));
         ButterKnife.bind(this, itemView);
+        for (int i = 0; i < 5; i++) {//小圆点先隐藏起来
+            ivDots[i].setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
-    public void bindData(MeasureBean.DataBean mMeasureData, int position) {
-        this.mMeasureData = mMeasureData;
+    public void bindData(final MeasureBean.DataBean mMeasureData, int position) {
+        mhandler.removeCallbacks(mRunnable);
+        //这里也要写,防止下拉刷新的时候数据产生了变化
+        for (int i = 0; i < 5; i++) {//小圆点先隐藏起来
+            ivDots[i].setVisibility(View.INVISIBLE);
+        }
+
+        if (isHavaData(mMeasureData)) {//无数据 不走了
+            return;
+        }
+
+        if (mMeasureData.ads.size() > 5) {
+            for (int i = 0; i < 5; i++) { //大于5 只取前五个
+                mData.add(mMeasureData.ads.get(i));
+            }
+        } else {
+            mData = mMeasureData.ads;
+        }
+
+        //根据数据集合的长度,决定显示几个原点
+        disPlayDot();
         try {
             Field field = ViewPager.class.getDeclaredField("mScroller");
             field.setAccessible(true);
-            FixedSpeedScroller scroller = new FixedSpeedScroller(vpCarousel.getContext(),
-                    new AccelerateInterpolator());
+            FixedSpeedScroller scroller = new FixedSpeedScroller(vpCarousel.getContext());
+//            FixedSpeedScroller scroller = new FixedSpeedScroller(vpCarousel.getContext(),new AccelerateInterpolator());
             field.set(vpCarousel, scroller);
-            scroller.setmDuration(500);
+            scroller.setmDuration(800);
         } catch (Exception e) {
         }
 
-
-        vpCarousel.setAdapter(new MyAdapter(mMeasureData, mContext));
-        vpCarousel.setCurrentItem(300000,false);
-        mhandler.postDelayed(mRunnable, 2500);
+        vpCarousel.setAdapter(new MyAdapter(mData, mContext));
+        if(mData.size() == 1){
+            mhandler.removeCallbacks(mRunnable);
+        }else {
+            mhandler.postDelayed(mRunnable, 2500);
+            vpCarousel.setCurrentItem(mData.size() * 100000, false);
+        }
         vpCarousel.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -78,24 +106,8 @@ public class MeasureCarouselHolder extends BaseMeasureHolder {
 
             @Override
             public void onPageSelected(int position) {
-                int index = position % 3;
-                switch (index) {
-                    case 0:
-                        ivDot01.setImageResource(R.drawable.pager_select_icon);
-                        ivDot02.setImageResource(R.drawable.pager_icon);
-                        ivDot03.setImageResource(R.drawable.pager_icon);
-                        break;
-                    case 1:
-                        ivDot01.setImageResource(R.drawable.pager_icon);
-                        ivDot02.setImageResource(R.drawable.pager_select_icon);
-                        ivDot03.setImageResource(R.drawable.pager_icon);
-                        break;
-                    case 2:
-                        ivDot01.setImageResource(R.drawable.pager_icon);
-                        ivDot02.setImageResource(R.drawable.pager_icon);
-                        ivDot03.setImageResource(R.drawable.pager_select_icon);
-                        break;
-                }
+                int index = position % mData.size();
+                setDotStatus(index);
             }
 
             @Override
@@ -103,6 +115,31 @@ public class MeasureCarouselHolder extends BaseMeasureHolder {
 
             }
         });
+        vpEventHandle();//viewpager触摸事件处理
+    }
+
+    /**
+     * 根据原点
+     */
+    private void disPlayDot() {
+        if (mData.size() == 1) { //如果数据集合长度 等于1  那么不显示小圆点
+            return;
+        } else { //如果不是,那就显示对应的个数
+            for (int i = 0; i < 5; i++) {
+                if (i < mData.size()) {
+                    ivDots[i].setVisibility(View.VISIBLE);
+                } else {
+                    ivDots[i].setVisibility(View.GONE);
+                }
+            }
+        }
+
+    }
+
+    /**
+     * viewpager触摸事件的处理
+     */
+    private void vpEventHandle() {
         vpCarousel.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -126,25 +163,52 @@ public class MeasureCarouselHolder extends BaseMeasureHolder {
         });
     }
 
+    /**
+     * 判断是否有数据
+     *
+     * @param mMeasureData
+     * @return
+     */
+    private boolean isHavaData(MeasureBean.DataBean mMeasureData) {
+        return mMeasureData == null || mMeasureData.ads == null || mMeasureData.ads.size() == 0;
+    }
+
+    /**
+     * 小圆点的设置
+     *
+     * @param index
+     */
+    private void setDotStatus(int index) {
+        for (int i = 0; i < mData.size(); i++) {
+            if (i == index) {
+                ivDots[i].setImageResource(R.drawable.pager_select_icon);
+            } else {
+                ivDots[i].setImageResource(R.drawable.pager_icon);
+            }
+        }
+    }
+
 
     class MyAdapter extends PagerAdapter {
 
-        private MeasureBean.DataBean mMeasureData;
-        private Context mContext;
 
-        public MyAdapter(MeasureBean.DataBean mMeasureData, Context mContext) {
-            this.mMeasureData = mMeasureData;
+        private Context mContext;
+        List<MeasureBean.DataBean.AdsBean> mData;
+
+        public MyAdapter(List<MeasureBean.DataBean.AdsBean> mData, Context mContext) {
+            this.mData = mData;
             this.mContext = mContext;
 
         }
 
         @Override
         public int getCount() {
-            if(mMeasureData == null || mMeasureData.ads == null){
-                return 0;
+            if(mData.size() == 1){
+                return mData.size();
             }else {
                 return Integer.MAX_VALUE;
             }
+
         }
 
         @Override
@@ -154,10 +218,18 @@ public class MeasureCarouselHolder extends BaseMeasureHolder {
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            int index = position % 3;
+            final int index = position % mData.size();
             View mView = View.inflate(mContext, R.layout.item_banner, null);
+            mView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ARouter.getInstance().build("/ui/web")
+                            .withString("url", mData.get(index).url)
+                            .navigation();
+                }
+            });
             ImageView ivItemBanner = (ImageView) mView.findViewById(R.id.iv_item_banner);
-            GlideApp.with(mContext).load(mMeasureData.ads.get(index).image).into(ivItemBanner);
+            GlideApp.with(mContext).load(mData.get(index).image).into(ivItemBanner);
             container.addView(mView);
             if (mView.getParent() != null) {
                 return mView;
@@ -184,13 +256,11 @@ public class MeasureCarouselHolder extends BaseMeasureHolder {
 
         @Override
         public void startScroll(int startX, int startY, int dx, int dy, int duration) {
-            // Ignore received duration, use fixed one instead
             super.startScroll(startX, startY, dx, dy, mDuration);
         }
 
         @Override
         public void startScroll(int startX, int startY, int dx, int dy) {
-            // Ignore received duration, use fixed one instead
             super.startScroll(startX, startY, dx, dy, mDuration);
         }
 

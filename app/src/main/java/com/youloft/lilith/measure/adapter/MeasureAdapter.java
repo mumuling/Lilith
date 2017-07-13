@@ -38,8 +38,9 @@ public class MeasureAdapter extends RecyclerView.Adapter<BaseMeasureHolder> {
         this.mContext = mContext;
     }
 
-    public void setData(List<MeasureBean.DataBean> mMeasureData) {
-        this.mMeasureData = mMeasureData;
+    public void setData(List<MeasureBean.DataBean> measureData) {
+        mMeasureData.clear();
+        mMeasureData.addAll(measureData);
         notifyDataSetChanged();
     }
 

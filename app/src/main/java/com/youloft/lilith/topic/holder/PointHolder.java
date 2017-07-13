@@ -197,7 +197,7 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
                     public void onDataSuccess(PointBean pointBean) {
                         if (pointBean.data == null || pointBean.data.size() == 0 ) {
                             textLoadMore.setVisibility(View.VISIBLE);
-                            textLoadMore.setText("没有数据了..");
+                            textLoadMore.setText("没有更多数据");
                             imageLoading.setVisibility(View.GONE);
                             imageLoading.clearAnimation();
                             return;
@@ -215,7 +215,7 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
 
                         super.onFailed(e);
                         textLoadMore.setVisibility(View.VISIBLE);
-                        textLoadMore.setText("没有数据了..");
+                        textLoadMore.setText("没有更多数据");
                         imageLoading.setVisibility(View.GONE);
                         imageLoading.clearAnimation();
 
@@ -225,7 +225,7 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
 
     }
 
-    public void bindNormal(final PointBean.DataBean point, final TopicDetailBean.DataBean option, boolean isLast) {
+    public void bindNormal(final PointBean.DataBean point, final TopicDetailBean.DataBean option, int position,boolean isLast) {
         if (point == null || option == null)return;
         this.topic = option;
         this.point = point;
@@ -295,6 +295,11 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
         if (isLast) {
             llLoadMore.setVisibility(View.VISIBLE);
             commentDividerBottom.setVisibility(View.GONE);
+            if (position >= 10) {
+                textLoadMore.setText("加载更多");
+            } else {
+                textLoadMore.setText("没有更多数据");
+            }
         } else {
             llLoadMore.setVisibility(View.GONE);
             commentDividerBottom.setVisibility(View.VISIBLE);

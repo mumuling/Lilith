@@ -9,9 +9,15 @@
         android:id="@+id/btl_CC"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_CC"
+    <com.youloft.lilith.common.widgets.view.PullToRefreshLayout
+        android:id="@+id/ptr_CC"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
+        <android.support.v7.widget.RecyclerViewCanPullAble
+            android:id="@+id/rv_CC"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </com.youloft.lilith.common.widgets.view.PullToRefreshLayout>
+
 
 </LinearLayout>

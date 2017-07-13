@@ -17,6 +17,7 @@ import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.login.event.LoginEvent;
 import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.topic.adapter.TopicDetailAdapter;
+import com.youloft.lilith.topic.bean.ClickLikeEvent;
 import com.youloft.lilith.topic.bean.PointBean;
 import com.youloft.lilith.topic.bean.TopicBean;
 import com.youloft.lilith.topic.bean.TopicDetailBean;
@@ -234,6 +235,17 @@ public class TopicDetailActivity extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
     public void onLoddingChagne(LoginEvent event) {
         requestTopicDetail();
+
+    }
+    /**
+     * 点赞状态
+     *
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
+    public void onLikeChagne(ClickLikeEvent event) {
+        if (event.type != ClickLikeEvent.TYPE_AUTHOR || adapter == null)return;
+        adapter.notifyDataSetChanged();
 
     }
 
