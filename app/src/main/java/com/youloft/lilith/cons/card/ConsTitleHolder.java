@@ -71,7 +71,7 @@ public class ConsTitleHolder extends BaseHolder<String> {
             return;
         }
         SpannableString ss = new SpannableString(String.format(loggin, getStringInDay(), data));
-        ss.setSpan(highLight, 4, ss.length() - 9, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss.setSpan(highLight, 4, ss.length() - 10, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         mConsTitleText.setText(ss);
     }
 
@@ -85,7 +85,7 @@ public class ConsTitleHolder extends BaseHolder<String> {
         int i = GregorianCalendar.getInstance().get(Calendar.HOUR_OF_DAY);
         if (i >= 5 && i < 13) {
             return "上午";
-        } else if (i >= 13 && i < 18) {
+        } else if (i >= 13 && i < 20) {
             return "下午";
         } else {
             return "晚上";
