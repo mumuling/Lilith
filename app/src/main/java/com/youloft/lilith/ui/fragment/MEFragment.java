@@ -107,7 +107,13 @@ public class MEFragment extends BaseFragment {
             //登录成功了,图片,昵称
             setUserInfo();
         } else {
-            //登出了
+            //登出了  吧所有的图片清空
+            ivRise.setImageBitmap(null);
+            ivSun.setImageBitmap(null);
+            ivMoon.setImageBitmap(null);
+            ivConstellation.setImageBitmap(null);
+            ivBlurBg.setImageBitmap(null);
+            ivHeader.setImageBitmap(null);
         }
 
     }

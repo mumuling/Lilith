@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
@@ -47,6 +48,7 @@ public class DatePickerPop implements CanShow ,DatePicker.onDateChangedListener{
         popwindow.setTouchable(true);
         popwindow.setOutsideTouchable(false);
         popwindow.setFocusable(true);
+        popwindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         mDatePicker.setDateChangedListener(this);
         setUpData();

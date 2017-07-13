@@ -456,7 +456,7 @@ public class RegisterActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        handler.removeCallbacksAndMessages(null);
+        handler.removeCallbacks(runnable);
         EventBus.getDefault().unregister(this);
     }
 

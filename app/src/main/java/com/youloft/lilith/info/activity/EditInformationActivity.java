@@ -27,7 +27,6 @@ import com.youloft.lilith.common.widgets.picker.TimePickerPop;
 import com.youloft.lilith.common.widgets.webkit.handle.UserFileHandle;
 import com.youloft.lilith.glide.GlideBlurTwoViewTarget;
 import com.youloft.lilith.info.bean.UpLoadHeaderBean;
-import com.youloft.lilith.info.bean.UpdateUserInfoBean;
 import com.youloft.lilith.info.event.UserInfoUpDateEvent;
 import com.youloft.lilith.info.repo.UpdateUserRepo;
 import com.youloft.lilith.login.bean.UserBean;
@@ -296,10 +295,18 @@ public class EditInformationActivity extends BaseActivity {
 
     @OnClick({R.id.fl_sex, R.id.fl_date_birth, R.id.fl_time_birth, R.id.fl_place_birth, R.id.fl_place_now})
     public void onViewClicked(View view) {
+        etNickName.setCursorVisible(false);
         switch (view.getId()) {
             case R.id.fl_sex:
+                int sex = AppSetting.getUserInfo().data.userInfo.sex;
+                String gender;
+                if (sex == 2) {//男
+                    gender = "男";
+                } else {//女
+                    gender = "女";
+                }
                 GenderPickerPop.getDefaultGenderPicker(this)
-                        .setGender("男") //这儿设置默认显示
+                        .setGender(gender) //这儿设置默认显示
                         .setOnSelectListener(new OnPickerSelectListener() {
                             @Override
                             public void onSelected(Object data) {
@@ -408,5 +415,10 @@ public class EditInformationActivity extends BaseActivity {
     public void onBackPressed() {
         super.onBackPressed();
         finish();
+    }
+
+    @OnClick(R.id.et_nick_name)
+    public void onViewClicked() {
+        etNickName.setCursorVisible(true);
     }
 }

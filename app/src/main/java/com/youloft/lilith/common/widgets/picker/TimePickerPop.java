@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
@@ -44,12 +45,14 @@ public class TimePickerPop implements CanShow, TimePicker.onTimeChangedListener 
         mTimePicker = (TimePicker) popview.findViewById(R.id.time_picker);
 
         popwindow = new PopupWindow(popview, LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT);
+                LinearLayout.LayoutParams.WRAP_CONTENT);
         popwindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         popwindow.setAnimationStyle(R.style.AnimBottom);
         popwindow.setTouchable(true);
         popwindow.setOutsideTouchable(false);
         popwindow.setFocusable(true);
+        popwindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
 
         mTimePicker.setDateChangedListener(this);
 

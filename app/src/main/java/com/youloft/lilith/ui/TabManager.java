@@ -10,6 +10,8 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.utils.SafeUtil;
+import com.youloft.lilith.login.bean.UserBean;
+import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.ui.fragment.CCFragment;
 import com.youloft.lilith.ui.fragment.HTFragment;
 import com.youloft.lilith.ui.fragment.MEFragment;
@@ -171,10 +173,16 @@ public class TabManager implements NavBarLayout.OnTabChangeListener {
 
     @Override
     public boolean selectChange(int index) {
-        if (index == TabManager.TAB_INDEX_SZ && !AppConfig.LOGIN_STATUS) {
-                        ARouter.getInstance().build("/test/LoginActivity")
-                                .navigation();
-            return true;
+        if (index == TabManager.TAB_INDEX_SZ) {
+            UserBean userInfo = AppSetting.getUserInfo();
+            if (userInfo == null||
+                    userInfo.data == null||
+                    userInfo.data.userInfo == null||
+                    userInfo.data.userInfo.id== 0) {
+                ARouter.getInstance().build("/test/LoginActivity")
+                        .navigation();
+                return true;
+            }
         }
         setTabIndex(index);
         return false;

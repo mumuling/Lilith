@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -251,7 +252,7 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
         popwindow.setTouchable(true);
         popwindow.setOutsideTouchable(false);
         popwindow.setFocusable(true);
-
+        popwindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
 
         /**

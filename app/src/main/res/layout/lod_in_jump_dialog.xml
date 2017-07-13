@@ -50,7 +50,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="32dp"
                 android:gravity="center_horizontal"
-                android:text="查看专属运势，请登陆后填写资料！"
+                android:text="@string/log_dialog_to_lod"
                 android:textColor="@color/white"
                 android:textSize="16dp" />
 
