@@ -365,25 +365,13 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
 
     @Override
     public void recover() {
-
-       // root.setBackgroundColor(Color.parseColor("#4D000000"));
         imageRoot.setAlpha(0.3f);
     }
 
     @Override
     public void move(float distance) {
-       // root.setAlpha(1 - distance / ViewUtil.getStatusHeight() + 500);
-        // root.setBackgroundColor(Color.parseColor("#00000000"));
-        float alpha = 0;
-
-
         imageRoot.setAlpha((float) (0.3 - Math.min(distance/500,0.3)));
     }
-//
-//    @Override
-//    public void move() {
-//
-//    }
 
     @OnClick(R.id.close_icon)
     public void onClick() {
