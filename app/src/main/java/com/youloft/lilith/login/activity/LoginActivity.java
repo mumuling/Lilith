@@ -381,9 +381,7 @@ public class LoginActivity extends BaseActivity {
                         } else {
                             Toaster.showShort("登录失败");
                         }
-
                     }
-
                     @Override
                     protected void onFailed(Throwable e) {
                         super.onFailed(e);

@@ -216,7 +216,7 @@ public abstract class AbstractDataRepo implements IProvider {
                         if (response.code() == 200) {
                             String string = response.body().string();
                             T t = JSON.parseObject(string, clz);
-                            if (t.status == 200) {
+                            if (t.status == 200 && t.data != null) {
                                 return t;
                             }
                             return null;
@@ -226,6 +226,7 @@ public abstract class AbstractDataRepo implements IProvider {
                     }
                 })
                 .compose(LLApplication.getApiCache().<T>cacheTransform(cacheKey));
+
         if (TextUtils.isEmpty(cacheKey)
                 || !LLApplication.getApiCache().hasCache(cacheKey)) {
             return compose;
@@ -291,7 +292,7 @@ public abstract class AbstractDataRepo implements IProvider {
                         if (response.code() == 200) {
                             String string = response.body().string();
                             T t = JSON.parseObject(string, clz);
-                            if (t.status == 200) {
+                            if (t.status == 200 && t.data != null) {
                                 return t;
                             }
                             return null;
