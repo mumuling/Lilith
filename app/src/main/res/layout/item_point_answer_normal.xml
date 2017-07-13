@@ -47,6 +47,7 @@
             android:layout_marginLeft="7dp"
             android:drawableLeft="@drawable/topic_reply_icon"
             android:drawablePadding="7dp"
+            android:paddingRight="20dp"
             android:visibility="gone"
             />
         <LinearLayout
