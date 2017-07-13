@@ -1,6 +1,5 @@
 package com.youloft.lilith.topic;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -86,6 +85,8 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
     TextView textConfirm;
     @BindView(R.id.image_pen)
     ImageView imagePen;
+    @BindView(R.id.image_root)
+    ImageView imageRoot;
     private LinearLayoutManager mLayoutManager;
     private PointAnswerAdapter adapter;
     private List<ReplyBean.DataBean> replyBeanList = new ArrayList<>();//回复的列表
@@ -94,11 +95,12 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
     public int replyId = 0;
     public String replyName;
     private PointAnswerCache pointAnswerCache;
-    private InputMethodManager imm ;
+    private InputMethodManager imm;
     private UserBean.DataBean.UserInfoBean userInfo = null;
     private boolean isReplyAuthor = true;
 
     private int replyCount = 0;//回复的条数
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -167,18 +169,19 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
     }
 
     /**
-     *   处理回复列表的数据库
+     * 处理回复列表的数据库
+     *
      * @param replyBean
      */
     private void handleAnswerDb(ReplyBean replyBean) {
         ArrayList<PointAnswerTable> tableArrayList = pointAnswerCache.getAnswerListByCode(point.id);
-        if (userInfo == null)return;
+        if (userInfo == null) return;
         if (tableArrayList == null || tableArrayList.size() == 0) return;
         PointAnswerTable pointAnswerTable = null;
 
-        for (int j = 0; j < tableArrayList.size();j++) {
-             pointAnswerTable = tableArrayList.get(j);
-            if (pointAnswerTable.time < replyBean.t){
+        for (int j = 0; j < tableArrayList.size(); j++) {
+            pointAnswerTable = tableArrayList.get(j);
+            if (pointAnswerTable.time < replyBean.t) {
                 pointAnswerCache.deleteData(pointAnswerTable.rid);
             } else {
                 ReplyBean.DataBean dataBean = new ReplyBean.DataBean();
@@ -194,13 +197,13 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
                 dataBean.uid = userInfo.id;
                 dataBean.nickName = userInfo.nickName;
                 replyBeanList.add(0, dataBean);
-                replyCount ++;
+                replyCount++;
             }
         }
     }
 
     private void initView() {
-        replyName ="";
+        replyName = "";
         int statusHeight = ViewUtil.getStatusHeight();
         FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) llTopRoot.getLayoutParams();
         params.topMargin = statusHeight;
@@ -233,7 +236,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
 
                 } else {
                     ////软键盘弹出啦
-                    if (isReplyAuthor){
+                    if (isReplyAuthor) {
                         replyId = 0;
                         replyName = "";
                     }
@@ -247,7 +250,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
         if (point != null) {
             if (point.reply == 0) {
                 commandNum.setText("暂无评论");
-            }else {
+            } else {
                 commandNum.setText(point.reply + "条回复");
             }
             replyCount = point.reply;
@@ -266,7 +269,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
                 if (newState == RecyclerView.SCROLL_STATE_IDLE
                         && lastVisibleItemPosition == totalItemCount - 1
                         && visibleItemCount > 0) {
-                    if (replyBeanList!= null && replyBeanList.size() >= 10) {
+                    if (replyBeanList != null && replyBeanList.size() >= 10) {
                         loadMoreReply();
                     }
                 }
@@ -290,22 +293,21 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
         });
 
 
-
     }
 
     /**
-     *   滑动到底部加载更多
+     * 滑动到底部加载更多
      */
     private void loadMoreReply() {
-        if (point == null)return;
+        if (point == null) return;
         int userId;
-        if (userInfo == null){
-             userId = 0;
+        if (userInfo == null) {
+            userId = 0;
         } else {
             userId = userInfo.id;
         }
 
-        TopicRepo.getPointReply(String.valueOf(point.id),String.valueOf(userId),"10",replyBeanList.size() + "",false)
+        TopicRepo.getPointReply(String.valueOf(point.id), String.valueOf(userId), "10", replyBeanList.size() + "", false)
                 .compose(this.<ReplyBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
@@ -341,7 +343,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
         isReplyAuthor = false;
         if (imm != null) {
             commentEdit.requestFocus();
-            imm.showSoftInput(commentEdit,0);
+            imm.showSoftInput(commentEdit, 0);
         }
 
         commentEdit.setHint("回复 " + replyName + ":");
@@ -363,13 +365,25 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
 
     @Override
     public void recover() {
-        root.setBackgroundColor(Color.parseColor("#4D000000"));
+
+       // root.setBackgroundColor(Color.parseColor("#4D000000"));
+        imageRoot.setAlpha(0.3f);
     }
 
     @Override
-    public void move() {
-        root.setBackgroundColor(Color.parseColor("#00000000"));
+    public void move(float distance) {
+       // root.setAlpha(1 - distance / ViewUtil.getStatusHeight() + 500);
+        // root.setBackgroundColor(Color.parseColor("#00000000"));
+        float alpha = 0;
+
+
+        imageRoot.setAlpha((float) (0.3 - Math.min(distance/500,0.3)));
     }
+//
+//    @Override
+//    public void move() {
+//
+//    }
 
     @OnClick(R.id.close_icon)
     public void onClick() {
@@ -428,7 +442,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
                             dataBean.headImg = userInfo.headImg;
                             dataBean.id = answerId;
                             adapter.setAnswerTop(dataBean);
-                            updatePointAnswerDb(result.t,dataBean,answerId);
+                            updatePointAnswerDb(result.t, dataBean, answerId);
                             replyCount++;
                             commandNum.setText(String.valueOf(replyCount) + "条回复");
                             Toaster.showShort("评论成功！");
@@ -452,7 +466,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
      * @param dataBean 回复的数据
      * @param answerId 回复的ID
      */
-    private void updatePointAnswerDb(long time,ReplyBean.DataBean dataBean, int answerId) {
+    private void updatePointAnswerDb(long time, ReplyBean.DataBean dataBean, int answerId) {
         PointAnswerTable pointAnswerTable = new PointAnswerTable();
         pointAnswerTable.tid = replyId;
         pointAnswerTable.replyName = replyName;
