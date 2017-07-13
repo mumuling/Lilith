@@ -20,6 +20,7 @@ public class PointTable implements Serializable {
     public String voteTitle;
     public int oid;//支持的ID
     public String buildDate;
+    public long time;
 
     public PointTable(){}
     public PointTable(int oid,int tid,int pid,String viewPoint,String buildDate,String topicTitle,String voteTitle ) {
@@ -42,6 +43,7 @@ public class PointTable implements Serializable {
                 + Columns.PID + " INTEGER,"
                 + Columns.OID + " INTEGER,"
                 + Columns.BUILD_DATE + " TEXT,"
+                + Columns.TIME + " LONG,"
                 + Columns.TOPIC_TITLE + " TEXT,"
                 + Columns.VOTE_TITLE + " TEXT,"
                 + Columns.VIEWPOINT + " TEXT" + ");");
@@ -60,6 +62,7 @@ public class PointTable implements Serializable {
         contentValues.put(Columns.BUILD_DATE,buildDate);
         contentValues.put(Columns.TOPIC_TITLE,topicTitle);
         contentValues.put(Columns.VOTE_TITLE,voteTitle);
+        contentValues.put(Columns.TIME,System.currentTimeMillis());
         return contentValues;
     }
     public PointTable fromCursor(Cursor cursor) {
@@ -70,7 +73,7 @@ public class PointTable implements Serializable {
         this.buildDate = cursor.getString(cursor.getColumnIndex(Columns.BUILD_DATE));
         this.topicTitle = cursor.getString(cursor.getColumnIndex(Columns.TOPIC_TITLE));
         this.voteTitle = cursor.getString(cursor.getColumnIndex(Columns.VOTE_TITLE));
-
+        this.time = cursor.getLong(cursor.getColumnIndex(Columns.TIME));
         return this;
     }
 
@@ -80,6 +83,7 @@ public class PointTable implements Serializable {
         String VIEWPOINT = "view_point";//观点内容
         String OID = "oid";//支持的id
         String BUILD_DATE = "build_date";
+        String TIME = "time";
         String TOPIC_TITLE = "topic_title";
         String VOTE_TITLE = "vote_title";
     }

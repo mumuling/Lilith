@@ -15,6 +15,8 @@ public abstract class AbsResponse<T> implements Serializable {
 
     @JSONField(name = "data")
     public T data;
+    @JSONField(name = "t")
+    public long t;
 
     /**
      * 是否成功
