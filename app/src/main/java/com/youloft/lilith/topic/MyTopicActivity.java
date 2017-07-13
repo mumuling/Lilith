@@ -215,7 +215,7 @@ public class MyTopicActivity extends BaseActivity {
                 .subscribe(new RxObserver<MyTopicBean>() {
                     @Override
                     public void onDataSuccess(MyTopicBean myTopicBean) {
-                        if (myTopicBean.data != null && myTopicBean.data.size() != 0) {
+                        if (myTopicBean.data != null) {
                             readDb(myTopicBean.data ,false);
                             adapter.setMyTopicList(myTopicBean.data);
                         } else {

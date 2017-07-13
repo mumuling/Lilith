@@ -70,6 +70,7 @@ public class HTFragment extends BaseFragment implements PullToRefreshLayout.OnRe
                     @Override
                     public void onDataSuccess(TopicBean topicBean) {
                         if (topicBean.data == null) return;
+                        topicBeanList.clear();
                         topicBeanList.addAll(topicBean.data);
                         mAdapter.setData(topicBean.data);
                         if (layout != null)layout.refreshFinish(PullToRefreshLayout.SUCCEED);

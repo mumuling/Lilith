@@ -143,7 +143,7 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     .dontAnimate()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .transform(new GlideBlurTransform(mTopicImage.getContext()))
-                    .skipMemoryCache(true)
+                    .skipMemoryCache(false)
                     .into(mTopicImage);
 
 
