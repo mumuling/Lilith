@@ -8,19 +8,12 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
-import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -31,37 +24,25 @@ import com.bumptech.glide.request.transition.Transition;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.base.BaseActivity;
-import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.CalendarHelper;
 import com.youloft.lilith.common.utils.SafeUtil;
-import com.youloft.lilith.common.utils.ViewUtil;
-import com.youloft.lilith.common.widgets.picker.CityInfo;
-import com.youloft.lilith.common.widgets.picker.CityPicker;
-import com.youloft.lilith.common.widgets.picker.DatePicker;
-import com.youloft.lilith.common.widgets.picker.DatePickerPop;
-import com.youloft.lilith.common.widgets.picker.GenderPickerPop;
-import com.youloft.lilith.common.widgets.picker.OnPickerSelectListener;
-import com.youloft.lilith.common.widgets.picker.TimePickerPop;
 import com.youloft.lilith.cons.bean.ConsPredictsBean;
-import com.youloft.lilith.cons.consmanager.ConsManager;
 import com.youloft.lilith.cons.view.ConsCalendar;
-import com.youloft.lilith.glide.GlideBlurTransform;
 import com.youloft.lilith.share.ShareBuilder;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.logging.LogManager;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by zchao on 2017/7/3.
@@ -94,27 +75,14 @@ public class ConsCalDetailActivity extends BaseActivity {
     ImageView mConsDetailClose;
     @BindView(R.id.cons_detail_content_root)
     LinearLayout mConsDetailContentRoot;
+    @BindView(R.id.cons_detail_share_root)
+    LinearLayout mConsShare;
     @BindView(R.id.root)
     FrameLayout mRoot;
     private int[] week_locals;
     private int distance;
     private ConsPredictsBean mData;
 
-    /**
-     * 关闭
-     */
-    @OnClick(R.id.cons_detail_close)
-    public void close() {
-        openAnim(false, distance);
-    }
-
-    /**
-     * 关闭
-     */
-    @OnClick(R.id.cons_detail_share_root)
-    public void shareCons() {
-        share();
-    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -132,6 +100,59 @@ public class ConsCalDetailActivity extends BaseActivity {
         if (mData != null) {
             bindData(mData);
         }
+
+        bindClick();
+    }
+
+    @OnClick(R.id.cons_detail_share_root)
+    public void shareClick(){
+        Flowable.just("share")
+                .throttleFirst(2000, TimeUnit.MILLISECONDS)
+                .toObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<String>() {
+                    @Override
+                    public void accept(@NonNull String linearLayout) throws Exception {
+                        share();
+                    }
+                });
+    }
+
+    @OnClick(R.id.cons_detail_close)
+    public void closeClick(){
+        Flowable.just(mConsDetailClose)
+                .throttleFirst(800, TimeUnit.MILLISECONDS)
+                .toObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<ImageView>() {
+                    @Override
+                    public void accept(@NonNull ImageView view) throws Exception {
+                        openAnim(false, distance);
+                    }
+                });
+    }
+
+    /**
+     * 点击事件，使用RxBinding来做连点过滤
+     */
+    private void bindClick() {
+
+
+//        RxView.clicks(mConsShare)
+//                .throttleFirst(800, TimeUnit.MILLISECONDS)
+//                .subscribe(new Consumer<Object>() {
+//                    @Override
+//                    public void accept(@NonNull Object o) throws Exception {
+//                    }
+//                });
+//        RxView.clicks(mConsDetailClose)
+//                .throttleFirst(800, TimeUnit.MILLISECONDS)
+//                .subscribe(new Consumer<Object>() {
+//                    @Override
+//                    public void accept(@NonNull Object o) throws Exception {
+//
+//                    }
+//                });
     }
 
     /**
