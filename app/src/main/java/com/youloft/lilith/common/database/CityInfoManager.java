@@ -7,6 +7,7 @@ import android.os.Environment;
 import android.text.TextUtils;
 
 import com.youloft.lilith.AppConfig;
+import com.youloft.lilith.setting.AppSetting;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -25,7 +26,7 @@ import java.util.Map;
 public class CityInfoManager {
     private static String DB_NAME = "city.db";
     private static String TABLE_NAME = "city";
-    private static int DB_VERSION = 1;
+    private static int DB_VERSION = 2;
     protected Context mContext;
     private SQLiteDatabase db;
 
@@ -185,6 +186,11 @@ public class CityInfoManager {
     String dbfile = DB_PATH + "/city.db";
     private SQLiteDatabase openDatabase() {
         try {
+            int cityDBVersion = AppSetting.getCityDBVersion();
+            if (cityDBVersion != DB_VERSION) {
+                File file = new File(dbfile);
+                file.deleteOnExit(); //删除老数据
+            }
             if (!(new File(dbfile).exists())) { //判断数据库文件是否存在，若不存在则执行导入，否则直接打开数据库
                 InputStream is = mContext.getResources().getAssets().open("city.db");
                 File file = new File(DB_PATH);

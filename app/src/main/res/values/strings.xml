@@ -61,7 +61,6 @@
     <string name="log_dialog_to_lod">查看专属运势,请登录后填写资料</string>
     <string name="log_dialog_to_complete">查看专属运势,请填写资料</string>
     <string name="log_dialog_to_lod_topic">登录后才可参与话题讨论</string>
-    <string name="cece">测测</string>
     <string name="feed_back">意见反馈</string>
     <string name="setting">设置</string>
     <string name="bind_phone">绑定手机</string>
@@ -70,6 +69,11 @@
     <string name="out_program">再按一次退出程序</string>
     <string name="cons_my_info_default_cn_word">喜怒哀乐喜欢表现在脸上，让人一看便知道，把心中的苦闷说出来会舒服一些。</string>
     <string name="cons_my_info_default_en_word">Sorrow and happiness, like the expression on the face, let people see, you know, the heart of the depression will be comfortable.</string>
+
+    <!--tab名字-->
+    <string name="cece">测测</string>
+    <string name="huati">话题</string>
+    <string name="me">我</string>
 
     <!--运势title-->
     <string name="cons_ys_title_total">运势概括</string>
