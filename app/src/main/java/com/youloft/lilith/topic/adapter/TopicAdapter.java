@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
@@ -61,6 +62,11 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void setData(List<TopicBean.DataBean> data) {
         if (data == null) return;
         topicBeanList.clear();
+        topicBeanList.addAll(data);
+        notifyDataSetChanged();
+    }
+    public void setMoreData(List<TopicBean.DataBean> data) {
+        if (data == null)return;
         topicBeanList.addAll(data);
         notifyDataSetChanged();
     }
@@ -135,7 +141,9 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     .asBitmap()
                     .load(topic.backImg)
                     .dontAnimate()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .transform(new GlideBlurTransform(mTopicImage.getContext()))
+                    .skipMemoryCache(true)
                     .into(mTopicImage);
 
 

@@ -10,7 +10,7 @@ package com.youloft.lilith.common.net;
 */
 
 public class Urls {
-
+    public static final String Cache_Time = "http://lilith.51wnl.com/GetSysCache";
     public static final String CONFIG = "http://cfg.51wnl.com/api/getallconfig.ashx?";
     public static final String CONS_PREDICTS = "http://lilith.51wnl.com/GetPredicts";   //星座数据
 

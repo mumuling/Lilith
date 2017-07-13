@@ -13,6 +13,8 @@ import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseFragment;
 import com.youloft.lilith.common.rx.RxObserver;
+import com.youloft.lilith.common.utils.Toaster;
+import com.youloft.lilith.common.widgets.view.PullToRefreshLayout;
 import com.youloft.lilith.topic.TopicDetailActivity;
 import com.youloft.lilith.topic.TopicRepo;
 import com.youloft.lilith.topic.adapter.TopicAdapter;
@@ -33,12 +35,14 @@ import io.reactivex.schedulers.Schedulers;
  * version:
  */
 
-public class HTFragment extends BaseFragment{
+public class HTFragment extends BaseFragment implements PullToRefreshLayout.OnRefreshListener{
     private BaseToolBar mToolBar;
     private RecyclerView mTopicRv;
     private TopicAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private List<TopicBean.DataBean> topicBeanList = new ArrayList<>();
+    private PullToRefreshLayout llPullRefresh;
+    private boolean needLoadMoreTopic = true;
     public HTFragment() {
         super(R.layout.fragment_ht);
     }
@@ -49,15 +53,15 @@ public class HTFragment extends BaseFragment{
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView();
-        requestTopic();
+        requestTopic(llPullRefresh);
 
     }
 
     /**
      *  请求话题信息
      */
-    private void requestTopic() {
-        TopicRepo.getTopicList("0","10")
+    private void requestTopic(final PullToRefreshLayout layout) {
+        TopicRepo.getTopicList("0","0","10")
                 .compose(this.<TopicBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
@@ -68,11 +72,13 @@ public class HTFragment extends BaseFragment{
                         if (topicBean.data == null) return;
                         topicBeanList.addAll(topicBean.data);
                         mAdapter.setData(topicBean.data);
+                        if (layout != null)layout.refreshFinish(PullToRefreshLayout.SUCCEED);
                     }
 
                     @Override
                     protected void onFailed(Throwable e) {
                         super.onFailed(e);
+                        if (layout != null)layout.refreshFinish(PullToRefreshLayout.FAIL);
                     }
                 });
     }
@@ -88,7 +94,60 @@ public class HTFragment extends BaseFragment{
         mTopicRv.setLayoutManager(mLayoutManager);
         mAdapter = new TopicAdapter(getContext());
         mTopicRv.setAdapter(mAdapter);
+        llPullRefresh = (PullToRefreshLayout) getView().findViewById(R.id.rl_pull_refresh);
+        llPullRefresh.setOnRefreshListener(this);
+        mTopicRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                LinearLayoutManager lm = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int totalItemCount = recyclerView.getAdapter().getItemCount();
+                int lastVisibleItemPosition = lm.findLastVisibleItemPosition();
+                int visibleItemCount = recyclerView.getChildCount();
+
+                if (newState == RecyclerView.SCROLL_STATE_IDLE
+                        && totalItemCount >=10
+                        && lastVisibleItemPosition >= totalItemCount - 2
+                        && visibleItemCount > 0) {
+                    if (topicBeanList!= null && topicBeanList.size() >= 8) {
+                        loadMoreTopic();
+                    }
+                }
+            }
+        });
+    }
+
+    private void loadMoreTopic() {
+        TopicRepo.getTopicList("0",String.valueOf(topicBeanList.size()),"10")
+                .compose(this.<TopicBean>bindToLifecycle())
+                .subscribeOn(Schedulers.newThread())
+                .toObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new RxObserver<TopicBean>() {
+                    @Override
+                    public void onDataSuccess(TopicBean topicBean) {
+                        if (topicBean.data == null) return;
+                        if (topicBean.data.size() == 0){
+                            needLoadMoreTopic = false;
+                            Toaster.showShort("没有更多话题了");
+                            return;
+                        }
+                        topicBeanList.addAll(topicBean.data);
+                        mAdapter.setMoreData(topicBean.data);
+
+                    }
+
+                    @Override
+                    protected void onFailed(Throwable e) {
+
+                        super.onFailed(e);
+                    }
+                });
     }
 
 
+    @Override
+    public void onRefresh(PullToRefreshLayout pullToRefreshLayout) {
+        needLoadMoreTopic = true;
+        requestTopic(pullToRefreshLayout);
+    }
 }

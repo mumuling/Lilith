@@ -13,12 +13,17 @@
         app:show_share_btn="false"
         app:show_title_btn="true"
         />
-    <android.support.v7.widget.RecyclerView
+    <com.youloft.lilith.common.widgets.view.PullToRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
+        android:id="@+id/rl_pull_refresh">
+    <android.support.v7.widget.RecyclerViewCanPullAble
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
         android:clipChildren="false"
         android:clipToPadding="false"
         android:id="@+id/lv_topic"/>
+    </com.youloft.lilith.common.widgets.view.PullToRefreshLayout>
 </LinearLayout>

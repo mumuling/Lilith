@@ -41,6 +41,7 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private static int ITEM_TYPE_OTHER = 1000;//顶部header
     private static int ITEM_TYPE_VOTE_VIEW = 2000;//投票的view
     private static int ITEM_TYPE_COMMENT = 3000;//评论item
+    private static int ITEM_TYPE_NO_POINT = 4000;//沙发
     public List<PointBean.DataBean> pointBeanList = new ArrayList<>();
     private List<TopicBean.DataBean> otherTopicList = new ArrayList<>();
     private TopicDetailBean.DataBean topicInfo = null;
@@ -86,9 +87,10 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             holder = new VoteHolder(mInflater.inflate(R.layout.item_topic_detail_vote,parent,false),this);
         } else if (viewType == ITEM_TYPE_COMMENT){
             holder = new PointHolder(mInflater.inflate(R.layout.item_topic_detail_comment,parent,false),this);
-        }else {
+        }else if (viewType == ITEM_TYPE_OTHER){
           holder = new OtherTopicHolder(mInflater.inflate(R.layout.item_other_topic_layout,parent,false));
-
+      } else {
+          holder = new NoPointHolder(mInflater.inflate(R.layout.item_point_no_anwser,parent,false));
       }
         return holder;
     }
@@ -106,10 +108,10 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             }
         }
         if (holder instanceof OtherTopicHolder) {
-            if (position == pointBeanList.size() + 1) {
-                ((OtherTopicHolder) holder).bind(otherTopicList.get(position - pointBeanList.size() -1),true);
+            if (position == pointBeanList.size() + (pointBeanList.size() == 0 ? 2 : 1)) {
+                ((OtherTopicHolder) holder).bind(otherTopicList.get(position - pointBeanList.size() -(pointBeanList.size() == 0 ? 2 : 1)),true);
             } else {
-                ((OtherTopicHolder) holder).bind(otherTopicList.get(position - pointBeanList.size() -1),false);
+                ((OtherTopicHolder) holder).bind(otherTopicList.get(position - pointBeanList.size() -(pointBeanList.size() == 0 ? 2 : 1)),false);
             }
         }
     }
@@ -118,7 +120,9 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public int getItemViewType(int position) {
         if (position == 0) {
             return ITEM_TYPE_VOTE_VIEW;
-        } else if (position >= pointBeanList.size() + 1) {
+        }else if (pointBeanList.size() == 0 && position == 1) {
+            return ITEM_TYPE_NO_POINT;
+        } else if (position >= pointBeanList.size() + (pointBeanList.size() == 0 ? 2 : 1)) {
             return ITEM_TYPE_OTHER;
         }else {
             return ITEM_TYPE_COMMENT;
@@ -127,10 +131,14 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public int getItemCount() {
-        return pointBeanList.size() + otherTopicList.size() + 1;
+        return pointBeanList.size() + otherTopicList.size() + (pointBeanList.size() == 0 ? 2 : 1);
     }
 
-
+    public class NoPointHolder extends RecyclerView.ViewHolder {
+        public NoPointHolder(View itemView) {
+            super(itemView);
+        }
+    }
 
 
 }

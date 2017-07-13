@@ -45,6 +45,9 @@ public class VoteDialog extends BaseDialog implements View.OnClickListener {
 
     public VoteDialog(@NonNull Context context, @StyleRes int themeResId) {
         super(context, themeResId);
+        setContentView(R.layout.layout_vote_dialog);
+        init();
+
     }
     public void setListener(OnClickConfirmListener listener) {
         this.onClickConfirmListener = listener;
