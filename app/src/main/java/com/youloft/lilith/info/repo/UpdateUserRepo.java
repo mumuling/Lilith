@@ -61,7 +61,7 @@ public class UpdateUserRepo extends AbstractDataRepo {
         paramsUpdateUserInfo.put("LiveLongi", liveLongi);
         paramsUpdateUserInfo.put("LiveLati", liveLati);
 
-        return post(Urls.UPDATE_USER_INFO, null, paramsUpdateUserInfo, true, UserBean.class, "update_user_info", 0);
+        return post(Urls.UPDATE_USER_INFO, null, paramsUpdateUserInfo, true, UserBean.class, null, 0);
     }
 
 

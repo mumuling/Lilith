@@ -16,9 +16,10 @@ import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.CalendarHelper;
+import com.youloft.lilith.common.utils.LoginUtils;
 import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.common.widgets.picker.CityInfo;
-import com.youloft.lilith.common.widgets.picker.CityPickerPop;
+import com.youloft.lilith.common.widgets.picker.CityPicker;
 import com.youloft.lilith.common.widgets.picker.DatePickerPop;
 import com.youloft.lilith.common.widgets.picker.GenderPickerPop;
 import com.youloft.lilith.common.widgets.picker.OnPickerSelectListener;
@@ -74,6 +75,16 @@ public class EditInformationActivity extends BaseActivity {
     TextView tvPlaceNow;   //现居地点
     @BindView(R.id.et_nick_name)
     EditText etNickName;  //下面的可编辑昵称
+    @BindView(R.id.iv_tips_sex)
+    ImageView ivTipsSex;  //性别前面的感叹号
+    @BindView(R.id.iv_tips_date)
+    ImageView ivTipsDate; //日期前面的感叹号
+    @BindView(R.id.iv_tips_time)
+    ImageView ivTipsTime; //时间前面的感叹号
+    @BindView(R.id.iv_tips_birth_place)
+    ImageView ivTipsBirthPlace; //出生地前面的感叹号
+    @BindView(R.id.iv_tips_now)
+    ImageView ivTipsNow;   //现居地前面的感叹号
 
     private String birthLongi = "";//出生经度
     private String birthLati = "";//出生纬度
@@ -81,14 +92,39 @@ public class EditInformationActivity extends BaseActivity {
     private String liveLati = "";//现居地纬度
 
     private String sex;
-    private UserFileHandle fileHandle;
+    private UserFileHandle fileHandle;//文件选择处理器
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_information);
         ButterKnife.bind(this);
+        //初始化标题栏的显示,和监听
+        initTitle();
 
+        //根据数据做对应的初始化
+        initView();
+
+        //失去焦点隐藏光标,获得焦点显示光标
+        etNickName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    etNickName.setCursorVisible(true);
+                    etNickName.setSelection(etNickName.length());
+                    etNickName.setCursorVisible(true);
+                } else {
+                    etNickName.setCursorVisible(false);
+                    etNickName.setCursorVisible(false);
+                }
+            }
+        });
+    }
+
+    /**
+     * 初始化Title相关
+     */
+    private void initTitle() {
         btlEditInformation.setBackgroundColor(Color.TRANSPARENT);
         btlEditInformation.setTitle("编辑资料");
         btlEditInformation.setShowShareBtn(false);
@@ -117,24 +153,6 @@ public class EditInformationActivity extends BaseActivity {
                 savaUserInfo();
             }
         });
-
-        //根据数据做对应的初始化
-        initView();
-
-
-        etNickName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    etNickName.setCursorVisible(true);
-                    etNickName.setSelection(etNickName.length());
-                    etNickName.setCursorVisible(true);
-                } else {
-                    etNickName.setCursorVisible(false);
-                    etNickName.setCursorVisible(false);
-                }
-            }
-        });
     }
 
     /**
@@ -144,42 +162,82 @@ public class EditInformationActivity extends BaseActivity {
 
         UserBean userInfo = AppSetting.getUserInfo();
         if (userInfo != null) {//处于登录状态
-            //获取用户信息,并且展示
-            if (userInfo == null || userInfo.data == null || userInfo.data.userInfo == null) {
-                return;
-            }
+
             UserBean.DataBean.UserInfoBean detail = userInfo.data.userInfo;
+            //头像的初始化相关,如果有头像显示头像,如果没有显示默认头像
             if (!TextUtils.isEmpty(detail.headImg)) {
                 GlideApp.with(this).asBitmap().dontAnimate().load(detail.headImg).into(new GlideBlurTwoViewTarget(ivHeader, ivBlurBg));
-            }else {
-                ivHeader.setImageResource(R.drawable.default_user_head_img);
+            } else {
+                ivHeader.setImageResource(R.drawable.morentouxiang);
             }
-
+            //两个昵称初始化
             tvNickName.setText(detail.nickName);
             etNickName.setText(detail.nickName);
 
-            if (detail.sex == 2) {
-                tvSex.setText(R.string.man);
-            } else {
-                tvSex.setText(R.string.woman);
+
+            if (TextUtils.isEmpty(detail.birthLongi)) { //资料没完善过
+                tvSex.setText(R.string.select_sex);
+                tvSex.setTextColor(getResources().getColor(R.color.white_50));
+                ivTipsSex.setVisibility(View.VISIBLE);
+
+                tvDateBirth.setText(R.string.select_date_birth);
+                tvDateBirth.setTextColor(getResources().getColor(R.color.white_50));
+                ivTipsDate.setVisibility(View.VISIBLE);
+
+                tvTimeBirth.setText(R.string.select_time_birth);
+                tvTimeBirth.setTextColor(getResources().getColor(R.color.white_50));
+                ivTipsTime.setVisibility(View.VISIBLE);
+
+                tvPlaceBirth.setText(R.string.select_place_birth);
+                tvPlaceBirth.setTextColor(getResources().getColor(R.color.white_50));
+                ivTipsBirthPlace.setVisibility(View.VISIBLE);
+
+
+                tvPlaceNow.setText(R.string.select_place_now);
+                tvPlaceNow.setTextColor(getResources().getColor(R.color.white_50));
+                ivTipsNow.setVisibility(View.VISIBLE);
+
+            } else { //已经有完整的资料了
+                //需要给四个经纬度赋值
+                birthLongi = detail.birthLongi;//出生经度
+                birthLati = detail.birthLati;//出生纬度
+                liveLongi = detail.liveLongi;//现居地经度
+                liveLati = detail.liveLati;//现居地纬度
+                //性别
+                if (detail.sex == 2) {
+                    tvSex.setText(R.string.man);
+                } else {
+                    tvSex.setText(R.string.woman);
+                }
+
+                tvSex.setTextColor(getResources().getColor(R.color.white));
+                ivTipsSex.setVisibility(View.GONE);
+
+                //时间日期
+                String birthDay = detail.birthDay;
+                Date date = CalendarHelper.parseDate(birthDay, DATE_FORMAT);
+                mCal.setTime(date);
+                tvDateBirth.setText(CalendarHelper.format(mCal.getTime(), "yyyy-MM-dd"));
+                tvDateBirth.setTextColor(getResources().getColor(R.color.white));
+                ivTipsDate.setVisibility(View.GONE);
+
+                tvTimeBirth.setText(CalendarHelper.format(mCal.getTime(), "HH:mm"));
+                tvTimeBirth.setTextColor(getResources().getColor(R.color.white));
+                ivTipsTime.setVisibility(View.GONE);
+
+                tvPlaceBirth.setText(detail.birthPlace);
+                tvPlaceBirth.setTextColor(getResources().getColor(R.color.white));
+                ivTipsBirthPlace.setVisibility(View.GONE);
+
+                tvPlaceNow.setText(detail.livePlace);
+                tvPlaceNow.setTextColor(getResources().getColor(R.color.white));
+                ivTipsNow.setVisibility(View.GONE);
+
             }
 
-            String birthDay = detail.birthDay;
-            Date date = CalendarHelper.parseDate(birthDay, DATE_FORMAT);
-            mCal.setTime(date);
-            tvDateBirth.setText(CalendarHelper.format(mCal.getTime(), "yyyy-MM-dd"));
-            tvTimeBirth.setText(CalendarHelper.format(mCal.getTime(), "HH:mm"));
-            tvPlaceBirth.setText(detail.birthPlace);
-            tvPlaceNow.setText(detail.livePlace);
-
-            //去除感叹号
-            deleteTextDrawable(tvSex);
-            deleteTextDrawable(tvDateBirth);
-            deleteTextDrawable(tvTimeBirth);
-            deleteTextDrawable(tvPlaceBirth);
-            deleteTextDrawable(tvPlaceNow);
         }
     }
+
 
     /**
      * 保存用户信息的网络请求
@@ -198,10 +256,21 @@ public class EditInformationActivity extends BaseActivity {
             Toaster.showShort("请完善信息");
             return;
         }
-        if (nickName.length() > 7) {//昵称长度不能超过7个
+
+        if (nickName.length() > 20) {//昵称长度不能超过20个
             Toaster.showShort("昵称过长");
             return;
         }
+        //当这些字符串为默认字符串的时候 不让修改
+        if (sexStr.equals(getResources().getString(R.string.select_sex))
+                || dateBirth.equals(getResources().getString(R.string.select_date_birth))
+                || timeBirth.equals(getResources().getString(R.string.select_time_birth))
+                || placeBirth.equals(getResources().getString(R.string.select_place_birth))
+                || placeNow.equals(getResources().getString(R.string.select_place_now))) {
+            Toaster.showShort("请完善信息");
+            return;
+        }
+
         sex = "1";
         if (sexStr.equals(getResources().getString(R.string.man))) {//女 1   男 2
             sex = String.valueOf(2);
@@ -298,77 +367,124 @@ public class EditInformationActivity extends BaseActivity {
     public void onViewClicked(View view) {
         etNickName.setCursorVisible(false);
         switch (view.getId()) {
-            case R.id.fl_sex:
-                int sex = AppSetting.getUserInfo().data.userInfo.sex;
-                String gender;
-                if (sex == 2) {//男
-                    gender = "男";
-                } else {//女
-                    gender = "女";
+            case R.id.fl_sex:    //弹出性别选择器
+                if (!LoginUtils.canClick()) {
+                    return;
                 }
-                GenderPickerPop.getDefaultGenderPicker(this)
-                        .setGender(gender) //这儿设置默认显示
-                        .setOnSelectListener(new OnPickerSelectListener() {
-                            @Override
-                            public void onSelected(Object data) {
-                                String sex = (String) data;
-                                tvSex.setText(sex);
-                                deleteTextDrawable(tvSex);
-                            }
-
-                            @Override
-                            public void onCancel() {
-
-                            }
-                        })
-                        .show();
+                showGenderPicker();
                 break;
-            case R.id.fl_date_birth:
-                DatePickerPop.getDefaultDatePicker(this)
-                        .setDate(mCal)
-                        .setOnSelectListener(new OnPickerSelectListener<GregorianCalendar>() {
-                            @Override
-                            public void onSelected(GregorianCalendar data) {
-                                mCal.set(Calendar.YEAR, data.get(Calendar.YEAR));
-                                mCal.set(Calendar.MONTH, data.get(Calendar.MONTH));
-                                mCal.set(Calendar.DAY_OF_MONTH, data.get(Calendar.DAY_OF_MONTH));
-                                tvDateBirth.setText(CalendarHelper.format(mCal.getTime(), "yyyy-MM-dd"));
-                                deleteTextDrawable(tvDateBirth);
-                            }
-
-                            @Override
-                            public void onCancel() {
-
-                            }
-                        })
-                        .show();
+            case R.id.fl_date_birth://弹出日期选择器
+                if (!LoginUtils.canClick()) {
+                    return;
+                }
+                showDatePicker();
                 break;
-            case R.id.fl_time_birth:
-                TimePickerPop.getDefaultTimePicker(this)
-                        .setDate(mCal.getTime())
-                        .setOnSelectListener(new OnPickerSelectListener<GregorianCalendar>() {
-                            @Override
-                            public void onSelected(GregorianCalendar data) {
-                                mCal.set(Calendar.HOUR_OF_DAY, data.get(Calendar.HOUR_OF_DAY));
-                                mCal.set(Calendar.MINUTE, data.get(Calendar.MINUTE));
-                                tvTimeBirth.setText(CalendarHelper.format(mCal.getTime(), "HH:mm"));
-                                deleteTextDrawable(tvTimeBirth);
-                            }
-
-                            @Override
-                            public void onCancel() {
-
-                            }
-                        })
-                        .show();
+            case R.id.fl_time_birth://弹出时间选择器
+                if (!LoginUtils.canClick()) {
+                    return;
+                }
+                showTimePicker();
                 break;
             case R.id.fl_place_birth://弹出城市选择器
+                if (!LoginUtils.canClick()) {
+                    return;
+                }
                 cityPick(tvPlaceBirth, true);
                 break;
             case R.id.fl_place_now://弹出城市选择器
+                if (!LoginUtils.canClick()) {
+                    return;
+                }
                 cityPick(tvPlaceNow, false);
                 break;
         }
+    }
+
+    /**
+     * 弹出时间选择器
+     */
+    private void showTimePicker() {
+        TimePickerPop.getDefaultTimePicker(this)
+                .setDate(mCal.getTime())
+                .setOnSelectListener(new OnPickerSelectListener<GregorianCalendar>() {
+                    @Override
+                    public void onSelected(GregorianCalendar data) {
+                        mCal.set(Calendar.HOUR_OF_DAY, data.get(Calendar.HOUR_OF_DAY));
+                        mCal.set(Calendar.MINUTE, data.get(Calendar.MINUTE));
+                        tvTimeBirth.setText(CalendarHelper.format(mCal.getTime(), "HH:mm"));
+                        tvTimeBirth.setTextColor(getResources().getColor(R.color.white));
+                        ivTipsTime.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onCancel() {
+
+                    }
+                })
+                .show();
+    }
+
+    /**
+     * 弹出日期选择器
+     */
+    private void showDatePicker() {
+        DatePickerPop.getDefaultDatePicker(this)
+                .setDate(mCal)
+                .setOnSelectListener(new OnPickerSelectListener<GregorianCalendar>() {
+                    @Override
+                    public void onSelected(GregorianCalendar data) {
+                        mCal.set(Calendar.YEAR, data.get(Calendar.YEAR));
+                        mCal.set(Calendar.MONTH, data.get(Calendar.MONTH));
+                        mCal.set(Calendar.DAY_OF_MONTH, data.get(Calendar.DAY_OF_MONTH));
+                        tvDateBirth.setText(CalendarHelper.format(mCal.getTime(), "yyyy-MM-dd"));
+                        tvDateBirth.setTextColor(getResources().getColor(R.color.white));
+                        ivTipsDate.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onCancel() {
+
+                    }
+                })
+                .show();
+    }
+
+    /**
+     * 弹出性别选择器
+     */
+    private void showGenderPicker() {
+
+        GenderPickerPop picker;//这里需要判断一下 picker的初始化值
+        if (AppSetting.getUserInfo() == null) {
+            picker = GenderPickerPop.getDefaultGenderPicker(this);
+        } else {
+            int sex = AppSetting.getUserInfo().data.userInfo.sex;
+            String gender;
+            if (sex == 2) {//男
+                gender = "男";
+            } else {//女
+                gender = "女";
+            }
+            picker = GenderPickerPop.getDefaultGenderPicker(this)
+                    .setGender(gender);
+        }
+
+        picker
+                .setOnSelectListener(new OnPickerSelectListener() {
+                    @Override
+                    public void onSelected(Object data) {
+                        String sex = (String) data;
+                        tvSex.setText(sex);
+                        tvSex.setTextColor(getResources().getColor(R.color.white));
+                        ivTipsSex.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onCancel() {
+
+                    }
+                })
+                .show();
     }
 
     /**
@@ -379,9 +495,9 @@ public class EditInformationActivity extends BaseActivity {
      */
     private void cityPick(final TextView tv, final boolean b) {
 
-        CityPickerPop cityPickerPop = getCityPicker(b);
+        CityPicker cityPicker = getCityPicker(b);
 
-        cityPickerPop
+        cityPicker
                 .setOnCityItemClickListener(new OnPickerSelectListener<CityInfo>() {
                     @Override
                     public void onSelected(CityInfo data) {
@@ -389,15 +505,16 @@ public class EditInformationActivity extends BaseActivity {
                         builder.append(data.pProvice).append("-").append(data.pCity).append("-").append(data.pDistrict);
                         String content = builder.toString();
                         tv.setText(content);
-                        deleteTextDrawable(tv);
                         if (b) {
                             birthLongi = data.pLongitude;
                             birthLati = data.pLatitude;
+                            ivTipsBirthPlace.setVisibility(View.GONE);
                         } else {
                             liveLongi = data.pLongitude;
                             liveLati = data.pLatitude;
+                            ivTipsNow.setVisibility(View.GONE);
                         }
-
+                        tv.setTextColor(getResources().getColor(R.color.white));
                     }
 
                     @Override
@@ -413,35 +530,28 @@ public class EditInformationActivity extends BaseActivity {
      *
      * @param b 来源  true代表出生地   false 现居地
      */
-    private CityPickerPop getCityPicker(boolean b) {
+    private CityPicker getCityPicker(boolean b) {
         if (b) {
 
             String content = tvPlaceBirth.getText().toString();
-            if (TextUtils.isEmpty(content)) {
-                return CityPickerPop.getDefCityPicker(this);
-            } else {
-                String[] split = content.split("-");
-                return CityPickerPop.getDefCityPicker(this).province(split[0]).city(split[1]).district(split[2]);
-            }
+            return getCityPicker2(content);
 
         } else {
             String content = tvPlaceNow.getText().toString();
-            if (TextUtils.isEmpty(content)) {
-                return CityPickerPop.getDefCityPicker(this);
-            } else {
-                String[] split = content.split("-");
-                return CityPickerPop.getDefCityPicker(this).province(split[0]).city(split[1]).district(split[2]);
-            }
+            return getCityPicker2(content);
 
         }
     }
 
-    /**
-     * 去掉TextView的左边的小图标
-     */
-    private void deleteTextDrawable(TextView tv) {
-        tv.setCompoundDrawables(null, null, null, null);
+    private CityPicker getCityPicker2(String content) {
+        if (!TextUtils.isEmpty(content) && content.contains("-")) {
+            String[] split = content.split("-");
+            return CityPicker.getDefCityPicker(this).province(split[0]).city(split[1]).district(split[2]);
+        } else {
+            return CityPicker.getDefCityPicker(this);
+        }
     }
+
 
     @Override
     public void onBackPressed() {
