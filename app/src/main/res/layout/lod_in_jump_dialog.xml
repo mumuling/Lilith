@@ -31,6 +31,7 @@
                 android:layout_gravity="center_horizontal"
                 android:src="@drawable/default_user_head_img"
                 android:layout_marginTop="22dp"
+                android:scaleType="centerCrop"
                 app:radius="80dp" />
 
             <TextView
