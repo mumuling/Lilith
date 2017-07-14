@@ -14,7 +14,7 @@ import java.util.GregorianCalendar;
  * 日期选择器
  * Created by javen on 15/4/18.
  */
-public class DatePicker extends FrameLayout {
+public class DatePickerView extends FrameLayout {
 
 
     private GregorianCalendar minDate = makeDate(1900, 1, 1);
@@ -81,11 +81,11 @@ public class DatePicker extends FrameLayout {
 
     }
 
-    public DatePicker(Context context) {
+    public DatePickerView(Context context) {
         this(context, null);
     }
 
-    public DatePicker(Context context, AttributeSet attrs) {
+    public DatePickerView(Context context, AttributeSet attrs) {
         super(context, attrs);
         inflate(context, R.layout.picker_date, this);
         GregorianCalendar curr = new GregorianCalendar();

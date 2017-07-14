@@ -81,7 +81,6 @@ public class UserImageStackViewGroup extends RelativeLayout {
             if (safeData != null) {
                 safeData.setVisibility(INVISIBLE);
             }
-
         }
         for (int i = 0; i < Math.min(imageList.size(), mUserImageList.size()); i++) {
             mUserImageList.get(i).setVisibility(VISIBLE);

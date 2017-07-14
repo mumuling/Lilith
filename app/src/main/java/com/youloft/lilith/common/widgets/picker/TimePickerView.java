@@ -16,7 +16,7 @@ import java.util.GregorianCalendar;
  * <p/>
  * Created by javen on 15/4/18.
  */
-public class TimePicker extends FrameLayout {
+public class TimePickerView extends FrameLayout {
 
     protected GregorianCalendar mDate = new GregorianCalendar();
 
@@ -72,11 +72,11 @@ public class TimePicker extends FrameLayout {
     }
 
 
-    public TimePicker(Context context) {
+    public TimePickerView(Context context) {
         this(context, null);
     }
 
-    public TimePicker(Context context, AttributeSet attrs) {
+    public TimePickerView(Context context, AttributeSet attrs) {
         super(context, attrs);
         inflate(context, R.layout.picker_time, this);
         assignViews();

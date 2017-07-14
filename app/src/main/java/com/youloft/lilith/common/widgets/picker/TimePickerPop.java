@@ -1,16 +1,10 @@
 package com.youloft.lilith.common.widgets.picker;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 
 import com.youloft.lilith.R;
+import com.youloft.lilith.common.widgets.dialog.PickerBaseDialog;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -18,43 +12,32 @@ import java.util.GregorianCalendar;
 
 /**
  * Created by zchao on 2017/7/9.
- * desc:
+ * desc: 时间选择弹窗，如果没有特殊需求，请直接调用{@link #getDefaultTimePicker(Context)},
+ *       然后通过接口来获得选择结果{@link #setOnSelectListener(OnPickerSelectListener)}
+ *       最后必须要调用show()才会弹出弹窗;
  * version:
  */
 
-public class TimePickerPop implements CanShow, TimePicker.onTimeChangedListener {
+public class TimePickerPop extends PickerBaseDialog implements CanShow, TimePickerView.onTimeChangedListener {
 
-    private final PopupWindow popwindow;
-    private final View popview;
     private final View mCancel;
     private final View mConfirm;
     Context mContext;
-    private final TimePicker mTimePicker;
+    private final TimePickerView mTimePickerView;
     private int hour = 0;
     private int min = 0;
     private GregorianCalendar mCal = new GregorianCalendar();
     private OnPickerSelectListener<GregorianCalendar> listener;
 
     public TimePickerPop(Context mContext) {
+        super(mContext);
         this.mContext = mContext;
+        setContentView(R.layout.pop_timepicker);
+        mConfirm = findViewById(R.id.tv_confirm);
+        mCancel = findViewById(R.id.tv_cancel);
+        mTimePickerView = (TimePickerView) findViewById(R.id.time_picker);
 
-        LayoutInflater layoutInflater = LayoutInflater.from(mContext);
-        popview = layoutInflater.inflate(R.layout.pop_timepicker, null);
-        mConfirm = popview.findViewById(R.id.tv_confirm);
-        mCancel = popview.findViewById(R.id.tv_cancel);
-        mTimePicker = (TimePicker) popview.findViewById(R.id.time_picker);
-
-        popwindow = new PopupWindow(popview, LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        popwindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        popwindow.setAnimationStyle(R.style.AnimBottom);
-        popwindow.setTouchable(true);
-        popwindow.setOutsideTouchable(false);
-        popwindow.setFocusable(true);
-        popwindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-
-
-        mTimePicker.setDateChangedListener(this);
+        mTimePickerView.setDateChangedListener(this);
 
         setUpData();
 
@@ -79,11 +62,12 @@ public class TimePickerPop implements CanShow, TimePicker.onTimeChangedListener 
         });
     }
 
-    public TimePickerPop setDate(Date date){
+    public TimePickerPop setDate(Date date) {
         mCal.setTime(date);
         setUpData();
         return this;
     }
+
     public TimePickerPop setOnSelectListener(OnPickerSelectListener listener) {
         this.listener = listener;
         return this;
@@ -99,30 +83,22 @@ public class TimePickerPop implements CanShow, TimePicker.onTimeChangedListener 
 
     }
 
-    @Override
-    public void show() {
-        if (!isShow()) {
-//            setUpData();
-            popwindow.showAtLocation(popview, Gravity.BOTTOM, 0, 0);
-        }
-    }
-
     private void setUpData() {
         hour = mCal.get(Calendar.HOUR_OF_DAY);
         min = mCal.get(Calendar.MINUTE);
-        mTimePicker.setHourAndMin(hour, min);
+        mTimePickerView.setHourAndMin(hour, min);
     }
 
     @Override
     public void hide() {
         if (isShow()) {
-            popwindow.dismiss();
+            super.dismiss();
         }
     }
 
     @Override
     public boolean isShow() {
-        return popwindow.isShowing();
+        return isShowing();
     }
 
     @Override

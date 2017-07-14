@@ -1,8 +1,7 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/ll_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#6f9f"
     android:layout_gravity="bottom"
     android:orientation="vertical">
 
@@ -10,7 +9,6 @@
         android:id="@+id/ll_title_background"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:background="@color/constellation_week_color"
         android:orientation="vertical">
 
@@ -52,4 +50,4 @@
     </LinearLayout>
 
 
-</RelativeLayout>
+</FrameLayout>

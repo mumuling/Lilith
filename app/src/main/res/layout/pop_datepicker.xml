@@ -1,52 +1,41 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/ll_root"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_title_background"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/constellation_week_color"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/ll_title_background"
+    <RelativeLayout
+        android:id="@+id/rl_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/constellation_week_color"
-        android:orientation="vertical">
-
-        <RelativeLayout
-            android:id="@+id/rl_title"
-            android:layout_width="match_parent"
-            android:layout_height="45dp">
-
-            <ImageView
-                android:id="@+id/tv_confirm"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="15dp"
-                android:src="@drawable/popup_right_icon" />
-
-            <ImageView
-                android:id="@+id/tv_cancel"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="15dp"
-                android:gravity="center_vertical"
-                android:src="@drawable/topic_close_icon" />
-
-        </RelativeLayout>
+        android:layout_height="45dp">
 
         <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/white_10" />
+            android:id="@+id/tv_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            android:src="@drawable/popup_right_icon" />
 
-        <com.youloft.lilith.common.widgets.picker.DatePicker
-            android:id="@+id/date_picker"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        <ImageView
+            android:id="@+id/tv_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="15dp"
+            android:gravity="center_vertical"
+            android:src="@drawable/topic_close_icon" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/white_10" />
 
-</RelativeLayout>
+    <com.youloft.lilith.common.widgets.picker.DatePickerView
+        android:id="@+id/date_picker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>
