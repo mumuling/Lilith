@@ -13,6 +13,7 @@ import com.youloft.lilith.topic.TopicRepo;
 import com.youloft.lilith.topic.adapter.TopicAdapter;
 import com.youloft.lilith.topic.bean.TopicBean;
 import com.youloft.lilith.ui.TabManager;
+import com.youloft.statistics.AppAnalytics;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -64,10 +65,20 @@ public class ConsHotTopicHolder extends CardHolder {
         mConsHotTopicList.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
         adapter = new TopicAdapter(mContext, true);
         mConsHotTopicList.setAdapter(adapter);
+        mConsHotTopicList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dx > 0) {
+                    AppAnalytics.onEvent("Slideview", "C");
+                }
+            }
+        });
     }
 
     @OnClick(R.id.cons_hot_topic_card_more)
     public void showMore() {
+        AppAnalytics.onEvent("Hometopicmore", "C");
         EventBus.getDefault().post(new TabChangeEvent(TabManager.TAB_INDEX_HT));
     }
 

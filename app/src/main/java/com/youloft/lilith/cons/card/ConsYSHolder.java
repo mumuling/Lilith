@@ -15,6 +15,7 @@ import com.youloft.lilith.cons.bean.ConsPredictsBean;
 import com.youloft.lilith.cons.bean.LuckData;
 import com.youloft.lilith.cons.consmanager.LoddingCheckEvent;
 import com.youloft.lilith.cons.view.LuckView;
+import com.youloft.statistics.AppAnalytics;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -40,6 +41,8 @@ public class ConsYSHolder extends ConsBaseHolder {
     public static final int CONS_LOVE = 2;
     public static final int CONS_WORK = 3;
     public static final int CONS_MONEY = 4;
+    private String mReportKey = "Summaryfortunes"; //上报key
+    private boolean isReport = false;              //是否已上报
 
     private static final String formatDate = "yyyy-MM-dd";
     private SimpleDateFormat format = null;
@@ -54,22 +57,41 @@ public class ConsYSHolder extends ConsBaseHolder {
     @BindView(R.id.root)
     LinearLayout mRoot;
 
+
     public ConsYSHolder(Context context, ViewGroup parent, int type) {
         super(context, parent, R.layout.cons_ys_holder);
         this.type = type;
         ButterKnife.bind(this, itemView);
         format = new SimpleDateFormat(formatDate);
         mConsLuckView.setType(type);
+        initReportKey();
+    }
+
+    private void initReportKey() {
+        if (type == CONS_YS) {
+            mReportKey = "Summaryfortunes";
+        } else if (type == CONS_LOVE) {
+            mReportKey = "Feelingfortunes";
+        } else if (type == CONS_WORK) {
+            mReportKey = "Jobfortunes";
+        } else if (type == CONS_MONEY) {
+            mReportKey = "Wealthfortunes";
+        }
     }
 
     @OnClick(R.id.root)
     public void checkLodding() {
+        AppAnalytics.onEvent(mReportKey, "C");
         EventBus.getDefault().post(new LoddingCheckEvent());
     }
 
     @Override
     public void bindData(ConsPredictsBean data) {
         super.bindData(data);
+        if (!isReport) {
+            AppAnalytics.onEvent(mReportKey, "IM");
+            isReport = true;
+        }
         if (data == null || data.data == null) {
             return;
         }

@@ -29,6 +29,12 @@ public class CityInfoManager {
     private static int DB_VERSION = 2;
     protected Context mContext;
     private SQLiteDatabase db;
+    private final int BUFFER_SIZE = 400000;
+    public static final String PACKAGE_NAME = AppConfig.Bundle;
+    public static final String DB_PATH = "/data" + Environment.getDataDirectory().getAbsolutePath() + "/"
+            + PACKAGE_NAME + "/databases";
+    String dbfile = DB_PATH + "/city.db";
+
 
     private String[] mProvinceDatas;
     /**
@@ -140,9 +146,10 @@ public class CityInfoManager {
 
     /**
      * 获取所有城市经纬度
+     *
      * @return
      */
-    public synchronized Map<String, String[]> getDistrictLongAndLati(){
+    public synchronized Map<String, String[]> getDistrictLongAndLati() {
         if (mLongAndLat.isEmpty()) {
             getCityAndDistrictDate();
         }
@@ -152,7 +159,7 @@ public class CityInfoManager {
 
     private Cursor rawQueryByKey(String row, String value, String distinct) {
         String distinctsql = TextUtils.isEmpty(distinct) ? "*" : "distinct " + distinct;
-        String sql = "select "+ distinctsql +" from " + TABLE_NAME + " where " + row + "='" + value + "'";
+        String sql = "select " + distinctsql + " from " + TABLE_NAME + " where " + row + "='" + value + "'";
         if (db == null || !db.isOpen()) {
             db = openDatabase();
         }
@@ -179,11 +186,6 @@ public class CityInfoManager {
     }
 
 
-    private final int BUFFER_SIZE = 400000;
-    public static final String PACKAGE_NAME = AppConfig.Bundle;
-    public static final String DB_PATH = "/data" +Environment.getDataDirectory().getAbsolutePath() + "/"
-            + PACKAGE_NAME + "/databases";
-    String dbfile = DB_PATH + "/city.db";
     private SQLiteDatabase openDatabase() {
         try {
             int cityDBVersion = AppSetting.getCityDBVersion();
