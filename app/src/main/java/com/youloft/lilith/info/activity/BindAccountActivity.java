@@ -47,6 +47,8 @@ public class BindAccountActivity extends BaseActivity {
     TextView tvPhone;
     @BindView(R.id.tv_phone_number)
     TextView tvPhoneNumber;
+    @BindView(R.id.tv_bind_weixin)
+    TextView tvBindWeixin;
 
 
     @Override
@@ -55,7 +57,13 @@ public class BindAccountActivity extends BaseActivity {
         setContentView(R.layout.activity_bind_accont);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
-        btlBindAccount.setTitle("绑定账号");
+        initTilte();
+        //进来的时候看看用户是否有手机号码,有就显示绑定的手机
+        initView();
+    }
+
+    private void initTilte() {
+        btlBindAccount.setTitle(getResources().getString(R.string.bind_account));
         btlBindAccount.setShowShareBtn(false);
         btlBindAccount.setOnToolBarItemClickListener(new BaseToolBar.OnToolBarItemClickListener() {
             @Override
@@ -78,23 +86,27 @@ public class BindAccountActivity extends BaseActivity {
 
             }
         });
-        //进来的时候看看用户是否有手机号码,有就显示绑定的手机
-        bindPhoneNumber();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onBindAccount(BindAccountEvent bindAccountEvent) {
-        bindPhoneNumber();
+        initView();
     }
 
-    private void bindPhoneNumber() {
+    private void initView() {
         UserBean userInfo = AppSetting.getUserInfo();
         if (userInfo == null) {
             return;
         }
+        boolean bindWx = userInfo.data.userInfo.bindWx;
+        if (bindWx) {
+            tvBindWeixin.setVisibility(View.VISIBLE);
+        } else {
+            tvBindWeixin.setVisibility(View.INVISIBLE);
+        }
         String phone = userInfo.data.userInfo.phone;
         if (phone.length() != 11) return;
-        phone = phone.substring(0,4)+"****"+phone.substring(8);
+        phone = phone.substring(0, 3) + "****" + phone.substring(7);
         tvPhoneNumber.setText(phone);
         tvPhoneNumber.setVisibility(View.VISIBLE);
     }
@@ -171,6 +183,9 @@ public class BindAccountActivity extends BaseActivity {
                     public void onDataSuccess(UserBean userBean) {
                         if (userBean.data.result == 0) {
                             Toaster.showShort("绑定成功");
+                            userBean.data.userInfo.bindWx = true;
+                            AppSetting.saveUserInfo(userBean);
+                            tvBindWeixin.setVisibility(View.VISIBLE);
                         } else {
                             Toaster.showShort("绑定失败");
                         }

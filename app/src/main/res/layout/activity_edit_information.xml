@@ -32,7 +32,7 @@
                 android:src="@drawable/div" />
             <!--用户昵称-->
             <TextView
-                android:id="@+id/tv_nick_name1"
+                android:id="@+id/tv_nick_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|bottom"
@@ -69,13 +69,13 @@
                     android:layout_marginTop="14dp"
                     android:background="@color/white_10" />
 
-                <FrameLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="103dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginBottom="14dp"
@@ -107,14 +107,14 @@
                     android:layout_marginLeft="20dp"
                     android:background="@color/white_10" />
 
-                <FrameLayout
+                <LinearLayout
                     android:id="@+id/fl_sex"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="103dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginBottom="14dp"
@@ -123,19 +123,29 @@
                         android:text="@string/sex"
                         android:textColor="@color/white"
                         android:textSize="16dp" />
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent">
+                        <ImageView
+                            android:id="@+id/iv_tips_sex"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="3dp"
+                            android:src="@drawable/mine_tips_icon"
+                            android:layout_gravity="center_vertical"/>
+                        <TextView
+                            android:id="@+id/tv_sex"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:drawablePadding="3dp"
+                            android:text="@string/select_sex"
+                            android:textColor="@color/white"
+                            android:textSize="16dp" />
+                    </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/tv_sex"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="114dp"
-                        android:drawableLeft="@drawable/mine_tips_icon"
-                        android:drawablePadding="3dp"
-                        android:text="@string/select_sex"
-                        android:textColor="@color/white"
-                        android:textSize="16dp" />
-                </FrameLayout>
+                </LinearLayout>
                 <!--分割线-->
                 <View
                     android:layout_width="match_parent"
@@ -143,14 +153,14 @@
                     android:layout_marginLeft="20dp"
                     android:background="@color/white_10" />
 
-                <FrameLayout
+                <LinearLayout
                     android:id="@+id/fl_date_birth"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="103dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginBottom="14dp"
@@ -159,19 +169,27 @@
                         android:text="@string/date_birth"
                         android:textColor="@color/white"
                         android:textSize="16dp" />
-
-                    <TextView
-                        android:id="@+id/tv_date_birth"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="114dp"
-                        android:drawableLeft="@drawable/mine_tips_icon"
-                        android:drawablePadding="3dp"
-                        android:text="@string/select_date_birth"
-                        android:textColor="@color/white"
-                        android:textSize="16dp" />
-                </FrameLayout>
+                        android:layout_height="match_parent">
+                        <ImageView
+                            android:id="@+id/iv_tips_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/mine_tips_icon"
+                            android:layout_marginRight="3dp"
+                            android:layout_gravity="center_vertical"/>
+                        <TextView
+                            android:id="@+id/tv_date_birth"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="@string/select_date_birth"
+                            android:textColor="@color/white"
+                            android:textSize="16dp" />
+                    </LinearLayout>
+
+                </LinearLayout>
                 <!--分割线-->
                 <View
                     android:layout_width="match_parent"
@@ -179,14 +197,14 @@
                     android:layout_marginLeft="20dp"
                     android:background="@color/white_10" />
 
-                <FrameLayout
+                <LinearLayout
                     android:id="@+id/fl_time_birth"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="103dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginBottom="14dp"
@@ -195,19 +213,26 @@
                         android:text="@string/time_birth"
                         android:textColor="@color/white"
                         android:textSize="16dp" />
-
-                    <TextView
-                        android:id="@+id/tv_time_birth"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="114dp"
-                        android:drawableLeft="@drawable/mine_tips_icon"
-                        android:drawablePadding="3dp"
-                        android:text="@string/select_time_birth"
-                        android:textColor="@color/white"
-                        android:textSize="16dp" />
-                </FrameLayout>
+                        android:layout_height="match_parent">
+                        <ImageView
+                            android:id="@+id/iv_tips_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="3dp"
+                            android:src="@drawable/mine_tips_icon"
+                            android:layout_gravity="center_vertical"/>
+                        <TextView
+                            android:id="@+id/tv_time_birth"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="@string/select_time_birth"
+                            android:textColor="@color/white"
+                            android:textSize="16dp" />
+                    </LinearLayout>
+                </LinearLayout>
                 <!--分割线-->
                 <View
                     android:layout_width="match_parent"
@@ -215,14 +240,14 @@
                     android:layout_marginLeft="20dp"
                     android:background="@color/white_10" />
 
-                <FrameLayout
+                <LinearLayout
                     android:id="@+id/fl_place_birth"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="103dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginBottom="14dp"
@@ -231,19 +256,26 @@
                         android:text="@string/place_birth"
                         android:textColor="@color/white"
                         android:textSize="16dp" />
-
-                    <TextView
-                        android:id="@+id/tv_place_birth"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="114dp"
-                        android:drawableLeft="@drawable/mine_tips_icon"
-                        android:drawablePadding="3dp"
-                        android:text="@string/select_place_birth"
-                        android:textColor="@color/white"
-                        android:textSize="16dp" />
-                </FrameLayout>
+                        android:layout_height="match_parent">
+                        <ImageView
+                            android:id="@+id/iv_tips_birth_place"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="3dp"
+                            android:src="@drawable/mine_tips_icon"
+                            android:layout_gravity="center_vertical"/>
+                        <TextView
+                            android:id="@+id/tv_place_birth"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="@string/select_place_birth"
+                            android:textColor="@color/white"
+                            android:textSize="16dp" />
+                    </LinearLayout>
+                </LinearLayout>
                 <!--分割线-->
                 <View
                     android:layout_width="match_parent"
@@ -251,14 +283,14 @@
                     android:layout_marginLeft="20dp"
                     android:background="@color/white_10" />
 
-                <FrameLayout
+                <LinearLayout
                     android:id="@+id/fl_place_now"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="103dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginBottom="14dp"
@@ -267,19 +299,27 @@
                         android:text="@string/place_now"
                         android:textColor="@color/white"
                         android:textSize="16dp" />
-
-                    <TextView
-                        android:id="@+id/tv_place_now"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="114dp"
-                        android:drawableLeft="@drawable/mine_tips_icon"
-                        android:drawablePadding="3dp"
-                        android:text="@string/select_place_now"
-                        android:textColor="@color/white"
-                        android:textSize="16dp" />
-                </FrameLayout>
+                        android:layout_height="match_parent">
+                        <ImageView
+                            android:id="@+id/iv_tips_now"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/mine_tips_icon"
+                            android:layout_marginRight="3dp"
+                            android:layout_gravity="center_vertical"/>
+                        <TextView
+                            android:id="@+id/tv_place_now"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="@string/select_place_now"
+                            android:textColor="@color/white"
+                            android:textSize="16dp" />
+                    </LinearLayout>
+
+                </LinearLayout>
                 <!--分割线-->
                 <View
                     android:layout_width="match_parent"

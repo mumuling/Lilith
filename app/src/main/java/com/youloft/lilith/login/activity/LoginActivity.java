@@ -274,9 +274,9 @@ public class LoginActivity extends BaseActivity {
         String nickName64 = Base64.encodeToString(nickName.getBytes(), Base64.DEFAULT);
         //由于服务器对性别的区分是1 2 所以做一下转换
         if ("男".equals(gender)) {
-            gender = "1";
-        } else if ("女".equals(gender)) {
             gender = "2";
+        } else if ("女".equals(gender)) {
+            gender = "1";
         } else {
             gender = "0";
         }

@@ -81,7 +81,7 @@ public class TopicDetailActivity extends BaseActivity {
         topicInfoCache = TopicInfoCache.getIns(this);
         pointCache = PointCache.getIns(this);
         initView();
-        requestTopicDetail();//请求话题的详细信息
+        requestTopicDetail(true);//请求话题的详细信息
         requestPointList();//请求观点列表
         requestOtherTopicList();//请求底部的更多话题
     }
@@ -183,14 +183,14 @@ public class TopicDetailActivity extends BaseActivity {
     /**
      * 请求话题详细信息
      */
-    private void requestTopicDetail() {
+    private void requestTopicDetail(boolean needCache) {
         int userId = -1;
         UserBean userBean = AppSetting.getUserInfo();
         if (userBean != null) {
             userId = userBean.data.userInfo.id;
         }
 
-        TopicRepo.getTopicDetail(String.valueOf(tid), userId == -1 ? null : String.valueOf(userId))
+        TopicRepo.getTopicDetail(String.valueOf(tid), userId == -1 ? null : String.valueOf(userId),needCache)
                 .compose(this.<TopicDetailBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
@@ -238,7 +238,7 @@ public class TopicDetailActivity extends BaseActivity {
      */
     @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
     public void onLoddingChagne(LoginEvent event) {
-        requestTopicDetail();
+        requestTopicDetail(false);
 
     }
 

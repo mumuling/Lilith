@@ -38,25 +38,26 @@
                 android:id="@+id/tv_phone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/flag1"
-                android:layout_centerVertical="true"
                 android:layout_marginStart="10dp"
-                android:layout_toEndOf="@+id/flag1"
                 android:text="@string/bind_phone"
                 android:textColor="@color/white"
-                android:textSize="16dp" />
+                android:textSize="16dp"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/flag1"
+                android:layout_toEndOf="@+id/flag1"
+                android:layout_marginLeft="10dp" />
 
             <TextView
                 android:id="@+id/tv_phone_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/flag5"
-                android:layout_centerVertical="true"
                 android:layout_marginEnd="8dp"
-                android:layout_toStartOf="@+id/flag5"
-                android:text=""
                 android:textColor="@color/white"
-                android:textSize="16dp" />
+                android:textSize="16dp"
+                android:layout_alignTop="@+id/flag5"
+                android:layout_toLeftOf="@+id/flag5"
+                android:layout_toStartOf="@+id/flag5"
+                android:layout_marginRight="8dp" />
 
             <ImageView
                 android:id="@+id/flag5"
@@ -103,21 +104,36 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/flag2"
-                    android:layout_centerVertical="true"
                     android:layout_marginStart="10dp"
-                    android:layout_toEndOf="@+id/flag2"
                     android:text="绑定微信"
-                    android:textColor="#ffffff"
-                    android:textSize="16dp" />
+                    android:textColor="@color/white"
+                    android:textSize="16dp"
+                    android:layout_alignTop="@+id/flag2"
+                    android:layout_toRightOf="@+id/flag2"
+                    android:layout_toEndOf="@+id/flag2"
+                    android:layout_marginLeft="10dp" />
 
+                <TextView
+                    android:id="@+id/tv_bind_weixin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="已绑定"
+                    android:visibility="invisible"
+                    android:textColor="@color/white"
+                    android:textSize="16dp"
+                    android:layout_alignTop="@+id/imageView"
+                    android:layout_toLeftOf="@+id/imageView"
+                    android:layout_toStartOf="@+id/imageView"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginEnd="8dp" />
                 <ImageView
                     android:layout_width="15dp"
                     android:layout_height="15dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="15dp"
-                    android:src="@drawable/mine_more_icon" />
+                    android:src="@drawable/mine_more_icon"
+                    android:id="@+id/imageView" />
             </RelativeLayout>
             <!--分割线-->
             <View

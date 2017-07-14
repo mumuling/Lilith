@@ -26,7 +26,13 @@
         android:layout_height="match_parent"
         android:id="@+id/image_topic_bg"
         app:radius="5dp"
-        android:scaleType="fitXY"/>
+        android:scaleType="centerCrop"/>
+        <com.youloft.lilith.common.widgets.view.RoundImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#80000000"
+            app:radius="5dp"
+            />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

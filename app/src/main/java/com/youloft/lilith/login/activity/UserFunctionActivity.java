@@ -340,7 +340,7 @@ public class UserFunctionActivity extends BaseActivity {
 
                             AppSetting.saveUserInfo(userBean); //保存用户信息
                             EventBus.getDefault().post(new LoginEvent(true));//发送登录事件
-                            if (TextUtils.isEmpty(userBean.data.userInfo.birthLongi)){ //新用户
+                            if (TextUtils.isEmpty(userBean.data.userInfo.birthLongi)){ //资料不完整
                                 ARouter.getInstance().build("/test/EditInformationActivity").navigation();
                             }
                             finish();

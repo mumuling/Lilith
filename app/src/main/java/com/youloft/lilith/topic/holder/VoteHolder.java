@@ -330,15 +330,15 @@ public class VoteHolder extends RecyclerView.ViewHolder {
             voteAniamtion((float) topicInfo.option.get(0).vote / topicInfo.totalVote);
             needVoteAnimation = false;
         }
+
         GlideApp.with(itemView.getContext())
                 .asBitmap()
                 .load(topicInfo.backImg)
-                .transform(new GlideBlurTransform(itemView.getContext()))
                 .dontAnimate()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .transform(new GlideBlurTransform(itemView.getContext()))
                 .skipMemoryCache(false)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .override(50)
-                .placeholder(R.drawable.calendar_work_icon)
                 .into(imageTop);
         textTopicTitle.setText(topicInfo.title);
     }

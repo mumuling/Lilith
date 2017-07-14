@@ -21,6 +21,6 @@ public class UserRepo extends AbstractDataRepo{
     public static Flowable<UserBean> loginForUserInfo(String phone, String code) {
         params.put("phone",phone);
         params.put("code",code);
-        return unionFlow(Urls.QUICKLY_LOGIN_URL, null, params, true, UserBean.class, "user_info", 1);
+        return httpFlow(Urls.QUICKLY_LOGIN_URL, null, params, true, UserBean.class, "user_info", 0);
     }
 }

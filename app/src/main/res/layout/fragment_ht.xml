@@ -1,10 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/theme_background">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/default_image"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:src="@drawable/sad_face_icon"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/ll_root"
+        android:orientation="vertical">
     <com.youloft.lilith.ui.view.BaseToolBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -27,3 +38,4 @@
         android:id="@+id/lv_topic"/>
     </com.youloft.lilith.common.widgets.view.PullToRefreshLayout>
 </LinearLayout>
+</FrameLayout>
