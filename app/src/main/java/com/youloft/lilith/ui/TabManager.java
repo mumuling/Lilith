@@ -16,6 +16,7 @@ import com.youloft.lilith.ui.fragment.MEFragment;
 import com.youloft.lilith.ui.fragment.XZFragment;
 import com.youloft.lilith.ui.view.NavBarLayout;
 import com.youloft.lilith.ui.view.TabItemBean;
+import com.youloft.statistics.AppAnalytics;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

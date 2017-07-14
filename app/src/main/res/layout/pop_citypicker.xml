@@ -1,88 +1,81 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/ll_root"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_title_background"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:background="@color/constellation_week_color"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/ll_title_background"
+    <RelativeLayout
+        android:id="@+id/rl_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/constellation_week_color"
-        android:orientation="vertical">
-
-        <RelativeLayout
-            android:id="@+id/rl_title"
-            android:layout_width="match_parent"
-            android:layout_height="45dp">
-
-            <ImageView
-                android:id="@+id/tv_confirm"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="15dp"
-                android:gravity="center_vertical"
-                android:src="@drawable/popup_right_icon" />
-
-            <TextView
-                android:id="@+id/tv_title"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_centerHorizontal="true"
-                android:gravity="center_vertical"
-                android:text="选择地区"
-                android:textColor="#ffffff"
-                android:textSize="18sp" />
-
-            <ImageView
-                android:id="@+id/tv_cancel"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="15dp"
-                android:gravity="center_vertical"
-                android:src="@drawable/topic_close_icon" />
-
-        </RelativeLayout>
+        android:layout_height="45dp">
 
         <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/white_10" />
+            android:id="@+id/tv_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            android:gravity="center_vertical"
+            android:src="@drawable/popup_right_icon" />
 
-        <LinearLayout
-            android:id="@+id/ll_title"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:layout_width="fill_parent"
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_vertical"
+            android:text="选择地区"
+            android:textColor="#ffffff"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:id="@+id/tv_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="15dp"
+            android:gravity="center_vertical"
+            android:src="@drawable/topic_close_icon" />
+
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/white_10" />
+
+    <LinearLayout
+        android:id="@+id/ll_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp">
+
+        <com.youloft.lilith.common.widgets.picker.wheel.WheelView
+            android:id="@+id/id_province"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_weight="1">
 
-            <com.youloft.lilith.common.widgets.picker.wheel.WheelView
-                android:id="@+id/id_province"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
+        </com.youloft.lilith.common.widgets.picker.wheel.WheelView>
 
-            </com.youloft.lilith.common.widgets.picker.wheel.WheelView>
+        <com.youloft.lilith.common.widgets.picker.wheel.WheelView
+            android:id="@+id/id_city"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
 
-            <com.youloft.lilith.common.widgets.picker.wheel.WheelView
-                android:id="@+id/id_city"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
+        </com.youloft.lilith.common.widgets.picker.wheel.WheelView>
 
-            </com.youloft.lilith.common.widgets.picker.wheel.WheelView>
+        <com.youloft.lilith.common.widgets.picker.wheel.WheelView
+            android:id="@+id/id_district"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
 
-            <com.youloft.lilith.common.widgets.picker.wheel.WheelView
-                android:id="@+id/id_district"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-
-            </com.youloft.lilith.common.widgets.picker.wheel.WheelView>
-        </LinearLayout>
+        </com.youloft.lilith.common.widgets.picker.wheel.WheelView>
     </LinearLayout>
-</RelativeLayout>
+</LinearLayout>

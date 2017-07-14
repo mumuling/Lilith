@@ -272,8 +272,8 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
                 .asBitmap()
                 .transform(new GlideCircleTransform())
                 .load(point.headImg)
-                .placeholder(R.drawable.morentouxiang)
-                .error(R.drawable.morentouxiang)
+                .placeholder(R.drawable.default_user_head_img)
+                .error(R.drawable.default_user_head_img)
                 .into(imageCommentUser);
         //用户名字
         textUserName.setText(point.nickName);
@@ -300,7 +300,7 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
             textVoteResult.setTextColor(Color.parseColor("#5696df"));
         }
         //星座
-        textUserConstellation.setText(ConsManager.CONS_NAME[point.signs]);
+        textUserConstellation.setText(ConsManager.getConsName(point.signs));
         //观点
         textCommentContent.setText(point.viewpoint);
         //是否有底部的加载更多

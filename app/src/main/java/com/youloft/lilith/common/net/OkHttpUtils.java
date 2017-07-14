@@ -361,7 +361,7 @@ public class OkHttpUtils {
     }
 
     /**
-     * post方法请求
+     * post方法请求，MediaType为application/json；
      *
      * @param baseUrl
      * @param params         表单参数
@@ -376,7 +376,6 @@ public class OkHttpUtils {
         for (Map.Entry<String, String> param : params.entrySet()) {
             json.put(param.getKey(), param.getValue());
         }
-
         RequestBody mBody = RequestBody.create(MediaType.parse("application/json"), json.toJSONString());
 
         Request.Builder builder = new Request.Builder().url(baseUrl).post(mBody);

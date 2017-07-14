@@ -109,14 +109,23 @@ public class TopicRepo extends AbstractDataRepo {
      * @param tid  话题编号
      * @return
      */
-    public static Flowable<TopicDetailBean> getTopicDetail(String tid,String vid) {
+    public static Flowable<TopicDetailBean> getTopicDetail(String tid,String vid,boolean needCache) {
+        String cacheKey = "topic_datail" + tid;
+        long cacheDuration = 2 * 1000 * 60;
         HashMap<String, String> param = new HashMap();
         param.put("tid",tid);
+
         if (vid != null) param.put("uid",vid);
+        if (needCache) {
+            if (!LLApplication.getApiCache().isExpired(cacheKey,cacheDuration)) {
+                return LLApplication.getApiCache().readCache(cacheKey,TopicDetailBean.class);
+            } else {
+                return httpFlow(Urls.TOPIC_INFO, null, param, true, TopicDetailBean.class, cacheKey, cacheDuration);
+            }
+        } else {
+            return httpFlow(Urls.TOPIC_INFO, null, param, true, TopicDetailBean.class, null, 0);
+        }
 
-
-
-        return unionFlow(Urls.TOPIC_INFO,null,param,true,TopicDetailBean.class,null,0);
     }
 
     /**

@@ -1,43 +1,32 @@
 package com.youloft.lilith.common.widgets.picker;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.text.TextUtils;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.utils.SafeUtil;
+import com.youloft.lilith.common.widgets.dialog.PickerBaseDialog;
 import com.youloft.lilith.common.widgets.picker.wheel.OnWheelChangedListener;
 import com.youloft.lilith.common.widgets.picker.wheel.WheelView;
 import com.youloft.lilith.common.widgets.picker.wheel.adapters.ArrayWheelAdapter;
 
-import java.util.Date;
-import java.util.GregorianCalendar;
-
 /**
  * Created by zchao on 2017/7/9.
- * desc:
+ * desc:性别选择弹窗，如果没有特殊需求，请直接调用{@link #getDefaultGenderPicker(Context)} (Context)},
+ *       然后通过接口来获得选择结果{@link #setOnSelectListener(OnPickerSelectListener)}
+ *       最后必须要调用show()才会弹出弹窗;
  * version:
  */
 
-public class GenderPickerPop implements CanShow, OnWheelChangedListener{
-
-    private final PopupWindow popwindow;
-    private final View popview;
+public class GenderPickerPop extends PickerBaseDialog implements CanShow, OnWheelChangedListener {
     private final View mCancel;
     private final View mConfirm;
     Context mContext;
     private final WheelView mGenderWheel;
 
     private static final String[] list = {"男", "女"};
-    private int mCurrentIndex = 0;
 
+    private int mCurrentIndex = 0;
 
     /**
      * Default text color
@@ -48,10 +37,10 @@ public class GenderPickerPop implements CanShow, OnWheelChangedListener{
      * Default text size
      */
     public static final int DEFAULT_TEXT_SIZE = 18;
+
     private int textColor = DEFAULT_TEXT_COLOR;
 
     private int textSize = DEFAULT_TEXT_SIZE;
-
 
     /**
      * 区滚轮是否循环滚动
@@ -67,27 +56,17 @@ public class GenderPickerPop implements CanShow, OnWheelChangedListener{
      */
     private static final int DEF_VISIBLE_ITEMS = 5;
 
-    // Count of visible items
     private int visibleItems = DEF_VISIBLE_ITEMS;
     private OnPickerSelectListener<String> listener;
 
     public GenderPickerPop(final Context mContext) {
+        super(mContext);
+        setContentView(R.layout.pop_genderpicker);
         this.mContext = mContext;
-
-        LayoutInflater layoutInflater = LayoutInflater.from(mContext);
-        popview = layoutInflater.inflate(R.layout.pop_genderpicker, null);
-        mConfirm = popview.findViewById(R.id.tv_confirm);
-        mCancel = popview.findViewById(R.id.tv_cancel);
-        mGenderWheel = (WheelView) popview.findViewById(R.id.gender_wheel_view);
+        mConfirm = findViewById(R.id.tv_confirm);
+        mCancel = findViewById(R.id.tv_cancel);
+        mGenderWheel = (WheelView) findViewById(R.id.gender_wheel_view);
         mGenderWheel.addChangingListener(this);
-        popwindow = new PopupWindow(popview, LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT);
-        popwindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        popwindow.setAnimationStyle(R.style.AnimBottom);
-        popwindow.setTouchable(true);
-        popwindow.setOutsideTouchable(false);
-        popwindow.setFocusable(true);
-        popwindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         setUpData();
 
@@ -121,7 +100,7 @@ public class GenderPickerPop implements CanShow, OnWheelChangedListener{
         return new GenderPickerPop(context);
     }
 
-    public GenderPickerPop setGender(String gender){
+    public GenderPickerPop setGender(String gender) {
         if (gender.equals("男")) {
             mGenderWheel.setCurrentItem(0);
         } else if (gender.equals("女")) {
@@ -138,13 +117,6 @@ public class GenderPickerPop implements CanShow, OnWheelChangedListener{
 
     }
 
-    @Override
-    public void show() {
-        if (!isShow()) {
-//            setUpData();
-            popwindow.showAtLocation(popview, Gravity.BOTTOM, 0, 0);
-        }
-    }
 
     private void setUpData() {
         mGenderWheel.setCyclic(isCyclic);
@@ -162,14 +134,14 @@ public class GenderPickerPop implements CanShow, OnWheelChangedListener{
 
     @Override
     public void hide() {
-        if (isShow()) {
-            popwindow.dismiss();
+        if (isShowing()) {
+            dismiss();
         }
     }
 
     @Override
     public boolean isShow() {
-        return popwindow.isShowing();
+        return isShowing();
     }
 
 

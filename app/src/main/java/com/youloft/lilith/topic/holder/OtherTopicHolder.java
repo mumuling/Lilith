@@ -59,7 +59,8 @@ public class OtherTopicHolder extends RecyclerView.ViewHolder {
                 .asBitmap()
                 .transform(new GlideBlurTransform(itemView.getContext()))
                 .load(topic.backImg)
-                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .override(50)
                 .into(mTopicImage);
         mTopicUserImageLayout.bindData(topic.voteUser,topic.totalVote);
 

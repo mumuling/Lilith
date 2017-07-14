@@ -2,6 +2,7 @@ package com.youloft.statistics;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
 import com.tendcloud.tenddata.TCAgent;
 
@@ -107,9 +108,11 @@ public class AppAnalytics {
      * @param eventLabel
      */
     public static void onEvent(String eventId, String eventLabel) {
+        Log.d(TAG, "onEvent() called with: eventId = [" + eventId + "], eventLabel = [" + eventLabel + "]");
         TCAgent.onEvent(sCtx, eventId, eventLabel);
     }
 
+    private static final String TAG = "AppAnalytics";
     /**
      * 上报带有参数&&Label的自定义事件
      *
@@ -129,6 +132,5 @@ public class AppAnalytics {
     public static void onError(Throwable throwable) {
         TCAgent.onError(sCtx, throwable);
     }
-
 
 }

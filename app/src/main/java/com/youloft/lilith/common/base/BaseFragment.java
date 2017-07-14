@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.tendcloud.tenddata.TCAgent;
 import com.trello.rxlifecycle2.components.support.RxFragment;
 
 /**
@@ -77,6 +78,12 @@ public abstract class BaseFragment extends RxFragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         if (!isCreated) {
             return;
+        }
+        //TD页面统计
+        if (isVisibleToUser) {
+            TCAgent.onPageStart(mContext, getClass().getSimpleName());
+        } else {
+            TCAgent.onPageEnd(mContext, getClass().getSimpleName());
         }
         super.setUserVisibleHint(isVisibleToUser);
     }

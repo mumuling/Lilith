@@ -11,7 +11,7 @@
     <color name="tab_share_color">#2f2a40</color>
 
 
-    <color name="province_line_border">#C7C7C7</color>
+    <color name="province_line_border">@color/white_10</color>
     <color name="translucent">#00000000</color>
 
 

@@ -37,6 +37,15 @@
         <item name="android:windowFullscreen">false</item>
         <item name="android:windowSoftInputMode">adjustResize</item>
     </style>
+    <style name="PickDialog" parent="DialogTheme">
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+        <item name="android:windowEnterAnimation">@null</item>
+        <item name="android:windowExitAnimation">@null</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowAnimationStyle">@null</item>
+    </style>
 
     <declare-styleable name="BaseToolBar">
         <attr name="show_back_btn" format="boolean"/>

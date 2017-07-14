@@ -16,6 +16,7 @@ import android.view.WindowManager;
 
 import com.trello.rxlifecycle2.components.RxActivity;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
+import com.youloft.statistics.AppAnalytics;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -35,11 +36,13 @@ public abstract class BaseActivity extends RxAppCompatActivity implements View.O
             immerseToolbar();
         }
         super.onCreate(savedInstanceState);
+        AppAnalytics.onPageStart(getPackageName());
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        AppAnalytics.onPageEnd(getPackageName());
     }
 
     @Override

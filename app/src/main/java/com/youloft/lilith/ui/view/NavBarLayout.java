@@ -18,6 +18,7 @@ import com.youloft.lilith.R;
 import com.youloft.lilith.common.utils.SafeUtil;
 import com.youloft.lilith.common.utils.ViewUtil;
 import com.youloft.lilith.cons.consmanager.ConsManager;
+import com.youloft.statistics.AppAnalytics;
 
 import java.util.ArrayList;
 
@@ -46,7 +47,7 @@ public class NavBarLayout extends LinearLayout {
 
     private void init() {
         int height = (int) ViewUtil.dp2px(49);
-        setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,height));
+        setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height));
         setBackgroundColor(getResources().getColor(R.color.tab_bg_color));
 
         initLinePaint();
@@ -58,7 +59,7 @@ public class NavBarLayout extends LinearLayout {
         mPaint.setColor(getResources().getColor(R.color.tab_line_color));
     }
 
-    public void changConsIcon(int consKey){
+    public void changConsIcon(int consKey) {
         Integer[] consIconSrc = ConsManager.getConsIconSrc(String.valueOf(consKey));
         ConsManager.ConsInfo consSrc = ConsManager.getConsSrc(String.valueOf(consKey));
         NavItemView consIcon = SafeUtil.getSafeData(mTabViews, 0);
@@ -87,12 +88,13 @@ public class NavBarLayout extends LinearLayout {
                 NavItemView itemView = new NavItemView(getContext());
                 itemView.setData(item);
                 addView(itemView);
-                mTabViews.add(i,itemView);
+                mTabViews.add(i, itemView);
                 itemView.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (v instanceof NavItemView) {
                             TabItemBean tb = ((NavItemView) v).getData();
+                            AppAnalytics.onEvent("MainTab.C", tb.mIndex == 0 ? "首页" : tb.mTabName);
                             if (tb != null) {
                                 if (mTabChangeListener != null) {
                                     boolean b = mTabChangeListener.selectChange(tb.mIndex);
@@ -128,15 +130,17 @@ public class NavBarLayout extends LinearLayout {
 
     /**
      * 让某一个tab处于选中状态
+     *
      * @param index
      */
-    public void setSelectTab(int index){
-        if (index < 0 || index > mTabViews.size()-1) {
+    public void setSelectTab(int index) {
+        if (index < 0 || index > mTabViews.size() - 1) {
             return;
         }
         resetAllSelect();
         mTabViews.get(index).setSelect(true);
     }
+
     /**
      * 设置默认的tab项目
      */
@@ -147,7 +151,7 @@ public class NavBarLayout extends LinearLayout {
         mTabs.add(new TabItemBean(getResources().getString(R.string.me), R.drawable.tab_mine_icon_unselect, R.drawable.tab_mine_icon, 3, false));
     }
 
-    public ArrayList<TabItemBean> getTabs(){
+    public ArrayList<TabItemBean> getTabs() {
         return mTabs;
     }
 
@@ -159,12 +163,12 @@ public class NavBarLayout extends LinearLayout {
      * Desc: 主界面底部icon点击接口
      * Change:
      *
-     * @version
      * @author zchao created at 2017/6/27 9:40
      * @see
-    */
-    public interface OnTabChangeListener{
+     */
+    public interface OnTabChangeListener {
         boolean selectChange(int index);
+
         void tabsChange();
     }
 
@@ -174,7 +178,7 @@ public class NavBarLayout extends LinearLayout {
         if (mPaint == null) {
             initLinePaint();
         }
-        canvas.drawLine(0,0,getWidth(),0, mPaint);
+        canvas.drawLine(0, 0, getWidth(), 0, mPaint);
     }
 
 
@@ -182,11 +186,11 @@ public class NavBarLayout extends LinearLayout {
      * Desc: NavigationBar 的tab
      * Change:
      * i
-     * @version
+     *
      * @author zchao created at 2017/6/26 18:34
      * @see
-    */
-    class NavItemView extends LinearLayout{
+     */
+    class NavItemView extends LinearLayout {
         public TabItemBean pTabInfo;
         private ImageView mNavIc;
         private TextView mNavName;
@@ -208,23 +212,24 @@ public class NavBarLayout extends LinearLayout {
 
         /**
          * 设置此tabView的数据
+         *
          * @param tabInfo
          */
-        public void setData(TabItemBean tabInfo){
+        public void setData(TabItemBean tabInfo) {
             pTabInfo = tabInfo;
             bindView();
         }
 
-        public void bindView(){
+        public void bindView() {
             mNavIc.setImageResource(pTabInfo.mSelected ? pTabInfo.mTabIc : pTabInfo.mTabIcUnSelect);
             mNavName.setText(pTabInfo.mTabName);
         }
 
-        public TabItemBean getData(){
+        public TabItemBean getData() {
             return pTabInfo;
         }
 
-        public void setSelect(boolean select){
+        public void setSelect(boolean select) {
             if (pTabInfo.mSelected == select) {
                 return;
             }

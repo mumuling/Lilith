@@ -24,7 +24,7 @@
             android:layout_height="@dimen/head_portrait"
             android:layout_marginTop="68dp"
             android:scaleType="centerCrop"
-            android:src="@mipmap/icon_launcher" />
+            android:src="@mipmap/ic_luncher" />
 
         <!--名称-->
         <TextView

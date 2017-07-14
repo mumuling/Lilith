@@ -24,6 +24,7 @@ import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.glide.GlideBlurTransform;
 import com.youloft.lilith.topic.bean.TopicBean;
 import com.youloft.lilith.topic.widget.TopicUserDataBind;
+import com.youloft.statistics.AppAnalytics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,9 +67,9 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         notifyDataSetChanged();
     }
     public void setMoreData(List<TopicBean.DataBean> data) {
-        if (data == null)return;
+        if (data == null || data.size() == 0)return;
         topicBeanList.addAll(data);
-        notifyDataSetChanged();
+        notifyItemRangeChanged(topicBeanList.size() - data.size() + 1,data.size());
     }
 
     @Override
@@ -87,7 +88,7 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof NormalViewHolder) {
             ((NormalViewHolder) holder).bind(topicBeanList.get(getRealPosition(position)));
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -96,6 +97,9 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     ARouter.getInstance().build("/test/TopicDetailActivity")
                             .withInt("tid", topicBeanList.get(getRealPosition(position)).id)
                             .navigation();
+                    if (holder instanceof HotTopicViewHolder) {
+                        AppAnalytics.onEvent("Hometopic", "C");
+                    }
                 }
             });
         }
@@ -144,6 +148,7 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .transform(new GlideBlurTransform(mTopicImage.getContext()))
                     .skipMemoryCache(false)
+                    .override(50)
                     .into(mTopicImage);
 
 
@@ -155,12 +160,17 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
      * 热门话题item的holder
      */
     public class HotTopicViewHolder extends NormalViewHolder {
+        private boolean isReport = false;
         public HotTopicViewHolder(View itemView) {
             super(itemView);
         }
 
         @Override
         public void bind(TopicBean.DataBean topic) {
+            if (!isReport) {
+                AppAnalytics.onEvent("Hometopic", "IM");
+                isReport = true;
+            }
             mTopicContent.setText(topic.title);
             GlideApp.with(itemView)
                     .asBitmap()

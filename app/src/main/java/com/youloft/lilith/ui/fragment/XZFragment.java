@@ -16,11 +16,13 @@ import com.youloft.lilith.common.base.BaseFragment;
 import com.youloft.lilith.common.event.ConsChangeEvent;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.CalendarHelper;
+import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.common.utils.ViewUtil;
 import com.youloft.lilith.common.widgets.view.PullToRefreshLayout;
 import com.youloft.lilith.cons.ConsRepo;
 import com.youloft.lilith.cons.bean.ConsPredictsBean;
 import com.youloft.lilith.cons.card.ConsFragmentCardAdapter;
+import com.youloft.lilith.cons.consmanager.ConsManager;
 import com.youloft.lilith.cons.consmanager.LoddingCheckEvent;
 import com.youloft.lilith.cons.consmanager.ShareConsEvent;
 import com.youloft.lilith.cons.view.LogInOrCompleteDialog;
@@ -137,12 +139,14 @@ public class XZFragment extends BaseFragment implements PullToRefreshLayout.OnRe
                     @Override
                     public void onError(@NonNull Throwable e) {
                         super.onError(e);
+                        Toaster.showShort("请求出错");
                         sendFinish(pullToRefreshLayout);
                     }
 
                     @Override
                     protected void onFailed(Throwable e) {
                         super.onFailed(e);
+                        Toaster.showShort("请求失败");
                         sendFinish(pullToRefreshLayout);
                     }
                 });
