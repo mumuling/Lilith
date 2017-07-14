@@ -60,7 +60,7 @@ public class EditInformationActivity extends BaseActivity {
     ImageView ivHeader;  //头像
     @BindView(R.id.iv_blur_bg)
     ImageView ivBlurBg;  //背景
-    @BindView(R.id.tv_nick_name)
+    @BindView(R.id.tv_nick_name1)
     TextView tvNickName;  //上面的昵称
     @BindView(R.id.tv_sex)
     TextView tvSex;   //性别
@@ -155,7 +155,12 @@ public class EditInformationActivity extends BaseActivity {
                 ivHeader.setImageResource(R.drawable.default_user_head_img);
             }
 
-            tvNickName.setText(detail.nickName);
+            String showNickName = detail.nickName;
+            int length = showNickName.length();
+            if (length > 7) {
+                showNickName = showNickName.substring(0,6) + "...";
+            }
+            tvNickName.setText(showNickName);
             etNickName.setText(detail.nickName);
 
             if (detail.sex == 2) {
@@ -198,7 +203,7 @@ public class EditInformationActivity extends BaseActivity {
             Toaster.showShort("请完善信息");
             return;
         }
-        if (nickName.length() > 7) {//昵称长度不能超过7个
+        if (nickName.length() > 20) {//昵称长度不能超过7个
             Toaster.showShort("昵称过长");
             return;
         }

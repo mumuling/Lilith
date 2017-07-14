@@ -32,12 +32,13 @@
                 android:src="@drawable/div" />
             <!--用户昵称-->
             <TextView
-                android:id="@+id/tv_nick_name"
+                android:id="@+id/tv_nick_name1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|bottom"
                 android:layout_marginBottom="44dp"
                 android:text="Easter Roob"
+                android:lines="1"
                 android:textColor="#ffffff"
                 android:textSize="16dp" />
 
@@ -92,6 +93,7 @@
                         android:layout_marginLeft="114dp"
                         android:background="@null"
                         android:cursorVisible="false"
+                        android:lines="1"
                         android:hint="请输入昵称"
                         android:text="Easter Roob"
                         android:textColor="@color/white"

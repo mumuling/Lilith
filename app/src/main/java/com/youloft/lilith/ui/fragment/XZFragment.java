@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.youloft.lilith.R;
+import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.base.BaseFragment;
 import com.youloft.lilith.common.event.ConsChangeEvent;
 import com.youloft.lilith.common.rx.RxObserver;
@@ -25,6 +26,7 @@ import com.youloft.lilith.cons.card.ConsFragmentCardAdapter;
 import com.youloft.lilith.cons.consmanager.ConsManager;
 import com.youloft.lilith.cons.consmanager.LoddingCheckEvent;
 import com.youloft.lilith.cons.consmanager.ShareConsEvent;
+import com.youloft.lilith.cons.view.ConsGuidDialog;
 import com.youloft.lilith.cons.view.LogInOrCompleteDialog;
 import com.youloft.lilith.info.activity.EditInformationActivity;
 import com.youloft.lilith.info.event.UserInfoUpDateEvent;
@@ -43,6 +45,8 @@ import java.util.GregorianCalendar;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.schedulers.Schedulers;
+import jp.wasabeef.blurry.internal.Blur;
+import jp.wasabeef.blurry.internal.BlurFactor;
 
 /**
  * Created by zchao on 2017/6/27.
@@ -68,8 +72,36 @@ public class XZFragment extends BaseFragment implements PullToRefreshLayout.OnRe
         super.onViewCreated(view, savedInstanceState);
         EventBus.getDefault().register(this);
         init(view);
-
         initDate();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        showGuide();
+    }
+
+    /**
+     * 显示引导页
+     */
+    private void showGuide() {
+        if (AppSetting.isGuideShown()) {
+            return;
+        }
+        Bitmap bitmap = null;
+        if (getActivityContext() instanceof BaseActivity) {
+            bitmap = ((BaseActivity) getActivityContext()).takeScreenShot(false, 0);
+            if (bitmap != null && !bitmap.isRecycled()) {
+                BlurFactor bf = new BlurFactor();
+                bf.width = bitmap.getWidth();
+                bf.height = bitmap.getHeight();
+                bf.sampling = 10;
+                bf.radius = 10;
+                bitmap = Blur.of(getContext(), bitmap, bf);
+            }
+        }
+        ConsGuidDialog.mBg = bitmap;
+        new ConsGuidDialog(getActivityContext()).show();
     }
 
     @Override
@@ -112,6 +144,7 @@ public class XZFragment extends BaseFragment implements PullToRefreshLayout.OnRe
 
     /**
      * 请求数据
+     *
      * @param birdt
      * @param birtm
      * @param birlongi
