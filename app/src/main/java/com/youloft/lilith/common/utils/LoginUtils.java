@@ -20,4 +20,15 @@ public class LoginUtils {
             return false;
         }
     }
+
+
+    private static long clicktime = 0;
+
+    public synchronized static boolean canClick() {
+        if (Math.abs(clicktime - System.currentTimeMillis()) > 800) {
+            clicktime = System.currentTimeMillis();
+            return true;
+        }
+        return false;
+    }
 }

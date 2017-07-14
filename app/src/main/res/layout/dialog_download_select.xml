@@ -1,43 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fl_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#4c000000"
-    android:id="@+id/fl_root"
     android:orientation="vertical">
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:background="@drawable/login_jump_dialog_bg">
-        <ImageView
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scaleType="centerCrop"
-            android:src="@drawable/new_version_pic"/>
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/new_version_pic" />
+
+                <TextView
+                    android:id="@+id/tv_version"
+                    android:text="v1.13"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:textColor="@color/white"
+                    android:textSize="12dp" />
+            </FrameLayout>
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="13dp"
+                android:paddingLeft="22dp"
+                android:paddingRight="22dp" />
+
+            <TextView
+                android:id="@+id/tv_update"
+                android:layout_width="200dp"
+                android:layout_height="40dp"
+                android:layout_gravity="bottom|center_horizontal"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="26dp"
+                android:background="@drawable/slt_login_btn"
+                android:gravity="center"
+                android:text="立即更新"
+                android:textColor="@color/slt_login_text_color"
+                android:textSize="17dp" />
+        </LinearLayout>
+
         <ImageView
             android:id="@+id/iv_close"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
             android:src="@drawable/login_password_delete_icon" />
 
 
-        <TextView
-            android:id="@+id/tv_update"
-            android:layout_width="200dp"
-            android:layout_height="40dp"
-            android:layout_gravity="bottom|center_horizontal"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/slt_login_btn"
-            android:gravity="center"
-            android:text="立即更新"
-            android:textColor="@color/slt_login_text_color"
-            android:textSize="17dp" />
     </FrameLayout>
 </FrameLayout>
