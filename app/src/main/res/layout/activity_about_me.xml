@@ -55,7 +55,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="23dp"
-                    android:text="微信:  搜索XXXXXXXXX"
+                    android:text="微信:  暗月莉莉斯"
                     android:textColor="@color/white"
                     android:textSize="15dp" />
             </FrameLayout>
@@ -77,13 +77,14 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="23dp"
-                    android:text="邮箱：xingzuo @youloft.com"
+                    android:text="邮箱：lilith@Youloft.com"
                     android:textColor="@color/white"
                     android:textSize="15dp" />
             </FrameLayout>
 
             <!--微博-->
             <FrameLayout
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp">
@@ -100,6 +101,27 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="23dp"
                     android:text="微博：weibo.com/xingzuo"
+                    android:textColor="@color/white"
+                    android:textSize="15dp" />
+            </FrameLayout>
+            <!--QQ群-->
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/binding_qq_icon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="23dp"
+                    android:text="QQ群：180275927"
                     android:textColor="@color/white"
                     android:textSize="15dp" />
             </FrameLayout>

@@ -89,7 +89,9 @@ public class UserImageStackViewGroup extends RelativeLayout {
                     .error(R.drawable.topic_user_img_er)
                     .transform(new GlideCircleTransform())
                     .load(imageList.get(i).headImg)
-                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                    .placeholder(R.drawable.morentouxiang)
+                    .error(R.drawable.morentouxiang)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .skipMemoryCache(false)
                     .into(mUserImageList.get(i));
         }

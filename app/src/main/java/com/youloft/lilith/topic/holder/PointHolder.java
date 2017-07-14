@@ -272,22 +272,8 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
                 .asBitmap()
                 .transform(new GlideCircleTransform())
                 .load(point.headImg)
-                .listener(new RequestListener<Bitmap>() {
-                    @Override
-                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                        GlideApp.with(itemView)
-                                .asBitmap()
-                                .transform(new GlideCircleTransform())
-                                .load(R.drawable.calendar_work_icon)
-                                .into(imageCommentUser);
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                        return false;
-                    }
-                })
+                .placeholder(R.drawable.morentouxiang)
+                .error(R.drawable.morentouxiang)
                 .into(imageCommentUser);
         //用户名字
         textUserName.setText(point.nickName);
