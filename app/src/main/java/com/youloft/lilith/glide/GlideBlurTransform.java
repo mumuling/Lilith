@@ -31,7 +31,7 @@ public class GlideBlurTransform extends BitmapTransformation {
     }
 
     private int sampling = 1;
-    private int radius = 10;
+    private int radius = 2;
 
     public GlideBlurTransform(Context context, int sampling, int radius) {
         super();
@@ -54,9 +54,10 @@ public class GlideBlurTransform extends BitmapTransformation {
         float scale = Math.max(xScale,yScale);
         if(scale>sampling){
             sampling = (int) scale;
+            radius = (radius/scale) < 1 ? 1: (int) (radius / scale);
         }
         bf.sampling = sampling;
-        bf.radius = (int) (radius/scale)/ 2;
+        bf.radius = radius ;
         return Blur.of(mContext, toTransform, bf);
      //   return toTransform;
     }
