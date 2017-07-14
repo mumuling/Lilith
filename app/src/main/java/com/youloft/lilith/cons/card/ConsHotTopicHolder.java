@@ -3,9 +3,11 @@ package com.youloft.lilith.cons.card;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.jakewharton.rxbinding2.view.RxView;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.event.TabChangeEvent;
 import com.youloft.lilith.common.rx.RxObserver;
@@ -37,13 +39,14 @@ public class ConsHotTopicHolder extends CardHolder {
     @BindView(R.id.cons_hot_topic_list)
     RecyclerView mConsHotTopicList;
     private TopicAdapter adapter;
+    private boolean isReport = false;
 
     public ConsHotTopicHolder(Context context, ViewGroup parent) {
         super(context, parent, R.layout.cons_hot_topic);
         ButterKnife.bind(this, itemView);
 
         init();
-        TopicRepo.getTopicList("1", "0","10",true)
+        TopicRepo.getTopicList("1", "0", "10", true)
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -65,12 +68,22 @@ public class ConsHotTopicHolder extends CardHolder {
         mConsHotTopicList.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
         adapter = new TopicAdapter(mContext, true);
         mConsHotTopicList.setAdapter(adapter);
+        //产品说每左滑一次都上报一次，所以。。
         mConsHotTopicList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if (dx > 0) {
+                if (dx > 0  && !isReport) {
+                    isReport = true;
                     AppAnalytics.onEvent("Slideview", "C");
+                }
+            }
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    isReport = false;
                 }
             }
         });
