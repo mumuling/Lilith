@@ -136,7 +136,7 @@ public class MEFragment extends BaseFragment {
         if (!TextUtils.isEmpty(headImgUrl)) {
             GlideApp.with(mContext).asBitmap().dontAnimate().load(headImgUrl).into(new GlideBlurTwoViewTarget(ivHeader, ivBlurBg));
         } else {
-            ivHeader.setImageResource(R.drawable.morentouxiang);
+            ivHeader.setImageResource(R.drawable.default_user_head_img);
         }
         //根据不同的key设置不同的星座
         String asceSigns = String.valueOf(userInfo.data.userInfo.asceSigns);//上升

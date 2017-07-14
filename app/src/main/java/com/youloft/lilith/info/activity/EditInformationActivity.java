@@ -152,7 +152,7 @@ public class EditInformationActivity extends BaseActivity {
             if (!TextUtils.isEmpty(detail.headImg)) {
                 GlideApp.with(this).asBitmap().dontAnimate().load(detail.headImg).into(new GlideBlurTwoViewTarget(ivHeader, ivBlurBg));
             }else {
-                ivHeader.setImageResource(R.drawable.morentouxiang);
+                ivHeader.setImageResource(R.drawable.default_user_head_img);
             }
 
             tvNickName.setText(detail.nickName);
