@@ -83,4 +83,9 @@ public class ConsGuideDialog extends BaseDialog {
             mBg.recycle();
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        super.dismiss();
+    }
 }

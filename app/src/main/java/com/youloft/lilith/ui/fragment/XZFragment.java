@@ -107,8 +107,8 @@ public class XZFragment extends BaseFragment implements PullToRefreshLayout.OnRe
                 BlurFactor bf = new BlurFactor();
                 bf.width = bitmap.getWidth();
                 bf.height = bitmap.getHeight();
-                bf.sampling = 10;
-                bf.radius = 10;
+                bf.sampling = 5;
+                bf.radius = 5;
                 bitmap = Blur.of(getContext(), bitmap, bf);
             }
         }
