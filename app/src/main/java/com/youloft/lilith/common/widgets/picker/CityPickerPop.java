@@ -274,7 +274,6 @@ public class CityPickerPop extends PickerBaseDialog implements CanShow, OnWheelC
 
         //初始化城市数据
         initProvinceDatas(context);
-
         // 添加change事件
         mViewProvince.addChangingListener(this);
         // 添加change事件

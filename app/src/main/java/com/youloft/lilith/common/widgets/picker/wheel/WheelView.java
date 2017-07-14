@@ -36,6 +36,7 @@ import android.widget.LinearLayout;
 
 
 import com.youloft.lilith.R;
+import com.youloft.lilith.common.utils.ViewUtil;
 import com.youloft.lilith.common.widgets.picker.wheel.adapters.WheelViewAdapter;
 
 import java.util.LinkedList;
@@ -68,6 +69,7 @@ public class WheelView extends View {
      */
     private static final int DEF_VISIBLE_ITEMS = 5;
 
+    private float selectLineWidth = ViewUtil.dp2px(0.5f);
     // Wheel Values
     private int currentItem = 0;
 
@@ -707,16 +709,10 @@ public class WheelView extends View {
     private void drawCenterRect(Canvas canvas) {
         int center = getHeight() / 2;
         int offset = (int) (getItemHeight() / 2 * 1.2);
-        /*/ Remarked by wulianghuan 2014-11-27  使用自己的画线，而不是描边
-        Rect rect = new Rect(left, top, right, bottom)
-        centerDrawable.setBounds(bounds)
-        centerDrawable.setBounds(0, center - offset, getWidth(), center + offset);
-        centerDrawable.draw(canvas);
-        //*/
         Paint paint = new Paint();
         paint.setColor(getResources().getColor(R.color.province_line_border));
         // 设置线宽
-        paint.setStrokeWidth((float) 3);
+        paint.setStrokeWidth( selectLineWidth);
         // 绘制上边直线
         canvas.drawLine(0, center - offset, getWidth(), center - offset, paint);
         // 绘制下边直线
