@@ -189,7 +189,9 @@ public class CityInfoManager {
             int cityDBVersion = AppSetting.getCityDBVersion();
             if (cityDBVersion != DB_VERSION) {
                 File file = new File(dbfile);
-                file.deleteOnExit(); //删除老数据
+                if (file.exists()) {
+                    file.delete();
+                }
             }
             if (!(new File(dbfile).exists())) { //判断数据库文件是否存在，若不存在则执行导入，否则直接打开数据库
                 InputStream is = mContext.getResources().getAssets().open("city.db");
@@ -203,6 +205,7 @@ public class CityInfoManager {
                 while ((count = is.read(buffer)) > 0) {
                     fos.write(buffer, 0, count);
                 }
+                AppSetting.saveCityDBVersion(DB_VERSION);
                 fos.close();
                 is.close();
             }

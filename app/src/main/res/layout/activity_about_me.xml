@@ -20,7 +20,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="50dp"
             android:scaleType="centerCrop"
-            android:src="@mipmap/icon_launcher" />
+            android:src="@mipmap/ic_luncher" />
 
         <TextView
             android:layout_width="wrap_content"
