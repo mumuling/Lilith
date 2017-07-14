@@ -33,6 +33,7 @@ import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.login.event.LoginEvent;
 import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.share.ShareBuilder;
+import com.youloft.lilith.ui.view.NetErrDialog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -184,14 +185,14 @@ public class XZFragment extends BaseFragment implements PullToRefreshLayout.OnRe
                     @Override
                     public void onError(@NonNull Throwable e) {
                         super.onError(e);
-                        Toaster.showShort("请求出错");
+                        new NetErrDialog(getActivityContext()).show();
                         sendFinish(pullToRefreshLayout);
                     }
 
                     @Override
                     protected void onFailed(Throwable e) {
                         super.onFailed(e);
-                        Toaster.showShort("请求失败");
+                        new NetErrDialog(getActivityContext()).show();
                         sendFinish(pullToRefreshLayout);
                     }
                 });
