@@ -48,7 +48,6 @@ public class HTFragment extends BaseFragment implements PullToRefreshLayout.OnRe
     private LinearLayoutManager mLayoutManager;
     private List<TopicBean.DataBean> topicBeanList = new ArrayList<>();
     private PullToRefreshLayout llPullRefresh;
-    private LinearLayout llRoot;
     private ImageView imageNoNet;
     private boolean needLoadMoreTopic = true;
     public HTFragment() {
@@ -70,11 +69,12 @@ public class HTFragment extends BaseFragment implements PullToRefreshLayout.OnRe
      */
     private void requestTopic(final PullToRefreshLayout layout) {
         if (!NetUtil.isNetOK()) {
-            llPullRefresh.setVisibility(View.GONE);
+            mTopicRv.setVisibility(View.GONE);
             imageNoNet.setVisibility(View.VISIBLE);
+            if (layout != null)layout.refreshFinish(PullToRefreshLayout.FAIL);
             return;
         } else {
-            llPullRefresh.setVisibility(View.VISIBLE);
+            mTopicRv.setVisibility(View.VISIBLE);
             imageNoNet.setVisibility(View.GONE);
         }
         TopicRepo.getTopicList("0","0","10",true)
@@ -85,7 +85,10 @@ public class HTFragment extends BaseFragment implements PullToRefreshLayout.OnRe
                 .subscribe(new RxObserver<TopicBean>() {
                     @Override
                     public void onDataSuccess(TopicBean topicBean) {
-                        if (topicBean.data == null) return;
+                        if (topicBean.data == null){
+                            if (layout != null)layout.refreshFinish(PullToRefreshLayout.FAIL);
+                            return;
+                        }
 
                         for (TopicBean.DataBean dataBean : topicBean.data) {
                             GlideApp.with(getContext())
@@ -112,7 +115,6 @@ public class HTFragment extends BaseFragment implements PullToRefreshLayout.OnRe
         if (getView() == null)return;
         mToolBar = (BaseToolBar) getView().findViewById(R.id.tool_bar);
         mTopicRv = (RecyclerView) getView().findViewById(R.id.lv_topic);
-        llRoot = (LinearLayout) getView().findViewById(R.id.ll_root);
         imageNoNet = (ImageView) getView().findViewById(R.id.default_image);
         mToolBar.setTitle("星座话题");
         //设置recycleView

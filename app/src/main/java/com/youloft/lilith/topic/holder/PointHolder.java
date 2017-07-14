@@ -316,7 +316,11 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
             llLoadMore.setVisibility(View.GONE);
             commentDividerBottom.setVisibility(View.VISIBLE);
         }
-        textCommentAnswerCount.setText(String.valueOf(point.reply));
+        if (point.reply == 0) {
+            textCommentAnswerCount.setText("回复");
+        } else {
+            textCommentAnswerCount.setText(String.valueOf(point.reply));
+        }
         //用户评论，最多显示3条
         if (point.replyList != null && point.replyList.size() > 0) {
             for (int i = 0; i < point.replyList.size(); i++) {
