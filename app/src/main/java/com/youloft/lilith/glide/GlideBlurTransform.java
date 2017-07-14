@@ -48,8 +48,15 @@ public class GlideBlurTransform extends BitmapTransformation {
         BlurFactor bf = new BlurFactor();
         bf.width = toTransform.getWidth();
         bf.height = toTransform.getHeight();
+
+        float xScale = (float)toTransform.getWidth()/outWidth;
+        float yScale = (float)toTransform.getHeight()/outHeight;
+        float scale = Math.max(xScale,yScale);
+        if(scale>sampling){
+            sampling = (int) scale;
+        }
         bf.sampling = sampling;
-        bf.radius = radius;
+        bf.radius = (int) (radius/scale)/ 2;
         return Blur.of(mContext, toTransform, bf);
      //   return toTransform;
     }

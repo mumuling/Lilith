@@ -10,11 +10,14 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.youloft.lilith.R;
+import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.base.BaseFragment;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.common.widgets.view.PullToRefreshLayout;
+import com.youloft.lilith.glide.GlideBlurTransform;
 import com.youloft.lilith.topic.TopicDetailActivity;
 import com.youloft.lilith.topic.TopicRepo;
 import com.youloft.lilith.topic.adapter.TopicAdapter;
@@ -70,6 +73,14 @@ public class HTFragment extends BaseFragment implements PullToRefreshLayout.OnRe
                     @Override
                     public void onDataSuccess(TopicBean topicBean) {
                         if (topicBean.data == null) return;
+
+                        for (TopicBean.DataBean dataBean : topicBean.data) {
+                            GlideApp.with(getContext())
+                                    .asBitmap()
+                                    .load(dataBean.backImg)
+                                    .transform(new GlideBlurTransform(getContext()))
+                                    .preload(50,50);
+                        }
                         topicBeanList.clear();
                         topicBeanList.addAll(topicBean.data);
                         mAdapter.setData(topicBean.data);

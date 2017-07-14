@@ -66,9 +66,9 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         notifyDataSetChanged();
     }
     public void setMoreData(List<TopicBean.DataBean> data) {
-        if (data == null)return;
+        if (data == null || data.size() == 0)return;
         topicBeanList.addAll(data);
-        notifyDataSetChanged();
+        notifyItemRangeChanged(topicBeanList.size() - data.size() + 1,data.size());
     }
 
     @Override
@@ -144,6 +144,7 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .transform(new GlideBlurTransform(mTopicImage.getContext()))
                     .skipMemoryCache(false)
+                    .override(50)
                     .into(mTopicImage);
 
 

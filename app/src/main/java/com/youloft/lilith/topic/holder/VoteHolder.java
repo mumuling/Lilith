@@ -336,10 +336,10 @@ public class VoteHolder extends RecyclerView.ViewHolder {
                 .transform(new GlideBlurTransform(itemView.getContext()))
                 .dontAnimate()
                 .skipMemoryCache(false)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .override(50)
+                .placeholder(R.drawable.calendar_work_icon)
                 .into(imageTop);
         textTopicTitle.setText(topicInfo.title);
     }
-
-
 }

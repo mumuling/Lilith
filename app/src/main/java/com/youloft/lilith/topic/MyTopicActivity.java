@@ -115,7 +115,12 @@ public class MyTopicActivity extends BaseActivity {
                         if (myTopicBean.data != null) {
                             readDb(myTopicBean);
                             myTopicList.addAll(myTopicBean.data);
-                            adapter.setMyTopicList(myTopicList);
+                            if (myTopicList.size() == 0) {
+                                rvMyTopic.setVisibility(View.GONE);
+                                llNoTopic.setVisibility(View.VISIBLE);
+                            } else {
+                                adapter.setMyTopicList(myTopicList);
+                            }
                         } else {
                             rvMyTopic.setVisibility(View.GONE);
                             llNoTopic.setVisibility(View.VISIBLE);
