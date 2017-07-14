@@ -39,7 +39,7 @@
         <item name="solidColor">@android:color/transparent</item>
         <item name="flingable">true</item>
         <item name="selectionDivider">@drawable/div</item>
-        <item name="selectionDividerHeight">1dip</item>
+        <item name="selectionDividerHeight">0.5dip</item>
         <item name="android:minWidth">48dip</item>
         <item name="android:maxHeight">200dip</item>
         <item name="android:textColor">#ffffff</item>
@@ -48,7 +48,7 @@
         <item name="scaleDetal">4dp</item>
     </style>
 
-    <drawable name="div">#FFDFDFDF</drawable>
+    <drawable name="div">@color/white_10</drawable>
     <drawable name="div1">#a15e5e</drawable>
     <drawable name="div2">#b32a2870</drawable>
 

@@ -16,8 +16,6 @@ public class ConsManager {
     private static final HashMap<String, ConsInfo> mConsImg = new HashMap<>();
     private static final HashMap<String, Integer[]> mConsIconImg = new HashMap<>();
 
-    public static final String[] CONS_NAME = {"双鱼座", "水瓶座", "双鱼座", "白羊座", "金牛座", "双子座", "巨蟹座", "狮子座", "处女座", "天秤座", "天蝎座", "射手座", "摩羯座"};
-
     /**
      * 获取星座图片
      *
@@ -320,28 +318,40 @@ public class ConsManager {
         switch (consKey) {
             case 1: //水瓶座
                 consStringSrc= R.string.aquarius;
+                break;
             case 2: //双鱼座
                 consStringSrc= R.string.pisces;
+                break;
             case 3:  //白羊座
                 consStringSrc= R.string.aries;
+                break;
             case 4:  //金牛座
                 consStringSrc= R.string.taurus;
+                break;
             case 5:  //双子座
                 consStringSrc= R.string.gemini;
+                break;
             case 6: //巨蟹座
                 consStringSrc= R.string.cancer;
+                break;
             case 7:  //狮子座
                 consStringSrc= R.string.leo;
+                break;
             case 8:  //处女座
                 consStringSrc= R.string.virgo;
+                break;
             case 9:  //天秤座
                 consStringSrc= R.string.libra;
+                break;
             case 10:  //天蝎座
                 consStringSrc= R.string.scorpio;
+                break;
             case 11:  //射手座
                 consStringSrc= R.string.sagittarius;
+                break;
             case 12:  //摩羯座
                 consStringSrc= R.string.capricorn;
+                break;
             default:  //默认返回白羊座
                 consStringSrc= R.string.aries;
         }

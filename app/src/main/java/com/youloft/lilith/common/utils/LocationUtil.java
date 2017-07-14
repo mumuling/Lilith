@@ -77,7 +77,6 @@ public class LocationUtil {
                     } else {
                         e.onError(new Throwable("没有定位"));
                     }
-
                 }
             }).subscribeOn(Schedulers.newThread())
             .observeOn(Schedulers.io()).subscribe(new Observer<String[]>() {

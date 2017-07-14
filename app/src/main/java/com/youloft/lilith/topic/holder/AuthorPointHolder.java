@@ -127,7 +127,7 @@ public class AuthorPointHolder extends RecyclerView.ViewHolder implements View.O
             textVoteResult.setTextColor(Color.parseColor("#5696df"));
         }
         //星座
-        textUserConstellation.setText(ConsManager.CONS_NAME[point.signs]);
+        textUserConstellation.setText(ConsManager.getConsName(point.signs));
         //观点
         textCommentContent.setText(point.viewpoint);
         //时间

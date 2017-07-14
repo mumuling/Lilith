@@ -119,7 +119,7 @@ public class MyTopicHolder extends RecyclerView.ViewHolder {
         //昵称
         textUserName.setText(userInfo.nickName);
         //星座
-        textUserConstellation.setText(ConsManager.CONS_NAME[userInfo.signs]);
+        textUserConstellation.setText(ConsManager.getConsName(userInfo.signs));
         //性别
         if (userInfo.sex == 2) {
             imageUserSex.setImageResource(R.drawable.topic_male_icon);

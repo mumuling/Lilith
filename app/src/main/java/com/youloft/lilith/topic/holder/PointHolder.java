@@ -300,7 +300,7 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
             textVoteResult.setTextColor(Color.parseColor("#5696df"));
         }
         //星座
-        textUserConstellation.setText(ConsManager.CONS_NAME[point.signs]);
+        textUserConstellation.setText(ConsManager.getConsName(point.signs));
         //观点
         textCommentContent.setText(point.viewpoint);
         //是否有底部的加载更多
