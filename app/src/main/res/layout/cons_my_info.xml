@@ -67,7 +67,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/constellation_pisces_pic" />
+            android:src="@drawable/constellation_aries_pic" />
 
         <FrameLayout
             android:layout_width="wrap_content"

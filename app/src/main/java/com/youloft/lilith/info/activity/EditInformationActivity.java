@@ -170,8 +170,13 @@ public class EditInformationActivity extends BaseActivity {
             } else {
                 ivHeader.setImageResource(R.drawable.default_user_head_img);
             }
-            //两个昵称初始化
-            tvNickName.setText(detail.nickName);
+
+            String showNickName = detail.nickName;
+            int length = showNickName.length();
+            if (length > 7) {
+                showNickName = showNickName.substring(0,6) + "...";
+            }
+            tvNickName.setText(showNickName);
             etNickName.setText(detail.nickName);
 
 

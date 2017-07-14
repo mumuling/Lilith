@@ -128,11 +128,13 @@ public class MEFragment extends BaseFragment {
             return;
         }
         String headImgUrl = userInfo.data.userInfo.headImg;
-        String nickName = userInfo.data.userInfo.nickName;
-        if (nickName.length() > 7) {
-            nickName = nickName.substring(0, 8) + "...";
+
+        String showNickName = userInfo.data.userInfo.nickName;
+        int length = showNickName.length();
+         if (length > 7) {
+            showNickName = showNickName.substring(0,6) + "...";
         }
-        tvNickName.setText(nickName);
+        tvNickName.setText(showNickName);
         if (!TextUtils.isEmpty(headImgUrl)) {
             GlideApp.with(mContext).asBitmap().dontAnimate().load(headImgUrl).into(new GlideBlurTwoViewTarget(ivHeader, ivBlurBg));
         } else {

@@ -28,10 +28,18 @@
     <color name="white_10">#1affffff</color>
     <!--30%透明度黑色-->
     <color name="black_30">#4c000000</color>
+    <!--50%透明度黑色-->
+    <color name="black_50">#80000000</color>
     <!--70%透明度黑色-->
     <color name="black_70">#b1000000</color>
 
     <color name="topic_user_img_err">#d8d8d8</color>
+
+    <!--星盘图上几个小圆圈颜色-->
+    <color name="cons_circle_yellow">#ffb74a</color>
+    <color name="cons_circle_red">#ff4949</color>
+    <color name="cons_circle_blue">#49b5ff</color>
+    <color name="cons_confirm_btn">#d059df</color>
 
     <!--分享-->
     <color name="share_wx_bg_color">#68c952</color>

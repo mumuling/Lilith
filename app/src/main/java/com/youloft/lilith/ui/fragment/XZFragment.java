@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.youloft.lilith.R;
+import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.base.BaseFragment;
 import com.youloft.lilith.common.event.ConsChangeEvent;
 import com.youloft.lilith.common.rx.RxObserver;
@@ -22,9 +23,9 @@ import com.youloft.lilith.common.widgets.view.PullToRefreshLayout;
 import com.youloft.lilith.cons.ConsRepo;
 import com.youloft.lilith.cons.bean.ConsPredictsBean;
 import com.youloft.lilith.cons.card.ConsFragmentCardAdapter;
-import com.youloft.lilith.cons.consmanager.ConsManager;
 import com.youloft.lilith.cons.consmanager.LoddingCheckEvent;
 import com.youloft.lilith.cons.consmanager.ShareConsEvent;
+import com.youloft.lilith.cons.view.ConsGuideDialog;
 import com.youloft.lilith.cons.view.LogInOrCompleteDialog;
 import com.youloft.lilith.info.activity.EditInformationActivity;
 import com.youloft.lilith.info.event.UserInfoUpDateEvent;
@@ -32,6 +33,7 @@ import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.login.event.LoginEvent;
 import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.share.ShareBuilder;
+import com.youloft.lilith.ui.view.NetErrDialog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -43,6 +45,8 @@ import java.util.GregorianCalendar;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.schedulers.Schedulers;
+import jp.wasabeef.blurry.internal.Blur;
+import jp.wasabeef.blurry.internal.BlurFactor;
 
 /**
  * Created by zchao on 2017/6/27.
@@ -68,8 +72,49 @@ public class XZFragment extends BaseFragment implements PullToRefreshLayout.OnRe
         super.onViewCreated(view, savedInstanceState);
         EventBus.getDefault().register(this);
         init(view);
-
         initDate();
+        mConsList.post(new Runnable() {
+            @Override
+            public void run() {
+                int[] location = new int[2];
+                View childAt = mConsList.getChildAt(1);
+                if (childAt != null) {
+                    View viewById = childAt.findViewById(R.id.cons_my_info_cons_img);
+                    if (viewById != null) {
+                        viewById.getLocationOnScreen(location);
+                    }
+                }
+                showGuide(location);
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    /**
+     * 显示引导页
+     */
+    private void showGuide(int[] location) {
+        if (AppSetting.isGuideShown()) {
+            return;
+        }
+        Bitmap bitmap = null;
+        if (getActivityContext() instanceof BaseActivity) {
+            bitmap = ((BaseActivity) getActivityContext()).takeScreenShot(false, 0);
+            if (bitmap != null && !bitmap.isRecycled()) {
+                BlurFactor bf = new BlurFactor();
+                bf.width = bitmap.getWidth();
+                bf.height = bitmap.getHeight();
+                bf.sampling = 5;
+                bf.radius = 5;
+                bitmap = Blur.of(getContext(), bitmap, bf);
+            }
+        }
+        ConsGuideDialog.mBg = bitmap;
+        new ConsGuideDialog(getActivityContext()).setConsImageLocation(location).show();
     }
 
     @Override
@@ -112,6 +157,7 @@ public class XZFragment extends BaseFragment implements PullToRefreshLayout.OnRe
 
     /**
      * 请求数据
+     *
      * @param birdt
      * @param birtm
      * @param birlongi
@@ -139,14 +185,14 @@ public class XZFragment extends BaseFragment implements PullToRefreshLayout.OnRe
                     @Override
                     public void onError(@NonNull Throwable e) {
                         super.onError(e);
-                        Toaster.showShort("请求出错");
+                        new NetErrDialog(getActivityContext()).show();
                         sendFinish(pullToRefreshLayout);
                     }
 
                     @Override
                     protected void onFailed(Throwable e) {
                         super.onFailed(e);
-                        Toaster.showShort("请求失败");
+                        new NetErrDialog(getActivityContext()).show();
                         sendFinish(pullToRefreshLayout);
                     }
                 });
