@@ -113,9 +113,6 @@ public class TopicRepo extends AbstractDataRepo {
         HashMap<String, String> param = new HashMap();
         param.put("tid",tid);
         if (vid != null) param.put("uid",vid);
-
-
-
         return unionFlow(Urls.TOPIC_INFO,null,param,true,TopicDetailBean.class,null,0);
     }
 
