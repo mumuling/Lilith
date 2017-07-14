@@ -7,6 +7,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
@@ -15,6 +17,7 @@ import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.base.BaseFragment;
 import com.youloft.lilith.common.rx.RxObserver;
+import com.youloft.lilith.common.utils.NetUtil;
 import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.common.widgets.view.PullToRefreshLayout;
 import com.youloft.lilith.glide.GlideBlurTransform;
@@ -45,6 +48,8 @@ public class HTFragment extends BaseFragment implements PullToRefreshLayout.OnRe
     private LinearLayoutManager mLayoutManager;
     private List<TopicBean.DataBean> topicBeanList = new ArrayList<>();
     private PullToRefreshLayout llPullRefresh;
+    private LinearLayout llRoot;
+    private ImageView imageNoNet;
     private boolean needLoadMoreTopic = true;
     public HTFragment() {
         super(R.layout.fragment_ht);
@@ -64,6 +69,14 @@ public class HTFragment extends BaseFragment implements PullToRefreshLayout.OnRe
      *  请求话题信息
      */
     private void requestTopic(final PullToRefreshLayout layout) {
+        if (!NetUtil.isNetOK()) {
+            llPullRefresh.setVisibility(View.GONE);
+            imageNoNet.setVisibility(View.VISIBLE);
+            return;
+        } else {
+            llPullRefresh.setVisibility(View.VISIBLE);
+            imageNoNet.setVisibility(View.GONE);
+        }
         TopicRepo.getTopicList("0","0","10",true)
                 .compose(this.<TopicBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
@@ -99,6 +112,8 @@ public class HTFragment extends BaseFragment implements PullToRefreshLayout.OnRe
         if (getView() == null)return;
         mToolBar = (BaseToolBar) getView().findViewById(R.id.tool_bar);
         mTopicRv = (RecyclerView) getView().findViewById(R.id.lv_topic);
+        llRoot = (LinearLayout) getView().findViewById(R.id.ll_root);
+        imageNoNet = (ImageView) getView().findViewById(R.id.default_image);
         mToolBar.setTitle("星座话题");
         //设置recycleView
         mLayoutManager = new LinearLayoutManager(getContext());

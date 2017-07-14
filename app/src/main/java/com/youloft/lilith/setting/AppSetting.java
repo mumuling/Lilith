@@ -114,4 +114,30 @@ public class AppSetting {
     public static int getCityDBVersion() {
         return SettingProvider.getInt(sContext, "city_info_db_version", 0);
     }
+
+    /**
+     * 是否第一次进入app
+     */
+    public static boolean isFirst() {
+        return SettingProvider.getBoolean(sContext, "lilith_is_first_in", true);
+    }
+    /**
+     * 设置第一次进入app
+     */
+    public static void setFirst() {
+        SettingProvider.save(sContext, "lilith_is_first_in", false);
+    }
+
+    /**
+     * xz引导界面是否已展示过
+     */
+    public static boolean isGuideShown() {
+        return SettingProvider.getBoolean(sContext, "lilith_is_guide_shown", false);
+    }
+    /**
+     * 设置第一次进入app
+     */
+    public static void setGuideShown() {
+        SettingProvider.save(sContext, "lilith_is_guide_shown", true);
+    }
 }

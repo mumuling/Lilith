@@ -38,6 +38,7 @@
                 android:layout_gravity="center|bottom"
                 android:layout_marginBottom="44dp"
                 android:text="Easter Roob"
+                android:lines="1"
                 android:textColor="#ffffff"
                 android:textSize="16dp" />
 
@@ -48,6 +49,8 @@
         </FrameLayout>
 
         <LinearLayout
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/theme_background"
