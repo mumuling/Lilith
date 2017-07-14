@@ -34,6 +34,8 @@ import com.youloft.lilith.topic.bean.ClickLikeBean;
 import com.youloft.lilith.topic.bean.ClickLikeEvent;
 import com.youloft.lilith.topic.bean.PointBean;
 import com.youloft.lilith.topic.bean.TopicDetailBean;
+import com.youloft.lilith.topic.db.PointAnswerCache;
+import com.youloft.lilith.topic.db.PointAnswerTable;
 import com.youloft.lilith.topic.db.PointCache;
 import com.youloft.lilith.topic.db.PointTable;
 import com.youloft.lilith.topic.db.TopicLikeCache;
@@ -208,6 +210,7 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
                         }
                        // handlePointTableInfo(pointBean.data);
                         adapter.setPointBeanList(pointBean.data);
+                        handleAnswerTable(pointBean.data,pointBean.t);
                         totalPoint = adapter.pointBeanList.size();
                         textLoadMore.setVisibility(View.VISIBLE);
                         textLoadMore.setText("展开更多");
@@ -217,7 +220,6 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
 
                     @Override
                     protected void onFailed(Throwable e) {
-
                         super.onFailed(e);
                         textLoadMore.setVisibility(View.VISIBLE);
                         textLoadMore.setText("没有更多数据");
@@ -229,6 +231,36 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
 
 
     }
+
+    /**
+     *     加上本地缓存的回复数量
+     * @param pointList   获得的观点列表
+     */
+    private void handleAnswerTable(List<PointBean.DataBean> pointList,long time) {
+        if (pointList == null || pointList.size() == 0 )return;
+        if (AppSetting.getUserInfo() == null)return;
+        PointAnswerCache pointAnswerCache = PointAnswerCache.getIns(mContext);
+        List<PointAnswerTable> pointAnswerTableList = null;
+        for (int i = 0 ; i < pointList.size(); i ++) {
+            int poitnID = pointList.get(i).id;
+            int replyCount = pointList.get(i).reply;
+            pointAnswerTableList = pointAnswerCache.getAnswerListByCode(poitnID);
+            if (pointAnswerTableList == null){
+                continue;
+            }
+            for (int j = 0; j < pointAnswerTableList.size(); j ++) {
+                if (pointAnswerTableList.get(j).time > time) {
+                    replyCount = replyCount + 1;
+                    PointBean.DataBean.ReplyListBean replyBean = new PointBean.DataBean.ReplyListBean();
+                    replyBean.nickName = AppSetting.getUserInfo().data.userInfo.nickName;
+                    replyBean.contents = pointAnswerTableList.get(j).viewPoint;
+                    pointList.get(i).replyList.add(0,replyBean);
+                }
+            }
+            pointList.get(i).reply = replyCount;
+        }
+    }
+
 
     /**
      * 处理观点信息的数据库。
@@ -251,7 +283,7 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
         }
     }
 
-    public void bindNormal(final PointBean.DataBean point, final TopicDetailBean.DataBean option, int position, boolean isLast) {
+    public void bindNormal(final PointBean.DataBean point, final TopicDetailBean.DataBean option, final int position, boolean isLast) {
         if (point == null || option == null) return;
         this.topic = option;
         this.point = point;
@@ -263,6 +295,7 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
                 ARouter.getInstance().build("/test/PointDetailActivity")
                         .withObject("point", point)
                         .withObject("topic", option)
+                        .withInt("position",position)
                         .navigation();
             }
         });
@@ -316,7 +349,11 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
             llLoadMore.setVisibility(View.GONE);
             commentDividerBottom.setVisibility(View.VISIBLE);
         }
-        textCommentAnswerCount.setText(String.valueOf(point.reply));
+        if (point.reply == 0) {
+            textCommentAnswerCount.setText("回复");
+        } else {
+            textCommentAnswerCount.setText(String.valueOf(point.reply));
+        }
         //用户评论，最多显示3条
         if (point.replyList != null && point.replyList.size() > 0) {
             for (int i = 0; i < point.replyList.size(); i++) {

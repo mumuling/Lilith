@@ -32,6 +32,7 @@ import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.login.event.LoginEvent;
 import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.topic.adapter.PointAnswerAdapter;
+import com.youloft.lilith.topic.bean.AnswerEvent;
 import com.youloft.lilith.topic.bean.PointAnswerBean;
 import com.youloft.lilith.topic.bean.PointBean;
 import com.youloft.lilith.topic.bean.ReplyBean;
@@ -81,6 +82,8 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
     public PointBean.DataBean point;
     @Autowired
     public TopicDetailBean.DataBean topic;
+    @Autowired
+    public int position;
     @BindView(R.id.text_confirm)
     TextView textConfirm;
     @BindView(R.id.image_pen)
@@ -197,7 +200,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
                 dataBean.uid = userInfo.id;
                 dataBean.nickName = userInfo.nickName;
                 replyBeanList.add(0, dataBean);
-                replyCount++;
+              //  replyCount++;
             }
         }
     }
@@ -433,6 +436,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
                             updatePointAnswerDb(result.t, dataBean, answerId);
                             replyCount++;
                             commandNum.setText(String.valueOf(replyCount) + "条回复");
+                            EventBus.getDefault().post(new AnswerEvent(replyCount,position,userInfo.nickName,reply_content));
                             Toaster.showShort("评论成功！");
                         } else {
                             Toaster.showShort("评论失败!");

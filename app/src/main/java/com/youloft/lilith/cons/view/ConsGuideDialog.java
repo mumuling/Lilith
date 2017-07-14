@@ -3,22 +3,19 @@ package com.youloft.lilith.cons.view;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.umeng.socialize.media.Base;
 import com.youloft.lilith.R;
-import com.youloft.lilith.common.base.BaseActivity;
+import com.youloft.lilith.common.utils.ViewUtil;
 import com.youloft.lilith.common.widgets.dialog.BaseDialog;
-import com.youloft.lilith.cons.consmanager.ConsDrawableManager;
 import com.youloft.lilith.setting.AppSetting;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import jp.wasabeef.blurry.internal.Blur;
-import jp.wasabeef.blurry.internal.BlurFactor;
 
 /**
  * Created by zchao on 2017/7/14.
@@ -26,7 +23,7 @@ import jp.wasabeef.blurry.internal.BlurFactor;
  * version:
  */
 
-public class ConsGuidDialog extends BaseDialog {
+public class ConsGuideDialog extends BaseDialog {
     @BindView(R.id.cons_guide_bg)
     ImageView mConsGuideBg;
     @BindView(R.id.cons_view)
@@ -35,10 +32,10 @@ public class ConsGuidDialog extends BaseDialog {
     TextView mConsGuideConfirmBtn;
     @BindView(R.id.cons_content_root)
     LinearLayout mConsContentRoot;
-
+    private int contentRootTop = 0;
     public static Bitmap mBg = null;
 
-    public ConsGuidDialog(@NonNull Context context) {
+    public ConsGuideDialog(@NonNull Context context) {
         super(context);
         setContentView(R.layout.cons_guid_dialog);
         ButterKnife.bind(this);
@@ -51,6 +48,23 @@ public class ConsGuidDialog extends BaseDialog {
         } else {
             mConsGuideBg.setBackgroundColor(getContext().getResources().getColor(R.color.black_30));
         }
+    }
+
+    public ConsGuideDialog setConsImageLocation(int[] location) {
+        this.contentRootTop = location[1];
+        return this;
+    }
+
+    @Override
+    public void show() {
+        if (contentRootTop == 0) {
+            contentRootTop = (int) ViewUtil.dp2px(20);
+        }
+        mConsContentRoot.setPadding(mConsContentRoot.getPaddingLeft(),
+                mConsContentRoot.getPaddingTop() + contentRootTop,
+                mConsContentRoot.getPaddingRight(),
+                mConsContentRoot.getPaddingBottom());
+        super.show();
     }
 
     /**
@@ -68,5 +82,10 @@ public class ConsGuidDialog extends BaseDialog {
         if (mBg != null) {
             mBg.recycle();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.dismiss();
     }
 }

@@ -140,7 +140,11 @@ public class MyTopicHolder extends RecyclerView.ViewHolder {
             textVoteResult.setTextColor(Color.parseColor("#5696df"));
         }
         textCommentTime.setText(CalendarHelper.getInterValTime(CalendarHelper.getTimeMillisByString(point.date), System.currentTimeMillis()));
-        textCommentAnswerCount.setText(String.valueOf(point.reply));
+       if (point.reply == 0) {
+           textCommentAnswerCount.setText("回复");
+       } else {
+           textCommentAnswerCount.setText(String.valueOf(point.reply));
+       }
     }
 
     /**

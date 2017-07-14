@@ -327,7 +327,6 @@ public class VoteHolder extends RecyclerView.ViewHolder {
                     voteAniamtion(1 - ((float) topicInfo.option.get(j).vote / topicInfo.totalVote));
                 }
             }
-            voteAniamtion((float) topicInfo.option.get(0).vote / topicInfo.totalVote);
             needVoteAnimation = false;
         }
 

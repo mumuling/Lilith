@@ -28,6 +28,8 @@
     <color name="white_10">#1affffff</color>
     <!--30%透明度黑色-->
     <color name="black_30">#4c000000</color>
+    <!--50%透明度黑色-->
+    <color name="black_50">#80000000</color>
     <!--70%透明度黑色-->
     <color name="black_70">#b1000000</color>
 

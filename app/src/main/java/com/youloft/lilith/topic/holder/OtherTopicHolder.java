@@ -12,6 +12,7 @@ import com.youloft.lilith.common.widgets.view.RoundImageView;
 import com.youloft.lilith.glide.GlideBlurTransform;
 import com.youloft.lilith.topic.bean.TopicBean;
 import com.youloft.lilith.topic.widget.TopicUserImageLayout;
+import com.youloft.statistics.AppAnalytics;
 
 /**       话题详情页底部的其他话题推荐
  *version
@@ -26,6 +27,7 @@ public class OtherTopicHolder extends RecyclerView.ViewHolder {
     public RoundImageView mTopicImage;
     private TextView mOtherTopicText;
     private TopicBean.DataBean topic;
+    private boolean isReport = false;
 
     public OtherTopicHolder(View itemView) {
         super(itemView);
@@ -38,6 +40,10 @@ public class OtherTopicHolder extends RecyclerView.ViewHolder {
     public void bind(final TopicBean.DataBean topic, boolean first) {
         if (topic == null ) {
             return;
+        }
+        if (!isReport) {
+            AppAnalytics.onEvent("Commenttopic", "IM");
+            isReport = true;
         }
 
        itemView.setOnClickListener(new View.OnClickListener() {
