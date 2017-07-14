@@ -20,7 +20,7 @@ import com.youloft.lilith.R;
 
 /**
  * Created by zchao on 2017/7/13.
- * desc: 资料修改页面的Dialog，有默认动画
+ * desc: 资料修改页面的Dialog基类，有默认动画
  * version:
  */
 
