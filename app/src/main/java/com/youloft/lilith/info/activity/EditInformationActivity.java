@@ -114,8 +114,10 @@ public class EditInformationActivity extends BaseActivity {
                 if (hasFocus) {
                     etNickName.setCursorVisible(true);
                     etNickName.setSelection(etNickName.length());
+                    ivDeleteNickName.setVisibility(View.VISIBLE);
                 } else {
                     etNickName.setCursorVisible(false);
+                    ivDeleteNickName.setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -174,7 +176,7 @@ public class EditInformationActivity extends BaseActivity {
             String showNickName = detail.nickName;
             int length = showNickName.length();
             if (length > 7) {
-                showNickName = showNickName.substring(0,6) + "...";
+                showNickName = showNickName.substring(0, 6) + "...";
             }
             tvNickName.setText(showNickName);
             etNickName.setText(detail.nickName);
@@ -574,5 +576,10 @@ public class EditInformationActivity extends BaseActivity {
     @OnClick(R.id.iv_delete_nick_name)
     public void onDeleteNickClicked() {
         etNickName.setText(null);
+    }
+
+    @OnClick(R.id.ll_nick_name)
+    public void onLLNIckClicked() {
+        ivDeleteNickName.setVisibility(View.VISIBLE);
     }
 }

@@ -170,10 +170,10 @@ public class BindAccountActivity extends BaseActivity {
         String openid = data.get("openid");
         String unionid = data.get("unionid");
         String nickName = data.get("name");
-        String phone = AppSetting.getUserInfo().data.userInfo.phone;
+        String id = String.valueOf(AppSetting.getUserInfo().data.userInfo.id);
         String platform = "0";
 
-        UpdateUserRepo.bindWx(openid, unionid, nickName, phone, platform)
+        UpdateUserRepo.bindWx(openid, unionid, nickName, id, platform)
                 .compose(this.<UserBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()

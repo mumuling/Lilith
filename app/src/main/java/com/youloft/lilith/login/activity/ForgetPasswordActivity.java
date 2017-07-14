@@ -9,6 +9,8 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,6 +26,7 @@ import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.LoginUtils;
 import com.youloft.lilith.common.utils.Toaster;
+import com.youloft.lilith.login.MediaPlayerHelper;
 import com.youloft.lilith.login.PhoneFocusChangeListener;
 import com.youloft.lilith.login.PhoneTextWatcher;
 import com.youloft.lilith.login.bean.SendSmsBean;
@@ -36,13 +39,10 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.IOException;
-
 import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -52,9 +52,9 @@ import io.reactivex.schedulers.Schedulers;
  * Created by GYH on 2017/7/6.
  */
 @Route(path = "/test/ForgetPasswordActivity")
-public class ForgetPasswordActivity extends BaseActivity {
-    @BindView(R.id.vv_background)
-    VideoView vvBackground;  //背景视频
+public class ForgetPasswordActivity extends BaseActivity implements SurfaceHolder.Callback {
+    @BindView(R.id.sv_background)
+    SurfaceView svBackground;  //背景视频
     @BindView(R.id.et_verification_code)
     EditText etVerificationCode; //输入验证码的editText
     @BindView(R.id.et_phone_number)
@@ -81,6 +81,8 @@ public class ForgetPasswordActivity extends BaseActivity {
     private int mPreNumberLength;//电话号码变化之前的长度
     private boolean isCodeRight; //验证码是否正确
     private SmsCodeBean mSmsCodeBean; //获取到的验证码的数据模型
+    private MediaPlayer mediaPlayerInstance;
+    private SurfaceHolder holder;
 
 
     @Override
@@ -229,29 +231,7 @@ public class ForgetPasswordActivity extends BaseActivity {
      * 背景视频设置
      */
     private void initBackgroundVedio() {
-        String uri = "android.resource://" + getPackageName() + "/" + R.raw.bg_login;
-        vvBackground.setVideoURI(Uri.parse(uri));
-
-//        vvBackground.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-//
-//            @Override
-//            public boolean onError(MediaPlayer mp, int what, int extra) {
-//                // 设置当前播放的位置
-////                play(progress);
-////                isPlaying = false;
-//                vvBackground.start();
-//                return true;//如果设置true就可以防止他弹出错误的提示框！
-//            }
-//        });
-        vvBackground.start();
-        vvBackground.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-
-            @Override
-            public void onCompletion(MediaPlayer mPlayer) {
-                mPlayer.start();
-                mPlayer.setLooping(true);
-            }
-        });
+        MediaPlayerHelper.initMediaPlayerHelper(this,svBackground);
     }
 
 
@@ -365,5 +345,20 @@ public class ForgetPasswordActivity extends BaseActivity {
     @OnClick(R.id.iv_back)
     public void onBackClicked() {
         onBackPressed();
+    }
+
+    @Override
+    public void surfaceCreated(SurfaceHolder holder) {
+        mediaPlayerInstance.setDisplay(holder);
+    }
+
+    @Override
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+
+    }
+
+    @Override
+    public void surfaceDestroyed(SurfaceHolder holder) {
+
     }
 }

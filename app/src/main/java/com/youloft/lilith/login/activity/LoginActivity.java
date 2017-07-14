@@ -2,30 +2,25 @@ package com.youloft.lilith.login.activity;
 
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.InputFilter;
-import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Base64;
-import android.util.Log;
+import android.view.SurfaceView;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
-import android.widget.VideoView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.alibaba.android.arouter.utils.TextUtils;
-import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.LoginUtils;
 import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.common.widgets.dialog.PrivacyDialog;
+import com.youloft.lilith.login.MediaPlayerHelper;
 import com.youloft.lilith.login.PhoneFocusChangeListener;
 import com.youloft.lilith.login.PhoneTextWatcher;
 import com.youloft.lilith.login.PwdFocusChangeListener;
@@ -47,7 +42,6 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -62,7 +56,7 @@ public class LoginActivity extends BaseActivity {
     private static final String TAG = "LoginActivity";
 
     @BindView(R.id.vv_background)
-    VideoView vvBackground;//背景视频
+    SurfaceView svBackground;//背景视频
     @BindView(R.id.et_phone_number)
     EditText etPhoneNumber;//手机号码
     @BindView(R.id.et_password)
@@ -73,8 +67,8 @@ public class LoginActivity extends BaseActivity {
     ImageView ivIsShowPwd; //是否明文展示密码
     @BindView(R.id.iv_clean_password)
     ImageView ivCleanPassword; //清空密码
+    private MediaPlayerHelper mMediaPlayerHelper;
 
-    private int mPreNumberLength;//电话号码变化之前的长度
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,24 +95,25 @@ public class LoginActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+        mMediaPlayerHelper.release();
     }
 
     /**
      * 关于输入框各种乱七八糟的横线,叉叉的显示隐藏,点叉叉删除号码
-     *
+     * <p>
      * 输入框的设定
      */
     private void initEditText() {
 
         //电话号码变化的监听
         etPhoneNumber.setFilters(new InputFilter[]{new InputFilter.LengthFilter(13)});
-        etPhoneNumber.addTextChangedListener(new PhoneTextWatcher(etPhoneNumber,ivCleanNumber));
-        etPhoneNumber.setOnFocusChangeListener(new PhoneFocusChangeListener(etPhoneNumber,ivCleanNumber));
+        etPhoneNumber.addTextChangedListener(new PhoneTextWatcher(etPhoneNumber, ivCleanNumber));
+        etPhoneNumber.setOnFocusChangeListener(new PhoneFocusChangeListener(etPhoneNumber, ivCleanNumber));
 
         //密码输入框的监听
         etPassword.setFilters(new InputFilter[]{new InputFilter.LengthFilter(16)});
-        etPassword.addTextChangedListener(new PwdTextWatcher(etPassword,ivCleanPassword,ivIsShowPwd));
-        etPassword.setOnFocusChangeListener(new PwdFocusChangeListener(etPassword,ivCleanPassword,ivIsShowPwd));
+        etPassword.addTextChangedListener(new PwdTextWatcher(etPassword, ivCleanPassword, ivIsShowPwd));
+        etPassword.setOnFocusChangeListener(new PwdFocusChangeListener(etPassword, ivCleanPassword, ivIsShowPwd));
     }
 
 
@@ -131,8 +126,7 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        vvBackground.pause();
-        vvBackground.seekTo(0);
+
     }
 
     @Override
@@ -145,17 +139,7 @@ public class LoginActivity extends BaseActivity {
      * 背景视频设置
      */
     private void initBackgroundVedio() {
-        String uri = "android.resource://" + getPackageName() + "/" + R.raw.bg_login;
-        vvBackground.setVideoURI(Uri.parse(uri));
-        vvBackground.start();
-        vvBackground.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-
-            @Override
-            public void onCompletion(MediaPlayer mPlayer) {
-                mPlayer.start();
-                mPlayer.setLooping(true);
-            }
-        });
+        mMediaPlayerHelper = MediaPlayerHelper.initMediaPlayerHelper(this, svBackground);
     }
 
 
@@ -185,7 +169,7 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onDataSuccess(UserBean userBean) {
                         if (userBean != null &&
-                                userBean.data != null&&
+                                userBean.data != null &&
                                 userBean.data.result == 0) {
                             AppSetting.saveUserInfo(userBean); //保存用户信息
                             EventBus.getDefault().post(new LoginEvent(true));//发送登录事件
@@ -204,11 +188,6 @@ public class LoginActivity extends BaseActivity {
                 });
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        vvBackground.stopPlayback();
-    }
 
     //隐私条款
     @OnClick(R.id.ll_privacy_terms)
@@ -223,7 +202,6 @@ public class LoginActivity extends BaseActivity {
         ARouter.getInstance()
                 .build("/test/ForgetPasswordActivity")
                 .navigation();
-        finish();
     }
 
     //注册
@@ -297,7 +275,7 @@ public class LoginActivity extends BaseActivity {
                         if (userBean.data.result == 0) {
                             AppSetting.saveUserInfo(userBean); //保存用户信息
                             EventBus.getDefault().post(new LoginEvent(true));//发送登录事件
-                            if (android.text.TextUtils.isEmpty(userBean.data.userInfo.birthLongi)){ //新用户
+                            if (android.text.TextUtils.isEmpty(userBean.data.userInfo.birthLongi)) { //新用户
                                 ARouter.getInstance().build("/test/EditInformationActivity").navigation();
                             }
                             finish();
@@ -305,6 +283,7 @@ public class LoginActivity extends BaseActivity {
                             Toaster.showShort("登录失败");
                         }
                     }
+
                     @Override
                     protected void onFailed(Throwable e) {
                         super.onFailed(e);
@@ -345,4 +324,6 @@ public class LoginActivity extends BaseActivity {
     public void onViewClicked() {
         onBackPressed();
     }
+
+
 }

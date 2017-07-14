@@ -8,6 +8,7 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
+import android.view.SurfaceView;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -21,6 +22,7 @@ import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.Toaster;
+import com.youloft.lilith.login.MediaPlayerHelper;
 import com.youloft.lilith.login.bean.ModifyPasswordBean;
 import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.login.event.LoginEvent;
@@ -44,8 +46,8 @@ import io.reactivex.schedulers.Schedulers;
 @Route(path = "/test/SetPasswordActivity")
 public class SetPasswordActivity extends BaseActivity {
 
-    @BindView(R.id.vv_background)
-    VideoView vvBackground;  //背景视频
+    @BindView(R.id.sv_background)
+    SurfaceView svBackground;  //背景视频
     @BindView(R.id.et_password)
     EditText etPassword;  //输入密码
     @BindView(R.id.iv_is_show_pwd01)
@@ -142,17 +144,7 @@ public class SetPasswordActivity extends BaseActivity {
      * 背景视频设置
      */
     private void initBackgroundVedio() {
-        String uri = "android.resource://" + getPackageName() + "/" + R.raw.bg_login;
-        vvBackground.setVideoURI(Uri.parse(uri));
-        vvBackground.start();
-        vvBackground.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-
-            @Override
-            public void onCompletion(MediaPlayer mPlayer) {
-                mPlayer.start();
-                mPlayer.setLooping(true);
-            }
-        });
+        MediaPlayerHelper.initMediaPlayerHelper(this,svBackground);
     }
 
     private boolean isShowPassword01 = false;//是否显示密码的标识

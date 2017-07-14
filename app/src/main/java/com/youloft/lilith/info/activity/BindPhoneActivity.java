@@ -1,7 +1,5 @@
 package com.youloft.lilith.info.activity;
 
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -9,13 +7,13 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.VideoView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.youloft.lilith.R;
@@ -24,6 +22,7 @@ import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.LoginUtils;
 import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.info.repo.UpdateUserRepo;
+import com.youloft.lilith.login.MediaPlayerHelper;
 import com.youloft.lilith.login.PhoneFocusChangeListener;
 import com.youloft.lilith.login.bean.SendSmsBean;
 import com.youloft.lilith.login.bean.SmsCodeBean;
@@ -47,8 +46,8 @@ import io.reactivex.schedulers.Schedulers;
  */
 @Route(path = "/test/BindPhoneActivity")
 public class BindPhoneActivity extends BaseActivity{
-    @BindView(R.id.vv_background)
-    VideoView vvBackground;  //背景视频
+    @BindView(R.id.sv_background)
+    SurfaceView svBackground;  //背景视频
     @BindView(R.id.et_verification_code)
     EditText etVerificationCode; //输入验证码的editText
     @BindView(R.id.et_phone_number)
@@ -80,6 +79,7 @@ public class BindPhoneActivity extends BaseActivity{
     private boolean isNumberRight = true;  //验证电话号码是否已经存在之后的标识 true 存在   false 不存在
     private boolean isCodeRight; //验证码是否正确
     private SmsCodeBean mSmsCodeBean; //获取到的验证码的数据模型
+    private MediaPlayerHelper mMediaPlayerHelper;
 
 
     @Override
@@ -297,17 +297,7 @@ public class BindPhoneActivity extends BaseActivity{
      * 背景视频设置
      */
     private void initBackgroundVedio() {
-        String uri = "android.resource://" + getPackageName() + "/" + R.raw.bg_login;
-        vvBackground.setVideoURI(Uri.parse(uri));
-        vvBackground.start();
-        vvBackground.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-
-            @Override
-            public void onCompletion(MediaPlayer mPlayer) {
-                mPlayer.start();
-                mPlayer.setLooping(true);
-            }
-        });
+        mMediaPlayerHelper = MediaPlayerHelper.initMediaPlayerHelper(this, svBackground);
     }
 
 
@@ -461,6 +451,7 @@ public class BindPhoneActivity extends BaseActivity{
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mMediaPlayerHelper.release();
         handler.removeCallbacks(runnable);
     }
 

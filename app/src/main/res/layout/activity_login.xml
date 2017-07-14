@@ -4,7 +4,7 @@
     android:background="@color/theme_background"
     android:layout_height="match_parent">
 
-    <com.youloft.lilith.common.widgets.MyVideoView
+    <SurfaceView
         android:id="@+id/vv_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
