@@ -75,7 +75,7 @@ public class VoteDialog extends BaseDialog implements View.OnClickListener {
         voteId = id;
         voteTitle = title;
         this.title = title;
-        textPointVote.setText(title);
+        textPointVote.setText("投票给: " + title);
         if (id % 2 == 1) {
             textPointVote.setTextColor(Color.parseColor("#ff8282"));
         } else {
