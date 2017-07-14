@@ -15,10 +15,13 @@ import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.login.event.LoginEvent;
 import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.topic.adapter.TopicDetailAdapter;
+import com.youloft.lilith.topic.bean.AnswerEvent;
 import com.youloft.lilith.topic.bean.ClickLikeEvent;
 import com.youloft.lilith.topic.bean.PointBean;
 import com.youloft.lilith.topic.bean.TopicBean;
 import com.youloft.lilith.topic.bean.TopicDetailBean;
+import com.youloft.lilith.topic.db.PointAnswerCache;
+import com.youloft.lilith.topic.db.PointAnswerTable;
 import com.youloft.lilith.topic.db.PointCache;
 import com.youloft.lilith.topic.db.PointTable;
 import com.youloft.lilith.topic.db.TopicInfoCache;
@@ -66,7 +69,8 @@ public class TopicDetailActivity extends BaseActivity {
     private int isVote = 0;//是否参与过
     private TopicInfoCache topicInfoCache;
     private PointCache pointCache;
-    private boolean needLoadMoreTopic = true;
+    private boolean needLoadMoreTopic = true;//是否需要加载更多话题
+    private boolean needAddAnswer = true;//是否需要加缓存回复的数量
     @Autowired
     public int tid;
 
@@ -132,9 +136,10 @@ public class TopicDetailActivity extends BaseActivity {
                 .subscribe(new RxObserver<PointBean>() {
                     @Override
                     public void onDataSuccess(PointBean pointBean) {
-                        if (pointBean.data == null || pointBean.data.size() == 0) return;
+                        if (pointBean.data == null) return;
                         handlePointTableInfo(pointBean);
                         pointList.addAll(pointBean.data);
+                        handleAnswerTable(pointList,pointBean.t);
                         adapter.setPointBeanList(pointList);
                         totalPoint = pointBean.data.size();
                     }
@@ -144,6 +149,35 @@ public class TopicDetailActivity extends BaseActivity {
                         super.onFailed(e);
                     }
                 });
+    }
+
+    /**
+     *     加上本地缓存的回复数量
+     * @param pointList   获得的观点列表
+     */
+    private void handleAnswerTable(List<PointBean.DataBean> pointList,long time) {
+        if (pointList == null )return;
+        if (AppSetting.getUserInfo() == null)return;
+        PointAnswerCache pointAnswerCache = PointAnswerCache.getIns(this);
+        List<PointAnswerTable> pointAnswerTableList = null;
+        for (int i = 0 ; i < pointList.size(); i ++) {
+            int poitnID = pointList.get(i).id;
+            int replyCount = pointList.get(i).reply;
+            pointAnswerTableList = pointAnswerCache.getAnswerListByCode(poitnID);
+            if (pointAnswerTableList == null){
+                continue;
+            }
+            for (int j = 0; j < pointAnswerTableList.size(); j ++) {
+                if (pointAnswerTableList.get(j).time > time) {
+                    replyCount = replyCount + 1;
+                    PointBean.DataBean.ReplyListBean replyBean = new PointBean.DataBean.ReplyListBean();
+                    replyBean.nickName = AppSetting.getUserInfo().data.userInfo.nickName;
+                    replyBean.contents = pointAnswerTableList.get(j).viewPoint;
+                    pointList.get(i).replyList.add(0,replyBean);
+                }
+            }
+            pointList.get(i).reply = replyCount;
+        }
     }
 
     /**
@@ -157,7 +191,7 @@ public class TopicDetailActivity extends BaseActivity {
         UserBean.DataBean.UserInfoBean userInfo = userBean.data.userInfo;
         int userID = userInfo.id;
         PointTable pointTable = pointCache.getInforByCode(tid);
-        if (pointTable != null && pointTable.time < pointBeen.t) {
+        if (pointTable != null && pointTable.time > pointBeen.t) {
             PointBean.DataBean dataBean = new PointBean.DataBean();
             dataBean.userId = userInfo.id;
             dataBean.isclick = 0;
@@ -252,6 +286,22 @@ public class TopicDetailActivity extends BaseActivity {
         if (event.type != ClickLikeEvent.TYPE_AUTHOR || adapter == null) return;
         adapter.notifyDataSetChanged();
 
+    }
+
+    /**
+     * 回复数量
+     *
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
+    public void onCountChagne(AnswerEvent event) {
+        if (event.position <= 0)return;
+        adapter.pointBeanList.get(event.position -1).reply = event.count;
+        PointBean.DataBean.ReplyListBean replyBean = new PointBean.DataBean.ReplyListBean();
+        replyBean.nickName = event.nickNmae;
+        replyBean.contents = event.content;
+        adapter.pointBeanList.get(event.position -1).replyList.add(0,replyBean);
+        adapter.notifyItemChanged(event.position);
     }
 
     private void initView() {
