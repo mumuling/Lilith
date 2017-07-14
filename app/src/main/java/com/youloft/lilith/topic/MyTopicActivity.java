@@ -172,7 +172,7 @@ public class MyTopicActivity extends BaseActivity {
 
 
     private void initView() {
-        toolBar.setTitle("星座话题");
+        toolBar.setTitle("我的话题");
         mLayoutManager = new LinearLayoutManager(this);
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rvMyTopic.setLayoutManager(mLayoutManager);
