@@ -19,7 +19,7 @@ import com.youloft.lilith.common.utils.CalendarHelper;
 import com.youloft.lilith.common.utils.LoginUtils;
 import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.common.widgets.picker.CityInfo;
-import com.youloft.lilith.common.widgets.picker.CityPicker;
+import com.youloft.lilith.common.widgets.picker.CityPickerPop;
 import com.youloft.lilith.common.widgets.picker.DatePickerPop;
 import com.youloft.lilith.common.widgets.picker.GenderPickerPop;
 import com.youloft.lilith.common.widgets.picker.OnPickerSelectListener;
@@ -495,7 +495,7 @@ public class EditInformationActivity extends BaseActivity {
      */
     private void cityPick(final TextView tv, final boolean b) {
 
-        CityPicker cityPicker = getCityPicker(b);
+        CityPickerPop cityPicker = getCityPicker(b);
 
         cityPicker
                 .setOnCityItemClickListener(new OnPickerSelectListener<CityInfo>() {
@@ -530,7 +530,7 @@ public class EditInformationActivity extends BaseActivity {
      *
      * @param b 来源  true代表出生地   false 现居地
      */
-    private CityPicker getCityPicker(boolean b) {
+    private CityPickerPop getCityPicker(boolean b) {
         if (b) {
 
             String content = tvPlaceBirth.getText().toString();
@@ -543,12 +543,12 @@ public class EditInformationActivity extends BaseActivity {
         }
     }
 
-    private CityPicker getCityPicker2(String content) {
+    private CityPickerPop getCityPicker2(String content) {
         if (!TextUtils.isEmpty(content) && content.contains("-")) {
             String[] split = content.split("-");
-            return CityPicker.getDefCityPicker(this).province(split[0]).city(split[1]).district(split[2]);
+            return CityPickerPop.getDefCityPicker(this).province(split[0]).city(split[1]).district(split[2]);
         } else {
-            return CityPicker.getDefCityPicker(this);
+            return CityPickerPop.getDefCityPicker(this);
         }
     }
 
