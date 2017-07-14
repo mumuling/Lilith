@@ -85,6 +85,8 @@ public class EditInformationActivity extends BaseActivity {
     ImageView ivTipsBirthPlace; //出生地前面的感叹号
     @BindView(R.id.iv_tips_now)
     ImageView ivTipsNow;   //现居地前面的感叹号
+    @BindView(R.id.iv_delete_nick_name)
+    ImageView ivDeleteNickName; //清空昵称的按钮
 
     private String birthLongi = "";//出生经度
     private String birthLati = "";//出生纬度
@@ -112,9 +114,7 @@ public class EditInformationActivity extends BaseActivity {
                 if (hasFocus) {
                     etNickName.setCursorVisible(true);
                     etNickName.setSelection(etNickName.length());
-                    etNickName.setCursorVisible(true);
                 } else {
-                    etNickName.setCursorVisible(false);
                     etNickName.setCursorVisible(false);
                 }
             }
@@ -168,7 +168,7 @@ public class EditInformationActivity extends BaseActivity {
             if (!TextUtils.isEmpty(detail.headImg)) {
                 GlideApp.with(this).asBitmap().dontAnimate().load(detail.headImg).into(new GlideBlurTwoViewTarget(ivHeader, ivBlurBg));
             } else {
-                ivHeader.setImageResource(R.drawable.morentouxiang);
+                ivHeader.setImageResource(R.drawable.default_user_head_img);
             }
             //两个昵称初始化
             tvNickName.setText(detail.nickName);
@@ -257,7 +257,7 @@ public class EditInformationActivity extends BaseActivity {
             return;
         }
 
-        if (nickName.length() > 20) {//昵称长度不能超过20个
+        if (nickName.trim().length() > 20) {//昵称长度不能超过20个
             Toaster.showShort("昵称过长");
             return;
         }
@@ -366,6 +366,7 @@ public class EditInformationActivity extends BaseActivity {
     @OnClick({R.id.fl_sex, R.id.fl_date_birth, R.id.fl_time_birth, R.id.fl_place_birth, R.id.fl_place_now})
     public void onViewClicked(View view) {
         etNickName.setCursorVisible(false);
+        ivDeleteNickName.setVisibility(View.INVISIBLE);
         switch (view.getId()) {
             case R.id.fl_sex:    //弹出性别选择器
                 if (!LoginUtils.canClick()) {
@@ -562,5 +563,11 @@ public class EditInformationActivity extends BaseActivity {
     @OnClick(R.id.et_nick_name)
     public void onViewClicked() {
         etNickName.setCursorVisible(true);
+        ivDeleteNickName.setVisibility(View.VISIBLE);
+    }
+
+    @OnClick(R.id.iv_delete_nick_name)
+    public void onDeleteNickClicked() {
+        etNickName.setText(null);
     }
 }

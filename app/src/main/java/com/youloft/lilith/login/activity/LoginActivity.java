@@ -204,6 +204,11 @@ public class LoginActivity extends BaseActivity {
                 });
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        vvBackground.stopPlayback();
+    }
 
     //隐私条款
     @OnClick(R.id.ll_privacy_terms)
@@ -218,6 +223,7 @@ public class LoginActivity extends BaseActivity {
         ARouter.getInstance()
                 .build("/test/ForgetPasswordActivity")
                 .navigation();
+        finish();
     }
 
     //注册
