@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerViewCanPullAble;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.youloft.lilith.R;
@@ -40,6 +41,8 @@ public class CCFragment extends BaseFragment implements PullToRefreshLayout.OnRe
     Unbinder unbinder;
     @BindView(R.id.ptr_CC)
     PullToRefreshLayout ptrCC;
+    @BindView(R.id.ll_no_net)
+    LinearLayout llNoNet;
     private MeasureAdapter mMeasureAdapter;
 
     public CCFragment() {
@@ -75,8 +78,14 @@ public class CCFragment extends BaseFragment implements PullToRefreshLayout.OnRe
                     @Override
                     public void onDataSuccess(MeasureBean measureBean) {
                         mMeasureAdapter.setData(measureBean.data);
+                        llNoNet.setVisibility(View.INVISIBLE);
                     }
 
+                    @Override
+                    protected void onFailed(Throwable e) {
+                        super.onFailed(e);
+                        llNoNet.setVisibility(View.VISIBLE);
+                    }
                 });
     }
 

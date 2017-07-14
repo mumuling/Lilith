@@ -9,15 +9,43 @@
         android:id="@+id/btl_CC"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-    <com.youloft.lilith.common.widgets.view.PullToRefreshLayout
-        android:id="@+id/ptr_CC"
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <android.support.v7.widget.RecyclerViewCanPullAble
-            android:id="@+id/rv_CC"
+
+        <LinearLayout
+            android:id="@+id/ll_no_net"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/sad_face_icon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="网络异常"
+                android:textColor="@color/white"
+                android:textSize="16dp" />
+        </LinearLayout>
+
+        <com.youloft.lilith.common.widgets.view.PullToRefreshLayout
+            android:id="@+id/ptr_CC"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-    </com.youloft.lilith.common.widgets.view.PullToRefreshLayout>
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerViewCanPullAble
+                android:id="@+id/rv_CC"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </com.youloft.lilith.common.widgets.view.PullToRefreshLayout>
+    </FrameLayout>
 
 
 </LinearLayout>

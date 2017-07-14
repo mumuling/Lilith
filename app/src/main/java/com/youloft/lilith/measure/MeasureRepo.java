@@ -15,7 +15,7 @@ public class MeasureRepo extends AbstractDataRepo{
 
     public static Flowable<MeasureBean> getMeasureData() {
 
-        return unionFlow(Urls.MEASURE_URL, null, null, true, MeasureBean.class, "measure_data", 1);
+        return unionFlow(Urls.MEASURE_URL, null, null, true, MeasureBean.class, "measure_data", 1000*60*2);
     }
 
 }
