@@ -2,20 +2,15 @@ package com.youloft.lilith.common.widgets.picker;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.text.TextUtils;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.database.CityInfoManager;
 import com.youloft.lilith.common.utils.ViewUtil;
+import com.youloft.lilith.common.widgets.dialog.PickerBaseDialog;
 import com.youloft.lilith.common.widgets.picker.wheel.OnWheelChangedListener;
 import com.youloft.lilith.common.widgets.picker.wheel.WheelView;
 import com.youloft.lilith.common.widgets.picker.wheel.adapters.ArrayWheelAdapter;
@@ -25,19 +20,16 @@ import java.util.Map;
 
 /**
  * Desc: 省市区三级选择,带经纬度
- * Change:
+ * Change:城市选择弹窗，如果没有特殊需求，请直接调用{@link #getDefCityPicker(Context)} (Context)},
+ *        然后通过接口来获得选择结果{@link #setOnCityItemClickListener(OnPickerSelectListener)}}
+ *        最后必须要调用show()才会弹出弹窗;
  *
- * @version
  * @author zchao created at 2017/7/13 14:13
  * @see
-*/
-public class CityPicker implements CanShow, OnWheelChangedListener {
+ */
+public class CityPickerPop extends PickerBaseDialog implements CanShow, OnWheelChangedListener {
 
     private Context context;
-
-    private PopupWindow popwindow;
-
-    private View popview;
 
     private WheelView mViewProvince;
 
@@ -93,7 +85,7 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
     private OnPickerSelectListener<CityInfo> listener;
 
 
-    public CityPicker setOnCityItemClickListener(OnPickerSelectListener<CityInfo> listener) {
+    public CityPickerPop setOnCityItemClickListener(OnPickerSelectListener<CityInfo> listener) {
         this.listener = listener;
         return this;
     }
@@ -189,11 +181,12 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
 
     /**
      * 获取默认设置的城市选择器；如果需要自定义使用Builder来构建
+     *
      * @param context
      * @return
      */
-    public static CityPicker getDefCityPicker(Context context){
-        return new CityPicker(context).textSize(20)
+    public static CityPickerPop getDefCityPicker(Context context) {
+        return new CityPickerPop(context).textSize(20)
                 .backgroundPop(Color.TRANSPARENT)
                 .textColor(Color.parseColor("#ffffff"))
                 .textSize(16)
@@ -210,7 +203,7 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
      * @param defaultProvinceName
      * @return
      */
-    public CityPicker province(String defaultProvinceName) {
+    public CityPickerPop province(String defaultProvinceName) {
         this.defaultProvinceName = defaultProvinceName;
         return this;
     }
@@ -221,7 +214,7 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
      * @param defaultCityName
      * @return
      */
-    public CityPicker city(String defaultCityName) {
+    public CityPickerPop city(String defaultCityName) {
         this.defaultCityName = defaultCityName;
         return this;
     }
@@ -232,42 +225,31 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
      * @param defaultDistrict
      * @return
      */
-    public CityPicker district(String defaultDistrict) {
+    public CityPickerPop district(String defaultDistrict) {
         this.defaultDistrict = defaultDistrict;
         return this;
     }
+
     /**
      * 设置popwindow的背景
      */
     private int backgroundPop = 0xa0000000;
 
-    private CityPicker(Context context) {
+    private CityPickerPop(Context context) {
+        super(context);
+        setContentView(R.layout.pop_citypicker);
         this.context = context;
         this.mCurrentCityInfo.pProvice = defaultProvinceName;
         this.mCurrentCityInfo.pCity = defaultCityName;
         this.mCurrentCityInfo.pDistrict = defaultDistrict;
 
-
-        LayoutInflater layoutInflater = LayoutInflater.from(context);
-        popview = layoutInflater.inflate(R.layout.pop_citypicker, null);
-
-        mViewProvince = (WheelView) popview.findViewById(R.id.id_province);
-        mViewCity = (WheelView) popview.findViewById(R.id.id_city);
-        mViewDistrict = (WheelView) popview.findViewById(R.id.id_district);
-        mRelativeTitleBg = (RelativeLayout) popview.findViewById(R.id.rl_title);
-        mTvOK =  popview.findViewById(R.id.tv_confirm);
-        mTvTitle = (TextView) popview.findViewById(R.id.tv_title);
-        mTvCancel =  popview.findViewById(R.id.tv_cancel);
-
-        popwindow = new PopupWindow(popview, LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT);
-        popwindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        popwindow.setAnimationStyle(R.style.AnimBottom);
-        popwindow.setTouchable(true);
-        popwindow.setOutsideTouchable(false);
-        popwindow.setFocusable(true);
-        popwindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-
+        mViewProvince = (WheelView) findViewById(R.id.id_province);
+        mViewCity = (WheelView) findViewById(R.id.id_city);
+        mViewDistrict = (WheelView) findViewById(R.id.id_district);
+        mRelativeTitleBg = (RelativeLayout) findViewById(R.id.rl_title);
+        mTvOK = findViewById(R.id.tv_confirm);
+        mTvTitle = (TextView) findViewById(R.id.tv_title);
+        mTvCancel = findViewById(R.id.tv_cancel);
 
         /**
          * 设置标题
@@ -334,7 +316,7 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
      * @param backgroundPopColor
      * @return
      */
-    public CityPicker backgroundPop(int backgroundPopColor) {
+    public CityPickerPop backgroundPop(int backgroundPopColor) {
         this.backgroundPop = backgroundPopColor;
         return this;
     }
@@ -345,7 +327,7 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
      * @param titleTextColorStr
      * @return
      */
-    public CityPicker titleTextColor(String titleTextColorStr) {
+    public CityPickerPop titleTextColor(String titleTextColorStr) {
         this.titleTextColorStr = titleTextColorStr;
         return this;
     }
@@ -357,7 +339,7 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
      * @param mtitle
      * @return
      */
-    public CityPicker title(String mtitle) {
+    public CityPickerPop title(String mtitle) {
         this.mTitle = mtitle;
         return this;
     }
@@ -368,11 +350,10 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
      * @param flag
      * @return
      */
-    public CityPicker onlyShowProvinceAndCity(boolean flag) {
+    public CityPickerPop onlyShowProvinceAndCity(boolean flag) {
         this.showProvinceAndCity = flag;
         return this;
     }
-
 
 
     /**
@@ -381,7 +362,7 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
      * @param color
      * @return
      */
-    public CityPicker confirTextColor(String color) {
+    public CityPickerPop confirTextColor(String color) {
         this.confirmTextColorStr = color;
         return this;
     }
@@ -393,7 +374,7 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
      * @param color
      * @return
      */
-    public CityPicker cancelTextColor(String color) {
+    public CityPickerPop cancelTextColor(String color) {
         this.cancelTextColorStr = color;
         return this;
     }
@@ -404,7 +385,7 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
      * @param textColor
      * @return
      */
-    public CityPicker textColor(int textColor) {
+    public CityPickerPop textColor(int textColor) {
         this.textColor = textColor;
         return this;
     }
@@ -415,7 +396,7 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
      * @param textSize
      * @return
      */
-    public CityPicker textSize(int textSize) {
+    public CityPickerPop textSize(int textSize) {
         this.textSize = textSize;
         return this;
     }
@@ -426,7 +407,7 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
      * @param visibleItems
      * @return
      */
-    public CityPicker visibleItemsCount(int visibleItems) {
+    public CityPickerPop visibleItemsCount(int visibleItems) {
         this.visibleItems = visibleItems;
         return this;
     }
@@ -437,7 +418,7 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
      * @param isProvinceCyclic
      * @return
      */
-    public CityPicker provinceCyclic(boolean isProvinceCyclic) {
+    public CityPickerPop provinceCyclic(boolean isProvinceCyclic) {
         this.isProvinceCyclic = isProvinceCyclic;
         return this;
     }
@@ -448,7 +429,7 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
      * @param isCityCyclic
      * @return
      */
-    public CityPicker cityCyclic(boolean isCityCyclic) {
+    public CityPickerPop cityCyclic(boolean isCityCyclic) {
         this.isCityCyclic = isCityCyclic;
         return this;
     }
@@ -459,7 +440,7 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
      * @param isDistrictCyclic
      * @return
      */
-    public CityPicker districtCyclic(boolean isDistrictCyclic) {
+    public CityPickerPop districtCyclic(boolean isDistrictCyclic) {
         this.isDistrictCyclic = isDistrictCyclic;
         return this;
     }
@@ -470,10 +451,11 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
      * @param itemPadding
      * @return
      */
-    public CityPicker itemPadding(int itemPadding) {
+    public CityPickerPop itemPadding(int itemPadding) {
         this.padding = itemPadding;
         return this;
     }
+
     private void setUpData() {
         int provinceDefault = -1;
         if (!TextUtils.isEmpty(defaultProvinceName) && mProvinceDatas.length > 0) {
@@ -603,23 +585,20 @@ public class CityPicker implements CanShow, OnWheelChangedListener {
 
     @Override
     public void show() {
-        if (!isShow()) {
-            setUpData();
-            popwindow.showAtLocation(popview, Gravity.BOTTOM, 0, 0);
-        }
+        setUpData();
+        super.show();
     }
-
 
     @Override
     public void hide() {
         if (isShow()) {
-            popwindow.dismiss();
+            dismiss();
         }
     }
 
     @Override
     public boolean isShow() {
-        return popwindow.isShowing();
+        return isShowing();
     }
 
     @Override

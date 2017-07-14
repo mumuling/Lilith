@@ -19,6 +19,8 @@ import com.youloft.lilith.cons.consmanager.ConsManager;
 import com.youloft.lilith.cons.consmanager.LoddingCheckEvent;
 import com.youloft.lilith.cons.consmanager.ShareConsEvent;
 import com.youloft.lilith.cons.view.ConstellationViewFactory;
+import com.youloft.lilith.setting.AppSetting;
+import com.youloft.statistics.AppAnalytics;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -70,6 +72,7 @@ public class ConsMyInfoHolder extends ConsBaseHolder {
      */
     @OnClick(R.id.cons_my_info_root)
     public void checkLogStatus() {
+        AppAnalytics.onEvent("Fortuneslist", "C");
         EventBus.getDefault().post(new LoddingCheckEvent());
     }
 
@@ -135,6 +138,7 @@ public class ConsMyInfoHolder extends ConsBaseHolder {
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(@NonNull Object o) throws Exception {
+                        AppAnalytics.onEvent("Homeshare1", "C");
                         EventBus.getDefault().post(new ShareConsEvent("1"));
                     }
                 });

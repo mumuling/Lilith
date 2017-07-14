@@ -18,7 +18,7 @@ import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.CalendarHelper;
 import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.common.widgets.picker.CityInfo;
-import com.youloft.lilith.common.widgets.picker.CityPicker;
+import com.youloft.lilith.common.widgets.picker.CityPickerPop;
 import com.youloft.lilith.common.widgets.picker.DatePickerPop;
 import com.youloft.lilith.common.widgets.picker.GenderPickerPop;
 import com.youloft.lilith.common.widgets.picker.OnPickerSelectListener;
@@ -151,6 +151,8 @@ public class EditInformationActivity extends BaseActivity {
             UserBean.DataBean.UserInfoBean detail = userInfo.data.userInfo;
             if (!TextUtils.isEmpty(detail.headImg)) {
                 GlideApp.with(this).asBitmap().dontAnimate().load(detail.headImg).into(new GlideBlurTwoViewTarget(ivHeader, ivBlurBg));
+            }else {
+                ivHeader.setImageResource(R.drawable.default_user_head_img);
             }
 
             tvNickName.setText(detail.nickName);
@@ -377,9 +379,9 @@ public class EditInformationActivity extends BaseActivity {
      */
     private void cityPick(final TextView tv, final boolean b) {
 
-        CityPicker cityPicker = getCityPicker(b);
+        CityPickerPop cityPickerPop = getCityPicker(b);
 
-        cityPicker
+        cityPickerPop
                 .setOnCityItemClickListener(new OnPickerSelectListener<CityInfo>() {
                     @Override
                     public void onSelected(CityInfo data) {
@@ -411,24 +413,24 @@ public class EditInformationActivity extends BaseActivity {
      *
      * @param b 来源  true代表出生地   false 现居地
      */
-    private CityPicker getCityPicker(boolean b) {
+    private CityPickerPop getCityPicker(boolean b) {
         if (b) {
 
             String content = tvPlaceBirth.getText().toString();
             if (TextUtils.isEmpty(content)) {
-                return CityPicker.getDefCityPicker(this);
+                return CityPickerPop.getDefCityPicker(this);
             } else {
                 String[] split = content.split("-");
-                return CityPicker.getDefCityPicker(this).province(split[0]).city(split[1]).district(split[2]);
+                return CityPickerPop.getDefCityPicker(this).province(split[0]).city(split[1]).district(split[2]);
             }
 
         } else {
             String content = tvPlaceNow.getText().toString();
             if (TextUtils.isEmpty(content)) {
-                return CityPicker.getDefCityPicker(this);
+                return CityPickerPop.getDefCityPicker(this);
             } else {
                 String[] split = content.split("-");
-                return CityPicker.getDefCityPicker(this).province(split[0]).city(split[1]).district(split[2]);
+                return CityPickerPop.getDefCityPicker(this).province(split[0]).city(split[1]).district(split[2]);
             }
 
         }

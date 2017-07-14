@@ -31,6 +31,7 @@ import com.youloft.lilith.common.utils.SafeUtil;
 import com.youloft.lilith.cons.bean.ConsPredictsBean;
 import com.youloft.lilith.cons.view.ConsCalendar;
 import com.youloft.lilith.share.ShareBuilder;
+import com.youloft.statistics.AppAnalytics;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.reactivestreams.Subscriber;
@@ -111,7 +112,7 @@ public class ConsCalDetailActivity extends BaseActivity {
         if (mData != null) {
             bindData(mData);
         }
-
+        AppAnalytics.onEvent("Monthfortunes", "IM");
         bindClick();
     }
 
@@ -128,6 +129,7 @@ public class ConsCalDetailActivity extends BaseActivity {
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(@NonNull Object o) throws Exception {
+                        AppAnalytics.onEvent("Monthshare", "C");
                         share();
                     }
                 });
@@ -136,6 +138,7 @@ public class ConsCalDetailActivity extends BaseActivity {
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(@NonNull Object o) throws Exception {
+                        AppAnalytics.onEvent("Monthcancel", "C");
                         openAnim(false, distance);
                     }
                 });

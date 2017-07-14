@@ -18,14 +18,17 @@ import com.youloft.lilith.common.widgets.view.Pullable;
 public class RecyclerViewCanPullAble extends RecyclerView implements Pullable{
     public RecyclerViewCanPullAble(Context context) {
         super(context);
+        setOverScrollMode(OVER_SCROLL_NEVER);
     }
 
     public RecyclerViewCanPullAble(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        setOverScrollMode(OVER_SCROLL_NEVER);
     }
 
     public RecyclerViewCanPullAble(Context context, @Nullable AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        setOverScrollMode(OVER_SCROLL_NEVER);
     }
 
 

@@ -100,8 +100,8 @@ public class AuthorPointHolder extends RecyclerView.ViewHolder implements View.O
                 .asBitmap().
                 transform(new GlideCircleTransform())
                 .load(point.headImg)
-                .placeholder(R.drawable.morentouxiang)
-                .error(R.drawable.morentouxiang)
+                .placeholder(R.drawable.default_user_head_img)
+                .error(R.drawable.default_user_head_img)
                 .into(imageCommentUser);
         //用户名字
         textUserName.setText(point.nickName);

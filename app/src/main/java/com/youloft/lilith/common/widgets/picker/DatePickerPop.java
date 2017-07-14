@@ -1,56 +1,39 @@
 package com.youloft.lilith.common.widgets.picker;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 
 import com.youloft.lilith.R;
+import com.youloft.lilith.common.widgets.dialog.PickerBaseDialog;
 
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
  * Created by zchao on 2017/7/9.
- * desc:
+ * desc:日期选择弹窗，如果没有特殊需求，请直接调用{@link #getDefaultDatePicker(Context)} (Context)},
+ *       然后通过接口来获得选择结果{@link #setOnSelectListener(OnPickerSelectListener)}
+ *       最后必须要调用show()才会弹出弹窗;
  * version:
  */
 
-public class DatePickerPop implements CanShow ,DatePicker.onDateChangedListener{
+public class DatePickerPop extends PickerBaseDialog implements CanShow , DatePickerView.onDateChangedListener{
 
-    private final PopupWindow popwindow;
-    private final View popview;
     private final View mCancel;
     private final View mConfirm;
     Context mContext;
-    private final DatePicker mDatePicker;
+    private final DatePickerView mDatePickerView;
     private GregorianCalendar date = new GregorianCalendar();
 
     private OnPickerSelectListener<GregorianCalendar> listener;
     public DatePickerPop(Context mContext) {
+        super(mContext);
+        setContentView(R.layout.pop_datepicker);
         this.mContext = mContext;
+        mConfirm = findViewById(R.id.tv_confirm);
+        mCancel = findViewById(R.id.tv_cancel);
+        mDatePickerView = (DatePickerView) findViewById(R.id.date_picker);
 
-        LayoutInflater layoutInflater = LayoutInflater.from(mContext);
-        popview = layoutInflater.inflate(R.layout.pop_datepicker, null);
-        mConfirm = popview.findViewById(R.id.tv_confirm);
-        mCancel = popview.findViewById(R.id.tv_cancel);
-        mDatePicker = (DatePicker) popview.findViewById(R.id.date_picker);
-
-        popwindow = new PopupWindow(popview, LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT);
-        popwindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        popwindow.setAnimationStyle(R.style.AnimBottom);
-        popwindow.setTouchable(true);
-        popwindow.setOutsideTouchable(false);
-        popwindow.setFocusable(true);
-        popwindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-
-        mDatePicker.setDateChangedListener(this);
+        mDatePickerView.setDateChangedListener(this);
         setUpData();
 
         mConfirm.setOnClickListener(new View.OnClickListener() {
@@ -95,28 +78,21 @@ public class DatePickerPop implements CanShow ,DatePicker.onDateChangedListener{
 
     }
 
-    @Override
-    public void show() {
-        if (!isShow()) {
-//            setUpData();
-            popwindow.showAtLocation(popview, Gravity.BOTTOM, 0, 0);
-        }
-    }
 
     private void setUpData() {
-        mDatePicker.setDate(date);
+        mDatePickerView.setDate(date);
     }
 
     @Override
     public void hide() {
         if (isShow()) {
-            popwindow.dismiss();
+            dismiss();
         }
     }
 
     @Override
     public boolean isShow() {
-        return popwindow.isShowing();
+        return isShowing();
     }
 
 

@@ -12,6 +12,7 @@ import com.youloft.lilith.R;
 import com.youloft.lilith.cons.bean.ConsPredictsBean;
 import com.youloft.lilith.cons.consmanager.ShareConsEvent;
 import com.youloft.lilith.ui.MainActivity;
+import com.youloft.statistics.AppAnalytics;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -38,6 +39,7 @@ public class ConsShareHolder extends ConsBaseHolder {
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(@NonNull Object o) throws Exception {
+                        AppAnalytics.onEvent("Homeshare2", "C");
                         EventBus.getDefault().post(new ShareConsEvent("2"));//分享订阅在XZFragment中
                     }
                 });

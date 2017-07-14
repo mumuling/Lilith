@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
-import com.youloft.lilith.common.utils.ViewUtil;
 import com.youloft.socialize.media.ShareImage;
 
 import jp.wasabeef.blurry.internal.Blur;
@@ -76,7 +75,7 @@ public class ShareBuilder {
      * @return
      */
     public ShareBuilder withIcon() {
-        mShareBitmap = new ShareImage(mContext, R.mipmap.icon_launcher);
+        mShareBitmap = new ShareImage(mContext, R.mipmap.ic_luncher);
         return this;
     }
 

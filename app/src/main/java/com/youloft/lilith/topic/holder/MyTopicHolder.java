@@ -112,8 +112,8 @@ public class MyTopicHolder extends RecyclerView.ViewHolder {
         GlideApp.with(mContext)
                 .asBitmap().transform(new GlideCircleTransform())
                 .load(userInfo.headImg)
-                .placeholder(R.drawable.morentouxiang)
-                .error(R.drawable.morentouxiang)
+                .placeholder(R.drawable.default_user_head_img)
+                .error(R.drawable.default_user_head_img)
                 .into(imageCommentUser);
 
         //昵称

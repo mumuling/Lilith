@@ -120,8 +120,8 @@ public class PointAnswerNormalHolder extends RecyclerView.ViewHolder implements 
                 .asBitmap()
                 .transform(new GlideCircleTransform())
                 .load(dataBean.headImg)
-                .placeholder(R.drawable.morentouxiang)
-                .error(R.drawable.morentouxiang)
+                .placeholder(R.drawable.default_user_head_img)
+                .error(R.drawable.default_user_head_img)
                 .into(imageCommentUser);
         imageZan.setOnClickListener(this);
         llReply.setOnClickListener(this);
