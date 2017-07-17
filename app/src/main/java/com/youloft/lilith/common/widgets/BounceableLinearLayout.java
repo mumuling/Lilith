@@ -2,6 +2,7 @@ package com.youloft.lilith.common.widgets;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
@@ -13,6 +14,7 @@ import android.widget.Scroller;
  */
 
 public class BounceableLinearLayout extends LinearLayout {
+    private static final String TAG = "BounceableLinearLayout";
     private Scroller mScroller;
     private GestureDetector mGestureDetector;
 
@@ -71,13 +73,23 @@ public class BounceableLinearLayout extends LinearLayout {
         return mScrolling;
     }
 
+    private float startY;
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_UP:
                 //手指抬起时回到最初位置
+                startY = event.getRawY();
+
                 prepareScroll(0, 0);
                 break;
+//            case MotionEvent.ACTION_MOVE:
+//                if (onMyScrollerListener != null) {
+//                    onMyScrollerListener.scrollY(event.getRawY() - startY);
+//                }
+//                return mGestureDetector.onTouchEvent(event);
+
             default:
                 //其余情况交给GestureDetector手势处理
                 return mGestureDetector.onTouchEvent(event);
@@ -85,6 +97,7 @@ public class BounceableLinearLayout extends LinearLayout {
         return super.onTouchEvent(event);
     }
 
+    private float moveY;
 
     class GestureListenerImpl implements GestureDetector.OnGestureListener {
         @Override
@@ -105,6 +118,7 @@ public class BounceableLinearLayout extends LinearLayout {
 
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+
             int disY = (int) ((distanceY - 0.5) / 2);//调整一下拉动的幅度
             beginScroll(0, disY);
             return false;
@@ -138,8 +152,10 @@ public class BounceableLinearLayout extends LinearLayout {
         System.out.println("smoothScrollBy()---> " +
                 "mScroller.getFinalX()=" + mScroller.getFinalX() + "," +
                 "mScroller.getFinalY()=" + mScroller.getFinalY());
+        moveY += dy;
+        Log.d(TAG, "beginScroll() called with: dx = [" + dx + "], dy = [" + dy + "]");
         if (onMyScrollerListener != null) {
-            onMyScrollerListener.scrollY(dy);
+            onMyScrollerListener.scrollY(moveY);
         }
         //必须执行invalidate()从而调用computeScroll()
         invalidate();
@@ -148,7 +164,7 @@ public class BounceableLinearLayout extends LinearLayout {
     private OnMyScrollerListener onMyScrollerListener;
 
     public interface OnMyScrollerListener {
-        void scrollY(int dy);
+        void scrollY(float dy);
     }
 
     public void setOnMyScrollerListener(OnMyScrollerListener onMyScrollerListener) {

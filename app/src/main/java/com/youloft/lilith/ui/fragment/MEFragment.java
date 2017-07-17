@@ -2,7 +2,6 @@ package com.youloft.lilith.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.ViewUtils;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -65,6 +65,12 @@ public class MEFragment extends BaseFragment {
     BounceableLinearLayout bllContener; //下面的滑动布局
     @BindView(R.id.fl_anim)
     FrameLayout flAnim; // 动画的容器
+    @BindView(R.id.ll_rise)
+    LinearLayout llRise;
+    @BindView(R.id.ll_sun)
+    LinearLayout llSun;
+    @BindView(R.id.ll_moon)
+    LinearLayout llMoon;
 
 
     public MEFragment() {
@@ -148,8 +154,7 @@ public class MEFragment extends BaseFragment {
         EventBus.getDefault().unregister(this);
     }
 
-    int totalTrans = 0;
-    float h =  ViewUtil.dp2px(5);
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -159,12 +164,11 @@ public class MEFragment extends BaseFragment {
 
         bllContener.setOnMyScrollerListener(new BounceableLinearLayout.OnMyScrollerListener() {
             @Override
-            public void scrollY(int dy) {
-                final ViewGroup.LayoutParams layoutParams = flAnim.getLayoutParams();
-
-                layoutParams.height = (int) (layoutParams.height + (dy * 0.2f));
-                layoutParams.width = (int) (layoutParams.width + (dy * 0.2f));
-                flAnim.setLayoutParams(layoutParams);
+            public void scrollY(float dy) {
+                Log.d(TAG, "scrollY() called with: dy = [" + dy + "]");
+                moveRise(dy);
+                moveSun(dy);
+                moveMoon(dy);
             }
         });
         //view创建完成之后,检查登录状态,如果是登录的状态,那么把用户数据填上去
@@ -172,6 +176,43 @@ public class MEFragment extends BaseFragment {
             setUserInfo();
         }
         return rootView;
+    }
+
+    private void moveRise(float dy) {
+        float v = ViewUtil.dp2px(35);
+        if (Math.abs(dy) > v) {
+            if (dy < 0) {
+                dy = -v;
+            }else {
+                dy = v;
+            }
+        }
+        llRise.setTranslationX(-dy);
+        llRise.setTranslationY(-dy);
+    }
+    private void moveSun(float dy) {
+        float v = ViewUtil.dp2px(50);
+        if (Math.abs(dy) > v) {
+            if (dy < 0) {
+                dy = -v;
+            }else {
+                dy = v;
+            }
+        }
+        llSun.setTranslationX(dy);
+        llSun.setTranslationY(-dy);
+    }
+    private void moveMoon(float dy) {
+        float v = ViewUtil.dp2px(20);
+        if (Math.abs(dy) > v) {
+            if (dy < 0) {
+                dy = -v;
+            }else {
+                dy = v;
+            }
+        }
+        llMoon.setTranslationX(dy);
+        llMoon.setTranslationY(dy);
     }
 
 
