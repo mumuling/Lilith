@@ -20,6 +20,7 @@ import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.CalendarHelper;
+import com.youloft.lilith.cons.consmanager.ConsManager;
 import com.youloft.lilith.cons.view.LogInOrCompleteDialog;
 import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.setting.AppSetting;
@@ -108,6 +109,7 @@ public class PointAnswerNormalHolder extends RecyclerView.ViewHolder implements 
         }
         textUserName.setText(nickName);
         textAnswerContent.setText(dataBean.contents);
+        textUserConstellation.setText(ConsManager.getConsName(dataBean.signs));
         if (dataBean.sex == 1 ||dataBean.sex == 0) {
             imageUserSex.setImageResource(R.drawable.topic_female_icon);
         } else {

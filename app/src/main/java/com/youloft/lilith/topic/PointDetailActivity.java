@@ -199,6 +199,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
                 dataBean.pid = pointAnswerTable.tid;
                 dataBean.uid = userInfo.id;
                 dataBean.nickName = userInfo.nickName;
+                dataBean.signs = userInfo.signs;
                 replyBeanList.add(0, dataBean);
               //  replyCount++;
             }
@@ -432,6 +433,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
                             dataBean.contents = reply_content;
                             dataBean.headImg = userInfo.headImg;
                             dataBean.id = answerId;
+                            dataBean.signs = userInfo.signs;
                             adapter.setAnswerTop(dataBean);
                             updatePointAnswerDb(result.t, dataBean, answerId);
                             replyCount++;
