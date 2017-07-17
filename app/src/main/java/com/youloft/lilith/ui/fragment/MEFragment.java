@@ -16,6 +16,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.base.BaseFragment;
+import com.youloft.lilith.common.utils.StringUtil;
 import com.youloft.lilith.common.utils.ViewUtil;
 import com.youloft.lilith.common.widgets.BounceableLinearLayout;
 import com.youloft.lilith.cons.consmanager.ConsManager;
@@ -125,11 +126,7 @@ public class MEFragment extends BaseFragment {
         String headImgUrl = userInfo.data.userInfo.headImg;
 
         String showNickName = userInfo.data.userInfo.nickName;
-        int length = showNickName.length();
-        if (length > 7) {
-            showNickName = showNickName.substring(0, 6) + "...";
-        }
-        tvNickName.setText(showNickName);
+        tvNickName.setText(StringUtil.toNameString(showNickName));
         if (!TextUtils.isEmpty(headImgUrl)) {
             GlideApp.with(mContext).asBitmap().dontAnimate().load(headImgUrl).into(new GlideBlurTwoViewTarget(ivHeader, ivBlurBg));
         } else {
