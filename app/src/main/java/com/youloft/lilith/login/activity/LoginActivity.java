@@ -118,26 +118,18 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        initBackgroundVedio();
+        MediaPlayerHelper.getInstance().register(this, svBackground);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         SocializeApp.get(this).onActivityResult(requestCode, resultCode, data);
-    }
-
-    /**
-     * 背景视频设置
-     */
-    private void initBackgroundVedio() {
-        MediaPlayerHelper.getInstance().register(this, svBackground);
     }
 
 

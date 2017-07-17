@@ -265,27 +265,12 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
 
 
     /**
-     * 处理观点信息的数据库。
      *
-     * @param data
+     * @param point  观点信息
+     * @param option  观点选项
+     * @param position  位置
+     * @param isLast  是否是最后一个
      */
-    private void handlePointTableInfo(List<PointBean.DataBean> data) {
-        UserBean userBean = AppSetting.getUserInfo();
-        if (userBean == null) return;
-        UserBean.DataBean.UserInfoBean userInfo = userBean.data.userInfo;
-        int userID = userInfo.id;
-        PointTable pointTable = PointCache.getIns(mContext).getInforByCode(topic.id);
-        if (pointTable == null) return;
-        for (int i = 0; i < data.size(); i++) {
-            if (data.get(i).userId == userID) {
-                PointCache.getIns(mContext).deleteData(data.get(i).id);
-                data.remove(i);
-                return;
-            }
-        }
-    }
-
-    private static final String TAG = "PointHolder";
     public void bindNormal(final PointBean.DataBean point, final TopicDetailBean.DataBean option, final int position, boolean isLast) {
         if (point == null || option == null) return;
     //展示埋点
@@ -396,11 +381,19 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
 
     }
 
+    /**   绑定时间显示
+     *
+     * @param point
+     */
     private void bindTime(PointBean.DataBean point) {
         long time = CalendarHelper.getTimeMillisByString(point.buildDate);
         textCommentTime.setText(CalendarHelper.getInterValTime(time, System.currentTimeMillis()));
     }
 
+    /**
+     *     绑定赞
+     * @param dataBean
+     */
     private void bindZan(PointBean.DataBean dataBean) {
 
         PointBean.DataBean point = new PointBean.DataBean();
@@ -431,6 +424,9 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
         textZanCount.setText(String.valueOf(zanCount));
     }
 
+    /**
+     *   点赞
+     */
     public void clickLike() {
         UserBean userBean = AppSetting.getUserInfo();
         if (userBean != null) {
@@ -457,6 +453,10 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
         }
     }
 
+    /**
+     *  跟新赞的数据库
+     * @param ispost
+     */
     public void updateClickTable(int ispost) {
         TopicLikingTable topicLikingTable;
         if (isZan == 0) {

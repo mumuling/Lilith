@@ -297,15 +297,9 @@ public class RegisterActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        initBackgroundVedio();
-    }
-
-    /**
-     * 背景视频设置
-     */
-    private void initBackgroundVedio() {
         MediaPlayerHelper.getInstance().register(this, svBackground);
     }
+
 
 
     /**
