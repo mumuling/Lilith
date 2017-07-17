@@ -115,9 +115,13 @@ public class MyTopicHolder extends RecyclerView.ViewHolder {
                 .placeholder(R.drawable.default_user_head_img)
                 .error(R.drawable.default_user_head_img)
                 .into(imageCommentUser);
-
+        String name = userInfo.nickName;
+        int nameLength = name.length();
+        if (nameLength > 7) {
+            name = name.substring(0,6) + "...";
+        }
         //昵称
-        textUserName.setText(userInfo.nickName);
+        textUserName.setText(name);
         //星座
         textUserConstellation.setText(ConsManager.getConsName(userInfo.signs));
         //性别

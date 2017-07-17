@@ -308,8 +308,12 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
                 .placeholder(R.drawable.default_user_head_img)
                 .error(R.drawable.default_user_head_img)
                 .into(imageCommentUser);
+        String pointName = point.nickName;
+        if (pointName.length()>7) {
+            pointName  = pointName.substring(0,6) + "...";
+        }
         //用户名字
-        textUserName.setText(point.nickName);
+        textUserName.setText(pointName);
         //点赞数
         bindZan(point);
         bindTime(point);
@@ -360,7 +364,11 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
                 if (i >= 3) break;
                 PointBean.DataBean.ReplyListBean reply = point.replyList.get(i);
                 if (reply != null) {
-                    replyTextArray[i].setText(reply.nickName + ": " + reply.contents);
+                    String replyName = reply.nickName;
+                    if (replyName != null && replyName.length() > 7) {
+                        replyName = replyName.substring(0,6)+"...";
+                    }
+                    replyTextArray[i].setText(replyName + ": " + reply.contents);
                 } else {
                     replyTextArray[i].setVisibility(View.GONE);
                 }
