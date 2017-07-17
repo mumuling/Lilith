@@ -9,6 +9,8 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.Surface;
+import android.view.SurfaceView;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -25,6 +27,7 @@ import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.LoginUtils;
 import com.youloft.lilith.common.utils.Toaster;
+import com.youloft.lilith.login.MediaPlayerHelper;
 import com.youloft.lilith.login.PhoneFocusChangeListener;
 import com.youloft.lilith.login.PhoneTextWatcher;
 import com.youloft.lilith.login.bean.SendSmsBean;
@@ -55,8 +58,8 @@ import io.reactivex.schedulers.Schedulers;
 public class UserFunctionActivity extends BaseActivity {
 
 
-    @BindView(R.id.vv_background)
-    VideoView vvBackground;  //背景视频
+    @BindView(R.id.sv_background)
+    SurfaceView svBackground;  //背景视频
     @BindView(R.id.et_verification_code)
     EditText etVerificationCode; //输入验证码的editText
     @BindView(R.id.et_phone_number)
@@ -76,7 +79,6 @@ public class UserFunctionActivity extends BaseActivity {
     @BindView(R.id.iv_code_error)
     ImageView ivCodeError;  //验证码错误
 
-    private int mPreNumberLength;//电话号码变化之前的长度
     private boolean isCodeRight; //验证码是否正确
     private SmsCodeBean mSmsCodeBean; //获取到的验证码的数据模型
 
@@ -87,19 +89,13 @@ public class UserFunctionActivity extends BaseActivity {
         setContentView(R.layout.activity_user_function);
         ButterKnife.bind(this);
 
-        //根据不同的界面做不同的文字设置
-        init();
+
         phoneNumberSetting();
         verificationCodeSetting();
 
     }
 
-    /**
-     * 根据不同的界面做不同的文字设置
-     */
-    private void init() {
 
-    }
 
     /**
      * 号码输入框的设定
@@ -203,17 +199,7 @@ public class UserFunctionActivity extends BaseActivity {
      * 背景视频设置
      */
     private void initBackgroundVedio() {
-        String uri = "android.resource://" + getPackageName() + "/" + R.raw.bg_login;
-        vvBackground.setVideoURI(Uri.parse(uri));
-        vvBackground.start();
-        vvBackground.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-
-            @Override
-            public void onCompletion(MediaPlayer mPlayer) {
-                mPlayer.start();
-                mPlayer.setLooping(true);
-            }
-        });
+        MediaPlayerHelper.initMediaPlayerHelper(this,svBackground);
     }
 
 

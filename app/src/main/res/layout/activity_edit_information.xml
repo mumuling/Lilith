@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:fillViewport="true"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fillViewport="true">
 
 
     <LinearLayout
@@ -49,11 +49,11 @@
         </FrameLayout>
 
         <LinearLayout
-            android:focusable="true"
-            android:focusableInTouchMode="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/theme_background"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:orientation="vertical">
 
             <LinearLayout
@@ -70,6 +70,7 @@
                     android:background="@color/white_10" />
 
                 <LinearLayout
+                    android:id="@+id/ll_nick_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
@@ -87,18 +88,30 @@
 
                     <EditText
                         android:id="@+id/et_nick_name"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="114dp"
                         android:background="@null"
+                        android:singleLine="true"
                         android:cursorVisible="false"
-                        android:lines="1"
                         android:hint="请输入昵称"
                         android:text="Easter Roob"
                         android:textColor="@color/white"
                         android:textColorHint="@color/white_50"
                         android:textSize="16dp" />
+
+                    <ImageView
+                        android:id="@+id/iv_delete_nick_name"
+                        android:layout_marginLeft="10dp"
+                        android:paddingRight="20dp"
+                        android:src="@drawable/login_password_delete_icon"
+                        android:layout_width="wrap_content"
+                        android:visibility="invisible"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:scaleType="center" />
+
                 </LinearLayout>
                 <!--分割线-->
                 <View
@@ -123,23 +136,27 @@
                         android:text="@string/sex"
                         android:textColor="@color/white"
                         android:textSize="16dp" />
+
                     <LinearLayout
-                        android:orientation="horizontal"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
                         <ImageView
                             android:id="@+id/iv_tips_sex"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
                             android:layout_marginRight="3dp"
-                            android:src="@drawable/mine_tips_icon"
-                            android:layout_gravity="center_vertical"/>
+                            android:src="@drawable/mine_tips_icon" />
+
                         <TextView
                             android:id="@+id/tv_sex"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:drawablePadding="3dp"
+                            android:singleLine="true"
                             android:text="@string/select_sex"
                             android:textColor="@color/white"
                             android:textSize="16dp" />
@@ -169,20 +186,24 @@
                         android:text="@string/date_birth"
                         android:textColor="@color/white"
                         android:textSize="16dp" />
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
+
                         <ImageView
                             android:id="@+id/iv_tips_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/mine_tips_icon"
+                            android:layout_gravity="center_vertical"
                             android:layout_marginRight="3dp"
-                            android:layout_gravity="center_vertical"/>
+                            android:src="@drawable/mine_tips_icon" />
+
                         <TextView
                             android:id="@+id/tv_date_birth"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:singleLine="true"
                             android:layout_gravity="center_vertical"
                             android:text="@string/select_date_birth"
                             android:textColor="@color/white"
@@ -213,19 +234,23 @@
                         android:text="@string/time_birth"
                         android:textColor="@color/white"
                         android:textSize="16dp" />
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
+
                         <ImageView
                             android:id="@+id/iv_tips_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
                             android:layout_marginRight="3dp"
-                            android:src="@drawable/mine_tips_icon"
-                            android:layout_gravity="center_vertical"/>
+                            android:src="@drawable/mine_tips_icon" />
+
                         <TextView
                             android:id="@+id/tv_time_birth"
                             android:layout_width="match_parent"
+                            android:singleLine="true"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:text="@string/select_time_birth"
@@ -256,20 +281,24 @@
                         android:text="@string/place_birth"
                         android:textColor="@color/white"
                         android:textSize="16dp" />
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
+
                         <ImageView
                             android:id="@+id/iv_tips_birth_place"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
                             android:layout_marginRight="3dp"
-                            android:src="@drawable/mine_tips_icon"
-                            android:layout_gravity="center_vertical"/>
+                            android:src="@drawable/mine_tips_icon" />
+
                         <TextView
                             android:id="@+id/tv_place_birth"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:singleLine="true"
                             android:layout_gravity="center_vertical"
                             android:text="@string/select_place_birth"
                             android:textColor="@color/white"
@@ -299,20 +328,24 @@
                         android:text="@string/place_now"
                         android:textColor="@color/white"
                         android:textSize="16dp" />
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
+
                         <ImageView
                             android:id="@+id/iv_tips_now"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/mine_tips_icon"
+                            android:layout_gravity="center_vertical"
                             android:layout_marginRight="3dp"
-                            android:layout_gravity="center_vertical"/>
+                            android:src="@drawable/mine_tips_icon" />
+
                         <TextView
                             android:id="@+id/tv_place_now"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:singleLine="true"
                             android:layout_gravity="center_vertical"
                             android:text="@string/select_place_now"
                             android:textColor="@color/white"
@@ -331,8 +364,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="4.5dp"
                 android:layout_marginBottom="55dp"
+                android:layout_marginTop="4.5dp"
                 android:text="@string/user_information_desc"
                 android:textColor="@color/white_50"
                 android:textSize="12dp" />

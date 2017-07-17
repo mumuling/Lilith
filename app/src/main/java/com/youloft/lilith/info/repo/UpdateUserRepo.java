@@ -134,11 +134,11 @@ public class UpdateUserRepo extends AbstractDataRepo {
     //绑定微信
     static HashMap<String, String> paramsBindWx = new HashMap();
 
-    public static Flowable<UserBean> bindWx(String openid,String unionId,String nickName,String phone,String platform) {
+    public static Flowable<UserBean> bindWx(String openid,String unionId,String nickName,String id,String platform) {
         paramsBindWx.put("openid", openid);
         paramsBindWx.put("unionId", unionId);
         paramsBindWx.put("nickName", nickName);
-        paramsBindWx.put("phone", phone);
+        paramsBindWx.put("userId", id);
         paramsBindWx.put("platform", platform);
         return httpFlow(Urls.BIND_WEXIN, null, paramsBindWx, true, UserBean.class, "bind_wexin", 0);
     }

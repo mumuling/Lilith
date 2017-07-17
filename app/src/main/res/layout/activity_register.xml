@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.youloft.lilith.common.widgets.MyVideoView
-        android:id="@+id/vv_background"
+    <SurfaceView
+        android:id="@+id/sv_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

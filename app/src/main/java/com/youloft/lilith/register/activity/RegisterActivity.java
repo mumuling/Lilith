@@ -1,7 +1,5 @@
 package com.youloft.lilith.register.activity;
 
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -9,14 +7,13 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.VideoView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -25,6 +22,7 @@ import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.LoginUtils;
 import com.youloft.lilith.common.utils.Toaster;
+import com.youloft.lilith.login.MediaPlayerHelper;
 import com.youloft.lilith.login.bean.SendSmsBean;
 import com.youloft.lilith.login.bean.SmsCodeBean;
 import com.youloft.lilith.login.event.LoginEvent;
@@ -53,8 +51,8 @@ import io.reactivex.schedulers.Schedulers;
 public class RegisterActivity extends BaseActivity {
 
 
-    @BindView(R.id.vv_background)
-    VideoView vvBackground;  //背景视频
+    @BindView(R.id.sv_background)
+    SurfaceView svBackground;  //背景视频
     @BindView(R.id.et_verification_code)
     EditText etVerificationCode; //输入验证码的editText
     @BindView(R.id.et_phone_number)
@@ -306,17 +304,7 @@ public class RegisterActivity extends BaseActivity {
      * 背景视频设置
      */
     private void initBackgroundVedio() {
-        String uri = "android.resource://" + getPackageName() + "/" + R.raw.bg_login;
-        vvBackground.setVideoURI(Uri.parse(uri));
-        vvBackground.start();
-        vvBackground.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-
-            @Override
-            public void onCompletion(MediaPlayer mPlayer) {
-                mPlayer.start();
-                mPlayer.setLooping(true);
-            }
-        });
+        MediaPlayerHelper.initMediaPlayerHelper(this,svBackground);
     }
 
 
