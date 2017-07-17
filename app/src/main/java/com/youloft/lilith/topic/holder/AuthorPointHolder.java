@@ -19,6 +19,7 @@ import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.CalendarHelper;
+import com.youloft.lilith.common.utils.StringUtil;
 import com.youloft.lilith.cons.consmanager.ConsManager;
 import com.youloft.lilith.cons.view.LogInOrCompleteDialog;
 import com.youloft.lilith.login.bean.UserBean;
@@ -109,11 +110,7 @@ public class AuthorPointHolder extends RecyclerView.ViewHolder implements View.O
                 .into(imageCommentUser);
 
         //用户名字
-        String name = point.nickName;
-        if(name.length() > 7) {
-            name =  name.substring(0,6) + "...";
-        }
-        textUserName.setText(name);
+        textUserName.setText(StringUtil.toNameString(point.nickName));
         //点赞数
         bindZan(point);
 

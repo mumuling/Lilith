@@ -24,6 +24,7 @@ import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.CalendarHelper;
+import com.youloft.lilith.common.utils.StringUtil;
 import com.youloft.lilith.cons.consmanager.ConsManager;
 import com.youloft.lilith.cons.view.LogInOrCompleteDialog;
 import com.youloft.lilith.login.bean.UserBean;
@@ -302,12 +303,9 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
                 .placeholder(R.drawable.default_user_head_img)
                 .error(R.drawable.default_user_head_img)
                 .into(imageCommentUser);
-        String pointName = point.nickName;
-        if (pointName.length()>7) {
-            pointName  = pointName.substring(0,6) + "...";
-        }
+
         //用户名字
-        textUserName.setText(pointName);
+        textUserName.setText(StringUtil.toNameString(point.nickName));
         //点赞数
         bindZan(point);
         bindTime(point);
@@ -358,11 +356,7 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
                 if (i >= 3) break;
                 PointBean.DataBean.ReplyListBean reply = point.replyList.get(i);
                 if (reply != null) {
-                    String replyName = reply.nickName;
-                    if (replyName != null && replyName.length() > 7) {
-                        replyName = replyName.substring(0,6)+"...";
-                    }
-                    replyTextArray[i].setText(replyName + ": " + reply.contents);
+                    replyTextArray[i].setText(StringUtil.toNameString(reply.nickName) + ": " + reply.contents);
                     replyTextArray[i].setVisibility(View.VISIBLE);
                 } else {
                     replyTextArray[i].setVisibility(View.GONE);

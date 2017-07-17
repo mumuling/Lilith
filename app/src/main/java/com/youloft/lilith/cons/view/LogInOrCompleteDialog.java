@@ -77,7 +77,6 @@ public class LogInOrCompleteDialog extends BaseDialog {
     }
 
 
-
     /**
      * //是否需要显示背景的模糊图。使用时需要传入模糊图，
      * 如果不传入图片可以传入BaseActivity的上下文，这样会自动调取BaseActivity中的截屏功能；
@@ -107,7 +106,6 @@ public class LogInOrCompleteDialog extends BaseDialog {
 
     /**
      * 已显示就不在显示了
-     *
      */
     @Override
     public void show() {
@@ -129,6 +127,7 @@ public class LogInOrCompleteDialog extends BaseDialog {
         hisDialogShow = false;
         super.dismiss();
     }
+
     public static final int TOPIC_IN = 3;
 
     /**
@@ -166,6 +165,9 @@ public class LogInOrCompleteDialog extends BaseDialog {
             if (userInfo != null) {
                 UserBean.DataBean.UserInfoBean info = userInfo.data.userInfo;
                 String nickName = TextUtils.isDigitsOnly(info.nickName) ? (TextUtils.isEmpty(info.phone) ? mContext.getResources().getString(R.string.app_name_ch) : info.phone) : info.nickName;
+                if (nickName.length() > 7) {
+                    nickName = nickName.substring(0, 6) + "...";
+                }
                 mLoginJumpDialogNickname.setText(nickName);
 
                 if (!TextUtils.isEmpty(info.headImg)) {

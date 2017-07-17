@@ -257,6 +257,7 @@ public class PullToRefreshLayout extends RelativeLayout {
                 float defX = Math.abs(ev.getX() - downX);
                 float defY = Math.abs(ev.getY() - downY);
                 if (defX > mTouchSlop && defX > defY) {
+                    //直接跳出，交给系统分发；感觉不是很科学啊。
                     break;
                 }
                 if (mEvents == 0) {
