@@ -144,7 +144,7 @@ public class TopicRepo extends AbstractDataRepo {
         if (limit!=null)param.put("limit",limit);
         if (skip!=null)param.put("skip",skip);
         String cacheKey = "point_list" + tid;
-        long duration = 2 * 60 * 1000;
+        long duration = 60 * 1000;
         if (needCache) {
             if (!LLApplication.getApiCache().isExpired(cacheKey,duration)) {
                 return LLApplication.getApiCache().readCache(cacheKey,PointBean.class);
