@@ -10,6 +10,7 @@ import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.utils.SafeUtil;
 import com.youloft.lilith.measure.bean.MeasureBean;
+import com.youloft.statistics.AppAnalytics;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,6 +41,7 @@ public class MeasureBannerHolder extends BaseMeasureHolder {
         if(isaBoolean(mMeasureData)){
             return;
         }
+        AppAnalytics.onEvent("CC.AD.IM0");
         GlideApp.with(mContext).load(mMeasureData.ads.get(0).image).into(ivBanner);
     }
 
@@ -51,6 +53,7 @@ public class MeasureBannerHolder extends BaseMeasureHolder {
     public void onViewClicked() {
         boolean b = isaBoolean(mMeasureData);
         if (b) return;
+        AppAnalytics.onEvent("CC.AD.C0");
         ARouter.getInstance().build("/ui/web")
                 .withString("url", mMeasureData.ads.get(0).url)
                 .navigation();

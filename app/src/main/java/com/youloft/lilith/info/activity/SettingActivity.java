@@ -26,6 +26,7 @@ import com.youloft.lilith.topic.db.TopicInfoCache;
 import com.youloft.lilith.topic.db.TopicLikeCache;
 import com.youloft.lilith.ui.TabManager;
 import com.youloft.lilith.ui.view.BaseToolBar;
+import com.youloft.statistics.AppAnalytics;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -81,22 +82,28 @@ public class SettingActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_modify_password://修改密码
+                AppAnalytics.onEvent("Set.modifypassword.C");
                 ARouter.getInstance().build("/test/ModifyPasswordActivity").navigation();
                 break;
             case R.id.rl_bind_account://绑定账号
+                AppAnalytics.onEvent("Set.binding.C");
                 ARouter.getInstance().build("/test/BindAccountActivity").navigation();
                 break;
             case R.id.rl_check_update://检查更新
+                AppAnalytics.onEvent("Set.update.C");
                 checkVersionCode();
 
                 break;
             case R.id.rl_feedback://意见反馈
+                AppAnalytics.onEvent("Set.feedback.C");
                 ARouter.getInstance().build("/test/FeedBackActivity").navigation();
                 break;
             case R.id.rl_about_me://关于我们
+                AppAnalytics.onEvent("Set.about.C");
                 ARouter.getInstance().build("/test/AboutMeActivity").navigation();
                 break;
             case R.id.tv_logout://退出登录
+                AppAnalytics.onEvent("Set.signout.C");
                 logoutUser();
                 break;
         }

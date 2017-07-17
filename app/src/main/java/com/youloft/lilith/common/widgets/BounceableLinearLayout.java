@@ -138,8 +138,20 @@ public class BounceableLinearLayout extends LinearLayout {
         System.out.println("smoothScrollBy()---> " +
                 "mScroller.getFinalX()=" + mScroller.getFinalX() + "," +
                 "mScroller.getFinalY()=" + mScroller.getFinalY());
-
+        if (onMyScrollerListener != null) {
+            onMyScrollerListener.scrollY(dy);
+        }
         //必须执行invalidate()从而调用computeScroll()
         invalidate();
+    }
+
+    private OnMyScrollerListener onMyScrollerListener;
+
+    public interface OnMyScrollerListener {
+        void scrollY(int dy);
+    }
+
+    public void setOnMyScrollerListener(OnMyScrollerListener onMyScrollerListener) {
+        this.onMyScrollerListener = onMyScrollerListener;
     }
 }

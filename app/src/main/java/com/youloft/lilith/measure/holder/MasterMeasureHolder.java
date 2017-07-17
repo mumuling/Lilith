@@ -13,6 +13,7 @@ import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.measure.bean.MeasureBean;
+import com.youloft.statistics.AppAnalytics;
 
 import java.util.List;
 
@@ -53,22 +54,67 @@ public class MasterMeasureHolder extends BaseMeasureHolder {
     @Override
     public void bindData(MeasureBean.DataBean mMeasureData, int position) {
         mData = mMeasureData.ads;
+        if (mData == null || mData.size() < 8) {
+            return;
+        }
+        reportEventIM();
         for (int i = 0; i < 8; i++) {
+
             GlideApp.with(mContext).load(mData.get(i).image).into(ivMasters[i]);
             tvMasters[i].setText(mData.get(i).title);
             llMasters[i].setTag(i);
         }
     }
 
+    private void reportEventIM() {
+        AppAnalytics.onEvent("CC.Place.IM0");
+        AppAnalytics.onEvent("CC.Place.IM1");
+        AppAnalytics.onEvent("CC.Place.IM2");
+        AppAnalytics.onEvent("CC.Place.IM3");
+        AppAnalytics.onEvent("CC.Place.IM4");
+        AppAnalytics.onEvent("CC.Place.IM5");
+        AppAnalytics.onEvent("CC.Place.IM6");
+        AppAnalytics.onEvent("CC.Place.IM7");
+    }
+
     @OnClick({R.id.ll_master01, R.id.ll_master02, R.id.ll_master03, R.id.ll_master04,
             R.id.ll_master05, R.id.ll_master06, R.id.ll_master07, R.id.ll_master08})
     public void onViewClicked(View view) {
-
+        if (view.getTag() == null) {
+            return;
+        }
         int index = (int) view.getTag();
         String url = mData.get(index).url;
         ARouter.getInstance().build("/ui/web")
                 .withString("url", url)
                 .navigation();
+        switch (index){
+            case 0:
+                AppAnalytics.onEvent("CC.Place.C0");
+                break;
+            case 1:
+                AppAnalytics.onEvent("CC.Place.C1");
+                break;
+            case 2:
+                AppAnalytics.onEvent("CC.Place.C2");
+                break;
+            case 3:
+                AppAnalytics.onEvent("CC.Place.C3");
+                break;
+            case 4:
+                AppAnalytics.onEvent("CC.Place.C4");
+                break;
+            case 5:
+                AppAnalytics.onEvent("CC.Place.C5");
+                break;
+            case 6:
+                AppAnalytics.onEvent("CC.Place.C6");
+                break;
+            case 7:
+                AppAnalytics.onEvent("CC.Place.C7");
+                break;
+
+        }
 
     }
 }

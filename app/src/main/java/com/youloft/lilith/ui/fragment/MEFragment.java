@@ -2,10 +2,13 @@ package com.youloft.lilith.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.ViewUtils;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,12 +16,15 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.base.BaseFragment;
+import com.youloft.lilith.common.utils.ViewUtil;
+import com.youloft.lilith.common.widgets.BounceableLinearLayout;
 import com.youloft.lilith.cons.consmanager.ConsManager;
 import com.youloft.lilith.glide.GlideBlurTwoViewTarget;
 import com.youloft.lilith.info.event.UserInfoUpDateEvent;
 import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.login.event.LoginEvent;
 import com.youloft.lilith.setting.AppSetting;
+import com.youloft.statistics.AppAnalytics;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -38,6 +44,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MEFragment extends BaseFragment {
 
+    public static final String TAG = "MEFragment";
+
     Unbinder unbinder;
     @BindView(R.id.iv_constellation)
     ImageView ivConstellation; //用户星座
@@ -53,6 +61,10 @@ public class MEFragment extends BaseFragment {
     CircleImageView ivMoon; //月亮星座
     @BindView(R.id.iv_blur_bg)
     ImageView ivBlurBg; //模糊背景
+    @BindView(R.id.fl_item_container)
+    BounceableLinearLayout bllContener; //下面的滑动布局
+    @BindView(R.id.fl_anim)
+    FrameLayout flAnim; // 动画的容器
 
 
     public MEFragment() {
@@ -65,32 +77,6 @@ public class MEFragment extends BaseFragment {
         EventBus.getDefault().register(this);
 
     }
-
-//    @Override
-//    public void onResume() {
-//        Log.d(TAG, "onResume() called");
-//        super.onResume();
-//    }
-//
-//    private static final String TAG = "MEFragment";
-//    @Override
-//    public void setUserVisibleHint(boolean isVisibleToUser) {
-//        super.setUserVisibleHint(isVisibleToUser);
-//        Log.d(TAG, "setUserVisibleHint() called with: isVisibleToUser = [" + isVisibleToUser + "]");
-//        if (isVisibleToUser && !AppConfig.LOGIN_STATUS) {
-//            ARouter.getInstance().build("/test/LoginActivity")
-//                    .navigation();
-//        }
-//    }
-//
-//    @Override
-//    public void onHiddenChanged(boolean hidden) {
-//        super.onHiddenChanged(hidden);
-//        if (!hidden &&!AppConfig.LOGIN_STATUS ) {
-//            ARouter.getInstance().build("/test/LoginActivity")
-//                    .navigation();
-//        }
-//    }
 
     //快捷登录, 注册成功, 账号密码登录, 三方登录 用户登出 都会发送事件到这个地方
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -122,7 +108,6 @@ public class MEFragment extends BaseFragment {
      * 填充用户数据
      */
     private void setUserInfo() {
-        //TODO 做空判断，不然又可能GG
         UserBean userInfo = AppSetting.getUserInfo();
         if (userInfo == null) {
             return;
@@ -131,8 +116,8 @@ public class MEFragment extends BaseFragment {
 
         String showNickName = userInfo.data.userInfo.nickName;
         int length = showNickName.length();
-         if (length > 7) {
-            showNickName = showNickName.substring(0,6) + "...";
+        if (length > 7) {
+            showNickName = showNickName.substring(0, 6) + "...";
         }
         tvNickName.setText(showNickName);
         if (!TextUtils.isEmpty(headImgUrl)) {
@@ -163,12 +148,25 @@ public class MEFragment extends BaseFragment {
         EventBus.getDefault().unregister(this);
     }
 
+    int totalTrans = 0;
+    float h =  ViewUtil.dp2px(5);
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
 
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
         unbinder = ButterKnife.bind(this, rootView);
 
+        bllContener.setOnMyScrollerListener(new BounceableLinearLayout.OnMyScrollerListener() {
+            @Override
+            public void scrollY(int dy) {
+                final ViewGroup.LayoutParams layoutParams = flAnim.getLayoutParams();
+
+                layoutParams.height = (int) (layoutParams.height + (dy * 0.2f));
+                layoutParams.width = (int) (layoutParams.width + (dy * 0.2f));
+                flAnim.setLayoutParams(layoutParams);
+            }
+        });
         //view创建完成之后,检查登录状态,如果是登录的状态,那么把用户数据填上去
         if (AppSetting.getUserInfo() != null) {
             setUserInfo();
@@ -182,12 +180,15 @@ public class MEFragment extends BaseFragment {
     public void clickMyItem(View view) {
         switch (view.getId()) {
             case R.id.rl_topic:
+                AppAnalytics.onEvent("Mytopic.C");
                 ARouter.getInstance().build("/test/MyTopicActivity").navigation();
                 break;
             case R.id.rl_personal_data:
+                AppAnalytics.onEvent("Mydata.C");
                 ARouter.getInstance().build("/test/EditInformationActivity").navigation();
                 break;
             case R.id.rl_setting:
+                AppAnalytics.onEvent("Set.C");
                 ARouter.getInstance().build("/test/SettingActivity").navigation();
                 break;
 
