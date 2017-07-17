@@ -289,7 +289,7 @@ public class BindPhoneActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        initBackgroundVedio();
+        MediaPlayerHelper.getInstance().register(this, svBackground);
     }
 
     //离开时移除活动中的handler
@@ -297,12 +297,6 @@ public class BindPhoneActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         MediaPlayerHelper.getInstance().unregister(this);
-    }
-    /**
-     * 背景视频设置
-     */
-    private void initBackgroundVedio() {
-        MediaPlayerHelper.getInstance().register(this, svBackground);
     }
 
 

@@ -16,6 +16,7 @@ import java.util.HashSet;
 
 /**
  * Created by gyh on 2017/7/14.
+ * 注册界面背景视屏播放辅助类；使用时采用注册与反注册来使用；
  */
 
 public class MediaPlayerHelper implements SurfaceHolder.Callback {
@@ -36,6 +37,17 @@ public class MediaPlayerHelper implements SurfaceHolder.Callback {
         return instance;
     }
 
+    private MediaPlayerHelper(Context content) {
+        mMediaPlayer = MediaPlayer.create(content, R.raw.bg_login);
+        mMediaPlayer.setLooping(true);
+        mMediaPlayer.start();
+    }
+
+    /**
+     * 注册需要使用此播放器的Activity,在activity中注册时需要在onResume()中注册，防止回退时候没法播放；
+     * @param content
+     * @param surfaceView
+     */
     public void register(Activity content, SurfaceView surfaceView) {
         list.add(content);
         if (mHolder != null) {
@@ -46,6 +58,10 @@ public class MediaPlayerHelper implements SurfaceHolder.Callback {
         mHolder.addCallback(this);
     }
 
+    /**
+     * 反注册,如果引用数为0，则释放MediaPlayer；在Activity的onDestroy()中进行反注册；
+     * @param content
+     */
     public void unregister(Activity content) {
         list.remove(content);
         if (list.isEmpty()) {
@@ -53,17 +69,11 @@ public class MediaPlayerHelper implements SurfaceHolder.Callback {
         }
     }
 
-    private MediaPlayerHelper(Context content) {
-        mMediaPlayer = MediaPlayer.create(content, R.raw.bg_login);
-        mMediaPlayer.setLooping(true);
-        mMediaPlayer.start();
-    }
-
 
     /**
      * 释放MediaPlayer
      */
-    public void release() {
+    private void release() {
         if (mMediaPlayer != null) {
             mMediaPlayer.release();
             instance = null;
