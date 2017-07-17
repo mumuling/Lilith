@@ -27,8 +27,10 @@ public class MeasureBannerHolder extends BaseMeasureHolder {
 
 
     @BindView(R.id.iv_banner)
-    ImageView ivBanner;
-    private MeasureBean.DataBean mMeasureData;
+    ImageView ivBanner;  //banner图
+    private MeasureBean.DataBean mMeasureData;//数据源
+    private boolean reportTag = true;
+
     public MeasureBannerHolder(Context context, ViewGroup parent) {
         super(LayoutInflater.from(context).inflate(R.layout.item_measure_banner, parent, false));
         ButterKnife.bind(this, itemView);
@@ -41,7 +43,10 @@ public class MeasureBannerHolder extends BaseMeasureHolder {
         if(isaBoolean(mMeasureData)){
             return;
         }
-        AppAnalytics.onEvent("CC.AD.IM0");
+        if (reportTag){
+            AppAnalytics.onEvent("CC.AD.IM0");
+            reportTag = false;
+        }
         GlideApp.with(mContext).load(mMeasureData.ads.get(0).image).into(ivBanner);
     }
 

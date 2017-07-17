@@ -33,15 +33,17 @@ public class MasterMeasureHolder extends BaseMeasureHolder {
 
     @BindViews({R.id.iv_master01, R.id.iv_master02, R.id.iv_master03, R.id.iv_master04,
             R.id.iv_master05, R.id.iv_master06, R.id.iv_master07, R.id.iv_master08})
-    ImageView[] ivMasters;
+    ImageView[] ivMasters; //所有的icon
 
     @BindViews({R.id.tv_master01, R.id.tv_master02, R.id.tv_master03, R.id.tv_master04,
             R.id.tv_master05, R.id.tv_master06, R.id.tv_master07, R.id.tv_master08})
-    TextView[] tvMasters;
+    TextView[] tvMasters; //所有的文字描述
 
     @BindViews({R.id.ll_master01, R.id.ll_master02, R.id.ll_master03, R.id.ll_master04,
             R.id.ll_master05, R.id.ll_master06, R.id.ll_master07, R.id.ll_master08})
-    LinearLayout[] llMasters;
+    LinearLayout[] llMasters; //所有的外层容器
+
+    private boolean reportTag = true;
 
     private List<MeasureBean.DataBean.AdsBean> mData;
 
@@ -57,7 +59,11 @@ public class MasterMeasureHolder extends BaseMeasureHolder {
         if (mData == null || mData.size() < 8) {
             return;
         }
-        reportEventIM();
+        if(reportTag){
+            reportEventIM();
+            reportTag = false;
+        }
+
         for (int i = 0; i < 8; i++) {
 
             GlideApp.with(mContext).load(mData.get(i).image).into(ivMasters[i]);
@@ -88,33 +94,7 @@ public class MasterMeasureHolder extends BaseMeasureHolder {
         ARouter.getInstance().build("/ui/web")
                 .withString("url", url)
                 .navigation();
-        switch (index){
-            case 0:
-                AppAnalytics.onEvent("CC.Place.C0");
-                break;
-            case 1:
-                AppAnalytics.onEvent("CC.Place.C1");
-                break;
-            case 2:
-                AppAnalytics.onEvent("CC.Place.C2");
-                break;
-            case 3:
-                AppAnalytics.onEvent("CC.Place.C3");
-                break;
-            case 4:
-                AppAnalytics.onEvent("CC.Place.C4");
-                break;
-            case 5:
-                AppAnalytics.onEvent("CC.Place.C5");
-                break;
-            case 6:
-                AppAnalytics.onEvent("CC.Place.C6");
-                break;
-            case 7:
-                AppAnalytics.onEvent("CC.Place.C7");
-                break;
-
-        }
+        AppAnalytics.onEvent("CC.Place.C"+index);
 
     }
 }
