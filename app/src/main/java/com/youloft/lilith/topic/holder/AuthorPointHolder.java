@@ -90,7 +90,11 @@ public class AuthorPointHolder extends RecyclerView.ViewHolder implements View.O
 
     }
 
-
+    /**
+     *
+     * @param point  观点信息
+     * @param topic  话题信息
+     */
     public void bindView(PointBean.DataBean point, ArrayList<TopicDetailBean.DataBean.OptionBean> topic) {
         if (point == null || topic == null) return;
         this.point = point;
@@ -141,6 +145,10 @@ public class AuthorPointHolder extends RecyclerView.ViewHolder implements View.O
 
     }
 
+    /**
+     *   绑定赞
+     * @param dataBean
+     */
     private void bindZan(PointBean.DataBean dataBean) {
         int id = dataBean.id;
         zanCount = dataBean.zan;
@@ -218,6 +226,9 @@ public class AuthorPointHolder extends RecyclerView.ViewHolder implements View.O
         }
     }
 
+    /**
+     *    点赞
+     */
     public void clickLike() {
         UserBean userInfo = AppSetting.getUserInfo();
         if (userInfo != null) {
@@ -245,6 +256,10 @@ public class AuthorPointHolder extends RecyclerView.ViewHolder implements View.O
         }
     }
 
+    /**
+     *    跟新赞的数据库
+     * @param ispost
+     */
     public void updateClickTable(int ispost) {
         TopicLikingTable topicLikingTable;
         if (isZan == 1) {
