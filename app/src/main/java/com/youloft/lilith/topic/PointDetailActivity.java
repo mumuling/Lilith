@@ -149,7 +149,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
         } else {
             userId = userInfo.id;
         }
-        TopicRepo.getPointReply(String.valueOf(point.id), String.valueOf(userId), "10", null, true)
+        TopicRepo.getPointReply(String.valueOf(point.id), String.valueOf(userId), "10", null, false)
                 .compose(this.<ReplyBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
@@ -185,7 +185,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
         for (int j = 0; j < tableArrayList.size(); j++) {
             pointAnswerTable = tableArrayList.get(j);
             if (pointAnswerTable.time < replyBean.t) {
-                pointAnswerCache.deleteData(pointAnswerTable.rid);
+               return;// pointAnswerCache.deleteData(pointAnswerTable.rid);
             } else {
                 ReplyBean.DataBean dataBean = new ReplyBean.DataBean();
                 dataBean.headImg = userInfo.headImg;
@@ -199,6 +199,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
                 dataBean.pid = pointAnswerTable.tid;
                 dataBean.uid = userInfo.id;
                 dataBean.nickName = userInfo.nickName;
+                dataBean.signs = userInfo.signs;
                 replyBeanList.add(0, dataBean);
               //  replyCount++;
             }
@@ -432,6 +433,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
                             dataBean.contents = reply_content;
                             dataBean.headImg = userInfo.headImg;
                             dataBean.id = answerId;
+                            dataBean.signs = userInfo.signs;
                             adapter.setAnswerTop(dataBean);
                             updatePointAnswerDb(result.t, dataBean, answerId);
                             replyCount++;

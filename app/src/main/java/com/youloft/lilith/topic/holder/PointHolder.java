@@ -363,12 +363,14 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
                         replyName = replyName.substring(0,6)+"...";
                     }
                     replyTextArray[i].setText(replyName + ": " + reply.contents);
+                    replyTextArray[i].setVisibility(View.VISIBLE);
                 } else {
                     replyTextArray[i].setVisibility(View.GONE);
                 }
             }
             if (point.replyList.size() >= 3) {
                 textCommentAnswerRemain.setText("查看全部" + point.reply + "条");
+                textCommentAnswerRemain.setVisibility(View.VISIBLE);
             } else {
                 textCommentAnswerRemain.setVisibility(View.GONE);
                 for (int j = point.replyList.size(); j < 3; j++) {

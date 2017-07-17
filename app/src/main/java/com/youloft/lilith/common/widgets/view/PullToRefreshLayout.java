@@ -4,23 +4,26 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.view.ViewConfigurationCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.youloft.lilith.R;
 
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
 
 /**
  * Desc: 下拉刷新控件，带下拉刷新的控件必须实现{@link Pullable}接口，
- *        否者会报错;（目前本工程只有{@link android.support.v7.widget.RecyclerViewCanPullAble}支持下拉刷新）
- *
+ * 否者会报错;（目前本工程只有{@link android.support.v7.widget.RecyclerViewCanPullAble}支持下拉刷新）
+ * <p>
  * 在需要进行刷新操作的地方实现{@link OnRefreshListener},
  * 在接口实现方法里边进行刷新操作，刷新完成后记得调用{@link #refreshFinish(int)}来影藏刷新控件
  * Change:
@@ -47,7 +50,7 @@ public class PullToRefreshLayout extends RelativeLayout {
     // 刷新失败
     public static final int FAIL = 1;
     // 按下Y坐标，上一个事件点Y坐标
-    private float downY, lastY;
+    private float downY, lastY, downX, lastX;
 
     // 下拉的距离
     public float pullDownY = 0;
@@ -117,6 +120,7 @@ public class PullToRefreshLayout extends RelativeLayout {
 
     };
     private View refreshView;
+    private int mTouchSlop;
 
     public void setOnRefreshListener(OnRefreshListener listener) {
         mListener = listener;
@@ -141,6 +145,9 @@ public class PullToRefreshLayout extends RelativeLayout {
         mContext = context;
         timer = new MyTimer(updateHandler);
         View inflate = LayoutInflater.from(context).inflate(R.layout.refresh_group, this);
+        final ViewConfiguration configuration = ViewConfiguration.get(context);
+
+        mTouchSlop = ViewConfigurationCompat.getScaledPagingTouchSlop(configuration);
     }
 
     private void hide() {
@@ -224,11 +231,19 @@ public class PullToRefreshLayout extends RelativeLayout {
     }
 
     @Override
+    public void requestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+        super.requestDisallowInterceptTouchEvent(disallowIntercept);
+    }
+
+    @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        switch (ev.getActionMasked()) {
+        int actionMasked = ev.getActionMasked();
+        switch (actionMasked) {
             case MotionEvent.ACTION_DOWN:
                 downY = ev.getY();
+                downX = ev.getX();
                 lastY = downY;
+                lastX = downX;
                 timer.cancel();
                 mEvents = 0;
                 releasePull();
@@ -239,6 +254,11 @@ public class PullToRefreshLayout extends RelativeLayout {
                 mEvents = -1;
                 break;
             case MotionEvent.ACTION_MOVE:
+                float defX = Math.abs(ev.getX() - downX);
+                float defY = Math.abs(ev.getY() - downY);
+                if (defX > mTouchSlop && defX > defY) {
+                    break;
+                }
                 if (mEvents == 0) {
                     if (pullDownY > 0
                             || (((Pullable) pullableView).canPullDown()
@@ -264,9 +284,9 @@ public class PullToRefreshLayout extends RelativeLayout {
                 // 根据下拉距离改变比例
                 radio = (float) (2 + 2 * Math.tan(Math.PI / 2 / getMeasuredHeight()
                         * (pullDownY)));
-                if (pullDownY > 0)
+                if (pullDownY > 0 && pullDownY > mTouchSlop)
                     requestLayout();
-                if (pullDownY > 0) {
+                if (pullDownY > 0 && pullDownY > mTouchSlop) {
                     if (pullDownY <= refreshStartDist && (state == RELEASE_TO_REFRESH || state == DONE || state == INIT)) {
                         changeState(INIT, pullDownY);
                     }
@@ -290,7 +310,6 @@ public class PullToRefreshLayout extends RelativeLayout {
                         mListener.onRefresh(this);
                         mStartTime = System.currentTimeMillis();
                     }
-
                 }
                 hide();
             default:

@@ -10,6 +10,7 @@ import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.widgets.view.RoundImageView;
 import com.youloft.lilith.glide.GlideBlurTransform;
+import com.youloft.lilith.topic.TopicDetailActivity;
 import com.youloft.lilith.topic.bean.TopicBean;
 import com.youloft.lilith.topic.widget.TopicUserImageLayout;
 import com.youloft.statistics.AppAnalytics;
@@ -54,6 +55,9 @@ public class OtherTopicHolder extends RecyclerView.ViewHolder {
                         .withInt("tid",topic.id)
                         .navigation();
                 AppAnalytics.onEvent("Commenttopic", "C");
+                if (itemView.getContext() instanceof TopicDetailActivity) {
+                    ((TopicDetailActivity) itemView.getContext()).finish();
+                }
             }
         });
         mTopicContent.setText(topic.title);

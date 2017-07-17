@@ -128,7 +128,7 @@ public class TopicDetailActivity extends BaseActivity {
         } else {
             userId = 0;
         }
-        TopicRepo.getPointList(String.valueOf(tid), String.valueOf(userId), "10", null, true)
+        TopicRepo.getPointList(String.valueOf(tid), String.valueOf(userId), "10", null, false)
                 .compose(this.<PointBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
