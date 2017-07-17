@@ -1,7 +1,5 @@
 package com.youloft.lilith.register.activity;
 
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
@@ -12,12 +10,10 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.VideoView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.alibaba.android.arouter.utils.TextUtils;
-import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.rx.RxObserver;
@@ -140,11 +136,17 @@ public class SetPasswordActivity extends BaseActivity {
         initBackgroundVedio();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MediaPlayerHelper.getInstance().unregister(this);
+    }
+
     /**
      * 背景视频设置
      */
     private void initBackgroundVedio() {
-        MediaPlayerHelper.initMediaPlayerHelper(this,svBackground);
+        MediaPlayerHelper.getInstance().register(this, svBackground);
     }
 
     private boolean isShowPassword01 = false;//是否显示密码的标识
@@ -219,15 +221,15 @@ public class SetPasswordActivity extends BaseActivity {
                     .subscribe(new RxObserver<UserBean>() {
                         @Override
                         public void onDataSuccess(UserBean userBean) {
-                            if(userBean.data.result == 0){
+                            if (userBean.data.result == 0) {
                                 //这里代表注册成功,并且也登录了
                                 AppSetting.saveUserInfo(userBean); //保存用户信息
                                 EventBus.getDefault().post(new LoginEvent(true));//发送登录事件
-                                if (android.text.TextUtils.isEmpty(userBean.data.userInfo.birthLongi)){ //新用户
+                                if (android.text.TextUtils.isEmpty(userBean.data.userInfo.birthLongi)) { //新用户
                                     ARouter.getInstance().build("/test/EditInformationActivity").navigation();
                                 }
                                 finish();
-                            }else {
+                            } else {
                                 Toaster.showShort("注册失败");
                             }
                         }

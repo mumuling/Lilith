@@ -1,7 +1,6 @@
 package com.youloft.lilith.login.activity;
 
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -17,7 +16,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.VideoView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -231,7 +229,7 @@ public class ForgetPasswordActivity extends BaseActivity implements SurfaceHolde
      * 背景视频设置
      */
     private void initBackgroundVedio() {
-        MediaPlayerHelper.initMediaPlayerHelper(this,svBackground);
+        MediaPlayerHelper.getInstance().register(this,svBackground);
     }
 
 
@@ -332,6 +330,7 @@ public class ForgetPasswordActivity extends BaseActivity implements SurfaceHolde
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        MediaPlayerHelper.getInstance().unregister(this);
         handler.removeCallbacks(runnable);
         EventBus.getDefault().unregister(this);
     }

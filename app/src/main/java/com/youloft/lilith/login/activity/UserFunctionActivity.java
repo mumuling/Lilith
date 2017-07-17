@@ -1,7 +1,5 @@
 package com.youloft.lilith.login.activity;
 
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -9,19 +7,15 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.Surface;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.VideoView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.alibaba.fastjson.JSON;
-import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.rx.RxObserver;
@@ -199,7 +193,7 @@ public class UserFunctionActivity extends BaseActivity {
      * 背景视频设置
      */
     private void initBackgroundVedio() {
-        MediaPlayerHelper.initMediaPlayerHelper(this,svBackground);
+        MediaPlayerHelper.getInstance().register(this, svBackground);
     }
 
 
@@ -349,6 +343,7 @@ public class UserFunctionActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         handler.removeCallbacks(runnable);
+        MediaPlayerHelper.getInstance().unregister(this);
     }
 
     //点击清除电话号码

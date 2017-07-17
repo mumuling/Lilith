@@ -1,7 +1,6 @@
 package com.youloft.lilith.login.activity;
 
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.method.PasswordTransformationMethod;
@@ -67,7 +66,6 @@ public class LoginActivity extends BaseActivity {
     ImageView ivIsShowPwd; //是否明文展示密码
     @BindView(R.id.iv_clean_password)
     ImageView ivCleanPassword; //清空密码
-    private MediaPlayerHelper mMediaPlayerHelper;
 
 
     @Override
@@ -95,7 +93,7 @@ public class LoginActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-        mMediaPlayerHelper.release();
+        MediaPlayerHelper.getInstance().unregister(this);
     }
 
     /**
@@ -139,7 +137,7 @@ public class LoginActivity extends BaseActivity {
      * 背景视频设置
      */
     private void initBackgroundVedio() {
-        mMediaPlayerHelper = MediaPlayerHelper.initMediaPlayerHelper(this, svBackground);
+        MediaPlayerHelper.getInstance().register(this, svBackground);
     }
 
 

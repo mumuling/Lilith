@@ -304,7 +304,7 @@ public class RegisterActivity extends BaseActivity {
      * 背景视频设置
      */
     private void initBackgroundVedio() {
-        MediaPlayerHelper.initMediaPlayerHelper(this,svBackground);
+        MediaPlayerHelper.getInstance().register(this, svBackground);
     }
 
 
@@ -449,6 +449,7 @@ public class RegisterActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        MediaPlayerHelper.getInstance().unregister(this);
         handler.removeCallbacks(runnable);
         EventBus.getDefault().unregister(this);
     }
