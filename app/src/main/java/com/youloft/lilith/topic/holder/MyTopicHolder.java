@@ -18,6 +18,7 @@ import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.CalendarHelper;
+import com.youloft.lilith.common.utils.StringUtil;
 import com.youloft.lilith.cons.consmanager.ConsManager;
 import com.youloft.lilith.glide.GlideCircleTransform;
 import com.youloft.lilith.login.bean.UserBean;
@@ -115,13 +116,9 @@ public class MyTopicHolder extends RecyclerView.ViewHolder {
                 .placeholder(R.drawable.default_user_head_img)
                 .error(R.drawable.default_user_head_img)
                 .into(imageCommentUser);
-        String name = userInfo.nickName;
-        int nameLength = name.length();
-        if (nameLength > 7) {
-            name = name.substring(0,6) + "...";
-        }
+
         //昵称
-        textUserName.setText(name);
+        textUserName.setText(StringUtil.toNameString(userInfo.nickName));
         //星座
         textUserConstellation.setText(ConsManager.getConsName(userInfo.signs));
         //性别

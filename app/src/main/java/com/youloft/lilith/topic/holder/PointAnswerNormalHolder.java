@@ -20,6 +20,7 @@ import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.CalendarHelper;
+import com.youloft.lilith.common.utils.StringUtil;
 import com.youloft.lilith.cons.consmanager.ConsManager;
 import com.youloft.lilith.cons.view.LogInOrCompleteDialog;
 import com.youloft.lilith.login.bean.UserBean;
@@ -103,11 +104,7 @@ public class PointAnswerNormalHolder extends RecyclerView.ViewHolder implements 
         } else {
             textCommentHot.setVisibility(View.GONE);
         }
-        String nickName = dataBean.nickName;
-        if (nickName.length() > 7) {
-            nickName = nickName.substring(0,6) + "...";
-        }
-        textUserName.setText(nickName);
+        textUserName.setText(StringUtil.toNameString(dataBean.nickName));
         textAnswerContent.setText(dataBean.contents);
         textUserConstellation.setText(ConsManager.getConsName(dataBean.signs));
         if (dataBean.sex == 1 ||dataBean.sex == 0) {
@@ -120,11 +117,7 @@ public class PointAnswerNormalHolder extends RecyclerView.ViewHolder implements 
             textToName.setVisibility(View.GONE);
         } else {
             textToName.setVisibility(View.VISIBLE);
-            String pName = dataBean.pName;
-            if (pName.length() > 7) {
-                pName = pName.substring(0,6) + "...";
-            }
-            textToName.setText(pName);
+            textToName.setText(StringUtil.toNameString(dataBean.pName));
         }
         GlideApp.with(itemView)
                 .asBitmap()
