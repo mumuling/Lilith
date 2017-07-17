@@ -70,6 +70,9 @@ public class ConsTitleHolder extends BaseHolder<String> {
             setDefaultString();
             return;
         }
+        if (data.length() > 7) {
+            data = data.substring(0,6) + "...";
+        }
         SpannableString ss = new SpannableString(String.format(loggin, getStringInDay(), data));
         ss.setSpan(highLight, 4, ss.length() - 10, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         mConsTitleText.setText(ss);

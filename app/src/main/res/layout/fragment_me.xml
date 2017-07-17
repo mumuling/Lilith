@@ -15,118 +15,126 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop" />
-        <!--中间的头像和小的星座-->
+
         <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|bottom"
-            android:layout_marginBottom="70dp">
-            <!--用户头像-->
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/iv_header"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/div" />
-            <!--我的星座-->
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/iv_constellation"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_gravity="right"
-                android:scaleType="centerCrop" />
+            android:id="@+id/fl_anim"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <!--中间的头像和小的星座-->
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|bottom"
+                android:layout_marginBottom="70dp">
+                <!--用户头像-->
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/iv_header"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/div" />
+                <!--我的星座-->
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/iv_constellation"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="right"
+                    android:scaleType="centerCrop" />
+            </FrameLayout>
+
+            <!--用户昵称-->
+            <TextView
+                android:id="@+id/tv_nick_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|bottom"
+                android:lines="1"
+                android:layout_marginBottom="44dp"
+                android:textColor="@color/white"
+                android:textSize="16dp" />
+            <!--上升星座-->
+            <LinearLayout
+                android:id="@+id/ll_rise"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="104dp"
+                android:layout_marginLeft="48dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/iv_rise"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/div" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="上升星座"
+                    android:textColor="@color/white"
+                    android:textSize="16dp" />
+            </LinearLayout>
+
+            <!--太阳星座-->
+            <LinearLayout
+                android:id="@+id/ll_sun"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|bottom"
+                android:layout_marginBottom="154dp"
+                android:layout_marginRight="39dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/iv_sun"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/div" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="太阳星座"
+                    android:textColor="@color/white"
+                    android:textSize="16dp" />
+            </LinearLayout>
+
+            <!--月亮星座-->
+            <LinearLayout
+                android:id="@+id/ll_moon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|bottom"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="79dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/iv_moon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/div" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="月亮星座"
+                    android:textColor="@color/white"
+                    android:textSize="16dp" />
+            </LinearLayout>
         </FrameLayout>
 
-        <!--用户昵称-->
-        <TextView
-            android:id="@+id/tv_nick_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|bottom"
-            android:lines="1"
-            android:layout_marginBottom="44dp"
-            android:textColor="@color/white"
-            android:textSize="16dp" />
-        <!--上升星座-->
-        <LinearLayout
-            android:id="@+id/ll_rise"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_marginBottom="104dp"
-            android:layout_marginLeft="48dp"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/iv_rise"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/div" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="上升星座"
-                android:textColor="@color/white"
-                android:textSize="16dp" />
-        </LinearLayout>
-
-        <!--太阳星座-->
-        <LinearLayout
-            android:id="@+id/ll_sun"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right|bottom"
-            android:layout_marginBottom="154dp"
-            android:layout_marginRight="39dp"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/iv_sun"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/div" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="太阳星座"
-                android:textColor="@color/white"
-                android:textSize="16dp" />
-        </LinearLayout>
-
-        <!--月亮星座-->
-        <LinearLayout
-            android:id="@+id/ll_moon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right|bottom"
-            android:layout_marginBottom="10dp"
-            android:layout_marginRight="79dp"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/iv_moon"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/div" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="月亮星座"
-                android:textColor="@color/white"
-                android:textSize="16dp" />
-        </LinearLayout>
     </FrameLayout>
     <!--下面的话题资料设置-->
     <com.youloft.lilith.common.widgets.BounceableLinearLayout

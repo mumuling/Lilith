@@ -39,6 +39,10 @@ public class ImmediatelyMeasureHolder extends BaseMeasureHolder {
     @Override
     public void bindData(MeasureBean.DataBean mMeasureData, int position) {
         this.mMeasureData = mMeasureData;
+        if(mMeasureData == null || mMeasureData.ads == null || mMeasureData.ads.size() == 0){
+            return;
+        }
+
         mIndex = position - 3;
         GlideApp.with(mContext).load(mMeasureData.ads.get(mIndex).image).into(ivIcon);
         tvTitle.setText(mMeasureData.ads.get(mIndex).title);
@@ -47,6 +51,7 @@ public class ImmediatelyMeasureHolder extends BaseMeasureHolder {
 
     @OnClick(R.id.bt_measure)
     public void onViewClicked() {
+
         ARouter.getInstance().build("/ui/web")
                 .withString("url", mMeasureData.ads.get(mIndex).url)
                 .navigation();

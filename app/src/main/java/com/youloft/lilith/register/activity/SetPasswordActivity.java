@@ -133,7 +133,7 @@ public class SetPasswordActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        initBackgroundVedio();
+        MediaPlayerHelper.getInstance().register(this, svBackground);
     }
 
     @Override
@@ -142,12 +142,6 @@ public class SetPasswordActivity extends BaseActivity {
         MediaPlayerHelper.getInstance().unregister(this);
     }
 
-    /**
-     * 背景视频设置
-     */
-    private void initBackgroundVedio() {
-        MediaPlayerHelper.getInstance().register(this, svBackground);
-    }
 
     private boolean isShowPassword01 = false;//是否显示密码的标识
     private boolean isShowPassword02 = false;//是否显示密码的标识
