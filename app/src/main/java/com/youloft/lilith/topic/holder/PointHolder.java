@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -42,6 +43,7 @@ import com.youloft.lilith.topic.db.TopicLikeCache;
 import com.youloft.lilith.topic.db.TopicLikingTable;
 import com.youloft.lilith.topic.widget.Rotate3dAnimation;
 import com.youloft.lilith.glide.GlideCircleTransform;
+import com.youloft.statistics.AppAnalytics;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -110,6 +112,7 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
     private TopicDetailBean.DataBean topic;
     private int totalPoint;
     private int zanCount = 0;
+    private boolean isReport = false;
 
     public PointHolder(View itemView, TopicDetailAdapter adapter) {
         super(itemView);
@@ -193,7 +196,6 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
      */
 
     public void loadMorePiont() {
-
         TopicRepo.getPointList(String.valueOf(topic.id), null, "10", String.valueOf(totalPoint), false)
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
@@ -283,8 +285,14 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
         }
     }
 
+    private static final String TAG = "PointHolder";
     public void bindNormal(final PointBean.DataBean point, final TopicDetailBean.DataBean option, final int position, boolean isLast) {
         if (point == null || option == null) return;
+    //展示埋点
+        if (!isReport) {
+            AppAnalytics.onEvent("Topic", "IM" + String.valueOf(position - 1));
+            isReport = true;
+        }
         this.topic = option;
         this.point = point;
         this.totalPoint = adapter.pointBeanList.size();
@@ -292,6 +300,7 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                AppAnalytics.onEvent("Topic", "C" + String.valueOf(position - 1));
                 ARouter.getInstance().build("/test/PointDetailActivity")
                         .withObject("point", point)
                         .withObject("topic", option)
