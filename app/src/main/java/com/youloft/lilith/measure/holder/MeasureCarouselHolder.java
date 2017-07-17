@@ -16,8 +16,10 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.measure.bean.MeasureBean;
+import com.youloft.statistics.AppAnalytics;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -35,7 +37,8 @@ public class MeasureCarouselHolder extends BaseMeasureHolder {
     ViewPager vpCarousel; //viewpager
     @BindViews({R.id.iv_dot01, R.id.iv_dot02, R.id.iv_dot03, R.id.iv_dot04, R.id.iv_dot05})
     ImageView[] ivDots;  //原点
-
+    private boolean mReportTag = true;
+    private List<Integer> mTags = new ArrayList<>();
     //下面的handler是玩轮播的
     private Handler mhandler = new Handler();
     private Runnable mRunnable = new Runnable() {
@@ -106,7 +109,17 @@ public class MeasureCarouselHolder extends BaseMeasureHolder {
 
             @Override
             public void onPageSelected(int position) {
+
                 int index = position % mData.size();
+                if(mReportTag){
+                    AppAnalytics.onEvent("CC.banner.IM"+index);
+                    if(!mTags.contains(index)){
+                        mTags.add(index);
+                    }
+                    if(mTags.size() == mData.size()){
+                        mReportTag = false;
+                    }
+                }
                 setDotStatus(index);
             }
 
@@ -223,6 +236,10 @@ public class MeasureCarouselHolder extends BaseMeasureHolder {
             mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (mData == null){
+                        return;
+                    }
+                    AppAnalytics.onEvent("CC.banner.C"+index);
                     ARouter.getInstance().build("/ui/web")
                             .withString("url", mData.get(index).url)
                             .navigation();
