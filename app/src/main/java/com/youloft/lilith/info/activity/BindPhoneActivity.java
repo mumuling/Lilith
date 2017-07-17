@@ -45,7 +45,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by gyh on 2017/7/11.
  */
 @Route(path = "/test/BindPhoneActivity")
-public class BindPhoneActivity extends BaseActivity{
+public class BindPhoneActivity extends BaseActivity {
     @BindView(R.id.sv_background)
     SurfaceView svBackground;  //背景视频
     @BindView(R.id.et_verification_code)
@@ -79,7 +79,6 @@ public class BindPhoneActivity extends BaseActivity{
     private boolean isNumberRight = true;  //验证电话号码是否已经存在之后的标识 true 存在   false 不存在
     private boolean isCodeRight; //验证码是否正确
     private SmsCodeBean mSmsCodeBean; //获取到的验证码的数据模型
-    private MediaPlayerHelper mMediaPlayerHelper;
 
 
     @Override
@@ -145,7 +144,7 @@ public class BindPhoneActivity extends BaseActivity{
 
             }
         });
-        etPhoneNumber.setOnFocusChangeListener(new PhoneFocusChangeListener(etPhoneNumber,ivCleanNumber));
+        etPhoneNumber.setOnFocusChangeListener(new PhoneFocusChangeListener(etPhoneNumber, ivCleanNumber));
     }
 
 
@@ -164,10 +163,10 @@ public class BindPhoneActivity extends BaseActivity{
                 .subscribe(new RxObserver<CheckPhoneBean>() {
                     @Override
                     public void onDataSuccess(CheckPhoneBean checkPhoneBean) {
-                        if(checkPhoneBean.data.result == 0){
+                        if (checkPhoneBean.data.result == 0) {
                             //如果成功了,根据信息进行判断
                             showIsExist(checkPhoneBean);
-                        }else {
+                        } else {
                             Toaster.showShort("网络错误");
                         }
 
@@ -293,11 +292,17 @@ public class BindPhoneActivity extends BaseActivity{
         initBackgroundVedio();
     }
 
+    //离开时移除活动中的handler
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MediaPlayerHelper.getInstance().unregister(this);
+    }
     /**
      * 背景视频设置
      */
     private void initBackgroundVedio() {
-        mMediaPlayerHelper = MediaPlayerHelper.initMediaPlayerHelper(this, svBackground);
+        MediaPlayerHelper.getInstance().register(this, svBackground);
     }
 
 
@@ -311,11 +316,11 @@ public class BindPhoneActivity extends BaseActivity{
         // 3.  手机号码验证存在与否的标识
         // 4.  是否在一分钟的重发时间内
         String phoneNumber = etPhoneNumber.getText().toString().replaceAll("-", "");
-        if (TextUtils.isEmpty(phoneNumber)){
+        if (TextUtils.isEmpty(phoneNumber)) {
             Toaster.showShort("手机码不能为空!");
             return;
         }
-        if(!LoginUtils.isPhoneNumber(phoneNumber)){
+        if (!LoginUtils.isPhoneNumber(phoneNumber)) {
             Toaster.showShort("手机号码不正确!");
             return;
         }
@@ -328,7 +333,7 @@ public class BindPhoneActivity extends BaseActivity{
             return;
         }
         //发送短信
-        SendSmsRepo.sendSms(phoneNumber,"Register")
+        SendSmsRepo.sendSms(phoneNumber, "Register")
                 .compose(this.<SendSmsBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
@@ -350,7 +355,7 @@ public class BindPhoneActivity extends BaseActivity{
     private void getSmsCode() {
         //发起获取验证码的请求
         String smsCode = etVerificationCode.getText().toString();
-        SmsCodeRepo.getSmsCode(etPhoneNumber.getText().toString().replaceAll("-", ""),"Register",smsCode)
+        SmsCodeRepo.getSmsCode(etPhoneNumber.getText().toString().replaceAll("-", ""), "Register", smsCode)
                 .compose(this.<SmsCodeBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
@@ -392,35 +397,35 @@ public class BindPhoneActivity extends BaseActivity{
         // 2. isCodeRigth 为true  代表可以注册
         // 3. 手机号码和验证码长度检验
         // 4. 手机正则校验
-        if(isNumberRight || !isCodeRight){
+        if (isNumberRight || !isCodeRight) {
             Toaster.showShort("手机号码已存在,或者验证码错误");
             return;
         }
         String phoneNumber = etPhoneNumber.getText().toString().replaceAll("-", "");
         String smsCode = etVerificationCode.getText().toString();
 
-        if(TextUtils.isEmpty(phoneNumber)||TextUtils.isEmpty(smsCode)){
+        if (TextUtils.isEmpty(phoneNumber) || TextUtils.isEmpty(smsCode)) {
             Toaster.showShort("手机号码或者验证码不能为空");
             return;
         }
 
-        if(!LoginUtils.isPhoneNumber(phoneNumber)){
+        if (!LoginUtils.isPhoneNumber(phoneNumber)) {
             Toaster.showShort("手机号码不正确");
             return;
         }
 
-        if(smsCode.trim().length()!= 6){
+        if (smsCode.trim().length() != 6) {
             Toaster.showShort("请检查验证码");
             return;
         }
 
         final UserBean userInfo = AppSetting.getUserInfo();
-        if(userInfo == null){
+        if (userInfo == null) {
             Toaster.showShort("内部信息错误");
             return;
         }
         //这些条件都满足后,发起请求
-        UpdateUserRepo.bindPhone(smsCode,phoneNumber,String.valueOf(userInfo.data.userInfo.id))
+        UpdateUserRepo.bindPhone(smsCode, phoneNumber, String.valueOf(userInfo.data.userInfo.id))
                 .compose(this.<UserBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
@@ -428,12 +433,12 @@ public class BindPhoneActivity extends BaseActivity{
                 .subscribe(new RxObserver<UserBean>() {
                     @Override
                     public void onDataSuccess(UserBean userBean) {
-                        if(userBean.data.result == 0){
+                        if (userBean.data.result == 0) {
                             AppSetting.saveUserInfo(userBean);
                             Toaster.showShort("绑定成功");
                             finish();
 
-                        }else {
+                        } else {
                             Toaster.showShort("绑定失败");
                         }
                     }
@@ -447,13 +452,6 @@ public class BindPhoneActivity extends BaseActivity{
     }
 
 
-    //离开时移除活动中的handler
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mMediaPlayerHelper.release();
-        handler.removeCallbacks(runnable);
-    }
 
     //点击清除电话号码
     @OnClick(R.id.iv_clean_number)

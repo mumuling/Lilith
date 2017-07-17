@@ -122,8 +122,6 @@ public class ConsCalDetailActivity extends BaseActivity {
      * 点击事件，使用RxBinding来做连点过滤
      */
     private void bindClick() {
-
-
         RxView.clicks(mConsShare)
                 .throttleFirst(800, TimeUnit.MILLISECONDS)
                 .subscribe(new Consumer<Object>() {

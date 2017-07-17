@@ -1,44 +1,72 @@
 package com.youloft.lilith.login;
 
 import android.app.Activity;
+import android.content.Context;
 import android.media.MediaPlayer;
+import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.youloft.lilith.R;
+import com.youloft.lilith.common.utils.Utils;
+
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.HashSet;
 
 /**
  * Created by gyh on 2017/7/14.
  */
 
 public class MediaPlayerHelper implements SurfaceHolder.Callback {
+    private static MediaPlayerHelper instance = null;
+    private MediaPlayer mMediaPlayer;
+    private SurfaceView mSurfaceView;
+    private SurfaceHolder mHolder;
+    private HashSet<Activity> list = new HashSet<>();
 
-    private static MediaPlayer mMediaPlayer;
-    private static SurfaceView mSurfaceView;
-    private static SurfaceHolder mHolder;
-    public static MediaPlayerHelper initMediaPlayerHelper(Activity content, SurfaceView surfaceView){
-        MediaPlayerHelper mediaPlayerHelper = new MediaPlayerHelper(content, surfaceView);
-        return mediaPlayerHelper;
-    }
-    public MediaPlayerHelper(Activity content, SurfaceView surfaceView) {
-        if (mMediaPlayer == null) {
+    public static MediaPlayerHelper getInstance() {
+        if (instance == null) {
             synchronized (MediaPlayerHelper.class) {
-                if (mMediaPlayer == null) {
-                    mMediaPlayer = MediaPlayer.create(content, R.raw.bg_login);
-                    mMediaPlayer.start();
-                    mMediaPlayer.setLooping(true);
+                if (instance == null) {
+                    instance = new MediaPlayerHelper(Utils.getContext());
                 }
             }
+        }
+        return instance;
+    }
+
+    public void register(Activity content, SurfaceView surfaceView) {
+        list.add(content);
+        if (mHolder != null) {
+            mHolder.removeCallback(this);
         }
         mSurfaceView = surfaceView;
         mHolder = mSurfaceView.getHolder();
         mHolder.addCallback(this);
     }
 
+    public void unregister(Activity content) {
+        list.remove(content);
+        if (list.isEmpty()) {
+            release();
+        }
+    }
 
+    private MediaPlayerHelper(Context content) {
+        mMediaPlayer = MediaPlayer.create(content, R.raw.bg_login);
+        mMediaPlayer.setLooping(true);
+        mMediaPlayer.start();
+    }
+
+
+    /**
+     * 释放MediaPlayer
+     */
     public void release() {
         if (mMediaPlayer != null) {
             mMediaPlayer.release();
+            instance = null;
         }
     }
 
@@ -56,6 +84,6 @@ public class MediaPlayerHelper implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-
+        holder.removeCallback(this);
     }
 }
