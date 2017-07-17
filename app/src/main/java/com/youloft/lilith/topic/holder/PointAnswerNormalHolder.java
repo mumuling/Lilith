@@ -102,7 +102,11 @@ public class PointAnswerNormalHolder extends RecyclerView.ViewHolder implements 
         } else {
             textCommentHot.setVisibility(View.GONE);
         }
-        textUserName.setText(dataBean.nickName);
+        String nickName = dataBean.nickName;
+        if (nickName.length() > 7) {
+            nickName = nickName.substring(0,6) + "...";
+        }
+        textUserName.setText(nickName);
         textAnswerContent.setText(dataBean.contents);
         if (dataBean.sex == 1 ||dataBean.sex == 0) {
             imageUserSex.setImageResource(R.drawable.topic_female_icon);
@@ -114,7 +118,11 @@ public class PointAnswerNormalHolder extends RecyclerView.ViewHolder implements 
             textToName.setVisibility(View.GONE);
         } else {
             textToName.setVisibility(View.VISIBLE);
-            textToName.setText(dataBean.pName);
+            String pName = dataBean.pName;
+            if (pName.length() > 7) {
+                pName = pName.substring(0,6) + "...";
+            }
+            textToName.setText(pName);
         }
         GlideApp.with(itemView)
                 .asBitmap()

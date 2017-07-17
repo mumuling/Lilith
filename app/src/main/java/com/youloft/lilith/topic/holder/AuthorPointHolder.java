@@ -103,8 +103,13 @@ public class AuthorPointHolder extends RecyclerView.ViewHolder implements View.O
                 .placeholder(R.drawable.default_user_head_img)
                 .error(R.drawable.default_user_head_img)
                 .into(imageCommentUser);
+
         //用户名字
-        textUserName.setText(point.nickName);
+        String name = point.nickName;
+        if(name.length() > 7) {
+            name =  name.substring(0,6) + "...";
+        }
+        textUserName.setText(name);
         //点赞数
         bindZan(point);
 

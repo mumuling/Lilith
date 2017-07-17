@@ -41,6 +41,7 @@ public class OtherTopicHolder extends RecyclerView.ViewHolder {
         if (topic == null ) {
             return;
         }
+        //更多话题展示的埋点
         if (!isReport) {
             AppAnalytics.onEvent("Commenttopic", "IM");
             isReport = true;
@@ -52,6 +53,7 @@ public class OtherTopicHolder extends RecyclerView.ViewHolder {
                 ARouter.getInstance().build("/test/TopicDetailActivity")
                         .withInt("tid",topic.id)
                         .navigation();
+                AppAnalytics.onEvent("Commenttopic", "C");
             }
         });
         mTopicContent.setText(topic.title);
