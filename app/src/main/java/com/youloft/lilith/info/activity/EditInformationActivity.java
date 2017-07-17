@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
@@ -121,6 +122,7 @@ public class EditInformationActivity extends BaseActivity {
                 }
             }
         });
+        etNickName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(20)});
     }
 
     /**

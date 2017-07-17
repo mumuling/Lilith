@@ -71,6 +71,10 @@ public class MEFragment extends BaseFragment {
     LinearLayout llSun;
     @BindView(R.id.ll_moon)
     LinearLayout llMoon;
+    @BindView(R.id.fl_header_root)
+    FrameLayout flHeaderRoot;
+    @BindView(R.id.fl_header_container)
+    FrameLayout flHeaderContainer;
 
 
     public MEFragment() {
@@ -169,6 +173,9 @@ public class MEFragment extends BaseFragment {
                 moveRise(dy);
                 moveSun(dy);
                 moveMoon(dy);
+                scaleHeader(dy);
+//                flHeaderRoot.setScaleY(dy);
+//                flHeaderRoot.setScaleX(dy);
             }
         });
         //view创建完成之后,检查登录状态,如果是登录的状态,那么把用户数据填上去
@@ -178,36 +185,53 @@ public class MEFragment extends BaseFragment {
         return rootView;
     }
 
+    private void scaleHeader(float dy) {
+        float v = ViewUtil.dp2px(50);
+        if (Math.abs(dy) > v) {
+            dy = v;
+        }
+        flHeaderContainer.setScaleX(1 + (Math.abs(dy) / v)*0.2f);
+        flHeaderContainer.setScaleY(1 + (Math.abs(dy) / v)*0.2f);
+        flHeaderRoot.setScaleX(1 + (Math.abs(dy) / v)*0.2f);
+        flHeaderRoot.setScaleY(1 + (Math.abs(dy) / v)*0.2f);
+    }
+
     private void moveRise(float dy) {
         float v = ViewUtil.dp2px(35);
+        dy = dy * 0.7f;
+//        dy = -0.0005f*dy*dy+dy;
         if (Math.abs(dy) > v) {
             if (dy < 0) {
                 dy = -v;
-            }else {
+            } else {
                 dy = v;
             }
         }
+
         llRise.setTranslationX(-dy);
         llRise.setTranslationY(-dy);
     }
+
     private void moveSun(float dy) {
         float v = ViewUtil.dp2px(50);
         if (Math.abs(dy) > v) {
             if (dy < 0) {
                 dy = -v;
-            }else {
+            } else {
                 dy = v;
             }
         }
         llSun.setTranslationX(dy);
         llSun.setTranslationY(-dy);
     }
+
     private void moveMoon(float dy) {
         float v = ViewUtil.dp2px(20);
+        dy = dy * 0.4f;
         if (Math.abs(dy) > v) {
             if (dy < 0) {
                 dy = -v;
-            }else {
+            } else {
                 dy = v;
             }
         }
