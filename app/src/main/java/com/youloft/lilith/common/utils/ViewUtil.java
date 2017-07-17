@@ -256,8 +256,8 @@ public class ViewUtil {
             }
 
             height += ViewUtil.dp2px(122);
-
-            bigBitmap = Bitmap.createBitmap(view.getMeasuredWidth(), height, Bitmap.Config.ARGB_8888);
+            int width = view.getMeasuredWidth() - view.getPaddingLeft() - view.getPaddingRight();
+            bigBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
             Canvas bigCanvas = new Canvas(bigBitmap);
 
             bigCanvas.drawColor(view.getResources().getColor(R.color.tab_share_color));
@@ -277,9 +277,9 @@ public class ViewUtil {
             Bitmap bitmap = BitmapFactory.decodeResource(view.getResources(), R.drawable.qrcard, options);
 
             if (bitmap != null && !bitmap.isRecycled()) {
-                bigCanvas.drawBitmap(bitmap, (view.getWidth() - bitmap.getWidth())/2, iHeight + ViewUtil.dp2px(16), paint);
+                bigCanvas.drawBitmap(bitmap, (width - bitmap.getWidth())/2, iHeight + ViewUtil.dp2px(16), paint);
             }
-            bigCanvas.drawText("定制我的运势", (view.getWidth() - paint.measureText("定制我的运势"))/2, height - ViewUtil.dp2px(17), paint);
+            bigCanvas.drawText("定制我的运势", (width - paint.measureText("定制我的运势"))/2, height - ViewUtil.dp2px(17), paint);
         }
         return bigBitmap;
     }
