@@ -1,24 +1,28 @@
 package com.youloft.lilith.login;
 
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.umeng.socialize.media.Base;
+
 /**
  * Created by gyh on 2017/7/13.
  */
 
-public class PwdTextWatcher implements TextWatcher{
+public class PwdTextWatcher extends BaseTextWatcher{
 
     private EditText _text;
     private ImageView ivCleanPassword;
     private ImageView ivIsShowPwd;
-    public PwdTextWatcher(EditText _text,ImageView ivCleanPassword,ImageView ivIsShowPwd) {
+    public PwdTextWatcher(EditText _text,ImageView ivCleanPassword,ImageView ivIsShowPwd, OnTextChange listener) {
         this._text = _text;
         this.ivCleanPassword = ivCleanPassword;
         this.ivIsShowPwd = ivIsShowPwd;
+        setListener(listener);
     }
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -27,7 +31,9 @@ public class PwdTextWatcher implements TextWatcher{
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+        if (listener != null) {
+            listener.onChange(isValid(), _text);
+        }
     }
 
     @Override
@@ -40,5 +46,11 @@ public class PwdTextWatcher implements TextWatcher{
             ivCleanPassword.setVisibility(View.INVISIBLE);
             ivIsShowPwd.setVisibility(View.INVISIBLE);
         }
+
+    }
+
+    @Override
+    boolean isValid() {
+        return !TextUtils.isEmpty(_text.getText().toString());
     }
 }

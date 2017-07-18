@@ -7,9 +7,9 @@ import android.text.method.PasswordTransformationMethod;
 import android.util.Base64;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -20,6 +20,7 @@ import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.LoginUtils;
 import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.common.widgets.dialog.PrivacyDialog;
+import com.youloft.lilith.login.BaseTextWatcher;
 import com.youloft.lilith.login.MediaPlayerHelper;
 import com.youloft.lilith.login.PhoneFocusChangeListener;
 import com.youloft.lilith.login.PhoneTextWatcher;
@@ -51,7 +52,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by GYH on 2017/6/29.
  */
 @Route(path = "/test/LoginActivity")
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends BaseActivity implements BaseTextWatcher.OnTextChange {
 
     private static final String TAG = "LoginActivity";
 
@@ -67,6 +68,8 @@ public class LoginActivity extends BaseActivity {
     ImageView ivIsShowPwd; //是否明文展示密码
     @BindView(R.id.iv_clean_password)
     ImageView ivCleanPassword; //清空密码
+    @BindView(R.id.btn_login)
+    Button btnLogin;
 
 
     @Override
@@ -74,6 +77,7 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        //先把登录按钮的clickable设置为false
         initEditText();
         EventBus.getDefault().register(this);
     }
@@ -106,15 +110,34 @@ public class LoginActivity extends BaseActivity {
 
         //电话号码变化的监听
         etPhoneNumber.setFilters(new InputFilter[]{new InputFilter.LengthFilter(13)});
-        etPhoneNumber.addTextChangedListener(new PhoneTextWatcher(etPhoneNumber, ivCleanNumber));
+        PhoneTextWatcher phoneTextWatcher = new PhoneTextWatcher(etPhoneNumber, ivCleanNumber, this);
+        etPhoneNumber.addTextChangedListener(phoneTextWatcher);
+
         etPhoneNumber.setOnFocusChangeListener(new PhoneFocusChangeListener(etPhoneNumber, ivCleanNumber));
 
         //密码输入框的监听
         etPassword.setFilters(new InputFilter[]{new InputFilter.LengthFilter(16)});
-        etPassword.addTextChangedListener(new PwdTextWatcher(etPassword, ivCleanPassword, ivIsShowPwd));
+        etPassword.addTextChangedListener(new PwdTextWatcher(etPassword, ivCleanPassword, ivIsShowPwd, this));
         etPassword.setOnFocusChangeListener(new PwdFocusChangeListener(etPassword, ivCleanPassword, ivIsShowPwd));
     }
 
+    boolean phoneIsValid = false, passIsValid = false;
+
+    @Override
+    public void onChange(boolean isValid, EditText view) {
+        if (view == etPhoneNumber) {
+            phoneIsValid = isValid;
+        }
+        if (view == etPassword) {
+            passIsValid = isValid;
+        }
+
+        if (phoneIsValid && passIsValid) {
+            btnLogin.setEnabled(true);
+        } else {
+            btnLogin.setEnabled(false);
+        }
+    }
 
     @Override
     protected void onResume() {
@@ -215,7 +238,7 @@ public class LoginActivity extends BaseActivity {
     @OnClick(R.id.ll_wechat_login)
     public void wechatLogin(View view) {
         //先校验微信是否已经安装
-        if (!LoginUtils.isWxInstall(this)){
+        if (!LoginUtils.isWxInstall(this)) {
             Toaster.showShort("请先安装微信");
             return;
         }
@@ -270,12 +293,15 @@ public class LoginActivity extends BaseActivity {
                 .subscribe(new RxObserver<UserBean>() {
                     @Override
                     public void onDataSuccess(UserBean userBean) {
+                        //因为是三方登录,所以需要添加一个标识
                         if (userBean.data.result == 0) {
+                            userBean.data.userInfo.thirdLogin = true;
                             AppSetting.saveUserInfo(userBean); //保存用户信息
                             EventBus.getDefault().post(new LoginEvent(true));//发送登录事件
                             if (android.text.TextUtils.isEmpty(userBean.data.userInfo.birthLongi)) { //新用户
                                 ARouter.getInstance().build("/test/EditInformationActivity").navigation();
                             }
+
                             finish();
                         } else {
                             Toaster.showShort("登录失败");
@@ -285,6 +311,7 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     protected void onFailed(Throwable e) {
                         super.onFailed(e);
+                        Toaster.showShort("网络异常");
                     }
                 });
     }

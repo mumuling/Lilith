@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,6 +22,7 @@ import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.LoginUtils;
 import com.youloft.lilith.common.utils.Toaster;
+import com.youloft.lilith.login.BaseTextWatcher.OnTextChange;
 import com.youloft.lilith.login.MediaPlayerHelper;
 import com.youloft.lilith.login.PhoneFocusChangeListener;
 import com.youloft.lilith.login.PhoneTextWatcher;
@@ -49,7 +51,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by GYH on 2017/6/29.
  */
 @Route(path = "/test/UserFunctionActivity")
-public class UserFunctionActivity extends BaseActivity {
+public class UserFunctionActivity extends BaseActivity implements OnTextChange {
 
 
     @BindView(R.id.sv_background)
@@ -72,6 +74,8 @@ public class UserFunctionActivity extends BaseActivity {
     ImageView ivCodeRight; //验证码正确
     @BindView(R.id.iv_code_error)
     ImageView ivCodeError;  //验证码错误
+    @BindView(R.id.btn_login)
+    Button btnLogin;
 
     private boolean isCodeRight; //验证码是否正确
     private SmsCodeBean mSmsCodeBean; //获取到的验证码的数据模型
@@ -90,15 +94,14 @@ public class UserFunctionActivity extends BaseActivity {
     }
 
 
-
     /**
      * 号码输入框的设定
      */
     private void phoneNumberSetting() {
 
         etPhoneNumber.setFilters(new InputFilter[]{new InputFilter.LengthFilter(13)});
-        etPhoneNumber.addTextChangedListener(new PhoneTextWatcher(etPhoneNumber,ivCleanNumber));
-        etPhoneNumber.setOnFocusChangeListener(new PhoneFocusChangeListener(etPhoneNumber,ivCleanNumber));
+        etPhoneNumber.addTextChangedListener(new PhoneTextWatcher(etPhoneNumber, ivCleanNumber, this));
+        etPhoneNumber.setOnFocusChangeListener(new PhoneFocusChangeListener(etPhoneNumber, ivCleanNumber));
     }
 
 
@@ -154,9 +157,33 @@ public class UserFunctionActivity extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                if (TextUtils.isEmpty(etVerificationCode.getText().toString())) {
+                    isCodeEmpty = false;
+                } else {
+                    isCodeEmpty = true;
+                }
+                if (isCodeEmpty && isPhoneEmpty) {
+                    btnLogin.setEnabled(true);
+                } else {
+                    btnLogin.setEnabled(false);
+                }
             }
         });
+    }
+
+    private boolean isCodeEmpty = false;
+    private boolean isPhoneEmpty = false;
+
+    @Override
+    public void onChange(boolean isValid, EditText view) {
+        if (view == etPhoneNumber) {
+            isPhoneEmpty = isValid;
+        }
+        if (isCodeEmpty && isPhoneEmpty) {
+            btnLogin.setEnabled(true);
+        } else {
+            btnLogin.setEnabled(false);
+        }
     }
 
     /**
@@ -201,12 +228,12 @@ public class UserFunctionActivity extends BaseActivity {
             return;
         }
         String phoneNumber = etPhoneNumber.getText().toString().replaceAll("-", "");
-        if (TextUtils.isEmpty(phoneNumber)){
+        if (TextUtils.isEmpty(phoneNumber)) {
             Toaster.showShort("手机号码不能为空");
             return;
         }
 
-        if(!LoginUtils.isPhoneNumber(phoneNumber)){
+        if (!LoginUtils.isPhoneNumber(phoneNumber)) {
             Toaster.showShort("手机号码不正确");
             return;
         }
@@ -283,7 +310,7 @@ public class UserFunctionActivity extends BaseActivity {
             Toaster.showShort("信息不能为空");
             return;
         }
-        if(!LoginUtils.isPhoneNumber(phoneNumber)){
+        if (!LoginUtils.isPhoneNumber(phoneNumber)) {
             Toaster.showShort("手机号码不正确");
             return;
         }
@@ -313,7 +340,7 @@ public class UserFunctionActivity extends BaseActivity {
 
                             AppSetting.saveUserInfo(userBean); //保存用户信息
                             EventBus.getDefault().post(new LoginEvent(true));//发送登录事件
-                            if (TextUtils.isEmpty(userBean.data.userInfo.birthLongi)){ //资料不完整
+                            if (TextUtils.isEmpty(userBean.data.userInfo.birthLongi)) { //资料不完整
                                 ARouter.getInstance().build("/test/EditInformationActivity").navigation();
                             }
                             finish();
@@ -349,4 +376,6 @@ public class UserFunctionActivity extends BaseActivity {
     public void onBackClicked() {
         onBackPressed();
     }
+
+
 }

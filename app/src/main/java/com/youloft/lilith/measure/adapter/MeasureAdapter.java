@@ -34,6 +34,7 @@ public class MeasureAdapter extends RecyclerView.Adapter<BaseMeasureHolder> {
 
     private List<MeasureBean.DataBean> mMeasureData = new ArrayList<>();
     private Activity mContext;
+
     public MeasureAdapter(Activity mContext) {
         this.mContext = mContext;
     }
@@ -79,20 +80,22 @@ public class MeasureAdapter extends RecyclerView.Adapter<BaseMeasureHolder> {
     public void onBindViewHolder(BaseMeasureHolder holder, int position) {
 
         if (holder instanceof MeasureCarouselHolder) {  //轮播holder
-            holder.bindData(mMeasureData.get(0),position);
+            holder.bindData(mMeasureData.get(0), position);
         } else if (holder instanceof MasterMeasureHolder) { //大师清算
-            holder.bindData(mMeasureData.get(1),position);
+            holder.bindData(mMeasureData.get(1), position);
         } else if (holder instanceof MeasureBannerHolder) { //bannerholder
-            holder.bindData(mMeasureData.get(2),position);
+            holder.bindData(mMeasureData.get(2), position);
         } else if (holder instanceof ImmediatelyMeasureHolder) {//立即测算holder
-            holder.bindData(mMeasureData.get(3),position);
+            if (mMeasureData.size() > 4) {
+                holder.bindData(mMeasureData.get(3), position);
+            }
         }
     }
 
     @Override
     public int getItemCount() {
         //这里的长度需要计算一下  当最后一个的location为四的时候 需要加上一个长度
-        if(mMeasureData == null || mMeasureData.size() == 0){
+        if (mMeasureData == null || mMeasureData.size() == 0) {
             return 0;
         }
         MeasureBean.DataBean dataBean = mMeasureData.get(mMeasureData.size() - 1);
