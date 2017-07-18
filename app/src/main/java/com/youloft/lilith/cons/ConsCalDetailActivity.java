@@ -275,7 +275,10 @@ public class ConsCalDetailActivity extends BaseActivity {
                 && mData.data.predicts != null
                 && !mData.data.predicts.isEmpty()) {
             mShareCal.setData(mData);
-
+            if (TextUtils.isEmpty(mData.data.bgImg)) {
+                canShare(shareView);
+                return;
+            }
             //不能直接使用glide加载到imageView里边
             GlideApp.with(shareView).asBitmap().load(mData.data.bgImg).into(new SimpleTarget<Bitmap>() {
                 @Override
