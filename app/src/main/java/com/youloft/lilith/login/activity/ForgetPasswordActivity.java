@@ -79,7 +79,7 @@ public class ForgetPasswordActivity extends BaseActivity implements BaseTextWatc
     private boolean isCodeRight; //验证码是否正确
     private SmsCodeBean mSmsCodeBean; //获取到的验证码的数据模型
     public static final String FORGET_PASSWORD_FLAG = "22";//这是代表忘记密码
-    public static final String MODIFY_PASSWORD_FLAG = "33";//这是代修改密码密码
+    public static final String MODIFY_PASSWORD_FLAG = "33";//这是代修修改密码
     private String mFlag; //上个界面传过来的flag  判断是修改密码,还是忘记密码
 
     @Override
@@ -87,8 +87,8 @@ public class ForgetPasswordActivity extends BaseActivity implements BaseTextWatc
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_password);
         mFlag = getIntent().getStringExtra("flag");
-        initView();
         ButterKnife.bind(this);
+        initView();
         phoneNumberSetting();
         verificationCodeSetting();
         EventBus.getDefault().register(this);
