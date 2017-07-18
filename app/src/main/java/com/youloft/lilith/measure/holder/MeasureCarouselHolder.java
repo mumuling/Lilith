@@ -46,7 +46,7 @@ public class MeasureCarouselHolder extends BaseMeasureHolder {
         public void run() {
             int index = vpCarousel.getCurrentItem() + 1;
             vpCarousel.setCurrentItem(index);
-            if(mData.size()!=1){
+            if (mData.size() != 1) {
                 mhandler.postDelayed(mRunnable, 2500);
             }
         }
@@ -95,9 +95,9 @@ public class MeasureCarouselHolder extends BaseMeasureHolder {
         }
 
         vpCarousel.setAdapter(new MyAdapter(mData, mContext));
-        if(mData.size() == 1){
+        if (mData.size() == 1) {
             mhandler.removeCallbacks(mRunnable);
-        }else {
+        } else {
             mhandler.postDelayed(mRunnable, 2500);
             vpCarousel.setCurrentItem(mData.size() * 100000, false);
         }
@@ -111,12 +111,12 @@ public class MeasureCarouselHolder extends BaseMeasureHolder {
             public void onPageSelected(int position) {
 
                 int index = position % mData.size();
-                if(mReportTag){
-                    AppAnalytics.onEvent("CC.banner.IM"+index);
-                    if(!mTags.contains(index)){
+                if (mReportTag) {
+                    AppAnalytics.onEvent("CC.banner", "IM" + index);
+                    if (!mTags.contains(index)) {
                         mTags.add(index);
                     }
-                    if(mTags.size() == mData.size()){
+                    if (mTags.size() == mData.size()) {
                         mReportTag = false;
                     }
                 }
@@ -216,9 +216,9 @@ public class MeasureCarouselHolder extends BaseMeasureHolder {
 
         @Override
         public int getCount() {
-            if(mData.size() == 1){
+            if (mData.size() == 1) {
                 return mData.size();
-            }else {
+            } else {
                 return Integer.MAX_VALUE;
             }
 
@@ -236,10 +236,10 @@ public class MeasureCarouselHolder extends BaseMeasureHolder {
             mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mData == null){
+                    if (mData == null) {
                         return;
                     }
-                    AppAnalytics.onEvent("CC.banner.C"+index);
+                    AppAnalytics.onEvent("CC.banner", "C" + index);
                     ARouter.getInstance().build("/ui/web")
                             .withString("url", mData.get(index).url)
                             .navigation();

@@ -61,9 +61,8 @@ public class TopicRepo extends AbstractDataRepo {
      * @param limit   获取条数 默认10条
      * @return
      */
-    public static  Flowable<TopicBean> getTopicList(String sortby,String skip ,String limit,Boolean needCache) {
+    public static  Flowable<TopicBean> getTopicList(String sortby,String skip ,String limit,Boolean needCache, long cacheDuration) {
         String cacheKey = "topic_list" + sortby;
-        long cacheDuration = 1000 * 60;
         HashMap<String, String> param = new HashMap();
         param.put("sortby",sortby);
         if (limit != null)param.put("limit",limit);
@@ -78,6 +77,10 @@ public class TopicRepo extends AbstractDataRepo {
         } else {
             return httpFlow(Urls.TOPIC_LIST, null, param, true, TopicBean.class, null, 0);
         }
+    }
+    public static  Flowable<TopicBean> getTopicList(String sortby,String skip ,String limit,Boolean needCache) {
+        long cacheDuration = 1000 * 60;
+        return getTopicList(sortby, skip, limit, needCache, cacheDuration);
     }
 
     /**  底部其他话题推荐请求

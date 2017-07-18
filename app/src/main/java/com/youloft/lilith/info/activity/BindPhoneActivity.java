@@ -141,7 +141,16 @@ public class BindPhoneActivity extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                if (TextUtils.isEmpty(etPhoneNumber.getText().toString())) {
+                    isPhoneEmpty = false;
+                } else {
+                    isPhoneEmpty = true;
+                }
+                if (isCodeEmpty && isPhoneEmpty) {
+                    btnLogin.setEnabled(true);
+                } else {
+                    btnLogin.setEnabled(false);
+                }
             }
         });
         etPhoneNumber.setOnFocusChangeListener(new PhoneFocusChangeListener(etPhoneNumber, ivCleanNumber));
@@ -204,6 +213,8 @@ public class BindPhoneActivity extends BaseActivity {
         }
     }
 
+    private boolean isCodeEmpty = false;
+    private boolean isPhoneEmpty = false;
     /**
      * 验证码输入相关
      */
@@ -256,7 +267,16 @@ public class BindPhoneActivity extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                if (TextUtils.isEmpty(etVerificationCode.getText().toString())) {
+                    isCodeEmpty = false;
+                } else {
+                    isCodeEmpty = true;
+                }
+                if (isCodeEmpty && isPhoneEmpty) {
+                    btnLogin.setEnabled(true);
+                } else {
+                    btnLogin.setEnabled(false);
+                }
             }
         });
     }

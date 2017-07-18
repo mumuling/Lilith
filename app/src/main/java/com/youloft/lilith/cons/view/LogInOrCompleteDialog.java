@@ -138,7 +138,7 @@ public class LogInOrCompleteDialog extends BaseDialog {
             if (mBlurBitmap != null && !mBlurBitmap.isRecycled()) {
                 mLoginJumpDialog.setImageBitmap(mBlurBitmap);
             } else if (mContext instanceof BaseActivity) {
-                Bitmap bitmap = ((BaseActivity) mContext).takeScreenShot(false, 0);
+                Bitmap bitmap = ((BaseActivity) mContext).takeScreenShot(false, 0, mContext.getResources().getColor(R.color.black_30));
                 if (bitmap != null && !bitmap.isRecycled()) {
                     BlurFactor bf = new BlurFactor();
                     bf.width = bitmap.getWidth();

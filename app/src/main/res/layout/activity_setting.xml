@@ -58,6 +58,7 @@
             </RelativeLayout>
             <!--分割线   这个分割线需要控制显示与隐藏  -->
             <View
+                android:id="@+id/v_devider"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_marginLeft="20dp"

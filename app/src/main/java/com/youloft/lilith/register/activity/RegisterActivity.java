@@ -157,7 +157,16 @@ public class RegisterActivity extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                if (TextUtils.isEmpty(etPhoneNumber.getText().toString())) {
+                    isPhoneEmpty = false;
+                } else {
+                    isPhoneEmpty = true;
+                }
+                if (isCodeEmpty && isPhoneEmpty) {
+                    btnLogin.setEnabled(true);
+                } else {
+                    btnLogin.setEnabled(false);
+                }
             }
         });
     }
@@ -169,7 +178,7 @@ public class RegisterActivity extends BaseActivity {
     private void checkNumber() {
         //手机号码长度满足之后,
         String phoneNumber = etPhoneNumber.getText().toString().replaceAll("-", "");
-        if(!LoginUtils.isPhoneNumber(phoneNumber)){
+        if (!LoginUtils.isPhoneNumber(phoneNumber)) {
             Toaster.showShort("手机号码不正确");
             return;
         }
@@ -211,6 +220,9 @@ public class RegisterActivity extends BaseActivity {
             }
         }
     }
+
+    private boolean isCodeEmpty = false;
+    private boolean isPhoneEmpty = false;
 
     /**
      * 验证码输入相关
@@ -264,10 +276,20 @@ public class RegisterActivity extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                if (TextUtils.isEmpty(etVerificationCode.getText().toString())) {
+                    isCodeEmpty = false;
+                } else {
+                    isCodeEmpty = true;
+                }
+                if (isCodeEmpty && isPhoneEmpty) {
+                    btnLogin.setEnabled(true);
+                } else {
+                    btnLogin.setEnabled(false);
+                }
             }
         });
     }
+
 
     /**
      * 查看验证码是否正确,来决定验证码后面的小图标显示哪一个
@@ -299,7 +321,6 @@ public class RegisterActivity extends BaseActivity {
         super.onResume();
         MediaPlayerHelper.getInstance().register(this, svBackground);
     }
-
 
 
     /**

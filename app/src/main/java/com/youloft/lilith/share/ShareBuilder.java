@@ -96,7 +96,7 @@ public class ShareBuilder {
     public void share() {
         ShareActivity.mShareBitmap = mShareBitmap;
         if (mContext instanceof BaseActivity) {
-            Bitmap source = ((BaseActivity) mContext).takeScreenShot(false, 0);
+            Bitmap source = ((BaseActivity) mContext).takeScreenShot(false, 0, mContext.getResources().getColor(R.color.black_30));
             BlurFactor bf = new BlurFactor();
             bf.sampling = 10;
             bf.radius = 10;

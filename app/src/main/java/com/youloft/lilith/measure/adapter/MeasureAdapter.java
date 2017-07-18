@@ -26,21 +26,46 @@ import java.util.List;
 
 public class MeasureAdapter extends RecyclerView.Adapter<BaseMeasureHolder> {
 
-    public static final int ITEM_CAROUSEL = 1001;//轮播图
-    public static final int ITEM_MASTER_MEASURE = 1002;//大师亲算
-    public static final int ITEM_BANNER = 1003;//banner
-    public static final int ITEM_IMMEDIATELY_MEASURE = 1004;//立即测算
+    public static final int ITEM_CAROUSEL = 1;//轮播图
+    public static final int ITEM_MASTER_MEASURE = 2;//大师亲算
+    public static final int ITEM_BANNER = 3;//banner
+    public static final int ITEM_IMMEDIATELY_MEASURE = 4;//立即测算
 
 
+    private int mImmedStart = 0; //统计立即测算起始位置
     private List<MeasureBean.DataBean> mMeasureData = new ArrayList<>();
     private Activity mContext;
+
     public MeasureAdapter(Activity mContext) {
         this.mContext = mContext;
     }
 
     public void setData(List<MeasureBean.DataBean> measureData) {
+        if (measureData == null) {
+            return;
+        }
         mMeasureData.clear();
-        mMeasureData.addAll(measureData);
+        for (int i = 0; i < measureData.size(); i++) {
+            MeasureBean.DataBean safeData = SafeUtil.getSafeData(measureData, i);
+            if (safeData == null) {
+                continue;
+            }
+            if (safeData.location == ITEM_IMMEDIATELY_MEASURE) {
+                mImmedStart = i;
+                List<MeasureBean.DataBean.AdsBean> ads = safeData.ads;
+                //接口写的傻逼，于是乎自己来高,
+                for (int j = 0; j < ads.size(); j++) {
+                    MeasureBean.DataBean dataBean = new MeasureBean.DataBean();
+                    dataBean.location = safeData.location;
+                    ArrayList<MeasureBean.DataBean.AdsBean> ad = new ArrayList<>();
+                    ad.add(ads.get(j));
+                    dataBean.ads = ad;
+                    mMeasureData.add(dataBean);
+                }
+            } else {
+                mMeasureData.add(safeData);
+            }
+        }
         notifyDataSetChanged();
     }
 
@@ -63,43 +88,25 @@ public class MeasureAdapter extends RecyclerView.Adapter<BaseMeasureHolder> {
 
     @Override
     public int getItemViewType(int position) {
-        switch (position) {
-            case 0:
-                return ITEM_CAROUSEL;
-            case 1:
-                return ITEM_MASTER_MEASURE;
-            case 2:
-                return ITEM_BANNER;
-            default:
-                return ITEM_IMMEDIATELY_MEASURE;
-        }
+        return mMeasureData.get(position).location;
     }
 
     @Override
     public void onBindViewHolder(BaseMeasureHolder holder, int position) {
-
-        if (holder instanceof MeasureCarouselHolder) {  //轮播holder
-            holder.bindData(mMeasureData.get(0),position);
-        } else if (holder instanceof MasterMeasureHolder) { //大师清算
-            holder.bindData(mMeasureData.get(1),position);
-        } else if (holder instanceof MeasureBannerHolder) { //bannerholder
-            holder.bindData(mMeasureData.get(2),position);
-        } else if (holder instanceof ImmediatelyMeasureHolder) {//立即测算holder
-            holder.bindData(mMeasureData.get(3),position);
+        MeasureBean.DataBean safeData = SafeUtil.getSafeData(mMeasureData, position);
+        if (safeData != null) {
+            if (holder instanceof ImmediatelyMeasureHolder) {
+                holder.bindData(safeData, position - mImmedStart);
+            } else {
+                holder.bindData(safeData, position);
+            }
         }
     }
 
     @Override
     public int getItemCount() {
-        //这里的长度需要计算一下  当最后一个的location为四的时候 需要加上一个长度
-        if(mMeasureData == null || mMeasureData.size() == 0){
-            return 0;
-        }
-        MeasureBean.DataBean dataBean = mMeasureData.get(mMeasureData.size() - 1);
-        if (dataBean.location == 4) {
-            return mMeasureData.size() + dataBean.ads.size() - 1;
-        } else {
-            return mMeasureData.size();
-        }
+        return mMeasureData.size();
     }
+
+
 }

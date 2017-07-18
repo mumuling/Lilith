@@ -44,42 +44,40 @@ public class ImmediatelyMeasureHolder extends BaseMeasureHolder {
     public void bindData(MeasureBean.DataBean mMeasureData, int position) {
         this.mMeasureData = mMeasureData;
         if (isDataSafe(mMeasureData)) return;
-        mIndex = position - 3;
-        if(mReportTag){
+        mIndex = position;
+        if (mReportTag) {
             reportEvent(mIndex);
         }
-        GlideApp.with(mContext).load(mMeasureData.ads.get(mIndex).image).into(ivIcon);
-        tvTitle.setText(mMeasureData.ads.get(mIndex).title);
-        tvDesc.setText(mMeasureData.ads.get(mIndex).infos);
+        GlideApp.with(mContext).load(mMeasureData.ads.get(0).image).into(ivIcon);
+        tvTitle.setText(mMeasureData.ads.get(0).title);
+        tvDesc.setText(mMeasureData.ads.get(0).infos);
     }
 
     /**
      * 判断数据源是否安全
+     *
      * @param mMeasureData
      * @return
      */
     private boolean isDataSafe(MeasureBean.DataBean mMeasureData) {
-        if(mMeasureData == null || mMeasureData.ads == null || mMeasureData.ads.size() == 0){
-            return true;
-        }
-        return false;
+        return mMeasureData == null || mMeasureData.ads == null || mMeasureData.ads.size() == 0;
     }
 
     /**
      * 展示事件的上报
+     *
      * @param mIndex
      */
     private void reportEvent(int mIndex) {
-        String eventName = "CC.Card.IM"+mIndex;
-        AppAnalytics.onEvent(eventName);
+        AppAnalytics.onEvent("CC.Card", "IM" + mIndex);
     }
 
     @OnClick(R.id.bt_measure)
     public void onViewClicked() {
         if (isDataSafe(mMeasureData)) return;
-        AppAnalytics.onEvent("CC.Card.C"+mIndex);
+        AppAnalytics.onEvent("CC.Card", "C" + mIndex);
         ARouter.getInstance().build("/ui/web")
-                .withString("url", mMeasureData.ads.get(mIndex).url)
+                .withString("url", mMeasureData.ads.get(0).url)
                 .navigation();
 
     }

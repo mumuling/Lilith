@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -89,6 +90,8 @@ public class EditInformationActivity extends BaseActivity {
     ImageView ivTipsNow;   //现居地前面的感叹号
     @BindView(R.id.iv_delete_nick_name)
     ImageView ivDeleteNickName; //清空昵称的按钮
+    @BindView(R.id.sv_scroller)
+    ScrollView svScroller; //滚动控件
 
     private String birthLongi = "";//出生经度
     private String birthLati = "";//出生纬度
@@ -108,7 +111,12 @@ public class EditInformationActivity extends BaseActivity {
 
         //根据数据做对应的初始化
         initView();
-
+        svScroller.post(new Runnable() {
+            @Override
+            public void run() {
+                svScroller.fullScroll(ScrollView.FOCUS_UP);
+            }
+        });
         //失去焦点隐藏光标,获得焦点显示光标
         etNickName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override

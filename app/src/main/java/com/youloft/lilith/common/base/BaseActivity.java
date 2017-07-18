@@ -56,13 +56,18 @@ public abstract class BaseActivity extends RxAppCompatActivity implements View.O
     }
 
 
+    public Bitmap takeScreenShot(boolean needFixStatus, int compress){
+        return takeScreenShot(needFixStatus, compress, 0);
+    }
+
     /**
      * 截屏
      *@param needFixStatus 是否需要去掉statubar
      *@param compress 压缩比例
+     *@param shadowColor 需要在图片上搞点颜色
      * @return
      */
-    public Bitmap takeScreenShot(boolean needFixStatus, int compress) {
+    public Bitmap takeScreenShot(boolean needFixStatus, int compress, int shadowColor) {
         try {
             View view = getWindow().getDecorView().findViewById(android.R.id.content);
             Bitmap b1 = loadBitmapFromView(view);
@@ -77,6 +82,11 @@ public abstract class BaseActivity extends RxAppCompatActivity implements View.O
                 dest = Bitmap.createBitmap(b1, 0, 0, b1.getWidth(), b1.getHeight());
 
             }
+            if (shadowColor != 0) {
+                Canvas canvas = new Canvas(dest);
+                canvas.drawColor(shadowColor);
+            }
+
             if (compress != 0) {
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
                 dest.compress(Bitmap.CompressFormat.JPEG, 100, out);
