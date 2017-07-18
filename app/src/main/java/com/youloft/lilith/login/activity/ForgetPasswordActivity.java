@@ -1,6 +1,5 @@
 package com.youloft.lilith.login.activity;
 
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -8,7 +7,6 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
@@ -50,7 +48,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by GYH on 2017/7/6.
  */
 @Route(path = "/test/ForgetPasswordActivity")
-public class ForgetPasswordActivity extends BaseActivity implements SurfaceHolder.Callback {
+public class ForgetPasswordActivity extends BaseActivity {
     @BindView(R.id.sv_background)
     SurfaceView svBackground;  //背景视频
     @BindView(R.id.et_verification_code)
@@ -76,11 +74,8 @@ public class ForgetPasswordActivity extends BaseActivity implements SurfaceHolde
     @BindView(R.id.iv_code_error)
     ImageView ivCodeError;  //验证码错误
 
-    private int mPreNumberLength;//电话号码变化之前的长度
     private boolean isCodeRight; //验证码是否正确
     private SmsCodeBean mSmsCodeBean; //获取到的验证码的数据模型
-    private MediaPlayer mediaPlayerInstance;
-    private SurfaceHolder holder;
 
 
     @Override
@@ -92,6 +87,7 @@ public class ForgetPasswordActivity extends BaseActivity implements SurfaceHolde
         verificationCodeSetting();
         EventBus.getDefault().register(this);
     }
+
     //登录成功后,收到事件,关闭本页面
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(LoginEvent loginEvent) {
@@ -110,11 +106,9 @@ public class ForgetPasswordActivity extends BaseActivity implements SurfaceHolde
     private void phoneNumberSetting() {
         //电话号码变化的监听
         etPhoneNumber.setFilters(new InputFilter[]{new InputFilter.LengthFilter(13)});
-        etPhoneNumber.addTextChangedListener(new PhoneTextWatcher(etPhoneNumber,ivCleanNumber));
-        etPhoneNumber.setOnFocusChangeListener(new PhoneFocusChangeListener(etPhoneNumber,ivCleanNumber));
+        etPhoneNumber.addTextChangedListener(new PhoneTextWatcher(etPhoneNumber, ivCleanNumber));
+        etPhoneNumber.setOnFocusChangeListener(new PhoneFocusChangeListener(etPhoneNumber, ivCleanNumber));
     }
-
-
 
 
     /**
@@ -180,7 +174,7 @@ public class ForgetPasswordActivity extends BaseActivity implements SurfaceHolde
      */
     private void getSmsCode() {
         String smsCode = etVerificationCode.getText().toString();
-        SmsCodeRepo.getSmsCode(etPhoneNumber.getText().toString().replaceAll("-", ""),"FindPwd",smsCode)
+        SmsCodeRepo.getSmsCode(etPhoneNumber.getText().toString().replaceAll("-", ""), "FindPwd", smsCode)
                 .compose(this.<SmsCodeBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
@@ -222,7 +216,7 @@ public class ForgetPasswordActivity extends BaseActivity implements SurfaceHolde
     @Override
     protected void onResume() {
         super.onResume();
-        MediaPlayerHelper.getInstance().register(this,svBackground);
+        MediaPlayerHelper.getInstance().register(this, svBackground);
     }
 
 
@@ -241,12 +235,12 @@ public class ForgetPasswordActivity extends BaseActivity implements SurfaceHolde
             Toaster.showShort("手机号码不能为空");
             return;
         }
-        if(!LoginUtils.isPhoneNumber(phoneNumber)){
+        if (!LoginUtils.isPhoneNumber(phoneNumber)) {
             Toaster.showShort("手机号码不正确");
             return;
         }
         //2.发起发送验证码的请求
-        SendSmsRepo.sendSms(phoneNumber,"FindPwd")
+        SendSmsRepo.sendSms(phoneNumber, "FindPwd")
                 .compose(this.<SendSmsBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
@@ -289,30 +283,30 @@ public class ForgetPasswordActivity extends BaseActivity implements SurfaceHolde
         //2. isCodeRight 是否为true
         //3. 跳转设置密码界面
 
-        if(TextUtils.isEmpty(phoneNumber)||TextUtils.isEmpty(smsCode)){
+        if (TextUtils.isEmpty(phoneNumber) || TextUtils.isEmpty(smsCode)) {
             Toaster.showShort("手机号码或者验证码不能为空");
             return;
         }
-        if(!LoginUtils.isPhoneNumber(phoneNumber)){
+        if (!LoginUtils.isPhoneNumber(phoneNumber)) {
             Toaster.showShort("手机号码不正确");
             return;
         }
 
-        if(smsCode.trim().length()!= 6){
+        if (smsCode.trim().length() != 6) {
             Toaster.showShort("请检查验证码");
             return;
         }
 
-        if(!isCodeRight){
+        if (!isCodeRight) {
             Toaster.showShort("验证码错误");
             return;
         }
         //这些条件都满足后,带着手机号码和验证码到设置密码界面
         ARouter.getInstance()
                 .build("/test/SetPasswordActivity")
-                .withString("phoneNumber",phoneNumber)
-                .withString("smsCode",smsCode)
-                .withString("source","20002")
+                .withString("phoneNumber", phoneNumber)
+                .withString("smsCode", smsCode)
+                .withString("source", "20002")
                 .navigation();
         //关掉本页面
         finish();
@@ -339,18 +333,4 @@ public class ForgetPasswordActivity extends BaseActivity implements SurfaceHolde
         onBackPressed();
     }
 
-    @Override
-    public void surfaceCreated(SurfaceHolder holder) {
-        mediaPlayerInstance.setDisplay(holder);
-    }
-
-    @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
-    }
-
-    @Override
-    public void surfaceDestroyed(SurfaceHolder holder) {
-
-    }
 }
