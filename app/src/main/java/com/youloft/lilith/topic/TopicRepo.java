@@ -120,7 +120,7 @@ public class TopicRepo extends AbstractDataRepo {
             if (!LLApplication.getApiCache().isExpired(cacheKey,cacheDuration)) {
                 return LLApplication.getApiCache().readCache(cacheKey,TopicDetailBean.class);
             } else {
-                return httpFlow(Urls.TOPIC_INFO, null, param, true, TopicDetailBean.class, cacheKey, cacheDuration);
+                return httpFlow(Urls.TOPIC_INFO, null, param, true, TopicDetailBean.class, null, 0);
             }
         } else {
             return httpFlow(Urls.TOPIC_INFO, null, param, true, TopicDetailBean.class, null, 0);
@@ -149,7 +149,7 @@ public class TopicRepo extends AbstractDataRepo {
             if (!LLApplication.getApiCache().isExpired(cacheKey,duration)) {
                 return LLApplication.getApiCache().readCache(cacheKey,PointBean.class);
             } else {
-                return httpFlow(Urls.VOTE_LIST, null, param, true, PointBean.class, cacheKey, duration);
+                return httpFlow(Urls.VOTE_LIST, null, param, true, PointBean.class, null, 0);
             }
         } else {
             return httpFlow(Urls.VOTE_LIST, null, param, true, PointBean.class, null, 0);

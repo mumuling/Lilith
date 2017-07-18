@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 public class MyTopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context mContext;
-    private ArrayList<MyTopicBean.DataBean> myTopicList = new ArrayList<>();
+    public ArrayList<MyTopicBean.DataBean> myTopicList = new ArrayList<>();
 
     public MyTopicAdapter(Context context) {
         this.mContext = context;
@@ -43,9 +43,9 @@ public class MyTopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof MyTopicHolder) {
             if (position == myTopicList.size() -1) {
-                ((MyTopicHolder) holder).bind(myTopicList.get(position),true);
+                ((MyTopicHolder) holder).bind(myTopicList.get(position),position,true);
             } else {
-                ((MyTopicHolder) holder).bind(myTopicList.get(position),true);
+                ((MyTopicHolder) holder).bind(myTopicList.get(position),position,false);
             }
         }
     }
