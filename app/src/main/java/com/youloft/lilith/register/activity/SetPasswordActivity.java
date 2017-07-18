@@ -78,6 +78,7 @@ public class SetPasswordActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_password);
+        ButterKnife.bind(this);
         //获取上个页面传过来的手机号码和验证码
         phoneNumber = getIntent().getStringExtra("phoneNumber");
         smsCode = getIntent().getStringExtra("smsCode");
@@ -94,7 +95,7 @@ public class SetPasswordActivity extends BaseActivity {
             tvBack.setText("修改密码");
             btnLogin.setText("确认");
         }
-        ButterKnife.bind(this);
+
         editTextSetting();
     }
 
