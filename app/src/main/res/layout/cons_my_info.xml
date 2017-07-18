@@ -18,6 +18,7 @@
         android:id="@+id/cons_my_info_content_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/black_60"
         android:orientation="vertical">
 
         <LinearLayout

@@ -9,6 +9,12 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="numberPickerStyle">@style/NumberPicker</item>
     </style>
+
+    <style name="ClearTheme" parent="AppTheme">
+        <item name="android:windowAnimationStyle">@style/AnimationActivity.MAIN</item>
+        <item name="android:windowBackground">@drawable/welcome</item>
+    </style>
+
     <style name="TranslucentThem" parent="AppTheme">
         <item name="android:windowAnimationStyle">@style/Animation</item>
         <item name="android:windowIsTranslucent">true</item>
@@ -45,6 +51,13 @@
         <item name="android:backgroundDimEnabled">false</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowAnimationStyle">@null</item>
+    </style>
+
+    <style name="AnimationActivity.MAIN" parent="@android:style/Animation">
+        <item name="android:activityOpenEnterAnimation">@anim/slide_in_right</item>
+        <item name="android:activityOpenExitAnimation">@anim/slide_out_left</item>
+        <item name="android:activityCloseEnterAnimation">@anim/slide_in_left</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_out_right</item>
     </style>
 
     <declare-styleable name="AutoScaleTextView">
