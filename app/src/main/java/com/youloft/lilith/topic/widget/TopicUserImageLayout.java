@@ -1,6 +1,7 @@
 package com.youloft.lilith.topic.widget;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
@@ -38,7 +39,12 @@ public class TopicUserImageLayout extends FrameLayout implements TopicUserDataBi
     @Override
     public void bindData(List<TopicBean.DataBean.VoteUserBean> imageList, int number) {
         mUserStack.bindData(imageList);
-        userNumber.setText(String.valueOf(number) + "人");
+        if (number <= 0) {
+            userNumber.setVisibility(GONE);
+        } else {
+            userNumber.setVisibility(VISIBLE);
+            userNumber.setText(String.valueOf(number) + "人");
+        }
     }
 
 
