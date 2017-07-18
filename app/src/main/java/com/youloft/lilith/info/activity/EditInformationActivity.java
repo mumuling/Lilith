@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
@@ -17,6 +18,7 @@ import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.CalendarHelper;
 import com.youloft.lilith.common.utils.LoginUtils;
+import com.youloft.lilith.common.utils.StringUtil;
 import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.common.widgets.picker.CityInfo;
 import com.youloft.lilith.common.widgets.picker.CityPickerPop;
@@ -121,6 +123,7 @@ public class EditInformationActivity extends BaseActivity {
                 }
             }
         });
+        etNickName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(20)});
     }
 
     /**
@@ -174,11 +177,7 @@ public class EditInformationActivity extends BaseActivity {
             }
 
             String showNickName = detail.nickName;
-            int length = showNickName.length();
-            if (length > 7) {
-                showNickName = showNickName.substring(0, 6) + "...";
-            }
-            tvNickName.setText(showNickName);
+            tvNickName.setText(StringUtil.toNameString(showNickName));
             etNickName.setText(detail.nickName);
 
 

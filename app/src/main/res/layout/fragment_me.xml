@@ -6,6 +6,7 @@
 
     <!--星座和头像部分-->
     <FrameLayout
+        android:id="@+id/fl_header_root"
         android:layout_width="match_parent"
         android:layout_height="270dp"
         android:background="@drawable/shp_me_bg">
@@ -23,6 +24,7 @@
             android:layout_height="match_parent">
             <!--中间的头像和小的星座-->
             <FrameLayout
+                android:id="@+id/fl_header_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|bottom"
@@ -114,7 +116,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|bottom"
                 android:layout_marginBottom="10dp"
-                android:layout_marginRight="79dp"
+                android:layout_marginRight="76dp"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
