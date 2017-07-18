@@ -93,7 +93,7 @@ public class FeedBackActivity extends BaseActivity {
             Toaster.showShort("内容或号码不能为空");
             return;
         }
-        if(LoginUtils.isPhoneNumber(feedPhone)){
+        if(!LoginUtils.isPhoneNumber(feedPhone)){
             Toaster.showShort("请输入正确的手机号码");
             return;
         }
