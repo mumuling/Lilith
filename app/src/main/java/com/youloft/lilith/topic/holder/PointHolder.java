@@ -285,11 +285,7 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
                 .override(30)
                 .into(imageCommentUser);
         if ( option == null) return;
-    //展示埋点
-        if (!isReport) {
-            AppAnalytics.onEvent("Topic", "IM" + String.valueOf(position - 1));
-            isReport = true;
-        }
+
         this.topic = option;
         this.point = point;
         this.totalPoint = adapter.pointBeanList.size();
@@ -297,7 +293,6 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AppAnalytics.onEvent("Topic", "C" + String.valueOf(position - 1));
                 ARouter.getInstance().build("/test/PointDetailActivity")
                         .withObject("point", point)
                         .withObject("topic", option)
