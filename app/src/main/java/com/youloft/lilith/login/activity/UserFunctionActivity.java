@@ -344,8 +344,16 @@ public class UserFunctionActivity extends BaseActivity implements OnTextChange {
                                 ARouter.getInstance().build("/test/EditInformationActivity").navigation();
                             }
                             finish();
-                        } else {
-                            Toaster.showShort("验证码错误");
+                        } else if(userBean.data.result == 4){
+                            Toaster.showShort("账号已禁用");
+                        }else if(userBean.data.result == 3){
+                            Toaster.showShort("无此手机号");
+                        }else if(userBean.data.result == 2){
+                            Toaster.showShort("验证码不正确或已失效");
+                        }else if(userBean.data.result == 1){
+                            Toaster.showShort("手机号无效");
+                        }else {
+                            Toaster.showShort("网络异常");
                         }
 
                     }
@@ -353,7 +361,7 @@ public class UserFunctionActivity extends BaseActivity implements OnTextChange {
                     @Override
                     protected void onFailed(Throwable e) {
                         super.onFailed(e);
-                        Toaster.showShort("网络错误");
+                        Toaster.showShort("网络异常");
                     }
                 });
     }
