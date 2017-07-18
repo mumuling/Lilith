@@ -15,10 +15,14 @@ import android.widget.TextView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.MultiTransformation;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.signature.ObjectKey;
+import com.youloft.lilith.LLApplication;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.glide.GlideBlurTransform;
@@ -96,6 +100,7 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 public void onClick(View v) {
                     ARouter.getInstance().build("/test/TopicDetailActivity")
                             .withInt("tid", topicBeanList.get(getRealPosition(position)).id)
+                            .withString("bakImg",topicBeanList.get(getRealPosition(position)).backImg)
                             .navigation();
                     if (holder instanceof HotTopicViewHolder) {
                         AppAnalytics.onEvent("Hometopic", "C");
@@ -145,10 +150,11 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     .asBitmap()
                     .load(topic.backImg)
                     .dontAnimate()
+                    .signature(new ObjectKey("list:"+topic.backImg))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .transform(new GlideBlurTransform(mTopicImage.getContext()))
-                    .skipMemoryCache(false)
-                    .override(50)
+//                    .transform(new MultiTransformation<Bitmap>(new CenterCrop(),new GlideBlurTransform(itemView.getContext())))
+                    .transform(GlideBlurTransform.getInstance(LLApplication.getInstance()))
+                    .override(188,75)
                     .into(mTopicImage);
 
 
@@ -172,10 +178,15 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 isReport = true;
             }
             mTopicContent.setText(topic.title);
+
             GlideApp.with(itemView)
                     .asBitmap()
                     .load(topic.backImg)
                     .dontAnimate()
+                    .signature(new ObjectKey("list:"+topic.backImg))
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .transform(GlideBlurTransform.getInstance(LLApplication.getInstance()))
+                    .override(188,75)
                     .into(mTopicImage);
             mUserImageStackViewGroup.bindData(topic.voteUser, topic.totalVote);
         }

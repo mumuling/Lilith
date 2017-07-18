@@ -1,12 +1,27 @@
 package com.youloft.lilith.topic.holder;
 
 import android.animation.ValueAnimator;
+import android.graphics.Bitmap;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.MemoryCategory;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.MultiTransformation;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.Transition;
+import com.bumptech.glide.signature.ObjectKey;
+import com.youloft.lilith.LLApplication;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.rx.RxObserver;
@@ -15,6 +30,7 @@ import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.common.utils.ViewUtil;
 import com.youloft.lilith.cons.view.LogInOrCompleteDialog;
 import com.youloft.lilith.glide.GlideBlurTransform;
+import com.youloft.lilith.glide.GlideBlurTwoViewTarget;
 import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.topic.TopicRepo;
@@ -30,6 +46,7 @@ import com.youloft.lilith.topic.widget.VoteDialog;
 import com.youloft.lilith.topic.widget.VoteView;
 
 import java.util.ArrayList;
+import java.util.logging.LogManager;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -62,6 +79,7 @@ public class VoteHolder extends RecyclerView.ViewHolder {
     private UserBean.DataBean.UserInfoBean userInfo;
     private String leftTitle;
     private String rightTitle;
+    private boolean needImage = true;
 
     public VoteHolder(View itemView, TopicDetailAdapter adapter) {
         super(itemView);
@@ -273,8 +291,25 @@ public class VoteHolder extends RecyclerView.ViewHolder {
      * 绑定holder
      *
      * @param topicInfo
+     * @param backImage
      */
-    public void bindView(final TopicDetailBean.DataBean topicInfo) {
+    public void bindView(final TopicDetailBean.DataBean topicInfo, String backImage) {
+        if (!TextUtils.isEmpty(backImage) && needImage) {
+            GlideApp.with(itemView.getContext())
+
+                    .asBitmap()
+                    .priority(Priority.HIGH)
+                    .load(backImage)
+                    .signature(new ObjectKey("list:"+backImage))
+                    .dontAnimate()
+                    .transform(GlideBlurTransform.getInstance(LLApplication.getInstance()))
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .override(188,75)
+
+            .into(imageTop);
+            needImage =false;
+
+        }
         if (topicInfo == null || topicInfo.option == null || topicInfo.option.size() == 0) return;
         this.topicInfo = topicInfo;
         for (int j = 0; j < topicInfo.option.size(); j++) {
@@ -330,15 +365,6 @@ public class VoteHolder extends RecyclerView.ViewHolder {
             needVoteAnimation = false;
         }
 
-        GlideApp.with(itemView.getContext())
-                .asBitmap()
-                .load(topicInfo.backImg)
-                .dontAnimate()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .transform(new GlideBlurTransform(itemView.getContext()))
-                .skipMemoryCache(false)
-                .override(50)
-                .into(imageTop);
         textTopicTitle.setText(topicInfo.title);
     }
 }

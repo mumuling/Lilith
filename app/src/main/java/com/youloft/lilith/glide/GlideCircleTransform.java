@@ -6,8 +6,13 @@ import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.Transformation;
+import com.bumptech.glide.load.engine.Resource;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
+import com.bumptech.glide.load.resource.bitmap.BitmapResource;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
+import com.bumptech.glide.load.resource.bitmap.TransformationUtils;
 
 import java.security.MessageDigest;
 
@@ -20,18 +25,30 @@ import java.security.MessageDigest;
  * @class GlideCircleTransform
  */
 
-public class GlideCircleTransform extends BitmapTransformation {
+public class GlideCircleTransform implements Transformation<Bitmap> {
     private static final String ID = "com.youloft.glide.load.resource.bitmap.circle";
     private static final byte[] ID_BYTES = ID.getBytes(CHARSET);
-
+    private float radius;
+    private Context mContext;
+    private static GlideCircleTransform sInstance = null;
     public GlideCircleTransform() {
 
     }
-
-    @Override
-    protected Bitmap transform(BitmapPool pool, Bitmap toTransform, int outWidth, int outHeight) {
-        return circleCrop(pool, toTransform);
+    public GlideCircleTransform(Context context) {
+        super();
+        mContext = context;
     }
+    public static Transformation<Bitmap> getInstance(Context context){
+            if(sInstance == null){
+                sInstance =  new GlideCircleTransform(context.getApplicationContext());
+            }
+            return sInstance;
+        }
+
+
+
+
+
 
     public static Bitmap circleCrop(BitmapPool pool, Bitmap source) {
         if (source == null) return null;
@@ -51,6 +68,32 @@ public class GlideCircleTransform extends BitmapTransformation {
         float r = size / 2f;
         canvas.drawCircle(r, r, r, paint);
         return result;
+    }
+
+    @Override
+    public Resource<Bitmap> transform(Context context, Resource<Bitmap> resource, int outWidth, int outHeight) {
+        Bitmap toTransform = TransformationUtils.centerCrop(Glide.get(mContext).getBitmapPool(),resource.get(),outWidth,outHeight);
+        Bitmap ret = circleCrop(Glide.get(mContext).getBitmapPool(), toTransform);
+        float r1 = Math.min(outWidth, outHeight);
+        radius = r1/2f;
+        return BitmapResource.obtain(ret, Glide.get(mContext).getBitmapPool());
+
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        GlideCircleTransform that = (GlideCircleTransform) o;
+
+        return radius == that.radius;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) radius;
     }
 
     @Override

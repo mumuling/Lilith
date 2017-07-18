@@ -1,17 +1,22 @@
 package com.youloft.lilith.common;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 
 import com.bumptech.glide.GlideBuilder;
 import com.bumptech.glide.Registry;
 import com.bumptech.glide.annotation.GlideModule;
+import com.bumptech.glide.load.Key;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.Resource;
 import com.bumptech.glide.load.engine.cache.ExternalCacheDiskCacheFactory;
 import com.bumptech.glide.load.engine.cache.InternalCacheDiskCacheFactory;
+import com.bumptech.glide.load.engine.cache.LruResourceCache;
 import com.bumptech.glide.module.AppGlideModule;
 import com.bumptech.glide.request.RequestOptions;
 
 import java.io.File;
+import java.util.HashMap;
 
 /**
  * Created by zchao on 2017/6/28.
@@ -44,6 +49,26 @@ public class CommonGlideModule extends AppGlideModule {
         } catch (Throwable e) {
             builder.setDiskCache(new InternalCacheDiskCacheFactory(context, Integer.MAX_VALUE));
         }
+
+//        builder.setMemoryCache(new LruResourceCache(Integer.MAX_VALUE){
+//
+//            private Key preKey;
+//
+//            @Nullable
+//            @Override
+//            public synchronized Resource<?> remove(Key key) {
+//                return get(preKey);
+//            }
+//
+//            @Override
+//            public synchronized Resource<?> put(Key key, Resource<?> item) {
+//               if(preKey==null)
+//                this.preKey =key;
+//
+//                return super.put(key, item);
+//            }
+//        });
+
 
         //默认glide的配置，目前只写了默认缓存到disk
         RequestOptions requestOptions = new RequestOptions()
