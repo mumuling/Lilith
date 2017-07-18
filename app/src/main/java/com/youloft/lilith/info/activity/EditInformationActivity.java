@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -101,6 +103,15 @@ public class EditInformationActivity extends BaseActivity {
     private String sex;
     private UserFileHandle fileHandle;//文件选择处理器
 
+    private boolean canSave  = false;
+    private String mName;//姓名
+    private String mSex;//性别
+    private String mBirthDay;//出生日期
+    private String mBirthTime;//出生时间
+    private String mBirthLocation;//出生地
+    private String mHomeLocation;//现居地
+
+    private TextWatcher textWatcher;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -142,6 +153,7 @@ public class EditInformationActivity extends BaseActivity {
         btlEditInformation.setTitle("编辑资料");
         btlEditInformation.setShowShareBtn(false);
         btlEditInformation.setShowSaveBtn(true);
+        btlEditInformation.setAlphaShowSaveBtn(0.5f);
         btlEditInformation.setOnToolBarItemClickListener(new BaseToolBar.OnToolBarItemClickListener() {
             @Override
             public void OnBackBtnClick() {
@@ -163,7 +175,10 @@ public class EditInformationActivity extends BaseActivity {
                 //1.确认资料是否都有数据
                 //2.对应服务器需要的参数,做一下数据组装
                 //3.发起请求修改用户信息
-                savaUserInfo();
+                if (canSave) {
+                    savaUserInfo();
+                }
+
             }
         });
     }
@@ -184,8 +199,8 @@ public class EditInformationActivity extends BaseActivity {
                 ivHeader.setImageResource(R.drawable.default_user_head_img);
             }
 
-            String showNickName = detail.nickName;
-            tvNickName.setText(StringUtil.toNameString(showNickName));
+            mName = detail.nickName;
+            tvNickName.setText(StringUtil.toNameString(mName));
             etNickName.setText(detail.nickName);
 
 
@@ -195,6 +210,7 @@ public class EditInformationActivity extends BaseActivity {
             } else {
                 tvSex.setText(R.string.woman);
             }
+            mSex = tvSex.getText().toString();
 
             tvSex.setTextColor(getResources().getColor(R.color.white));
             ivTipsSex.setVisibility(View.GONE);
@@ -205,10 +221,12 @@ public class EditInformationActivity extends BaseActivity {
             mCal.setTime(date);
             tvDateBirth.setText(CalendarHelper.format(mCal.getTime(), "yyyy-MM-dd"));
             tvDateBirth.setTextColor(getResources().getColor(R.color.white));
+            mBirthDay = tvDateBirth.getText().toString();
             ivTipsDate.setVisibility(View.GONE);
 
             tvTimeBirth.setText(CalendarHelper.format(mCal.getTime(), "HH:mm"));
             tvTimeBirth.setTextColor(getResources().getColor(R.color.white));
+            mBirthTime = tvTimeBirth.getText().toString();
             ivTipsTime.setVisibility(View.GONE);
 
             if (TextUtils.isEmpty(detail.birthLongi)) { //资料没完善过
@@ -244,14 +262,44 @@ public class EditInformationActivity extends BaseActivity {
                 tvPlaceBirth.setText(detail.birthPlace);
                 tvPlaceBirth.setTextColor(getResources().getColor(R.color.white));
                 ivTipsBirthPlace.setVisibility(View.GONE);
+                mBirthLocation = tvPlaceBirth.getText().toString();
 
                 tvPlaceNow.setText(detail.livePlace);
                 tvPlaceNow.setTextColor(getResources().getColor(R.color.white));
                 ivTipsNow.setVisibility(View.GONE);
+                mHomeLocation = tvPlaceNow.getText().toString();
 
             }
 
         }
+        textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!canSave) {
+                    canSave = true;
+                    btlEditInformation.setAlphaShowSaveBtn(1.0f);
+                }
+            }
+        };
+        etNickName.addTextChangedListener(textWatcher);
+        tvSex.addTextChangedListener(textWatcher);
+        tvDateBirth.addTextChangedListener(textWatcher);
+        tvTimeBirth.addTextChangedListener(textWatcher);
+        tvPlaceBirth.addTextChangedListener(textWatcher);
+        tvPlaceNow.addTextChangedListener(textWatcher);
+
+
+
     }
 
 
@@ -287,7 +335,18 @@ public class EditInformationActivity extends BaseActivity {
             return;
         }
 
-        sex = "1";
+        if (nickName.equals(mName)
+                && mBirthDay.equals(dateBirth)
+                && mBirthTime.equals(timeBirth)
+                && mBirthLocation.equals(placeBirth)
+                && mSex.equals(sexStr)
+                && mHomeLocation.equals(placeNow)) {
+
+            Toaster.showShort("个人资料未变化");
+            return;
+        }
+
+      sex = "1";
         if (sexStr.equals(getResources().getString(R.string.man))) {//女 1   男 2
             sex = String.valueOf(2);
         }
