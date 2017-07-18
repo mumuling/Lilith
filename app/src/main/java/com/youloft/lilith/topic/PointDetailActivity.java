@@ -187,7 +187,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
         for (int j = 0; j < tableArrayList.size(); j++) {
             pointAnswerTable = tableArrayList.get(j);
             if (pointAnswerTable.time < replyBean.t) {
-               return;// pointAnswerCache.deleteData(pointAnswerTable.rid);
+               continue;// pointAnswerCache.deleteData(pointAnswerTable.rid);
             } else {
                 ReplyBean.DataBean dataBean = new ReplyBean.DataBean();
                 dataBean.headImg = userInfo.headImg;

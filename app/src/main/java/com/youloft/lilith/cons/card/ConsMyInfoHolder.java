@@ -19,6 +19,7 @@ import com.youloft.lilith.cons.consmanager.ConsManager;
 import com.youloft.lilith.cons.consmanager.LoddingCheckEvent;
 import com.youloft.lilith.cons.consmanager.ShareConsEvent;
 import com.youloft.lilith.cons.view.ConstellationViewFactory;
+import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.setting.AppSetting;
 import com.youloft.statistics.AppAnalytics;
 
@@ -138,6 +139,11 @@ public class ConsMyInfoHolder extends ConsBaseHolder {
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(@NonNull Object o) throws Exception {
+                        UserBean userInfo = AppSetting.userDataIsComplete();
+                        if (userInfo == null) {
+                            EventBus.getDefault().post(new LoddingCheckEvent());
+                            return;
+                        }
                         AppAnalytics.onEvent("Homeshare1", "C");
                         EventBus.getDefault().post(new ShareConsEvent("1"));
                     }

@@ -109,6 +109,11 @@ public class PointAnswerCache {
         return pointAnswerTable;
     }
 
+    /**
+     *      通过观点ID查询本地的回复
+     * @param id
+     * @return
+     */
     public ArrayList<PointAnswerTable> getAnswerListByCode(int id) {
         SQLiteDatabase db = PointAnswerTableHelper.getInstance(mContext).getReadableDatabase();
         Cursor cursor = db.query(PointAnswerTable.TABLE_NAME, null, PointAnswerTable.Columns.PID + " =? ",
@@ -125,5 +130,24 @@ public class PointAnswerCache {
 
         cursor.close();
         return tableList;
+    }
+
+    /**
+     *    查询缓存未过期的回复列表
+     * @param time  当前数据的时间
+     * @return
+     */
+    public ArrayList<PointAnswerTable> getAnswerListByTime (int pid, long time) {
+        SQLiteDatabase db = PointAnswerTableHelper.getInstance(mContext).getReadableDatabase();
+        Cursor cursor = db.query(PointAnswerTable.TABLE_NAME,null,PointAnswerTable.Columns.TIME + " >? and "
+                 + PointAnswerTable.Columns.PID  + " =? ",
+                new String[]{String.valueOf(time),String.valueOf(pid)},null,null,null);
+        ArrayList<PointAnswerTable> tableArrayList = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            PointAnswerTable pointAnswerTable = new PointAnswerTable().fromCursor(cursor);
+            tableArrayList.add(pointAnswerTable);
+        }
+        cursor.close();
+        return tableArrayList;
     }
 }

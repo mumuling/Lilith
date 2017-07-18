@@ -120,7 +120,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|bottom"
                 android:layout_marginBottom="10dp"
-                android:layout_marginRight="76dp"
+                android:layout_marginRight="66dp"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 

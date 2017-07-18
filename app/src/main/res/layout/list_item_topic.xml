@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/topic_content"
             android:text="#电话等级划分和技术开发和价格的守空房几点开始几号放假的"
-            android:maxLines="2"
+            android:maxLines="3"
             android:gravity="left"
             android:textSize="20dp"
             android:textColor="@color/white_70"
