@@ -39,14 +39,15 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.MainActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/ClearTheme">
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.SplashActivity"
+            android:theme="@style/ClearTheme"/>
         <activity
             android:name=".ui.WebActivity"
             android:configChanges="orientation|keyboardHidden|screenSize" />
