@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
@@ -103,7 +104,7 @@ public class EditInformationActivity extends BaseActivity {
     private String sex;
     private UserFileHandle fileHandle;//文件选择处理器
 
-    private boolean canSave  = false;
+    private boolean canSave = false;
     private String mName;//姓名
     private String mSex;//性别
     private String mBirthDay;//出生日期
@@ -112,6 +113,8 @@ public class EditInformationActivity extends BaseActivity {
     private String mHomeLocation;//现居地
 
     private TextWatcher textWatcher;
+    private String mTempContent;//edittext失去焦点的时候临时存储文字
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,13 +139,31 @@ public class EditInformationActivity extends BaseActivity {
                     etNickName.setCursorVisible(true);
                     etNickName.setSelection(etNickName.length());
                     ivDeleteNickName.setVisibility(View.VISIBLE);
+
                 } else {
                     etNickName.setCursorVisible(false);
                     ivDeleteNickName.setVisibility(View.INVISIBLE);
+
                 }
             }
         });
         etNickName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(20)});
+    }
+
+    /**
+     * 对edittext文字的处理
+     */
+    private void handleEditText() {
+        mTempContent = etNickName.getText().toString();
+        String con = etNickName.getText().toString();
+        int measuredWidth = etNickName.getMeasuredWidth();
+        TextPaint paint = etNickName.getPaint();
+        int textWidth = (int) paint.measureText(mTempContent);
+        while (textWidth > measuredWidth) {
+            con = con.substring(0,con.length()-1);
+            textWidth = (int) paint.measureText(con);
+        }
+        etNickName.setText(con.substring(0,con.length()-2)+"...");
     }
 
     /**
@@ -298,7 +319,6 @@ public class EditInformationActivity extends BaseActivity {
         tvPlaceNow.addTextChangedListener(textWatcher);
 
 
-
     }
 
 
@@ -345,7 +365,7 @@ public class EditInformationActivity extends BaseActivity {
             return;
         }
 
-      sex = "1";
+        sex = "1";
         if (sexStr.equals(getResources().getString(R.string.man))) {//女 1   男 2
             sex = String.valueOf(2);
         }
@@ -441,6 +461,7 @@ public class EditInformationActivity extends BaseActivity {
     public void onViewClicked(View view) {
         etNickName.setCursorVisible(false);
         ivDeleteNickName.setVisibility(View.INVISIBLE);
+        handleEditText();
         switch (view.getId()) {
             case R.id.fl_sex:    //弹出性别选择器
                 if (!LoginUtils.canClick()) {
@@ -638,6 +659,8 @@ public class EditInformationActivity extends BaseActivity {
     public void onViewClicked() {
         etNickName.setCursorVisible(true);
         ivDeleteNickName.setVisibility(View.VISIBLE);
+        etNickName.setText(mTempContent);
+        etNickName.setSelection(mTempContent.length());
     }
 
     @OnClick(R.id.iv_delete_nick_name)
