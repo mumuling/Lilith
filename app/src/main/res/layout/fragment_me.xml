@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+
     android:layout_height="match_parent"
     android:orientation="vertical">
 
@@ -16,12 +17,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop" />
-
+        <View
+            android:layout_width="match_parent"
+            android:background="@drawable/shp_me_bg_transparent"
+            android:layout_height="match_parent"/>
         <FrameLayout
             android:id="@+id/fl_anim"
             android:layout_gravity="center"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="270dp">
             <!--中间的头像和小的星座-->
             <FrameLayout
                 android:id="@+id/fl_header_container"
@@ -142,7 +146,8 @@
     <com.youloft.lilith.common.widgets.BounceableLinearLayout
         android:id="@+id/fl_item_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_height="0dp"
         android:background="@drawable/lilith_bg">
 
         <LinearLayout

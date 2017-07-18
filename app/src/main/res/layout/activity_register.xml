@@ -317,7 +317,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:text="@string/get_validation_code"
-                    android:textColor="@color/white_50"
+                    android:textColor="@color/white"
                     android:textSize="20dp" />
             </LinearLayout>
         </LinearLayout>

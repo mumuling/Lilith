@@ -2,6 +2,7 @@ package com.youloft.lilith.info.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -114,7 +115,7 @@ public class SettingActivity extends BaseActivity {
      */
     private void checkVersionCode() {
         //如果正在下载,就不去检查更新
-        if(AppConfig.DOWNLOAD_STATUS){
+        if (AppConfig.DOWNLOAD_STATUS) {
             Toaster.showShort("新版本下载中...");
             return;
         }
@@ -128,15 +129,22 @@ public class SettingActivity extends BaseActivity {
                 .subscribe(new RxObserver<CheckVersionBean>() {
                     @Override
                     public void onDataSuccess(CheckVersionBean checkVersionBean) {
+                        if (checkVersionBean == null || checkVersionBean.data == null
+                                || TextUtils.isEmpty(checkVersionBean.data.version) ||
+                                TextUtils.isEmpty(checkVersionBean.data.contents)
+                                ||TextUtils.isEmpty(checkVersionBean.data.downPath)) {
+                            //防止运营瞎填
+                            Toaster.showShort("您当前版本为最新版本");
+                            mVersionCodeDialog.dismiss();
+                        }
                         String version = checkVersionBean.data.version;
-
                         if (version.equals(AppSetting.getVersionCode())) {
                             Toaster.showShort("您当前版本为最新版本");
                             mVersionCodeDialog.dismiss();
                         } else {
                             mVersionCodeDialog.dismiss();
                             //弹出对话框,让用户选择是否下载
-                            DownloadSelectDialog downloadSelectDialog = new DownloadSelectDialog(SettingActivity.this,checkVersionBean);
+                            DownloadSelectDialog downloadSelectDialog = new DownloadSelectDialog(SettingActivity.this, checkVersionBean);
                             downloadSelectDialog.show();
                         }
 
@@ -187,7 +195,7 @@ public class SettingActivity extends BaseActivity {
                             EventBus.getDefault().post(new LoginEvent(false));
                             EventBus.getDefault().post(new TabChangeEvent(TabManager.TAB_INDEX_XZ));
                             finish();
-                        }else {
+                        } else {
                             Toaster.showShort("网络错误");
                         }
                     }

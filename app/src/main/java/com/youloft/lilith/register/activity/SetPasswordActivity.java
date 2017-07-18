@@ -202,8 +202,12 @@ public class SetPasswordActivity extends BaseActivity {
         if (TextUtils.isEmpty(password) || TextUtils.isEmpty(confirmPwd)) {
             return;
         }
-        if (!password.equals(confirmPwd)) {
+        if (!password.trim().equals(confirmPwd.trim())) {
             Toaster.showShort("密码不一致");
+            return;
+        }
+        if (password.trim().length() < 6 || confirmPwd.trim().length() < 6) {
+            Toaster.showShort("密码长度不能低于6位");
             return;
         }
         if (source.equals("20001")) {//注册账号
