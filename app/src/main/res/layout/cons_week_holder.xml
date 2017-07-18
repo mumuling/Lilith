@@ -2,10 +2,21 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/cons_share_bg_color"
+    android:clipToPadding="false"
+    android:clipChildren="false"
     android:orientation="vertical">
-    <com.youloft.lilith.cons.view.ConsCalendar
-        android:id="@+id/cons_week_view"
-        android:background="@color/constellation_week_color"
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:background="@drawable/cons_week_shadow"
+        android:layout_marginLeft="-10dp"
+        android:layout_marginRight="-10dp">
+
+        <com.youloft.lilith.cons.view.ConsCalendar
+            android:id="@+id/cons_week_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
 </FrameLayout>

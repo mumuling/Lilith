@@ -150,7 +150,7 @@
                 android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:lineSpacingExtra="7dp"
-                android:paddingBottom="10dp"
+                android:paddingBottom="2dp"
                 android:text="@string/cons_my_info_default_cn_word"
                 android:textColor="@android:color/white"
                 android:textSize="16dp" />
