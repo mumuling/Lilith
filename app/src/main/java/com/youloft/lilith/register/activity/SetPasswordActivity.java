@@ -8,8 +8,10 @@ import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -56,6 +58,10 @@ public class SetPasswordActivity extends BaseActivity {
     ImageView ivIsShowPwd02;    //确认密码是否明文显示
     @BindView(R.id.iv_clean_password02)
     ImageView ivCleanPassword02;  //清除确认密码
+    @BindView(R.id.btn_login)
+    Button btnLogin;
+    @BindView(R.id.tv_back)
+    TextView tvBack;
     private String phoneNumber; //上个页面传来的手机号码
     private String smsCode;  //上个页面传来的验证码
     private String source;  //从哪个页面来的,用于区分,最后该发起哪个请求   20001:注册页面   20002:忘记密码页面
@@ -69,9 +75,19 @@ public class SetPasswordActivity extends BaseActivity {
         smsCode = getIntent().getStringExtra("smsCode");
         //从哪个界面来的
         source = getIntent().getStringExtra("source");
+
+        if (source.equals("20001")) {
+            tvBack.setText("注册账号");
+        } else {
+            tvBack.setText("忘记密码");
+        }
         ButterKnife.bind(this);
         editTextSetting();
     }
+
+
+    private boolean isPwdEmpty = false;
+    private boolean isConfirmPwdEmpty = false;
 
     /**
      * 密码框的UI变化设定
@@ -100,6 +116,16 @@ public class SetPasswordActivity extends BaseActivity {
                     ivCleanPassword01.setVisibility(View.INVISIBLE);
                     ivIsShowPwd01.setVisibility(View.INVISIBLE);
                 }
+                if (android.text.TextUtils.isEmpty(etPassword.getText().toString())) {
+                    isPwdEmpty = false;
+                } else {
+                    isPwdEmpty = true;
+                }
+                if (isPwdEmpty && isConfirmPwdEmpty) {
+                    btnLogin.setEnabled(true);
+                } else {
+                    btnLogin.setEnabled(false);
+                }
             }
         });
         //确认密码输入框的监听
@@ -124,6 +150,16 @@ public class SetPasswordActivity extends BaseActivity {
                 } else {
                     ivCleanPassword02.setVisibility(View.INVISIBLE);
                     ivIsShowPwd02.setVisibility(View.INVISIBLE);
+                }
+                if (android.text.TextUtils.isEmpty(etConfirmPassword.getText().toString())) {
+                    isConfirmPwdEmpty = false;
+                } else {
+                    isConfirmPwdEmpty = true;
+                }
+                if (isPwdEmpty && isConfirmPwdEmpty) {
+                    btnLogin.setEnabled(true);
+                } else {
+                    btnLogin.setEnabled(false);
                 }
             }
         });

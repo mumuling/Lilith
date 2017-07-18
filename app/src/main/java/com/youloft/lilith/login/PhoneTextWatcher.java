@@ -1,18 +1,22 @@
 package com.youloft.lilith.login;
 
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-public class PhoneTextWatcher implements TextWatcher {
+import butterknife.OnFocusChange;
+
+public class PhoneTextWatcher extends BaseTextWatcher {
 
     private EditText _text;
     private ImageView ivCleanNumber;
-    public PhoneTextWatcher(EditText _text,ImageView ivCleanNumber) {
+    public PhoneTextWatcher(EditText _text, ImageView ivCleanNumber, OnTextChange listener) {
         this._text = _text;
         this.ivCleanNumber = ivCleanNumber;
+        setListener(listener);
     }
 
 
@@ -22,7 +26,9 @@ public class PhoneTextWatcher implements TextWatcher {
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+        if (listener != null) {
+            listener.onChange(isValid(), _text);
+        }
         if (s == null || s.length() == 0) return;
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < s.length(); i++) {
@@ -61,5 +67,12 @@ public class PhoneTextWatcher implements TextWatcher {
         } else {
             ivCleanNumber.setVisibility(View.INVISIBLE);
         }
+
     }
+
+    @Override
+    boolean isValid() {
+        return !TextUtils.isEmpty(_text.getText().toString());
+    }
+
 }

@@ -22,6 +22,7 @@ import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.LoginUtils;
 import com.youloft.lilith.common.utils.Toaster;
+import com.youloft.lilith.login.BaseTextWatcher;
 import com.youloft.lilith.login.MediaPlayerHelper;
 import com.youloft.lilith.login.PhoneFocusChangeListener;
 import com.youloft.lilith.login.PhoneTextWatcher;
@@ -48,7 +49,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by GYH on 2017/7/6.
  */
 @Route(path = "/test/ForgetPasswordActivity")
-public class ForgetPasswordActivity extends BaseActivity {
+public class ForgetPasswordActivity extends BaseActivity implements BaseTextWatcher.OnTextChange{
     @BindView(R.id.sv_background)
     SurfaceView svBackground;  //背景视频
     @BindView(R.id.et_verification_code)
@@ -106,7 +107,7 @@ public class ForgetPasswordActivity extends BaseActivity {
     private void phoneNumberSetting() {
         //电话号码变化的监听
         etPhoneNumber.setFilters(new InputFilter[]{new InputFilter.LengthFilter(13)});
-        etPhoneNumber.addTextChangedListener(new PhoneTextWatcher(etPhoneNumber, ivCleanNumber));
+        etPhoneNumber.addTextChangedListener(new PhoneTextWatcher(etPhoneNumber, ivCleanNumber, this));
         etPhoneNumber.setOnFocusChangeListener(new PhoneFocusChangeListener(etPhoneNumber, ivCleanNumber));
     }
 
@@ -164,11 +165,34 @@ public class ForgetPasswordActivity extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                if (TextUtils.isEmpty(etVerificationCode.getText().toString())) {
+                    isCodeEmpty = false;
+                } else {
+                    isCodeEmpty = true;
+                }
+                if (isCodeEmpty && isPhoneEmpty) {
+                    btnLogin.setEnabled(true);
+                } else {
+                    btnLogin.setEnabled(false);
+                }
             }
         });
     }
 
+    private boolean isCodeEmpty = false;
+    private boolean isPhoneEmpty = false;
+
+    @Override
+    public void onChange(boolean isValid, EditText view) {
+        if (view == etPhoneNumber) {
+            isPhoneEmpty = isValid;
+        }
+        if (isCodeEmpty && isPhoneEmpty) {
+            btnLogin.setEnabled(true);
+        } else {
+            btnLogin.setEnabled(false);
+        }
+    }
     /**
      * 获取验证码是否正确的请求
      */
@@ -332,5 +356,8 @@ public class ForgetPasswordActivity extends BaseActivity {
     public void onBackClicked() {
         onBackPressed();
     }
+
+
+
 
 }

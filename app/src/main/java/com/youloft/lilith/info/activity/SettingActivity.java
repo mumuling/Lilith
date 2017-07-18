@@ -136,6 +136,7 @@ public class SettingActivity extends BaseActivity {
                             //防止运营瞎填
                             Toaster.showShort("您当前版本为最新版本");
                             mVersionCodeDialog.dismiss();
+                            return;
                         }
                         String version = checkVersionBean.data.version;
                         if (version.equals(AppSetting.getVersionCode())) {
