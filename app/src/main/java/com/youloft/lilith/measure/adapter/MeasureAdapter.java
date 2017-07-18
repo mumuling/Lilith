@@ -32,7 +32,7 @@ public class MeasureAdapter extends RecyclerView.Adapter<BaseMeasureHolder> {
     public static final int ITEM_IMMEDIATELY_MEASURE = 4;//立即测算
 
 
-
+    private int mImmedStart = 0; //统计立即测算起始位置
     private List<MeasureBean.DataBean> mMeasureData = new ArrayList<>();
     private Activity mContext;
 
@@ -51,6 +51,7 @@ public class MeasureAdapter extends RecyclerView.Adapter<BaseMeasureHolder> {
                 continue;
             }
             if (safeData.location == ITEM_IMMEDIATELY_MEASURE) {
+                mImmedStart = i;
                 List<MeasureBean.DataBean.AdsBean> ads = safeData.ads;
                 //接口写的傻逼，于是乎自己来高,
                 for (int j = 0; j < ads.size(); j++) {
@@ -94,7 +95,11 @@ public class MeasureAdapter extends RecyclerView.Adapter<BaseMeasureHolder> {
     public void onBindViewHolder(BaseMeasureHolder holder, int position) {
         MeasureBean.DataBean safeData = SafeUtil.getSafeData(mMeasureData, position);
         if (safeData != null) {
-            holder.bindData(safeData, position);
+            if (holder instanceof ImmediatelyMeasureHolder) {
+                holder.bindData(safeData, position - mImmedStart);
+            } else {
+                holder.bindData(safeData, position);
+            }
         }
     }
 
@@ -102,4 +107,6 @@ public class MeasureAdapter extends RecyclerView.Adapter<BaseMeasureHolder> {
     public int getItemCount() {
         return mMeasureData.size();
     }
+
+
 }

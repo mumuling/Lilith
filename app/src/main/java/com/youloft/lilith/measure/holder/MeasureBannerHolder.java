@@ -40,25 +40,25 @@ public class MeasureBannerHolder extends BaseMeasureHolder {
     @Override
     public void bindData(MeasureBean.DataBean mMeasureData, int position) {
         this.mMeasureData = mMeasureData;
-        if(isaBoolean(mMeasureData)){
+        if (isaBoolean(mMeasureData)) {
             return;
         }
-        if (reportTag){
-            AppAnalytics.onEvent("CC.AD.IM0");
+        if (reportTag) {
+            AppAnalytics.onEvent("CC.AD", "IM0");
             reportTag = false;
         }
         GlideApp.with(mContext).load(mMeasureData.ads.get(0).image).into(ivBanner);
     }
 
     private boolean isaBoolean(MeasureBean.DataBean mMeasureData) {
-        return mMeasureData == null||mMeasureData.ads == null || mMeasureData.ads.size() == 0;
+        return mMeasureData == null || mMeasureData.ads == null || mMeasureData.ads.size() == 0;
     }
 
     @OnClick(R.id.root)
     public void onViewClicked() {
         boolean b = isaBoolean(mMeasureData);
         if (b) return;
-        AppAnalytics.onEvent("CC.AD.C0");
+        AppAnalytics.onEvent("CC.AD", "C0");
         ARouter.getInstance().build("/ui/web")
                 .withString("url", mMeasureData.ads.get(0).url)
                 .navigation();
