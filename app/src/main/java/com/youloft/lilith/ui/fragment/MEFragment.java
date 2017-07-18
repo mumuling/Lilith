@@ -64,8 +64,6 @@ public class MEFragment extends BaseFragment {
     ImageView ivBlurBg; //模糊背景
     @BindView(R.id.fl_item_container)
     BounceableLinearLayout bllContener; //下面的滑动布局
-    @BindView(R.id.fl_anim)
-    FrameLayout flAnim; // 动画的容器
     @BindView(R.id.ll_rise)
     LinearLayout llRise;
     @BindView(R.id.ll_sun)
@@ -155,40 +153,42 @@ public class MEFragment extends BaseFragment {
         EventBus.getDefault().unregister(this);
     }
 
-
+    private ViewGroup.LayoutParams headerRootParams;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
         unbinder = ButterKnife.bind(this, rootView);
-
-        bllContener.setOnMyScrollerListener(new BounceableLinearLayout.OnMyScrollerListener() {
-            @Override
-            public void scrollY(float dy) {
-                Log.d(TAG, "scrollY() called with: dy = [" + dy + "]");
-                moveRise(dy);
-                moveSun(dy);
-                moveMoon(dy);
-                scaleHeader(dy);
-            }
-        });
-
         flHeaderRoot.post(new Runnable() {
-
-            private ViewGroup.LayoutParams layoutParams;
-
             @Override
             public void run() {
-                layoutParams = flHeaderRoot.getLayoutParams();
-
+                headerRootParams = flHeaderRoot.getLayoutParams();
             }
         });
+        bllContener.setOnMyScrollerListener(new BounceableLinearLayout.OnMyScrollerListener() {
+            @Override
+            public void scrollY(float moveY,float dy) {
+                Log.d(TAG, "scrollY() called with: dy = [" + moveY + "]");
+                moveRise(moveY);
+                moveSun(moveY);
+                moveMoon(moveY);
+                scaleHeader(moveY);
+                scaleHeaderRoot(dy);
+            }
+        });
+
+
         //view创建完成之后,检查登录状态,如果是登录的状态,那么把用户数据填上去
         if (AppSetting.getUserInfo() != null) {
             setUserInfo();
         }
         return rootView;
+    }
+
+    private void scaleHeaderRoot(float dy) {
+        headerRootParams.height = (int) (headerRootParams.height - dy);
+        flHeaderRoot.setLayoutParams(headerRootParams);
     }
 
     private void scaleHeader(float dy) {

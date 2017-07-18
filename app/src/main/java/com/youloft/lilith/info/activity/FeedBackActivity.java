@@ -2,6 +2,7 @@ package com.youloft.lilith.info.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.widget.EditText;
 
@@ -9,6 +10,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.rx.RxObserver;
+import com.youloft.lilith.common.utils.LoginUtils;
 import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.info.bean.FeedBackBean;
 import com.youloft.lilith.info.repo.UpdateUserRepo;
@@ -48,6 +50,15 @@ public class FeedBackActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback);
         ButterKnife.bind(this);
+        initTitle();
+        mApiVersion = String.valueOf(android.os.Build.VERSION.SDK_INT);
+        etFeedbackPhone.setFilters(new InputFilter[]{new InputFilter.LengthFilter(11)});
+    }
+
+    /**
+     * Title相关的设置
+     */
+    private void initTitle() {
         btlFeedback.setTitle(getResources().getString(R.string.feed_back));
         btlFeedback.setShowShareBtn(false);
         btlFeedback.setOnToolBarItemClickListener(new BaseToolBar.OnToolBarItemClickListener() {
@@ -71,7 +82,6 @@ public class FeedBackActivity extends BaseActivity {
 
             }
         });
-        mApiVersion = String.valueOf(android.os.Build.VERSION.SDK_INT);
     }
 
     @OnClick(R.id.btn_commit)
@@ -83,6 +93,11 @@ public class FeedBackActivity extends BaseActivity {
             Toaster.showShort("内容或号码不能为空");
             return;
         }
+        if(LoginUtils.isPhoneNumber(feedPhone)){
+            Toaster.showShort("请输入正确的手机号码");
+            return;
+        }
+
         UpdateUserRepo.feedBack(feedPhone, getHostIP(), String.valueOf(AppSetting.getVersionCode()), mApiVersion, feedContent)
                 .compose(this.<FeedBackBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
@@ -94,7 +109,7 @@ public class FeedBackActivity extends BaseActivity {
                         if (feedBackBean.data.result) {
                             Toaster.showShort("反馈成功");
                         } else {
-                            Toaster.showShort("网络不畅,反馈失败");
+                            Toaster.showShort("网络异常");
                         }
                     }
                 });

@@ -155,7 +155,7 @@ public class BounceableLinearLayout extends LinearLayout {
         moveY += dy;
         Log.d(TAG, "beginScroll() called with: dx = [" + dx + "], dy = [" + dy + "]");
         if (onMyScrollerListener != null) {
-            onMyScrollerListener.scrollY(moveY);
+            onMyScrollerListener.scrollY(moveY,dy);
         }
         //必须执行invalidate()从而调用computeScroll()
         invalidate();
@@ -164,7 +164,7 @@ public class BounceableLinearLayout extends LinearLayout {
     private OnMyScrollerListener onMyScrollerListener;
 
     public interface OnMyScrollerListener {
-        void scrollY(float dy);
+        void scrollY(float moveY,float dy);
     }
 
     public void setOnMyScrollerListener(OnMyScrollerListener onMyScrollerListener) {

@@ -9,6 +9,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -213,6 +214,13 @@ public class LoginActivity extends BaseActivity {
     //微信登录
     @OnClick(R.id.ll_wechat_login)
     public void wechatLogin(View view) {
+        //先校验微信是否已经安装
+        if (!LoginUtils.isWxInstall(this)){
+            Toaster.showShort("请先安装微信");
+            return;
+        }
+
+
         SocializeApp.get(this).getPlatformInfo(this, SocializePlatform.WEIXIN, new AuthListener() {
             @Override
             public void onStart(SocializePlatform platform) {
