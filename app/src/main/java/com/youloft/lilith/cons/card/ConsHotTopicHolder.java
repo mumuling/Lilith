@@ -46,22 +46,7 @@ public class ConsHotTopicHolder extends CardHolder {
         ButterKnife.bind(this, itemView);
 
         init();
-        TopicRepo.getTopicList("1", "0", "10", true)
-                .subscribeOn(Schedulers.newThread())
-                .toObservable()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new RxObserver<TopicBean>() {
-                    @Override
-                    public void onDataSuccess(TopicBean topicBean) {
-                        if (topicBean == null || topicBean.data == null) return;
-                        adapter.setData(topicBean.data);
-                    }
 
-                    @Override
-                    protected void onFailed(Throwable e) {
-                        super.onFailed(e);
-                    }
-                });
     }
 
     private void init() {
@@ -97,6 +82,21 @@ public class ConsHotTopicHolder extends CardHolder {
 
     @Override
     public void bindData(Object o) {
-        super.bindData(o);
+        TopicRepo.getTopicList("1", "0", "10", true, 10 * 60 * 1000)
+                .subscribeOn(Schedulers.newThread())
+                .toObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new RxObserver<TopicBean>() {
+                    @Override
+                    public void onDataSuccess(TopicBean topicBean) {
+                        if (topicBean == null || topicBean.data == null) return;
+                        adapter.setData(topicBean.data);
+                    }
+
+                    @Override
+                    protected void onFailed(Throwable e) {
+                        super.onFailed(e);
+                    }
+                });
     }
 }
