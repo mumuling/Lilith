@@ -21,6 +21,7 @@ import com.youloft.lilith.common.widgets.view.RoundImageView;
 import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.ui.fragment.XZFragment;
+import com.youloft.statistics.AppAnalytics;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -73,6 +74,7 @@ public class LogInOrCompleteDialog extends BaseDialog {
      */
     @OnClick({R.id.login_jump_dialog_close, R.id.login_jump_dialog})
     public void close() {
+        AppAnalytics.onEvent("Cancelpopup", "C");
         dismiss();
     }
 
@@ -114,6 +116,7 @@ public class LogInOrCompleteDialog extends BaseDialog {
             dismiss();
             return;
         }
+        AppAnalytics.onEvent("Donepopup", "IM");
         hisDialogShow = true;
         initDate();
         super.show();
@@ -185,14 +188,15 @@ public class LogInOrCompleteDialog extends BaseDialog {
         mLoginJumpDialogBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                AppAnalytics.onEvent("Donepopup", "C");
                 if (status == XZFragment.LOG_IN || status == TOPIC_IN) {
                     ARouter.getInstance().build("/test/LoginActivity")
                             .navigation();
-                    close();
+                    dismiss();
                 } else {
                     ARouter.getInstance().build("/test/EditInformationActivity")
                             .navigation();
-                    close();
+                    dismiss();
                 }
             }
         });
