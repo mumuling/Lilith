@@ -352,6 +352,7 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
         }
         //用户评论，最多显示3条
         if (point.replyList != null && point.replyList.size() > 0) {
+            llCommentAnswerRoot.setVisibility(View.VISIBLE);
             for (int i = 0; i < point.replyList.size(); i++) {
                 if (i >= 3) break;
                 PointBean.DataBean.ReplyListBean reply = point.replyList.get(i);
@@ -362,7 +363,7 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
                     replyTextArray[i].setVisibility(View.GONE);
                 }
             }
-            if (point.replyList.size() >= 3) {
+            if (point.replyList.size() > 3) {
                 textCommentAnswerRemain.setText("查看全部" + point.reply + "条");
                 textCommentAnswerRemain.setVisibility(View.VISIBLE);
             } else {

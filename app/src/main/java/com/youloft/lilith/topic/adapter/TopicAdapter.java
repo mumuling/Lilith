@@ -21,6 +21,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
+import com.youloft.lilith.common.utils.SafeUtil;
 import com.youloft.lilith.glide.GlideBlurTransform;
 import com.youloft.lilith.topic.bean.TopicBean;
 import com.youloft.lilith.topic.widget.TopicUserDataBind;
@@ -44,8 +45,10 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private static int ITEM_TYPE_HEADER = 1000;//顶部header
     private static int ITEM_TYPE_NORMAL = 2000;//普通item
     private static int ITEM_TYPE_HOT_TOPIC = 2002;//首页热门item
+    private static int ITEM_TYPE_NO_DATA = 2003;//首页热门无数据item
     private static int ITEM_TYPY_BOTTOM = 3999;
     private boolean isHotTopic = false;
+
 
     private List<TopicBean.DataBean> topicBeanList = new ArrayList<>();
 
@@ -81,8 +84,10 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             holder = new HotTopicViewHolder(mInflater.inflate(R.layout.list_item_hot_topic, parent, false));
         } else if (viewType == ITEM_TYPE_NORMAL){
             holder = new NormalViewHolder(mInflater.inflate(R.layout.list_item_topic, parent, false));
+        } else if (viewType == ITEM_TYPE_NO_DATA) {
+            holder = new HotTopicNoDataViewHolder(mInflater.inflate(R.layout.list_item_hot_topic_no_data, parent, false));
         } else {
-            holder = new MyHeaderHolder(mInflater.inflate(R.layout.bottom_topic_rv,parent,false));
+            holder = new MyHeaderHolder(mInflater.inflate(R.layout.bottom_topic_rv, parent, false));
         }
         return holder;
     }
@@ -90,7 +95,11 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof NormalViewHolder) {
-            ((NormalViewHolder) holder).bind(topicBeanList.get(getRealPosition(position)));
+            TopicBean.DataBean safeData = SafeUtil.getSafeData(topicBeanList, getRealPosition(position));
+            if(safeData == null){
+                return;
+            }
+            ((NormalViewHolder) holder).bind(safeData);
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -107,17 +116,29 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return topicBeanList.size() + (isHotTopic ? 0 : 2);
+        if (isHotTopic) {
+            if (topicBeanList == null || topicBeanList.isEmpty()) {
+                return 4;
+            } else {
+                return topicBeanList.size();
+            }
+        }
+        return topicBeanList.size() +  2;
     }
 
     public int getRealPosition(int position) {
+
         return position - (isHotTopic ? 0 : 1);
     }
 
     @Override
     public int getItemViewType(int position) {
         if (isHotTopic) {
-            return ITEM_TYPE_HOT_TOPIC;
+            if (topicBeanList == null || topicBeanList.isEmpty()) {
+                return ITEM_TYPE_NO_DATA;
+            } else {
+                return ITEM_TYPE_HOT_TOPIC;
+            }
         }
         return position == 0 ? ITEM_TYPE_HEADER :position == getItemCount() -1?ITEM_TYPY_BOTTOM : ITEM_TYPE_NORMAL;
     }
@@ -136,7 +157,6 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             mTopicContent = (TextView) itemView.findViewById(R.id.topic_content);
             mUserImageStackViewGroup = (TopicUserDataBind) itemView.findViewById(R.id.layout_user_image);
             mTopicImage = (ImageView) itemView.findViewById(R.id.image_topic_bg);
-
         }
 
         public void bind(TopicBean.DataBean topic) {
@@ -178,6 +198,15 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     .dontAnimate()
                     .into(mTopicImage);
             mUserImageStackViewGroup.bindData(topic.voteUser, topic.totalVote);
+        }
+    }
+
+    /**
+     * 热门话题item的holder
+     */
+    public class HotTopicNoDataViewHolder extends RecyclerView.ViewHolder {
+        public HotTopicNoDataViewHolder(View itemView) {
+            super(itemView);
         }
     }
 

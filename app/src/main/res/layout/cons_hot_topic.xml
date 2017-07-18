@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:clipChildren="false"
     android:clipToPadding="false"
+    android:orientation="vertical"
     android:paddingTop="30dp">
 
     <FrameLayout
@@ -25,9 +25,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right|center_vertical"
-            android:text="@string/cons_hot_topic_card_more"
-            android:drawableRight="@drawable/constellation_more_icon"
             android:drawablePadding="5dp"
+            android:drawableRight="@drawable/constellation_more_icon"
+            android:text="@string/cons_hot_topic_card_more"
             android:textColor="@color/white_50"
             android:textSize="14dp" />
     </FrameLayout>
@@ -36,9 +36,9 @@
         android:id="@+id/cons_hot_topic_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="14dp"
         android:clipChildren="false"
         android:clipToPadding="false"
-        android:layout_marginBottom="20dp"
-        android:overScrollMode="never"
-        android:layout_marginTop="14dp" />
+        android:overScrollMode="never" />
 </LinearLayout>

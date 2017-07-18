@@ -22,56 +22,72 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="26dp"
-            android:drawableLeft="@drawable/cons_guide_circle_yellow"
-            android:drawablePadding="10dp"
-            android:gravity="center_vertical"
-            android:text="黄色代表财富运"
-            android:textColor="@color/cons_circle_yellow"
-            android:textSize="15dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingBottom="40dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="33dp"
-            android:drawableLeft="@drawable/cons_guide_circle_red"
-            android:drawablePadding="10dp"
-            android:gravity="center_vertical"
-            android:text="红色代表爱情运"
-            android:textColor="@color/cons_circle_red"
-            android:textSize="15dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/cons_guide_circle_yellow"
+                android:drawablePadding="10dp"
+                android:gravity="center_vertical"
+                android:text="黄色代表财富运"
+                android:textColor="@color/cons_circle_yellow"
+                android:textSize="15dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="33dp"
-            android:drawableLeft="@drawable/cons_guide_circle_blue"
-            android:drawablePadding="10dp"
-            android:gravity="center_vertical"
-            android:text="蓝色代表事业运"
-            android:textColor="@color/cons_circle_blue"
-            android:textSize="15dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/cons_guide_circle_red"
+                android:drawablePadding="10dp"
+                android:gravity="center_vertical"
+                android:text="红色代表爱情运"
+                android:textColor="@color/cons_circle_red"
+                android:textSize="15dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="分数越高运势越好"
-            android:textColor="@color/white"
-            android:textSize="15dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/cons_guide_circle_blue"
+                android:drawablePadding="10dp"
+                android:gravity="center_vertical"
+                android:text="蓝色代表事业运"
+                android:textColor="@color/cons_circle_blue"
+                android:textSize="15dp" />
 
-        <TextView
-            android:id="@+id/cons_guide_confirm_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="60dp"
-            android:background="@drawable/cons_guide_btn_bg"
-            android:gravity="center"
-            android:text="朕知道了"
-            android:textColor="@color/cons_confirm_btn"
-            android:textSize="15dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:gravity="center"
+                android:text="分数越高运势越好"
+                android:textColor="@color/white"
+                android:textSize="15dp" />
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+                <TextView
+                    android:id="@+id/cons_guide_confirm_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/cons_guide_btn_bg"
+                    android:gravity="center"
+                    android:text="朕知道了"
+                    android:textColor="@color/cons_confirm_btn"
+                    android:textSize="15dp" />
+            </FrameLayout>
+        </LinearLayout>
     </LinearLayout>
 </FrameLayout>

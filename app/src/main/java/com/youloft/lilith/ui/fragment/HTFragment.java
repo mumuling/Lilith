@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
 import io.reactivex.internal.schedulers.RxThreadFactory;
 import io.reactivex.schedulers.Schedulers;
 
@@ -106,6 +107,12 @@ public class HTFragment extends BaseFragment implements PullToRefreshLayout.OnRe
                     @Override
                     protected void onFailed(Throwable e) {
                         super.onFailed(e);
+                        if (layout != null)layout.refreshFinish(PullToRefreshLayout.FAIL);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        super.onError(e);
                         if (layout != null)layout.refreshFinish(PullToRefreshLayout.FAIL);
                     }
                 });

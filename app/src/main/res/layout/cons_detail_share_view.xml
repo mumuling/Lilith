@@ -6,18 +6,20 @@
     android:layout_height="wrap_content"
     android:background="@color/cons_detail_content_bg_color"
     android:orientation="vertical">
+
     <ImageView
         android:id="@+id/share_bg_img"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scaleType="centerCrop"
+        android:layout_alignBottom="@+id/share_content"
         android:layout_alignTop="@+id/share_content"
-        android:layout_alignBottom="@+id/share_content"/>
+        android:scaleType="centerCrop" />
+
     <LinearLayout
         android:id="@+id/share_content"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/cons_detail_title_share"
@@ -105,7 +107,6 @@
                     android:textSize="10dp" />
 
             </LinearLayout>
-
         </FrameLayout>
     </LinearLayout>
 </RelativeLayout>

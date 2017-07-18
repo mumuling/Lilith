@@ -173,6 +173,17 @@ public class MEFragment extends BaseFragment {
                 scaleHeader(dy);
             }
         });
+
+        flHeaderRoot.post(new Runnable() {
+
+            private ViewGroup.LayoutParams layoutParams;
+
+            @Override
+            public void run() {
+                layoutParams = flHeaderRoot.getLayoutParams();
+
+            }
+        });
         //view创建完成之后,检查登录状态,如果是登录的状态,那么把用户数据填上去
         if (AppSetting.getUserInfo() != null) {
             setUserInfo();
