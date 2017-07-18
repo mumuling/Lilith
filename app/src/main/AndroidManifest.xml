@@ -64,6 +64,7 @@
             android:theme="@style/TranslucentThem" />
         <activity android:name=".topic.MyTopicActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".topic.TestActivity"/>
 
         <!-- share begin -->
 

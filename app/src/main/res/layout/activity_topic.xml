@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="#282142">
+    android:background="@drawable/lilith_bg">
     <com.youloft.lilith.ui.view.BaseToolBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -73,6 +74,8 @@ public class TopicDetailActivity extends BaseActivity {
     private boolean needAddAnswer = true;//是否需要加缓存回复的数量
     @Autowired
     public int tid;
+    @Autowired
+    public String bakImg;//顶部背景图
 
 
     @Override
@@ -128,7 +131,7 @@ public class TopicDetailActivity extends BaseActivity {
         } else {
             userId = 0;
         }
-        TopicRepo.getPointList(String.valueOf(tid), String.valueOf(userId), "10", null, false)
+        TopicRepo.getPointList(String.valueOf(tid), String.valueOf(userId), "10", null, true)
                 .compose(this.<PointBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
@@ -309,7 +312,7 @@ public class TopicDetailActivity extends BaseActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rvTopicDetail.setLayoutManager(mLayoutManager);
-        adapter = new TopicDetailAdapter(this);
+        adapter = new TopicDetailAdapter(this,bakImg);
         rvTopicDetail.setAdapter(adapter);
         voteDialog = new VoteDialog(this, R.style.VoteDialog);
         toolBar.setOnToolBarItemClickListener(new BaseToolBar.OnToolBarItemClickListener() {

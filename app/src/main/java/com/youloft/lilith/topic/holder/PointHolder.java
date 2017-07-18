@@ -20,6 +20,7 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.youloft.lilith.LLApplication;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.rx.RxObserver;
@@ -273,7 +274,17 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
      * @param isLast  是否是最后一个
      */
     public void bindNormal(final PointBean.DataBean point, final TopicDetailBean.DataBean option, final int position, boolean isLast) {
-        if (point == null || option == null) return;
+       if (point == null)return;
+        GlideApp.with(itemView)
+                .asBitmap()
+                .load(point.headImg)
+                .dontAnimate()
+                .transform(GlideCircleTransform.getInstance(LLApplication.getInstance()))
+                .placeholder(R.drawable.default_user_head_img)
+                .error(R.drawable.default_user_head_img)
+                .override(30)
+                .into(imageCommentUser);
+        if ( option == null) return;
     //展示埋点
         if (!isReport) {
             AppAnalytics.onEvent("Topic", "IM" + String.valueOf(position - 1));
@@ -296,13 +307,7 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
         });
         //头像
 
-        GlideApp.with(itemView)
-                .asBitmap()
-                .transform(new GlideCircleTransform())
-                .load(point.headImg)
-                .placeholder(R.drawable.default_user_head_img)
-                .error(R.drawable.default_user_head_img)
-                .into(imageCommentUser);
+
 
         //用户名字
         textUserName.setText(StringUtil.toNameString(point.nickName));

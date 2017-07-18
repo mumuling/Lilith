@@ -14,6 +14,7 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.youloft.lilith.LLApplication;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.rx.RxObserver;
@@ -111,7 +112,8 @@ public class MyTopicHolder extends RecyclerView.ViewHolder {
         }
         //头像
         GlideApp.with(mContext)
-                .asBitmap().transform(new GlideCircleTransform())
+                .asBitmap()
+                .transform(GlideCircleTransform.getInstance(LLApplication.getInstance()))
                 .load(userInfo.headImg)
                 .placeholder(R.drawable.default_user_head_img)
                 .error(R.drawable.default_user_head_img)

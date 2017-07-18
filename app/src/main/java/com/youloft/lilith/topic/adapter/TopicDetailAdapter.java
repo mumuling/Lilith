@@ -45,8 +45,10 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public List<PointBean.DataBean> pointBeanList = new ArrayList<>();
     private List<TopicBean.DataBean> otherTopicList = new ArrayList<>();
     private TopicDetailBean.DataBean topicInfo = null;
-    public TopicDetailAdapter (Context context) {
+    private String backImage;
+    public TopicDetailAdapter (Context context,String backImg) {
         this.mContext = context;
+        this.backImage = backImg;
         this.mInflater = LayoutInflater.from(context);
     }
 
@@ -98,16 +100,16 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof VoteHolder) {
-                ((VoteHolder) holder).bindView(topicInfo);
+                ((VoteHolder) holder).bindView(topicInfo,backImage);
         }
-        if (holder instanceof PointHolder) {
+         else if (holder instanceof PointHolder) {
             if (position == pointBeanList.size()) {
                 ((PointHolder) holder).bindNormal(pointBeanList.get(position - 1), topicInfo,position,true);
             } else {
                 ((PointHolder) holder).bindNormal(pointBeanList.get(position - 1), topicInfo,position,false);
             }
         }
-        if (holder instanceof OtherTopicHolder) {
+        else if (holder instanceof OtherTopicHolder) {
             if (position == pointBeanList.size() + (pointBeanList.size() == 0 ? 2 : 1)) {
                 ((OtherTopicHolder) holder).bind(otherTopicList.get(position - pointBeanList.size() -(pointBeanList.size() == 0 ? 2 : 1)),true);
             } else {
