@@ -45,11 +45,12 @@ import io.reactivex.schedulers.Schedulers;
 
 /**
  * 忘记密码界面
+ * 注意:修改密码也会走这边了
  * <p>
  * Created by GYH on 2017/7/6.
  */
 @Route(path = "/test/ForgetPasswordActivity")
-public class ForgetPasswordActivity extends BaseActivity implements BaseTextWatcher.OnTextChange{
+public class ForgetPasswordActivity extends BaseActivity implements BaseTextWatcher.OnTextChange {
     @BindView(R.id.sv_background)
     SurfaceView svBackground;  //背景视频
     @BindView(R.id.et_verification_code)
@@ -77,16 +78,31 @@ public class ForgetPasswordActivity extends BaseActivity implements BaseTextWatc
 
     private boolean isCodeRight; //验证码是否正确
     private SmsCodeBean mSmsCodeBean; //获取到的验证码的数据模型
-
+    public static final String FORGET_PASSWORD_FLAG = "22";//这是代表忘记密码
+    public static final String MODIFY_PASSWORD_FLAG = "33";//这是代修改密码密码
+    private String mFlag; //上个界面传过来的flag  判断是修改密码,还是忘记密码
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_password);
+        mFlag = getIntent().getStringExtra("flag");
+        initView();
         ButterKnife.bind(this);
         phoneNumberSetting();
         verificationCodeSetting();
         EventBus.getDefault().register(this);
+    }
+
+    /**
+     * 根据上个界面传来的flag,来判断显示忘记密码 还是 修改密码
+     */
+    private void initView() {
+        if (mFlag.equals(FORGET_PASSWORD_FLAG)) {//忘记密码
+            tvTitle.setText(R.string.forget_password);
+        } else {//修改密码
+            tvTitle.setText(R.string.modify_password);
+        }
     }
 
     //登录成功后,收到事件,关闭本页面
@@ -193,6 +209,7 @@ public class ForgetPasswordActivity extends BaseActivity implements BaseTextWatc
             btnLogin.setEnabled(false);
         }
     }
+
     /**
      * 获取验证码是否正确的请求
      */
@@ -326,11 +343,18 @@ public class ForgetPasswordActivity extends BaseActivity implements BaseTextWatc
             return;
         }
         //这些条件都满足后,带着手机号码和验证码到设置密码界面
+        //判断是应该携带哪个source
+        String source;
+        if (mFlag.equals(FORGET_PASSWORD_FLAG)) {//忘记密码
+            source = "20002";
+        } else {//修改密码
+            source = "20003";
+        }
         ARouter.getInstance()
                 .build("/test/SetPasswordActivity")
                 .withString("phoneNumber", phoneNumber)
                 .withString("smsCode", smsCode)
-                .withString("source", "20002")
+                .withString("source", source)
                 .navigation();
         //关掉本页面
         finish();
@@ -356,8 +380,6 @@ public class ForgetPasswordActivity extends BaseActivity implements BaseTextWatc
     public void onBackClicked() {
         onBackPressed();
     }
-
-
 
 
 }

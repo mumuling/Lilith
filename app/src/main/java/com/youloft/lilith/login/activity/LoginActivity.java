@@ -215,6 +215,7 @@ public class LoginActivity extends BaseActivity implements BaseTextWatcher.OnTex
     public void forgetPassword(View view) {
         ARouter.getInstance()
                 .build("/test/ForgetPasswordActivity")
+                .withString("flag",ForgetPasswordActivity.FORGET_PASSWORD_FLAG)
                 .navigation();
     }
 

@@ -19,8 +19,10 @@ import com.youloft.lilith.common.widgets.dialog.DownloadSelectDialog;
 import com.youloft.lilith.info.bean.CheckVersionBean;
 import com.youloft.lilith.info.bean.LogoutBean;
 import com.youloft.lilith.info.repo.UpdateUserRepo;
+import com.youloft.lilith.login.activity.ForgetPasswordActivity;
 import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.login.event.LoginEvent;
+import com.youloft.lilith.login.event.ModifyPasswordEvent;
 import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.topic.db.PointAnswerCache;
 import com.youloft.lilith.topic.db.PointCache;
@@ -31,6 +33,8 @@ import com.youloft.lilith.ui.view.BaseToolBar;
 import com.youloft.statistics.AppAnalytics;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,6 +64,12 @@ public class SettingActivity extends BaseActivity {
         ButterKnife.bind(this);
         initTitle();
         initView();
+        EventBus.getDefault().register(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onModifyPassword(ModifyPasswordEvent modifyPasswordEvent){
+        finish();
     }
 
     /**
@@ -83,6 +93,7 @@ public class SettingActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     /**
@@ -120,7 +131,10 @@ public class SettingActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.rl_modify_password://修改密码
                 AppAnalytics.onEvent("Set.modifypassword.C");
-                ARouter.getInstance().build("/test/ModifyPasswordActivity").navigation();
+                ARouter.getInstance()
+                        .build("/test/ForgetPasswordActivity")
+                        .withString("flag", ForgetPasswordActivity.MODIFY_PASSWORD_FLAG)
+                        .navigation();
                 break;
             case R.id.rl_bind_account://绑定账号
                 AppAnalytics.onEvent("Set.binding.C");

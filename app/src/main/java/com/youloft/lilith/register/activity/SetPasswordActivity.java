@@ -18,15 +18,23 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.alibaba.android.arouter.utils.TextUtils;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
+import com.youloft.lilith.common.event.TabChangeEvent;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.Toaster;
+import com.youloft.lilith.info.activity.SettingActivity;
 import com.youloft.lilith.login.MediaPlayerHelper;
 import com.youloft.lilith.login.bean.ModifyPasswordBean;
 import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.login.event.LoginEvent;
+import com.youloft.lilith.login.event.ModifyPasswordEvent;
 import com.youloft.lilith.login.repo.ModifyPasswordRepo;
 import com.youloft.lilith.register.repo.RegisterUserRepo;
 import com.youloft.lilith.setting.AppSetting;
+import com.youloft.lilith.topic.db.PointAnswerCache;
+import com.youloft.lilith.topic.db.PointCache;
+import com.youloft.lilith.topic.db.TopicInfoCache;
+import com.youloft.lilith.topic.db.TopicLikeCache;
+import com.youloft.lilith.ui.TabManager;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -64,7 +72,7 @@ public class SetPasswordActivity extends BaseActivity {
     TextView tvBack;
     private String phoneNumber; //上个页面传来的手机号码
     private String smsCode;  //上个页面传来的验证码
-    private String source;  //从哪个页面来的,用于区分,最后该发起哪个请求   20001:注册页面   20002:忘记密码页面
+    private String source;  //从哪个页面来的,用于区分,最后该发起哪个请求   20001:注册页面   20002:忘记密码页面  20003:修改密码界面
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -76,10 +84,15 @@ public class SetPasswordActivity extends BaseActivity {
         //从哪个界面来的
         source = getIntent().getStringExtra("source");
 
-        if (source.equals("20001")) {
+        if (source.equals("20001")) {  //注册账号
             tvBack.setText("注册账号");
-        } else {
+            btnLogin.setText("登录");
+        } else if (source.equals("20002")) { //忘记密码
             tvBack.setText("忘记密码");
+            btnLogin.setText("确认");
+        } else {   //修改密码
+            tvBack.setText("修改密码");
+            btnLogin.setText("确认");
         }
         ButterKnife.bind(this);
         editTextSetting();
@@ -274,7 +287,32 @@ public class SetPasswordActivity extends BaseActivity {
                             Toaster.showShort("网络错误");
                         }
                     });
-        } else { //修改密码
+        } else if(source.equals("20002")){ //忘记密码
+            ModifyPasswordRepo.modifyPassword(phoneNumber, smsCode, password)
+                    .compose(this.<ModifyPasswordBean>bindToLifecycle())
+                    .subscribeOn(Schedulers.newThread())
+                    .toObservable()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new RxObserver<ModifyPasswordBean>() {
+                        @Override
+                        public void onDataSuccess(ModifyPasswordBean modifyPasswordBean) {
+
+                            if (modifyPasswordBean.data.result == 0) {//找回密码成功  打开登录页面
+                                ARouter.getInstance().build("/test/LoginActivity").navigation();
+                                Toaster.showShort("密码设置成功");
+                                finish();
+                            } else {//失败
+                                Toaster.showShort("网络错误");
+                            }
+                        }
+
+                        @Override
+                        protected void onFailed(Throwable e) {
+                            super.onFailed(e);
+                            Toaster.showShort("网络错误");
+                        }
+                    });
+        }else {//修改密码
             ModifyPasswordRepo.modifyPassword(phoneNumber, smsCode, password)
                     .compose(this.<ModifyPasswordBean>bindToLifecycle())
                     .subscribeOn(Schedulers.newThread())
@@ -286,6 +324,16 @@ public class SetPasswordActivity extends BaseActivity {
 
                             if (modifyPasswordBean.data.result == 0) {//修改密码成功  打开登录页面
                                 ARouter.getInstance().build("/test/LoginActivity").navigation();
+                                Toaster.showShort("密码修改成功");
+                                //这个时候需要退出登录 需要通知settingActivity关闭
+                                AppSetting.clearUserInfo();
+                                PointCache.getIns(SetPasswordActivity.this).deleteTable();
+                                TopicLikeCache.getIns(SetPasswordActivity.this).deleteTable();
+                                PointAnswerCache.getIns(SetPasswordActivity.this).deleteTable();
+                                TopicInfoCache.getIns(SetPasswordActivity.this).deleteTable();
+                                EventBus.getDefault().post(new LoginEvent(false));
+                                EventBus.getDefault().post(new TabChangeEvent(TabManager.TAB_INDEX_XZ));
+                                EventBus.getDefault().post(new ModifyPasswordEvent());
                                 finish();
                             } else {//失败
                                 Toaster.showShort("修改密码失败");
