@@ -108,7 +108,6 @@ public class CCFragment extends BaseFragment implements PullToRefreshLayout.OnRe
                     public void onDataSuccess(MeasureBean measureBean) {
                         mMeasureAdapter.setData(measureBean.data);
                         pullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
-                        mMeasureAdapter.setData(measureBean.data);
                     }
 
                     @Override

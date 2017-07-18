@@ -48,9 +48,9 @@ public class ImmediatelyMeasureHolder extends BaseMeasureHolder {
         if(mReportTag){
             reportEvent(mIndex);
         }
-        GlideApp.with(mContext).load(mMeasureData.ads.get(mIndex).image).into(ivIcon);
-        tvTitle.setText(mMeasureData.ads.get(mIndex).title);
-        tvDesc.setText(mMeasureData.ads.get(mIndex).infos);
+        GlideApp.with(mContext).load(mMeasureData.ads.get(0).image).into(ivIcon);
+        tvTitle.setText(mMeasureData.ads.get(0).title);
+        tvDesc.setText(mMeasureData.ads.get(0).infos);
     }
 
     /**
@@ -59,10 +59,7 @@ public class ImmediatelyMeasureHolder extends BaseMeasureHolder {
      * @return
      */
     private boolean isDataSafe(MeasureBean.DataBean mMeasureData) {
-        if(mMeasureData == null || mMeasureData.ads == null || mMeasureData.ads.size() == 0){
-            return true;
-        }
-        return false;
+        return mMeasureData == null || mMeasureData.ads == null || mMeasureData.ads.size() == 0;
     }
 
     /**
@@ -79,7 +76,7 @@ public class ImmediatelyMeasureHolder extends BaseMeasureHolder {
         if (isDataSafe(mMeasureData)) return;
         AppAnalytics.onEvent("CC.Card.C"+mIndex);
         ARouter.getInstance().build("/ui/web")
-                .withString("url", mMeasureData.ads.get(mIndex).url)
+                .withString("url", mMeasureData.ads.get(0).url)
                 .navigation();
 
     }
