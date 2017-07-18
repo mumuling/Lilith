@@ -273,7 +273,7 @@ public class ViewUtil {
             }
             //二维码
             BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inSampleSize = (int) Math.ceil(1000/ViewUtil.dp2px(76));
+            options.inSampleSize = (int) Math.ceil(200/ViewUtil.dp2px(76));
             Bitmap bitmap = BitmapFactory.decodeResource(view.getResources(), R.drawable.qrcard, options);
 
             if (bitmap != null && !bitmap.isRecycled()) {

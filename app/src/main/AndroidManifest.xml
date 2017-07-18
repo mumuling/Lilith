@@ -39,7 +39,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.MainActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/ClearTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -63,6 +64,7 @@
             android:theme="@style/TranslucentThem" />
         <activity android:name=".topic.MyTopicActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".topic.TestActivity"/>
 
         <!-- share begin -->
 

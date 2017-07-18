@@ -35,6 +35,7 @@ public class AppSetting {
         SettingProvider.save(sContext, "app_versioncode", AppConfig.VERSION_CODE);
     }
 
+
     /**
      * 获取设备ID
      *
@@ -129,13 +130,13 @@ public class AppSetting {
     }
 
     /**
-     * xz引导界面是否已展示过
+     * xz引导图是否已展示过
      */
     public static boolean isGuideShown() {
         return SettingProvider.getBoolean(sContext, "lilith_is_guide_shown", false);
     }
     /**
-     * 设置第一次进入app
+     * xz引导图已展示过
      */
     public static void setGuideShown() {
         SettingProvider.save(sContext, "lilith_is_guide_shown", true);

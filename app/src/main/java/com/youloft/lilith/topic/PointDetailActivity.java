@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -108,6 +109,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_point_detail);
+        Log.d("time",System.currentTimeMillis() +"");
         overridePendingTransition(R.anim.slide_in_bottom, 0);
         ButterKnife.bind(this);
         ARouter.getInstance().inject(this);

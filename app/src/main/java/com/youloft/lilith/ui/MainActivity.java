@@ -6,7 +6,9 @@ import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.bumptech.glide.MemoryCategory;
 import com.youloft.lilith.R;
+import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.event.ConsChangeEvent;
 import com.youloft.lilith.common.event.TabChangeEvent;
@@ -46,13 +48,14 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.main_nav_bar)
     NavBarLayout mNavBar;
 
-    @BindView(R.id.main_content_tv)
-    TextView tv;
     private TabManager mMainTabManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        GlideApp.get(getApplicationContext()).setMemoryCategory(MemoryCategory.HIGH);
+
         setContentView(R.layout.activity_lilith);
+        SplashActivity.startSplashActivity(this, savedInstanceState);
         ARouter.getInstance().inject(this);
         EventBus.getDefault().register(this);
         ButterKnife.bind(this);

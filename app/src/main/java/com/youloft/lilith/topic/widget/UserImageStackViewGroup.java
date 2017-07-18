@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.youloft.lilith.LLApplication;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.utils.SafeUtil;
@@ -86,12 +87,13 @@ public class UserImageStackViewGroup extends RelativeLayout {
             mUserImageList.get(i).setVisibility(VISIBLE);
             GlideApp.with(mContext).asBitmap()
                     .error(R.drawable.topic_user_img_er)
-                    .transform(new GlideCircleTransform())
+                    .transform(GlideCircleTransform.getInstance(LLApplication.getInstance()))
                     .load(imageList.get(i).headImg)
                     .placeholder(R.drawable.default_user_head_img)
                     .error(R.drawable.default_user_head_img)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .skipMemoryCache(false)
+                    .override(30)
                     .into(mUserImageList.get(i));
         }
     }
