@@ -120,6 +120,7 @@
             android:theme="@style/TranslucentThem"
             android:screenOrientation="portrait"/>
         <activity android:name=".info.activity.EditInformationActivity"
+            android:windowSoftInputMode="stateHidden|stateUnchanged"
             android:screenOrientation="portrait"/>
         <activity android:name=".cons.ConsCalDetailActivity" android:theme="@style/TranslucentThem"/>
         <activity android:name=".info.activity.ModifyPasswordActivity"

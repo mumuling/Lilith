@@ -82,6 +82,7 @@ public class MyTopicHolder extends RecyclerView.ViewHolder {
     private UserBean.DataBean.UserInfoBean userInfo;
     private PointBean.DataBean pointInfo;
     private int isZan;
+    private int position = 0;
 
     public MyTopicHolder(View itemView) {
 
@@ -98,12 +99,13 @@ public class MyTopicHolder extends RecyclerView.ViewHolder {
      * @param point  观点信息
      * @param isLast 是否是最后一条数据
      */
-    public void bind(MyTopicBean.DataBean point, boolean isLast) {
+    public void bind(MyTopicBean.DataBean point,int position, boolean isLast) {
         UserBean userBean = AppSetting.getUserInfo();
         if (userBean == null) return;
         userInfo = userBean.data.userInfo;
         if (userInfo == null) return;
         this.topicBean = point;
+        this.position = position;
         initPointAndTopic(point);
         if (isLast) {
             commentDividerBottom.setVisibility(View.GONE);
@@ -295,6 +297,7 @@ public class MyTopicHolder extends RecyclerView.ViewHolder {
                 ARouter.getInstance().build("/test/PointDetailActivity")
                         .withObject("point", pointInfo)
                         .withObject("topic", topicInfo)
+                        .withInt("position",position)
                         .navigation();
                 break;
         }

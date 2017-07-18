@@ -17,8 +17,12 @@ import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.topic.adapter.MyTopicAdapter;
+import com.youloft.lilith.topic.bean.AnswerEvent;
 import com.youloft.lilith.topic.bean.ClickLikeEvent;
 import com.youloft.lilith.topic.bean.MyTopicBean;
+import com.youloft.lilith.topic.bean.PointBean;
+import com.youloft.lilith.topic.db.PointAnswerCache;
+import com.youloft.lilith.topic.db.PointAnswerTable;
 import com.youloft.lilith.topic.db.PointCache;
 import com.youloft.lilith.topic.db.PointTable;
 import com.youloft.lilith.ui.TabManager;
@@ -59,6 +63,7 @@ public class MyTopicActivity extends BaseActivity {
     private UserBean.DataBean.UserInfoBean userInfo;
     private ArrayList<MyTopicBean.DataBean> myTopicList = new ArrayList<>();
     private PointCache pointCache;
+    private PointAnswerCache pointAnswerCache;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -95,6 +100,7 @@ public class MyTopicActivity extends BaseActivity {
             userInfo = null;
         }
         pointCache = PointCache.getIns(this);
+        pointAnswerCache = PointAnswerCache.getIns(this);
         initView();
         requestMyTopicFirst();
     }
@@ -115,6 +121,7 @@ public class MyTopicActivity extends BaseActivity {
                         if (myTopicBean.data != null) {
                             readDb(myTopicBean);
                             myTopicList.addAll(myTopicBean.data);
+                            addReplyCount(myTopicList,myTopicBean.t);
                             if (myTopicList.size() == 0) {
                                 rvMyTopic.setVisibility(View.GONE);
                                 llNoTopic.setVisibility(View.VISIBLE);
@@ -135,6 +142,27 @@ public class MyTopicActivity extends BaseActivity {
     }
 
     /**
+     *   添加本地的回复数量
+     * @param myTopicList
+     * @param t
+     */
+    private void addReplyCount(ArrayList<MyTopicBean.DataBean> myTopicList, long t) {
+        ArrayList<PointAnswerTable> pointAnswerTables = new ArrayList<>();
+        for (int i = 0 ; i < myTopicList.size(); i ++) {
+            MyTopicBean.DataBean topic = myTopicList.get(i);
+            pointAnswerTables = pointAnswerCache.getAnswerListByTime(topic.id,t);
+            if (pointAnswerTables == null || pointAnswerTables.size() == 0){
+                return;
+            }else  {
+                int replyCount  = topic.reply;
+                myTopicList.get(i).reply = replyCount + pointAnswerTables.size();
+                pointAnswerTables.clear();
+            }
+
+        }
+    }
+
+    /**
      * 查找数据库加载缓存
      *
      * @param data
@@ -150,7 +178,7 @@ public class MyTopicActivity extends BaseActivity {
                 for(int i = 0; i < pointTables.size(); i++) {
                     pointTable = pointTables.get(i);
                     if (pointTable.time < data.t) {
-                        pointCache.deletaDataByPid(pointTable.pid);
+                       continue; //pointCache.deletaDataByPid(pointTable.pid);
                     } else {
                         MyTopicBean.DataBean topic = new MyTopicBean.DataBean();
                         topic.date = pointTable.buildDate;
@@ -212,6 +240,7 @@ public class MyTopicActivity extends BaseActivity {
                     @Override
                     public void onDataSuccess(MyTopicBean myTopicBean) {
                         if (myTopicBean.data != null) {
+                            addReplyCount(myTopicBean.data,myTopicBean.t);
                             adapter.setMyTopicList(myTopicBean.data);
                         } else {
                             Toaster.showShort("没有更多观点了。");
@@ -238,9 +267,20 @@ public class MyTopicActivity extends BaseActivity {
      * @param event
      */
     @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
-    public void onLoddingChagne(ClickLikeEvent event) {
-       if (event.type == ClickLikeEvent.TYPE_ANSWER ||adapter == null)return;
-        adapter.notifyDataSetChanged();
+    public void onLoddingChagne(AnswerEvent event) {
+
+
+    }
+    /**
+     * 回复数改变
+     *
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
+    public void onReplyChagne(AnswerEvent event) {
+        if (event.position < 0)return;
+        adapter.myTopicList.get(event.position).reply = event.count;
+        adapter.notifyItemChanged(event.position);
 
     }
 

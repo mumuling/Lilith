@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
@@ -20,17 +20,19 @@
             android:background="#d8d8d8" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginLeft="10dp"
-            android:layout_centerVertical="true"
-            android:layout_toEndOf="@+id/iv_icon">
+            android:layout_marginRight="10dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp">
 
             <TextView
                 android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:singleLine="true"
                 android:text="我是测算名字"
                 android:textColor="@color/white"
                 android:textSize="17dp" />
@@ -51,11 +53,10 @@
             android:id="@+id/bt_measure"
             android:layout_width="80dp"
             android:layout_height="30dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
+            android:layout_gravity="center"
             android:background="@drawable/slt_login_btn"
             android:text="立即测算"
             android:textColor="@color/slt_login_text_color"
             android:textSize="14dp" />
-    </RelativeLayout>
+    </LinearLayout>
 </FrameLayout>

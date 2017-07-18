@@ -21,6 +21,6 @@ public class ModifyPasswordRepo extends AbstractDataRepo{
         params.put("phone",phone);
         params.put("code",code);
         params.put("newpwd",password);
-        return unionFlow(Urls.MODIFY_PASSWORD, null, params, true, ModifyPasswordBean.class, "modify_password", 0);
+        return httpFlow(Urls.MODIFY_PASSWORD, null, params, true, ModifyPasswordBean.class, "modify_password", 0);
     }
 }

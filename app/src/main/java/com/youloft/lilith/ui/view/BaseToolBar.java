@@ -84,6 +84,9 @@ public class BaseToolBar extends ToolBarLayout {
     public void setShowSaveBtn(boolean showSaveBtn){
         mSaveTV.setVisibility(showSaveBtn ? VISIBLE : GONE);
     }
+    public void setAlphaShowSaveBtn (float alpha) {
+        mSaveTV.setAlpha(alpha);
+    }
 
     /**
      * 设置是否显示返回按钮
