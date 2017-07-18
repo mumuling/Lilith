@@ -11,8 +11,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="10dp"
             android:padding="5dp"
-            android:rotationY="180"
-            android:src="@drawable/mine_more_icon" />
+            android:src="@drawable/back_icon" />
 
         <TextView
             android:id="@+id/tool_bar_title"
