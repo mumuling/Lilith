@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -47,12 +48,47 @@ public class SettingActivity extends BaseActivity {
     private static final String TAG = "SettingActivity";
     @BindView(R.id.btl_setting)
     BaseToolBar btlSetting;
+    @BindView(R.id.rl_modify_password)
+    RelativeLayout rlModifyPassword;  //修改密码条目
+    @BindView(R.id.v_devider)
+    View vDevider;  //修改密码下面的线
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
         ButterKnife.bind(this);
+        initTitle();
+        initView();
+    }
+
+    /**
+     * 界面初始化
+     */
+    private void initView() {
+        //判断是不是三方登录
+        if (AppSetting.getUserInfo() != null) {
+            boolean thirdLogin = AppSetting.getUserInfo().data.userInfo.thirdLogin;
+            if (thirdLogin) {
+                rlModifyPassword.setVisibility(View.GONE);
+                vDevider.setVisibility(View.GONE);
+            } else {
+                rlModifyPassword.setVisibility(View.VISIBLE);
+                vDevider.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    /**
+     * 对Title进行初始化
+     */
+    private void initTitle() {
         btlSetting.setTitle(getResources().getString(R.string.setting));
         btlSetting.setShowShareBtn(false);
         btlSetting.setOnToolBarItemClickListener(new BaseToolBar.OnToolBarItemClickListener() {
@@ -132,7 +168,7 @@ public class SettingActivity extends BaseActivity {
                         if (checkVersionBean == null || checkVersionBean.data == null
                                 || TextUtils.isEmpty(checkVersionBean.data.version) ||
                                 TextUtils.isEmpty(checkVersionBean.data.contents)
-                                ||TextUtils.isEmpty(checkVersionBean.data.downPath)) {
+                                || TextUtils.isEmpty(checkVersionBean.data.downPath)) {
                             //防止运营瞎填
                             Toaster.showShort("您当前版本为最新版本");
                             mVersionCodeDialog.dismiss();

@@ -293,12 +293,15 @@ public class LoginActivity extends BaseActivity implements BaseTextWatcher.OnTex
                 .subscribe(new RxObserver<UserBean>() {
                     @Override
                     public void onDataSuccess(UserBean userBean) {
+                        //因为是三方登录,所以需要添加一个标识
                         if (userBean.data.result == 0) {
+                            userBean.data.userInfo.thirdLogin = true;
                             AppSetting.saveUserInfo(userBean); //保存用户信息
                             EventBus.getDefault().post(new LoginEvent(true));//发送登录事件
                             if (android.text.TextUtils.isEmpty(userBean.data.userInfo.birthLongi)) { //新用户
                                 ARouter.getInstance().build("/test/EditInformationActivity").navigation();
                             }
+
                             finish();
                         } else {
                             Toaster.showShort("登录失败");

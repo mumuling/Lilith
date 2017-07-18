@@ -61,6 +61,9 @@ public class UserBean extends AbsResponse<UserBean.DataBean> {
             public String liveLati; //现居地纬度
             @JSONField(name = "bindWx")
             public boolean bindWx; //是否绑定微信
+
+            @JSONField(name = "thirdLogin")
+            public boolean thirdLogin; //是否是三方登录
         }
 
 
