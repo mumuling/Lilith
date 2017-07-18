@@ -10,7 +10,10 @@ import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.youloft.lilith.R;
 import com.youloft.lilith.cons.bean.ConsPredictsBean;
+import com.youloft.lilith.cons.consmanager.LoddingCheckEvent;
 import com.youloft.lilith.cons.consmanager.ShareConsEvent;
+import com.youloft.lilith.login.bean.UserBean;
+import com.youloft.lilith.setting.AppSetting;
 import com.youloft.lilith.ui.MainActivity;
 import com.youloft.statistics.AppAnalytics;
 
@@ -30,6 +33,7 @@ import io.reactivex.functions.Consumer;
 public class ConsShareHolder extends ConsBaseHolder {
 
     private final View mRoot;
+
     public ConsShareHolder(Context context, ViewGroup parent) {
         super(context, parent, R.layout.cons_share_holder);
         mRoot = itemView.findViewById(R.id.cons_share_root);
@@ -39,6 +43,11 @@ public class ConsShareHolder extends ConsBaseHolder {
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(@NonNull Object o) throws Exception {
+                        UserBean userInfo = AppSetting.userDataIsComplete();
+                        if (userInfo == null) {
+                            EventBus.getDefault().post(new LoddingCheckEvent());
+                            return;
+                        }
                         AppAnalytics.onEvent("Homeshare2", "C");
                         EventBus.getDefault().post(new ShareConsEvent("2"));//分享订阅在XZFragment中
                     }
