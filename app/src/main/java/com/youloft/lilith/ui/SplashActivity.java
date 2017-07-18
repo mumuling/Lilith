@@ -6,17 +6,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
-import com.youloft.lilith.setting.AppSetting;
-
-import java.util.HashMap;
 
 /**
  * Created by zchao on 2017/7/18.
@@ -26,9 +18,9 @@ import java.util.HashMap;
 
 public class SplashActivity extends BaseActivity {
 
-    private ViewPager mGuidePager;
-    private int[] pagerSrc = {R.drawable.welcome, R.drawable.welcome, R.drawable.welcome};
-    private HashMap<String, View> views = new HashMap<>();
+//    private ViewPager mGuidePager;
+//    private int[] pagerSrc = {R.drawable.welcome, R.drawable.welcome, R.drawable.welcome};
+//    private HashMap<String, View> views = new HashMap<>();
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,47 +37,47 @@ public class SplashActivity extends BaseActivity {
 //        }
     }
 
-    private void init() {
-        mGuidePager = (ViewPager) findViewById(R.id.guide_pager);
-        mGuidePager.setAdapter(new PagerAdapter() {
-            @Override
-            public int getCount() {
-                return pagerSrc.length;
-            }
-
-            @Override
-            public boolean isViewFromObject(View view, Object object) {
-                return view == object;
-            }
-
-            @Override
-            public Object instantiateItem(ViewGroup container, int position) {
-                View inflate = null;
-                if (position == pagerSrc.length - 1) {
-                    inflate = getLayoutInflater().inflate(R.layout.guide_page_last, null);
-                    inflate.findViewById(R.id.guide_close).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            AppSetting.setFirst();
-                            finish();
-                        }
-                    });
-                } else {
-                    inflate = getLayoutInflater().inflate(R.layout.guide_page, null);
-                }
-                ImageView viewById = (ImageView) inflate.findViewById(R.id.guide_page_img);
-                viewById.setImageResource(pagerSrc[position]);
-                container.addView(inflate);
-                views.put(String.valueOf(position), inflate);
-                return inflate;
-            }
-
-            @Override
-            public void destroyItem(ViewGroup container, int position, Object object) {
-                container.removeView(views.get(String.valueOf(position)));
-            }
-        });
-    }
+//    private void init() {
+//        mGuidePager = (ViewPager) findViewById(R.id.guide_pager);
+//        mGuidePager.setAdapter(new PagerAdapter() {
+//            @Override
+//            public int getCount() {
+//                return pagerSrc.length;
+//            }
+//
+//            @Override
+//            public boolean isViewFromObject(View view, Object object) {
+//                return view == object;
+//            }
+//
+//            @Override
+//            public Object instantiateItem(ViewGroup container, int position) {
+//                View inflate = null;
+//                if (position == pagerSrc.length - 1) {
+//                    inflate = getLayoutInflater().inflate(R.layout.guide_page_last, null);
+//                    inflate.findViewById(R.id.guide_close).setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            AppSetting.setFirst();
+//                            finish();
+//                        }
+//                    });
+//                } else {
+//                    inflate = getLayoutInflater().inflate(R.layout.guide_page, null);
+//                }
+//                ImageView viewById = (ImageView) inflate.findViewById(R.id.guide_page_img);
+//                viewById.setImageResource(pagerSrc[position]);
+//                container.addView(inflate);
+//                views.put(String.valueOf(position), inflate);
+//                return inflate;
+//            }
+//
+//            @Override
+//            public void destroyItem(ViewGroup container, int position, Object object) {
+//                container.removeView(views.get(String.valueOf(position)));
+//            }
+//        });
+//    }
 
 
     /**
