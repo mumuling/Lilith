@@ -152,8 +152,7 @@ public class EditInformationActivity extends BaseActivity {
         btlEditInformation.setBackgroundColor(Color.TRANSPARENT);
         btlEditInformation.setTitle("编辑资料");
         btlEditInformation.setShowShareBtn(false);
-        btlEditInformation.setShowSaveBtn(true);
-        btlEditInformation.setAlphaShowSaveBtn(0.5f);
+        btlEditInformation.setShowSaveBtn(false);
         btlEditInformation.setOnToolBarItemClickListener(new BaseToolBar.OnToolBarItemClickListener() {
             @Override
             public void OnBackBtnClick() {
@@ -287,7 +286,7 @@ public class EditInformationActivity extends BaseActivity {
             public void afterTextChanged(Editable s) {
                 if (!canSave) {
                     canSave = true;
-                    btlEditInformation.setAlphaShowSaveBtn(1.0f);
+                    btlEditInformation.setShowSaveBtn(true);
                 }
             }
         };
