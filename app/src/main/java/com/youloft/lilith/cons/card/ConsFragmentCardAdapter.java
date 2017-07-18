@@ -43,6 +43,8 @@ public class ConsFragmentCardAdapter extends RecyclerView.Adapter<BaseHolder> {
             ((ConsBaseHolder) holder).bindData(mData);
         } else if (holder instanceof ConsTitleHolder) {
             ((ConsTitleHolder) holder).bindData(mTitle);
+        } else if (holder instanceof ConsHotTopicHolder) {
+            holder.bindData(null);
         }
     }
 
