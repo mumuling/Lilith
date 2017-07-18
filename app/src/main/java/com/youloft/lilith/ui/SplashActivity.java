@@ -20,7 +20,7 @@ import java.util.HashMap;
 
 /**
  * Created by zchao on 2017/7/18.
- * desc: 先大致写着，突出完了再细化
+ * desc: 先大致写着，
  * version:
  */
 
@@ -32,17 +32,17 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (AppSetting.isFirst()) {
-            setContentView(R.layout.lilith_guide);
-            init();
-        } else {
+//        if (AppSetting.isFirst()) {
+//            setContentView(R.layout.lilith_guide);
+//            init();
+//        } else {
             new Handler() {
                 @Override
                 public void handleMessage(Message msg) {
                     finish();
                 }
-            }.sendEmptyMessageDelayed(0, 500);
-        }
+            }.sendEmptyMessageDelayed(0, 2000);
+//        }
     }
 
     private void init() {
@@ -103,7 +103,8 @@ public class SplashActivity extends BaseActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_alpha, R.anim.slide_out_alpha);
     }
 }
