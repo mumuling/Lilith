@@ -185,15 +185,15 @@ public class XZFragment extends BaseFragment implements PullToRefreshLayout.OnRe
                     @Override
                     public void onError(@NonNull Throwable e) {
                         super.onError(e);
-                        new NetErrDialog(getActivityContext()).show();
                         sendFinish(pullToRefreshLayout);
+                        new NetErrDialog(getActivityContext()).show();
                     }
 
                     @Override
                     protected void onFailed(Throwable e) {
                         super.onFailed(e);
-                        new NetErrDialog(getActivityContext()).show();
                         sendFinish(pullToRefreshLayout);
+                        new NetErrDialog(getActivityContext()).show();
                     }
                 });
     }

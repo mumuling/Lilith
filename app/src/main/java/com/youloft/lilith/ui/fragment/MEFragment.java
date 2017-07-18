@@ -64,8 +64,6 @@ public class MEFragment extends BaseFragment {
     ImageView ivBlurBg; //模糊背景
     @BindView(R.id.fl_item_container)
     BounceableLinearLayout bllContener; //下面的滑动布局
-    @BindView(R.id.fl_anim)
-    FrameLayout flAnim; // 动画的容器
     @BindView(R.id.ll_rise)
     LinearLayout llRise;
     @BindView(R.id.ll_sun)
@@ -155,31 +153,42 @@ public class MEFragment extends BaseFragment {
         EventBus.getDefault().unregister(this);
     }
 
-
+    private ViewGroup.LayoutParams headerRootParams;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
         unbinder = ButterKnife.bind(this, rootView);
-
-        bllContener.setOnMyScrollerListener(new BounceableLinearLayout.OnMyScrollerListener() {
+        flHeaderRoot.post(new Runnable() {
             @Override
-            public void scrollY(float dy) {
-                Log.d(TAG, "scrollY() called with: dy = [" + dy + "]");
-                moveRise(dy);
-                moveSun(dy);
-                moveMoon(dy);
-                scaleHeader(dy);
-//                flHeaderRoot.setScaleY(dy);
-//                flHeaderRoot.setScaleX(dy);
+            public void run() {
+                headerRootParams = flHeaderRoot.getLayoutParams();
             }
         });
+        bllContener.setOnMyScrollerListener(new BounceableLinearLayout.OnMyScrollerListener() {
+            @Override
+            public void scrollY(float moveY,float dy) {
+                Log.d(TAG, "scrollY() called with: dy = [" + moveY + "]");
+                moveRise(moveY);
+                moveSun(moveY);
+                moveMoon(moveY);
+                scaleHeader(moveY);
+                scaleHeaderRoot(dy);
+            }
+        });
+
+
         //view创建完成之后,检查登录状态,如果是登录的状态,那么把用户数据填上去
         if (AppSetting.getUserInfo() != null) {
             setUserInfo();
         }
         return rootView;
+    }
+
+    private void scaleHeaderRoot(float dy) {
+        headerRootParams.height = (int) (headerRootParams.height - dy);
+        flHeaderRoot.setLayoutParams(headerRootParams);
     }
 
     private void scaleHeader(float dy) {
@@ -191,12 +200,12 @@ public class MEFragment extends BaseFragment {
         flHeaderContainer.setScaleY(1 + (Math.abs(dy) / v)*0.2f);
         flHeaderRoot.setScaleX(1 + (Math.abs(dy) / v)*0.2f);
         flHeaderRoot.setScaleY(1 + (Math.abs(dy) / v)*0.2f);
+
     }
 
     private void moveRise(float dy) {
         float v = ViewUtil.dp2px(35);
         dy = dy * 0.7f;
-//        dy = -0.0005f*dy*dy+dy;
         if (Math.abs(dy) > v) {
             if (dy < 0) {
                 dy = -v;

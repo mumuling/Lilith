@@ -181,18 +181,40 @@ public class EditInformationActivity extends BaseActivity {
             etNickName.setText(detail.nickName);
 
 
+            //性别
+            if (detail.sex == 2) {
+                tvSex.setText(R.string.man);
+            } else {
+                tvSex.setText(R.string.woman);
+            }
+
+            tvSex.setTextColor(getResources().getColor(R.color.white));
+            ivTipsSex.setVisibility(View.GONE);
+
+            //时间日期
+            String birthDay = detail.birthDay;
+            Date date = CalendarHelper.parseDate(birthDay, DATE_FORMAT);
+            mCal.setTime(date);
+            tvDateBirth.setText(CalendarHelper.format(mCal.getTime(), "yyyy-MM-dd"));
+            tvDateBirth.setTextColor(getResources().getColor(R.color.white));
+            ivTipsDate.setVisibility(View.GONE);
+
+            tvTimeBirth.setText(CalendarHelper.format(mCal.getTime(), "HH:mm"));
+            tvTimeBirth.setTextColor(getResources().getColor(R.color.white));
+            ivTipsTime.setVisibility(View.GONE);
+
             if (TextUtils.isEmpty(detail.birthLongi)) { //资料没完善过
-                tvSex.setText(R.string.select_sex);
-                tvSex.setTextColor(getResources().getColor(R.color.white_50));
-                ivTipsSex.setVisibility(View.VISIBLE);
-
-                tvDateBirth.setText(R.string.select_date_birth);
-                tvDateBirth.setTextColor(getResources().getColor(R.color.white_50));
-                ivTipsDate.setVisibility(View.VISIBLE);
-
-                tvTimeBirth.setText(R.string.select_time_birth);
-                tvTimeBirth.setTextColor(getResources().getColor(R.color.white_50));
-                ivTipsTime.setVisibility(View.VISIBLE);
+//                tvSex.setText(R.string.select_sex);
+//                tvSex.setTextColor(getResources().getColor(R.color.white_50));
+//                ivTipsSex.setVisibility(View.VISIBLE);
+//
+//                tvDateBirth.setText(R.string.select_date_birth);
+//                tvDateBirth.setTextColor(getResources().getColor(R.color.white_50));
+//                ivTipsDate.setVisibility(View.VISIBLE);
+//
+//                tvTimeBirth.setText(R.string.select_time_birth);
+//                tvTimeBirth.setTextColor(getResources().getColor(R.color.white_50));
+//                ivTipsTime.setVisibility(View.VISIBLE);
 
                 tvPlaceBirth.setText(R.string.select_place_birth);
                 tvPlaceBirth.setTextColor(getResources().getColor(R.color.white_50));
@@ -209,27 +231,7 @@ public class EditInformationActivity extends BaseActivity {
                 birthLati = detail.birthLati;//出生纬度
                 liveLongi = detail.liveLongi;//现居地经度
                 liveLati = detail.liveLati;//现居地纬度
-                //性别
-                if (detail.sex == 2) {
-                    tvSex.setText(R.string.man);
-                } else {
-                    tvSex.setText(R.string.woman);
-                }
 
-                tvSex.setTextColor(getResources().getColor(R.color.white));
-                ivTipsSex.setVisibility(View.GONE);
-
-                //时间日期
-                String birthDay = detail.birthDay;
-                Date date = CalendarHelper.parseDate(birthDay, DATE_FORMAT);
-                mCal.setTime(date);
-                tvDateBirth.setText(CalendarHelper.format(mCal.getTime(), "yyyy-MM-dd"));
-                tvDateBirth.setTextColor(getResources().getColor(R.color.white));
-                ivTipsDate.setVisibility(View.GONE);
-
-                tvTimeBirth.setText(CalendarHelper.format(mCal.getTime(), "HH:mm"));
-                tvTimeBirth.setTextColor(getResources().getColor(R.color.white));
-                ivTipsTime.setVisibility(View.GONE);
 
                 tvPlaceBirth.setText(detail.birthPlace);
                 tvPlaceBirth.setTextColor(getResources().getColor(R.color.white));

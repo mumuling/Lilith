@@ -28,7 +28,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".router.SchemeFilterActivity">
-
             <!-- Schame -->
             <intent-filter>
                 <data android:scheme="arouter" />
@@ -40,13 +39,16 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.MainActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/ClearTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.SplashActivity"
+            android:theme="@style/ClearTheme"/>
         <activity
             android:name=".ui.WebActivity"
             android:configChanges="orientation|keyboardHidden|screenSize" />

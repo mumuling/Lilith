@@ -48,8 +48,6 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.main_nav_bar)
     NavBarLayout mNavBar;
 
-    @BindView(R.id.main_content_tv)
-    TextView tv;
     private TabManager mMainTabManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +55,7 @@ public class MainActivity extends BaseActivity {
         GlideApp.get(getApplicationContext()).setMemoryCategory(MemoryCategory.HIGH);
 
         setContentView(R.layout.activity_lilith);
+        SplashActivity.startSplashActivity(this, savedInstanceState);
         ARouter.getInstance().inject(this);
         EventBus.getDefault().register(this);
         ButterKnife.bind(this);

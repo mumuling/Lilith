@@ -161,9 +161,6 @@ public class PullToRefreshLayout extends RelativeLayout {
      * @param refreshResult PullToRefreshLayout.SUCCEED代表成功，PullToRefreshLayout.FAIL代表失败
      */
     public void refreshFinish(int refreshResult) {
-        if (state != REFRESHING) {
-            return;
-        }
         long l = System.currentTimeMillis() - mStartTime;
         //这儿处理开始刷新到刷新成功时间过短
         if (l < 1000) {
@@ -173,12 +170,18 @@ public class PullToRefreshLayout extends RelativeLayout {
                     closeRefreshBar();
                 }
             }.sendEmptyMessageDelayed(0, 1000 - l);
+        } else {
+            closeRefreshBar();
         }
-
     }
 
     private void closeRefreshBar() {
         //设置静止状态
+        if (mRefreshIcon == null) {
+            changeState(DONE, 0);
+            hide();
+            return;
+        }
         mRefreshIcon.setState(RefreshImageView.REFRESH_DONE, 0);
         if (pullDownY > 0) {
             // 刷新结果停留1秒
