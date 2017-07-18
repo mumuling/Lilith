@@ -247,6 +247,13 @@ public class UserFunctionActivity extends BaseActivity implements OnTextChange {
                     @Override
                     public void onDataSuccess(SendSmsBean sendSmsBean) {
                         //确认短信发送成功了
+                        if(sendSmsBean == null){
+                            return;
+                        }
+                        // TODO: 2017/7/18 校验msg
+                        if(!sendSmsBean.data.isSend){
+                            Toaster.showShort("超出发送数量限制");
+                        }
 
                     }
                 });
@@ -268,6 +275,9 @@ public class UserFunctionActivity extends BaseActivity implements OnTextChange {
                 .subscribe(new RxObserver<SmsCodeBean>() {
                     @Override
                     public void onDataSuccess(SmsCodeBean smsCodeBean) {
+                        if(smsCodeBean == null){
+                            return;
+                        }
                         mSmsCodeBean = smsCodeBean;
                         //这里拿回了验证码的相关信息, 在验证码输入框的监听里面验证用户的验证码是否正确
                         checkSmsCode();

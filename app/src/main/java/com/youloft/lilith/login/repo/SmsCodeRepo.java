@@ -21,6 +21,6 @@ public class SmsCodeRepo extends AbstractDataRepo{
         params.put("Phone",phone);
         params.put("SmsType",smsType);
         params.put("code",smsCode);
-        return unionFlow(Urls.VERIFICATIONCODE_URL, null, params, true, SmsCodeBean.class, "sms_code", 0);
+        return httpFlow(Urls.VERIFICATIONCODE_URL, null, params, true, SmsCodeBean.class, "sms_code", 0);
     }
 }
