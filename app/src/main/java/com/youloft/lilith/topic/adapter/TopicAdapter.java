@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,12 +27,14 @@ import com.youloft.lilith.LLApplication;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.utils.SafeUtil;
+import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.glide.GlideBlurTransform;
 import com.youloft.lilith.topic.bean.TopicBean;
 import com.youloft.lilith.topic.widget.TopicUserDataBind;
 import com.youloft.statistics.AppAnalytics;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -103,10 +106,11 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             if(safeData == null){
                 return;
             }
-            ((NormalViewHolder) holder).bind(safeData);
+            ((NormalViewHolder) holder).bind(safeData,position);
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    AppAnalytics.onEvent("Topic", "C" + String.valueOf(position - 1));
                     ARouter.getInstance().build("/test/TopicDetailActivity")
                             .withInt("tid", topicBeanList.get(getRealPosition(position)).id)
                             .withString("bakImg",topicBeanList.get(getRealPosition(position)).backImg)
@@ -156,7 +160,10 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         public TopicUserDataBind mUserImageStackViewGroup;
         public ImageView mTopicImage;
         public ImageView imageTest;
-
+        private boolean needReport = true;
+        private TopicBean.DataBean topic;
+        private boolean isFirst = true;
+        private HashSet<String> hashPosition = new HashSet<>();
         public NormalViewHolder(View itemView) {
             super(itemView);
             mTopicContent = (TextView) itemView.findViewById(R.id.topic_content);
@@ -164,7 +171,14 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             mTopicImage = (ImageView) itemView.findViewById(R.id.image_topic_bg);
         }
 
-        public void bind(TopicBean.DataBean topic) {
+        public void bind(TopicBean.DataBean topic,int position) {
+            if (topic == null)return;
+            if ( hashPosition != null && !hashPosition.contains(String.valueOf(position))) {
+                // 展示埋点
+                    AppAnalytics.onEvent("Topic", "IM" + String.valueOf(position - 1));
+                    hashPosition.add(String.valueOf(position));
+                }
+                this.topic = topic;
             mTopicContent.setText(topic.title);
             GlideApp.with(itemView)
                     .asBitmap()
@@ -192,7 +206,7 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
 
         @Override
-        public void bind(TopicBean.DataBean topic) {
+        public void bind(TopicBean.DataBean topic ,int position) {
             if (!isReport) {
                 AppAnalytics.onEvent("Hometopic", "IM");
                 isReport = true;
