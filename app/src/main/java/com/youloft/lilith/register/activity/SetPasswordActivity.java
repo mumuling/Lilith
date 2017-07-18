@@ -252,7 +252,7 @@ public class SetPasswordActivity extends BaseActivity {
         if (TextUtils.isEmpty(password) || TextUtils.isEmpty(confirmPwd)) {
             return;
         }
-        if (!password.trim().equals(confirmPwd.trim())) {
+        if (!(password.trim()).equals(confirmPwd.trim())) {
             Toaster.showShort("密码不一致");
             return;
         }
