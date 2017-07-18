@@ -41,7 +41,7 @@ public class RoundImageView extends AppCompatImageView {
 
     private void initStyleable(AttributeSet attrs) {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RoundImageView);
-        mRadius = typedArray.getDimension(R.styleable.RoundImageView_radius, ViewUtil.dp2px(0));
+        mRadius = typedArray.getDimension(R.styleable.RoundImageView_radius, 0);
         mLeftTop = typedArray.getDimension(R.styleable.RoundImageView_radius_left_top, mRadius);
         mLeftBottom = typedArray.getDimension(R.styleable.RoundImageView_radius_left_bottom, mRadius);
         mRightBottom = typedArray.getDimension(R.styleable.RoundImageView_radius_right_bottom, mRadius);
