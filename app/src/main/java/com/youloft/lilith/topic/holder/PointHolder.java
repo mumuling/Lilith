@@ -215,7 +215,7 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
                             return;
                         }
                        // handlePointTableInfo(pointBean.data);
-                        PointAllCache.getIns(mContext).addPointListToDb(pointBean.data,pointBean.t);
+                       // PointAllCache.getIns(mContext).addPointListToDb(pointBean.data,pointBean.t);
                         //removeRepeatPoint(pointBean.data,pointBean.t);
                         handleAnswerTable(pointBean.data,pointBean.t);
                         adapter.setPointBeanList(pointBean.data);
@@ -239,18 +239,18 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
 
 
     }
-
-    private void removeRepeatPoint(List<PointBean.DataBean> data, long t) {
-        if (data == null || data.size() == 0)return;
-        ArrayList<PointAllTable> pointAllTableList = PointAllCache.getIns(mContext).getPointListByPid(t);
-        PointAllCache pointAllCache = PointAllCache.getIns(mContext);
-        for (PointBean.DataBean point : data ) {
-            if (pointAllCache.pointIsExperid(point.id,t)) {
-                data.remove(point);
-            }
-        }
-
-    }
+//
+//    private void removeRepeatPoint(List<PointBean.DataBean> data, long t) {
+//        if (data == null || data.size() == 0)return;
+//        ArrayList<PointAllTable> pointAllTableList = PointAllCache.getIns(mContext).getPointListByPid(t);
+//        PointAllCache pointAllCache = PointAllCache.getIns(mContext);
+//        for (PointBean.DataBean point : data ) {
+//            if (pointAllCache.pointIsExperid(point.id,t)) {
+//                data.remove(point);
+//            }
+//        }
+//
+//    }
 
     /**
      *     加上本地缓存的回复数量
