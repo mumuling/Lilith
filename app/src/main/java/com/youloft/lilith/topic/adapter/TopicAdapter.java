@@ -55,6 +55,7 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private static int ITEM_TYPE_NO_DATA = 2003;//首页热门无数据item
     private static int ITEM_TYPY_BOTTOM = 3999;
     private boolean isHotTopic = false;
+    public HashSet<String> hashPosition = new HashSet<>();
 
     private HashSet<String> homePosition = new HashSet<>();
 
@@ -173,7 +174,7 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         private boolean needReport = true;
         private TopicBean.DataBean topic;
         private boolean isFirst = true;
-        private HashSet<String> hashPosition = new HashSet<>();
+
 
         public NormalViewHolder(View itemView) {
             super(itemView);
@@ -182,6 +183,7 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             mTopicImage = (ImageView) itemView.findViewById(R.id.image_topic_bg);
         }
 
+        private static final String TAG = "NormalViewHolder";
         public void bind(TopicBean.DataBean topic, int position) {
             if (topic == null) return;
             if (hashPosition != null && !hashPosition.contains(String.valueOf(position))) {

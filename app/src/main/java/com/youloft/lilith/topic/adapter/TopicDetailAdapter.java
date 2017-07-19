@@ -26,6 +26,7 @@ import com.youloft.lilith.topic.widget.VoteDialog;
 import com.youloft.lilith.topic.widget.VoteView;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**         话题详情的Adapter
@@ -46,6 +47,7 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private List<TopicBean.DataBean> otherTopicList = new ArrayList<>();
     private TopicDetailBean.DataBean topicInfo = null;
     private String backImage;
+    public HashSet<String> hashPosition = new HashSet<>();//底部话题的埋点集合
     public TopicDetailAdapter (Context context,String backImg) {
         this.mContext = context;
         this.backImage = backImg;
@@ -111,11 +113,20 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
         else if (holder instanceof OtherTopicHolder) {
             if (position == pointBeanList.size() + (pointBeanList.size() == 0 ? 2 : 1)) {
-                ((OtherTopicHolder) holder).bind(otherTopicList.get(position - pointBeanList.size() -(pointBeanList.size() == 0 ? 2 : 1)),true);
+                ((OtherTopicHolder) holder).bind(this,otherTopicList.get(position - pointBeanList.size() -(pointBeanList.size() == 0 ? 2 : 1)),getOtherTopicPosition(position),true);
             } else {
-                ((OtherTopicHolder) holder).bind(otherTopicList.get(position - pointBeanList.size() -(pointBeanList.size() == 0 ? 2 : 1)),false);
+                ((OtherTopicHolder) holder).bind(this,otherTopicList.get(position - pointBeanList.size() -(pointBeanList.size() == 0 ? 2 : 1)),getOtherTopicPosition(position),false);
             }
         }
+    }
+
+    private int getOtherTopicPosition(int position) {
+        if (pointBeanList.size() == 0) {
+            return position - 2;
+        } else {
+            return position - pointBeanList.size() - 1;
+        }
+
     }
 
     @Override

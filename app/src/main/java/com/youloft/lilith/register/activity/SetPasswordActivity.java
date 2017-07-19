@@ -268,6 +268,7 @@ public class SetPasswordActivity extends BaseActivity {
                                 if (android.text.TextUtils.isEmpty(userBean.data.userInfo.birthLongi)) { //新用户
                                     ARouter.getInstance().build("/test/EditInformationActivity").navigation();
                                 }
+                                Toaster.showShort("注册成功");
                                 finish();
                             } else {
                                 Toaster.showShort("注册失败");

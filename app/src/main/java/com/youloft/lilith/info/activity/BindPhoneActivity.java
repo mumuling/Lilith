@@ -339,7 +339,7 @@ public class BindPhoneActivity extends BaseActivity {
             return;
         }
         //发送短信
-        SendSmsRepo.sendSms(phoneNumber, "Register")
+        SendSmsRepo.sendSms(phoneNumber, "Binding")
                 .compose(this.<SendSmsBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()

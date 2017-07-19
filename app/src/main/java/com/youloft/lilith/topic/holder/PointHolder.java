@@ -68,53 +68,53 @@ import io.reactivex.schedulers.Schedulers;
 
 public class PointHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     @BindView(R.id.image_comment_user)
-    ImageView imageCommentUser;
+    ImageView imageCommentUser;//用户头像
     @BindView(R.id.text_user_name)
-    TextView textUserName;
+    TextView textUserName;//用户名字
     @BindView(R.id.image_user_sex)
-    ImageView imageUserSex;
+    ImageView imageUserSex;//性别
     @BindView(R.id.text_user_constellation)
-    TextView textUserConstellation;
+    TextView textUserConstellation;//星座
     @BindView(R.id.image_zan)
-    ImageView imageZan;
+    ImageView imageZan;//赞
     @BindView(R.id.text_zan_count)
-    TextView textZanCount;
+    TextView textZanCount;//点赞数
     @BindView(R.id.text_vote_result)
-    TextView textVoteResult;
+    TextView textVoteResult;//投票结果
     @BindView(R.id.text_comment_content)
-    TextView textCommentContent;
+    TextView textCommentContent;//观点
     @BindView(R.id.text_comment_time)
-    TextView textCommentTime;
+    TextView textCommentTime;//发表时间
     @BindView(R.id.text_comment_answer_count)
-    TextView textCommentAnswerCount;
+    TextView textCommentAnswerCount;//回复数量
     @BindView(R.id.text_answer1)
-    TextView textAnswer1;
+    TextView textAnswer1;//回复1
     @BindView(R.id.text_answer2)
-    TextView textAnswer2;
+    TextView textAnswer2;//回复2
     @BindView(R.id.text_answer3)
-    TextView textAnswer3;
+    TextView textAnswer3;//回复3
     @BindView(R.id.text_comment_answer_remain)
-    TextView textCommentAnswerRemain;
+    TextView textCommentAnswerRemain;//全部回复
     @BindView(R.id.ll_comment_answer_root)
     LinearLayout llCommentAnswerRoot;
     @BindView(R.id.comment_divider_bottom)
-    View commentDividerBottom;
+    View commentDividerBottom;//底部分割线
     @BindView(R.id.ll_load_more)
-    FrameLayout llLoadMore;
+    FrameLayout llLoadMore;//加载更多
     @BindView(R.id.text_load_more)
     TextView textLoadMore;
     @BindView(R.id.image_loading)
-    ImageView imageLoading;
+    ImageView imageLoading;//加载中图片
     private TextView[] replyTextArray = new TextView[3];
-    private Animation loadAnimation;
-    private int isZan;
-    private PointBean.DataBean point;
+    private Animation loadAnimation;//加载动画
+    private int isZan;//是否为赞的状态
+    private PointBean.DataBean point;//观点
     private Context mContext;
     private TopicDetailAdapter adapter;
-    private TopicDetailBean.DataBean topic;
-    private int totalPoint;
-    private int zanCount = 0;
-    private boolean isReport = false;
+    private TopicDetailBean.DataBean topic;//话题信息
+    private int totalPoint;//总的观点数
+    private int zanCount = 0;//加上本地赞的数量
+
 
     public PointHolder(View itemView, TopicDetailAdapter adapter) {
         super(itemView);
