@@ -10,6 +10,7 @@ import com.youloft.lilith.common.net.OnlineConfigAgent;
 import com.youloft.lilith.common.utils.LocationUtil;
 import com.youloft.lilith.common.utils.Utils;
 import com.youloft.lilith.router.AppRouter;
+import com.youloft.lilith.setting.AppSetting;
 import com.youloft.socialize.SocializeApp;
 import com.youloft.statistics.AppAnalytics;
 
@@ -35,6 +36,7 @@ public class LLApplication extends Application {
         sInstance = this;
         //初始化工具类
         Utils.init(this);
+        AppSetting.install();
         //初始化基础配置
         AppConfig.init(this);
         //初始化三方SDK
