@@ -113,7 +113,7 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AppAnalytics.onEvent("Topic", "C" + String.valueOf(position));
+                    AppAnalytics.onEvent("Topic", "C" + String.valueOf(position - 1));
                     ARouter.getInstance().build("/test/TopicDetailActivity")
                             .withInt("tid", topicBeanList.get(getRealPosition(position)).id)
                             .withString("bakImg", topicBeanList.get(getRealPosition(position)).backImg)
@@ -124,6 +124,7 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 }
             });
 
+            //首页底部热门展示上报
             if (holder instanceof HotTopicViewHolder) {
                 if (homePosition != null && !homePosition.contains(String.valueOf(position))) {
                     // 展示埋点
@@ -184,6 +185,7 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
 
         private static final String TAG = "NormalViewHolder";
+
         public void bind(TopicBean.DataBean topic, int position) {
             if (topic == null) return;
             if (hashPosition != null && !hashPosition.contains(String.valueOf(position))) {
