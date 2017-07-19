@@ -20,17 +20,29 @@ import android.widget.TextView;
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.jakewharton.rxbinding2.view.RxView;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
+import com.youloft.lilith.cons.consmanager.LoddingCheckEvent;
+import com.youloft.lilith.cons.consmanager.ShareConsEvent;
+import com.youloft.lilith.login.bean.UserBean;
+import com.youloft.lilith.setting.AppSetting;
 import com.youloft.socialize.SocializeAction;
 import com.youloft.socialize.SocializeApp;
 import com.youloft.socialize.SocializePlatform;
 import com.youloft.socialize.media.ShareImage;
 import com.youloft.socialize.media.ShareWeb;
+import com.youloft.statistics.AppAnalytics;
+
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
 
 /**
  * Created by zchao on 2017/7/6.
@@ -110,6 +122,42 @@ public class ShareActivity extends BaseActivity {
                 startAnim(true);
             }
         });
+
+        bindClick();
+    }
+
+    private void bindClick() {
+        RxView.clicks(mShareWxHy)
+                .throttleFirst(800, TimeUnit.MILLISECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(@NonNull Object o) throws Exception {
+                        mShareAction.setPlatform(SocializePlatform.WEIXIN)
+                                .setCallback(new ShareEventListener(""){
+                                    @Override
+                                    public void onResult(SocializePlatform share_media) {
+                                        super.onResult(share_media);
+                                        cancel();
+                                    }
+                                }).share();
+                    }
+                });
+
+        RxView.clicks(mShareWxPyq)
+                .throttleFirst(800, TimeUnit.MILLISECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(@NonNull Object o) throws Exception {
+                        mShareAction.setPlatform(SocializePlatform.WEIXIN_CIRCLE)
+                                .setCallback(new ShareEventListener(""){
+                                    @Override
+                                    public void onResult(SocializePlatform share_media) {
+                                        super.onResult(share_media);
+                                        cancel();
+                                    }
+                                }).share();
+                    }
+                });
     }
 
     /**
@@ -135,35 +183,37 @@ public class ShareActivity extends BaseActivity {
 
     }
 
+
     /**
      * 分享给朋友
      */
-    @OnClick(R.id.share_wx_hy)
-    public void shareHY() {
-        mShareAction.setPlatform(SocializePlatform.WEIXIN)
-                .setCallback(new ShareEventListener("xxx"){
-                    @Override
-                    public void onResult(SocializePlatform share_media) {
-                        super.onResult(share_media);
-                        cancel();
-                    }
-                }).share();
-    }
+//    @OnClick(R.id.share_wx_hy)
+//    public void shareHY() {
+//        mShareAction.setPlatform(SocializePlatform.WEIXIN)
+//                .setCallback(new ShareEventListener("xxx"){
+//                    @Override
+//                    public void onResult(SocializePlatform share_media) {
+//                        super.onResult(share_media);
+//                        cancel();
+//                    }
+//                }).share();
+//    }
 
     /**
      * 分享到朋友圈
      */
-    @OnClick(R.id.share_wx_pyq)
-    public void sharePYQ() {
-        mShareAction.setPlatform(SocializePlatform.WEIXIN_CIRCLE)
-                .setCallback(new ShareEventListener("xxx"){
-                    @Override
-                    public void onResult(SocializePlatform share_media) {
-                        super.onResult(share_media);
-                        cancel();
-                    }
-                }).share();
-    }
+//    @OnClick(R.id.share_wx_pyq)
+//    public void sharePYQ() {
+//
+//        mShareAction.setPlatform(SocializePlatform.WEIXIN_CIRCLE)
+//                .setCallback(new ShareEventListener("xxx"){
+//                    @Override
+//                    public void onResult(SocializePlatform share_media) {
+//                        super.onResult(share_media);
+//                        cancel();
+//                    }
+//                }).share();
+//    }
 
     /**
      * 取消

@@ -52,7 +52,7 @@ public class ConsCalWeekHolder extends ConsBaseHolder implements ConsCalendar.On
 
     @Override
     public void onClick() {
-        AppAnalytics.onEvent("Weekfortunes", "C");
+        AppAnalytics.onEvent("Weekfortunes.C");
         UserBean userInfo = AppSetting.userDataIsComplete();
         if (userInfo == null) {
             EventBus.getDefault().post(new LoddingCheckEvent());

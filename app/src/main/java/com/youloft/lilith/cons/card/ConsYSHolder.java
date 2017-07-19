@@ -42,7 +42,6 @@ public class ConsYSHolder extends ConsBaseHolder {
     public static final int CONS_WORK = 3;
     public static final int CONS_MONEY = 4;
     private String mReportKey = "Summaryfortunes"; //上报key
-    private boolean isReport = false;              //是否已上报
 
     private static final String formatDate = "yyyy-MM-dd";
     private SimpleDateFormat format = null;
@@ -67,7 +66,7 @@ public class ConsYSHolder extends ConsBaseHolder {
         initReportKey();
     }
 
-    private void initReportKey() {
+    public String initReportKey() {
         if (type == CONS_YS) {
             mReportKey = "Summaryfortunes";
         } else if (type == CONS_LOVE) {
@@ -77,11 +76,12 @@ public class ConsYSHolder extends ConsBaseHolder {
         } else if (type == CONS_MONEY) {
             mReportKey = "Wealthfortunes";
         }
+        return mReportKey;
     }
 
     @OnClick(R.id.root)
     public void checkLodding() {
-        AppAnalytics.onEvent(mReportKey, "C");
+        AppAnalytics.onEvent(mReportKey + ".C");
         EventBus.getDefault().post(new LoddingCheckEvent());
     }
 
@@ -93,10 +93,6 @@ public class ConsYSHolder extends ConsBaseHolder {
     @Override
     public void bindData(ConsPredictsBean data) {
         super.bindData(data);
-        if (!isReport) {
-            AppAnalytics.onEvent(mReportKey, "IM");
-            isReport = true;
-        }
         if (data == null || data.data == null) {
             return;
         }

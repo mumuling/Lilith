@@ -60,7 +60,7 @@ public class ConsHotTopicHolder extends CardHolder {
                 super.onScrolled(recyclerView, dx, dy);
                 if (dx > 0  && !isReport) {
                     isReport = true;
-                    AppAnalytics.onEvent("Slideview", "C");
+                    AppAnalytics.onEvent("Slideview.C");
                 }
             }
 
@@ -76,7 +76,7 @@ public class ConsHotTopicHolder extends CardHolder {
 
     @OnClick(R.id.cons_hot_topic_card_more)
     public void showMore() {
-        AppAnalytics.onEvent("Hometopicmore", "C");
+        AppAnalytics.onEvent("Hometopicmore.C");
         EventBus.getDefault().post(new TabChangeEvent(TabManager.TAB_INDEX_HT));
     }
 

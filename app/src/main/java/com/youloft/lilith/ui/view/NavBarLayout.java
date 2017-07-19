@@ -94,7 +94,7 @@ public class NavBarLayout extends LinearLayout {
                     public void onClick(View v) {
                         if (v instanceof NavItemView) {
                             TabItemBean tb = ((NavItemView) v).getData();
-                            AppAnalytics.onEvent("MainTab.C", tb.mIndex == 0 ? "首页" : tb.mTabName);
+                            AppAnalytics.onEvent("MainTab.C" + (tb.mIndex == 0 ? "首页" : tb.mTabName));
                             if (tb != null) {
                                 if (mTabChangeListener != null) {
                                     boolean b = mTabChangeListener.selectChange(tb.mIndex);

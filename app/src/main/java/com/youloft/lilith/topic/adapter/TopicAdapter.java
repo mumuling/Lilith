@@ -113,13 +113,13 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AppAnalytics.onEvent("Topic.C",  String.valueOf(position - 1));
+                    AppAnalytics.onEvent("Topic.C", String.valueOf(position - 1));
                     ARouter.getInstance().build("/test/TopicDetailActivity")
                             .withInt("tid", topicBeanList.get(getRealPosition(position)).id)
                             .withString("bakImg", topicBeanList.get(getRealPosition(position)).backImg)
                             .navigation();
                     if (holder instanceof HotTopicViewHolder) {
-                        AppAnalytics.onEvent("Hometopic", "C" + String.valueOf(position));
+                        AppAnalytics.onEvent("Hometopic.C", String.valueOf(position));
                     }
                 }
             });
@@ -128,7 +128,7 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             if (holder instanceof HotTopicViewHolder) {
                 if (homePosition != null && !homePosition.contains(String.valueOf(position))) {
                     // 展示埋点
-                    AppAnalytics.onEvent("Hometopic", "IM" + String.valueOf(position));
+                    AppAnalytics.onEvent("Hometopic.IM", String.valueOf(position));
                     homePosition.add(String.valueOf(position));
                 }
             }
