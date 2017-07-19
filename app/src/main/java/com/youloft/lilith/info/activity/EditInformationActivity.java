@@ -160,6 +160,15 @@ public class EditInformationActivity extends BaseActivity {
         });
         etNickName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(20)});
     }
+boolean isFirst = true;
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        if (isFirst) {
+            handleEditText1();
+            isFirst = false;
+        }
+        super.onWindowFocusChanged(hasFocus);
+    }
 
     /**
      * 对edittext文字的处理
@@ -335,10 +344,7 @@ public class EditInformationActivity extends BaseActivity {
             }
 
         }
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-             handleEditText1();
+
                 textWatcher = new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -358,7 +364,6 @@ public class EditInformationActivity extends BaseActivity {
                         }
                     }
                 };
-
                 TextWatcher etNameWatcher = new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -387,8 +392,6 @@ public class EditInformationActivity extends BaseActivity {
                 tvTimeBirth.addTextChangedListener(textWatcher);
                 tvPlaceBirth.addTextChangedListener(textWatcher);
                 tvPlaceNow.addTextChangedListener(textWatcher);
-            }
-        },300);
 
 
 
