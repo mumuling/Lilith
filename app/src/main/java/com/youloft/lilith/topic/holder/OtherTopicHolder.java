@@ -50,7 +50,7 @@ public class OtherTopicHolder extends RecyclerView.ViewHolder {
         }
         //更多话题展示的埋点
         if (!adapter.hashPosition.contains(String.valueOf(position))) {
-            AppAnalytics.onEvent("Commenttopic", "IM" + String.valueOf(position));
+            AppAnalytics.onEvent("Commenttopic.IM", String.valueOf(position));
             adapter.hashPosition.add(String.valueOf(position));
         }
 
@@ -60,7 +60,7 @@ public class OtherTopicHolder extends RecyclerView.ViewHolder {
                 ARouter.getInstance().build("/test/TopicDetailActivity")
                         .withInt("tid",topic.id)
                         .navigation();
-                AppAnalytics.onEvent("Commenttopic", "C" + String.valueOf(position));
+                AppAnalytics.onEvent("Commenttopic.C", String.valueOf(position));
                 if (itemView.getContext() instanceof TopicDetailActivity) {
                     ((TopicDetailActivity) itemView.getContext()).finish();
                 }
