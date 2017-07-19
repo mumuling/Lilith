@@ -9,6 +9,10 @@ import android.widget.TextView;
 
 import com.youloft.lilith.R;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -21,10 +25,13 @@ import butterknife.OnClick;
 public class PrivacyDialog extends BaseDialog {
 
 
-
+    @BindView(R.id.tv_content)
+    TextView tvContent;
+    Context context;
 
     public PrivacyDialog(@NonNull Context context) {
         super(context);
+        this.context = context;
         initView();
     }
 
@@ -36,6 +43,29 @@ public class PrivacyDialog extends BaseDialog {
     private void initView() {
         setContentView(R.layout.dialog_privacy);
         ButterKnife.bind(this);
+
+        InputStream is = context.getResources().openRawResource(R.raw.privacy);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        try {
+            byte[] buffer = new byte[1024];
+
+            int length = -1;
+
+            while ((length = is.read(buffer)) != -1) {
+
+                bos.write(buffer, 0, length);
+
+            }
+
+
+            bos.close();
+            is.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        String htmlContent = bos.toString();
+        tvContent.setText(Html.fromHtml(htmlContent));
     }
 
     @OnClick({R.id.iv_close, R.id.fl_root})
