@@ -113,7 +113,7 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AppAnalytics.onEvent("Topic", "C" + String.valueOf(position - 1));
+                    AppAnalytics.onEvent("Topic.C",  String.valueOf(position - 1));
                     ARouter.getInstance().build("/test/TopicDetailActivity")
                             .withInt("tid", topicBeanList.get(getRealPosition(position)).id)
                             .withString("bakImg", topicBeanList.get(getRealPosition(position)).backImg)
@@ -190,7 +190,7 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             if (topic == null) return;
             if (hashPosition != null && !hashPosition.contains(String.valueOf(position))) {
                 // 展示埋点
-                AppAnalytics.onEvent("Topic", "IM" + String.valueOf(position - 1));
+                AppAnalytics.onEvent("Topic.IM",  String.valueOf(position - 1));
                 hashPosition.add(String.valueOf(position));
             }
             this.topic = topic;
