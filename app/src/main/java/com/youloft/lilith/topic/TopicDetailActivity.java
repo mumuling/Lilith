@@ -21,6 +21,8 @@ import com.youloft.lilith.topic.bean.ClickLikeEvent;
 import com.youloft.lilith.topic.bean.PointBean;
 import com.youloft.lilith.topic.bean.TopicBean;
 import com.youloft.lilith.topic.bean.TopicDetailBean;
+import com.youloft.lilith.topic.db.PointAllCache;
+import com.youloft.lilith.topic.db.PointAllTable;
 import com.youloft.lilith.topic.db.PointAnswerCache;
 import com.youloft.lilith.topic.db.PointAnswerTable;
 import com.youloft.lilith.topic.db.PointCache;
@@ -69,7 +71,8 @@ public class TopicDetailActivity extends BaseActivity {
     private boolean isMorePoint = true;
     private int isVote = 0;//是否参与过
     private TopicInfoCache topicInfoCache;//话题信息的数据库缓存
-    private PointCache pointCache;//观点信息的数据库缓存
+    private PointCache pointCache;//
+    private PointAllCache pointAllCache;
     private boolean needLoadMoreTopic = true;//是否需要加载更多话题
     private boolean needAddAnswer = true;//是否需要加缓存回复的数量
     @Autowired
@@ -87,6 +90,7 @@ public class TopicDetailActivity extends BaseActivity {
         EventBus.getDefault().register(this);
         topicInfoCache = TopicInfoCache.getIns(this);
         pointCache = PointCache.getIns(this);
+        pointAllCache = PointAllCache.getIns(this);
         initView();
         requestTopicDetail(true);//请求话题的详细信息
         requestPointList();//请求观点列表
@@ -143,6 +147,7 @@ public class TopicDetailActivity extends BaseActivity {
                         handlePointTableInfo(pointBean);
                         pointList.addAll(pointBean.data);
                         handleAnswerTable(pointList,pointBean.t);
+                        pointAllCache.addPointListToDb(pointList,pointBean.t);
                         adapter.setPointBeanList(pointList);
                         totalPoint = pointBean.data.size();
                     }
@@ -153,6 +158,7 @@ public class TopicDetailActivity extends BaseActivity {
                     }
                 });
     }
+
 
     /**
      *     加上本地缓存的回复数量

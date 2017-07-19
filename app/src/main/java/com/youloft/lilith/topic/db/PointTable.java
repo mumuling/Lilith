@@ -7,7 +7,7 @@ import android.provider.BaseColumns;
 
 import java.io.Serializable;
 
-/**
+/**  观点信息的数据库
  *
  */
 
