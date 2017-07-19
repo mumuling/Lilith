@@ -97,8 +97,7 @@ def changeApkPath(String type, String buldType) {
 /**
  * 编译测试任务
  */
-task buildPublish(dependsOn: ['assembleRelease','generatedebugJavadoc']) {
-    build = true
+task buildPublish(dependsOn: ['assembleRelease', 'generatedebugJavadoc']) {
     dependsOn {
         changeApkPath("publish", "release");
 
