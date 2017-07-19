@@ -245,7 +245,7 @@ public class ConsCalDetailActivity extends BaseActivity {
         ValueAnimator alphaAnim = ObjectAnimator.ofFloat(mConsDetailBgImg, View.ALPHA, in ? 0 : 1f, in ? 1f : 0);
 
         final AnimatorSet set = new AnimatorSet();
-        set.setDuration(350);
+        set.setDuration(300);
         set.playTogether(valueAnimator, valueAnimator1, weekTran, alphaAnim);
         set.addListener(new AnimatorListenerAdapter() {
             @Override
