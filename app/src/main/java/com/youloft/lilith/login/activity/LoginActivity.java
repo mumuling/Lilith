@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Base64;
+import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
@@ -262,6 +263,8 @@ public class LoginActivity extends BaseActivity implements BaseTextWatcher.OnTex
 
             @Override
             public void onCancel(SocializePlatform platform, int code) {
+                MediaPlayerHelper.getInstance().register(LoginActivity.this, svBackground);
+
             }
         });
     }
