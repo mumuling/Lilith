@@ -240,6 +240,9 @@ public class LoginActivity extends BaseActivity implements BaseTextWatcher.OnTex
     //微信登录
     @OnClick(R.id.ll_wechat_login)
     public void wechatLogin(View view) {
+        if(!LoginUtils.canClick()){
+            return;
+        }
         //先校验微信是否已经安装
         if (!LoginUtils.isWxInstall(this)) {
             Toaster.showShort("请先安装微信");
