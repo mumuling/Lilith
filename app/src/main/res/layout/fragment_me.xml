@@ -81,7 +81,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="上升星座"
+                    android:text="@string/rise_con"
                     android:textColor="@color/white"
                     android:textSize="16dp" />
             </LinearLayout>
@@ -108,7 +108,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="太阳星座"
+                    android:text="@string/sun_con"
                     android:textColor="@color/white"
                     android:textSize="16dp" />
             </LinearLayout>
@@ -135,7 +135,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="月亮星座"
+                    android:text="@string/moon_con"
                     android:textColor="@color/white"
                     android:textSize="16dp" />
             </LinearLayout>
@@ -160,7 +160,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:background="@color/white_20" />
+                android:background="@color/white_10" />
             <!--我的话题模块-->
             <RelativeLayout
                 android:id="@+id/rl_topic"
@@ -185,7 +185,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="10dp"
                     android:layout_toEndOf="@+id/flag1"
-                    android:text="我的话题"
+                    android:text="@string/my_topic"
                     android:textColor="@color/white"
                     android:textSize="16dp" />
 
@@ -202,7 +202,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_marginLeft="20dp"
-                android:background="#22ffffff" />
+                android:background="@color/white_10" />
             <!--我的资料-->
             <RelativeLayout
                 android:id="@+id/rl_personal_data"
@@ -228,7 +228,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="10dp"
                     android:layout_toEndOf="@+id/flag2"
-                    android:text="我的资料"
+                    android:text="@string/my_information"
                     android:textColor="@color/white"
                     android:textSize="16dp" />
 
@@ -245,7 +245,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_marginLeft="20dp"
-                android:background="@color/white_20" />
+                android:background="@color/white_10" />
             <!--设置-->
             <RelativeLayout
                 android:id="@+id/rl_setting"
@@ -271,7 +271,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="10dp"
                     android:layout_toEndOf="@+id/flag3"
-                    android:text="设置"
+                    android:text="@string/setting"
                     android:textColor="@color/white"
                     android:textSize="16dp" />
 
@@ -288,7 +288,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:background="@color/white_20" />
+                android:background="@color/white_10" />
 
         </LinearLayout>
 

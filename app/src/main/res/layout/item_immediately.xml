@@ -55,7 +55,7 @@
             android:layout_height="30dp"
             android:layout_gravity="center"
             android:background="@drawable/slt_login_btn"
-            android:text="立即测算"
+            android:text="@string/quckly_measure"
             android:textColor="@color/slt_login_text_color"
             android:textSize="14dp" />
     </LinearLayout>

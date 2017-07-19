@@ -24,7 +24,7 @@
             android:layout_marginTop="11dp"
             android:background="@drawable/shp_feedback_bg"
             android:gravity="top"
-            android:hint="请输入遇到的问题或建议..."
+            android:hint="@string/feedback_hint_content"
             android:padding="10dp"
             android:textColor="#999999"
             android:textColorHint="#999999"
@@ -38,7 +38,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="14dp"
             android:background="@drawable/shp_feedback_bg"
-            android:hint="联系电话"
+            android:hint="@string/phone_contact"
             android:inputType="number"
             android:padding="10dp"
             android:textColor="#999999"
@@ -53,8 +53,8 @@
             android:layout_marginRight="50dp"
             android:layout_marginTop="68dp"
             android:background="@drawable/slt_login_btn"
-            android:text="提交"
-            android:textColor="#ffffff"
+            android:text="@string/feed_commit"
+            android:textColor="@color/slt_login_text_color"
             android:textSize="17dp" />
     </LinearLayout>
 </LinearLayout>

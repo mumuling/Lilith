@@ -14,7 +14,11 @@
         android:layout_height="match_parent"
         android:background="#282142"
         android:orientation="vertical">
-
+        <!--分割线-->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/white_10" />
         <!--绑定手机-->
         <RelativeLayout
             android:id="@+id/rl_bind_phone"
@@ -68,7 +72,11 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="15dp" />
         </RelativeLayout>
-
+        <!--分割线-->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/white_10" />
 
         <!--绑定微信  绑定QQ  绑定微博-->
         <LinearLayout
@@ -82,7 +90,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:background="#22ffffff" />
+                android:background="@color/white_10" />
 
             <!--绑定微信-->
             <RelativeLayout
@@ -106,7 +114,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:text="绑定微信"
+                    android:text="@string/bind_we_chat"
                     android:textColor="@color/white"
                     android:textSize="16dp"
                     android:layout_alignTop="@+id/flag2"
@@ -228,7 +236,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:background="#22ffffff" />
+                android:background="@color/white_10" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
