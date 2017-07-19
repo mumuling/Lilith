@@ -1,55 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="200dp"
-    android:layout_height="150dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_marginBottom="15dp"
-    android:background="@drawable/item_topic_box"
-    android:minHeight="150dp"
-    android:layout_marginRight="10dp"
-    android:orientation="vertical">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/card_shadow_pic">
 
-    <com.youloft.lilith.common.widgets.view.RoundImageView
-        android:id="@+id/image_topic_bg"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        app:radius="5dp"/>
-    <com.youloft.lilith.common.widgets.view.RoundImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:background="#80000000"
-        app:radius="5dp"/>
+    <FrameLayout
+        android:layout_width="200dp"
+        android:layout_height="150dp"
+        android:minHeight="150dp">
 
-    <TextView
-        android:id="@+id/topic_content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top|left"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:textColor="@android:color/white"
-        android:gravity="left"
-        android:maxLines="3"
-        android:textSize="16dp"
-        android:ellipsize="end"
-        tools:text="#电话等级划分和技术开发和价格的守空房几点开始几号放假的" />
+        <com.youloft.lilith.common.widgets.view.RoundImageView
+            android:id="@+id/image_topic_bg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            app:radius="5dp" />
 
-    <com.youloft.lilith.topic.widget.HotUserImageStackViewGroup
-        android:id="@+id/layout_user_image"
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="15dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp" />
+        <com.youloft.lilith.common.widgets.view.RoundImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#80000000"
+            android:scaleType="centerCrop"
+            app:radius="5dp" />
 
-    <ImageView
+        <TextView
+            android:id="@+id/topic_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|left"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:ellipsize="end"
+            android:gravity="left"
+            android:maxLines="3"
+            android:textColor="@android:color/white"
+            android:textSize="16dp"
+            tools:text="#电话等级划分和技术开发和价格的守空房几点开始几号放假的" />
 
-        android:id="@+id/imageView2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        <com.youloft.lilith.topic.widget.HotUserImageStackViewGroup
+            android:id="@+id/layout_user_image"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="15dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp" />
+
+        <ImageView
+
+            android:id="@+id/imageView2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
 </FrameLayout>

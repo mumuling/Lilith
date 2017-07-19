@@ -14,9 +14,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:clipChildren="false"
-            android:clipToPadding="false"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp" />
+            android:clipToPadding="false" />
     </com.youloft.lilith.common.widgets.view.PullToRefreshLayout>
 
     <View

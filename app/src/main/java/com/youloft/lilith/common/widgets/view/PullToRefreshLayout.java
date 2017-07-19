@@ -212,7 +212,7 @@ public class PullToRefreshLayout extends RelativeLayout {
                     float rota = (offset) / refreshDist * 44;
                     mRefreshIcon.setState(RefreshImageView.REFRESH_PULL, Math.round(rota));
                 } else {
-                    mRefreshIcon.setState(RefreshImageView.REFRESH_PULL, 44);   //保持一张最后不动
+                    mRefreshIcon.setState(RefreshImageView.REFRESH_PULL, 45);   //保持一张最后不动
                 }
                 break;
             case REFRESHING:
