@@ -49,8 +49,7 @@
                 android:layout_marginRight="6dp"
                 android:text="06.16.2017"
                 android:textColor="@android:color/white"
-                android:textSize="16dp"
-                android:textStyle="italic" />
+                android:textSize="16dp" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -67,8 +66,7 @@
             android:layout_marginTop="5dp"
             android:text="SUNDAY"
             android:textColor="@android:color/white"
-            android:textSize="15dp"
-            android:textStyle="italic" />
+            android:textSize="15dp"/>
 
         <ImageView
             android:id="@+id/cons_my_info_cons_img"
@@ -114,8 +112,7 @@
                     android:layout_marginTop="2dp"
                     android:text="3.21-4.19"
                     android:textColor="@android:color/white"
-                    android:textSize="10dp"
-                    android:textStyle="italic" />
+                    android:textSize="10dp"/>
             </LinearLayout>
         </FrameLayout>
 

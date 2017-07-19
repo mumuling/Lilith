@@ -87,9 +87,12 @@ public class ConsMyInfoHolder extends ConsBaseHolder {
         ButterKnife.bind(this, itemView);
         Typeface num = Typeface.createFromAsset(mContext.getAssets(), "fonts/lilisi_number.ttf");
         Typeface en = Typeface.createFromAsset(mContext.getAssets(), "fonts/lilisi_english.ttf");
+        Typeface cons = Typeface.createFromAsset(mContext.getAssets(), "fonts/lilisi_constellation_regular.ttf");
         mConsMyInfoDate.setTypeface(num);
+        mConsMyInfoDateRange.setTypeface(num);
         mConsMyInfoWeek.setTypeface(en);
         mConsMyInfoEnWord.setTypeface(en);
+        mConsMyInfoXz.setTypeface(cons);
 
         bindDefault();
 
