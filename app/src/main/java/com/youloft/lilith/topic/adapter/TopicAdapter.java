@@ -230,8 +230,6 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     .dontAnimate()
                     .signature(new ObjectKey("list:" + topic.backImg))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .transform(GlideBlurTransform.getInstance(LLApplication.getInstance()))
-                    .override(188, 75)
                     .into(mTopicImage);
             mUserImageStackViewGroup.bindData(topic.voteUser, topic.totalVote);
         }

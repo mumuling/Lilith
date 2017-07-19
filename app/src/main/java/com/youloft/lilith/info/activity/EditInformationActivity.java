@@ -350,7 +350,7 @@ public class EditInformationActivity extends BaseActivity {
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    if (!canSave) {
+                    if (!canSave ) {
                         canSave = true;
                         btlEditInformation.setShowSaveBtn(true);
                     }
