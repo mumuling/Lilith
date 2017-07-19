@@ -187,6 +187,7 @@ public class LoginActivity extends BaseActivity implements BaseTextWatcher.OnTex
                                 userBean.data.result == 0) {
                             AppSetting.saveUserInfo(userBean); //保存用户信息
                             EventBus.getDefault().post(new LoginEvent(true));//发送登录事件
+                            Toaster.showShort("登录成功");
                             finish();
 
                         } else {
@@ -302,7 +303,7 @@ public class LoginActivity extends BaseActivity implements BaseTextWatcher.OnTex
                             if (android.text.TextUtils.isEmpty(userBean.data.userInfo.birthLongi)) { //新用户
                                 ARouter.getInstance().build("/test/EditInformationActivity").navigation();
                             }
-
+                            Toaster.showShort("登录成功");
                             finish();
                         } else {
                             Toaster.showShort("登录失败");

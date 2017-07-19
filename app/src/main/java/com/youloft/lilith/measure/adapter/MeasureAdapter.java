@@ -10,6 +10,7 @@ import com.youloft.lilith.R;
 import com.youloft.lilith.common.utils.SafeUtil;
 import com.youloft.lilith.measure.bean.MeasureBean;
 import com.youloft.lilith.measure.holder.BaseMeasureHolder;
+import com.youloft.lilith.measure.holder.EmptyHolder;
 import com.youloft.lilith.measure.holder.ImmediatelyMeasureHolder;
 import com.youloft.lilith.measure.holder.MasterMeasureHolder;
 import com.youloft.lilith.measure.holder.MeasureBannerHolder;
@@ -30,6 +31,7 @@ public class MeasureAdapter extends RecyclerView.Adapter<BaseMeasureHolder> {
     public static final int ITEM_MASTER_MEASURE = 2;//大师亲算
     public static final int ITEM_BANNER = 3;//banner
     public static final int ITEM_IMMEDIATELY_MEASURE = 4;//立即测算
+    public static final int ITEM_MEASURE_EMPTY = 100;//空的holder  垫高度用的
 
 
     private int mImmedStart = 0; //统计立即测算起始位置
@@ -80,6 +82,8 @@ public class MeasureAdapter extends RecyclerView.Adapter<BaseMeasureHolder> {
                 return new MeasureBannerHolder(mContext, parent);
             case ITEM_IMMEDIATELY_MEASURE:
                 return new ImmediatelyMeasureHolder(mContext, parent);
+            case ITEM_MEASURE_EMPTY:
+                return new EmptyHolder(mContext,parent);
             default:
                 return null;
         }
@@ -88,7 +92,11 @@ public class MeasureAdapter extends RecyclerView.Adapter<BaseMeasureHolder> {
 
     @Override
     public int getItemViewType(int position) {
-        return mMeasureData.get(position).location;
+        if (position > mMeasureData.size() -1 ){
+            return ITEM_MEASURE_EMPTY;
+        }else {
+            return mMeasureData.get(position).location;
+        }
     }
 
     @Override
@@ -105,7 +113,7 @@ public class MeasureAdapter extends RecyclerView.Adapter<BaseMeasureHolder> {
 
     @Override
     public int getItemCount() {
-        return mMeasureData.size();
+        return mMeasureData.size() + 1;//这里长度加一 用于最后的空holder垫起最后的item
     }
 
 

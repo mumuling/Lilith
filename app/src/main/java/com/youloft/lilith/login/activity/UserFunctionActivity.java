@@ -353,6 +353,7 @@ public class UserFunctionActivity extends BaseActivity implements OnTextChange {
                             if (TextUtils.isEmpty(userBean.data.userInfo.birthLongi)) { //资料不完整
                                 ARouter.getInstance().build("/test/EditInformationActivity").navigation();
                             }
+                            Toaster.showShort("登录成功");
                             finish();
                         } else if(userBean.data.result == 4){
                             Toaster.showShort("账号已禁用");
