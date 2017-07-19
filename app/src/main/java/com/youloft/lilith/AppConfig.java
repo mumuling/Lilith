@@ -23,7 +23,7 @@ public class AppConfig {
      */
     public static final String CID = "Youloft_Android";
     public static final String CONFIG_APP_KEY = "lilith_android";
-    public static final String TD_APPID = "72A651CFBCCA43EABB547A6C6518F144";//TD的APPKey
+    public static final String TD_APPID = "A3DAB99C79B14F478C283EF08926B0A0";//TD的APPKey
 
     public static final String UMENG_APPKEY = "595de80bf43e487e8300177e";//友盟AppKey
     public static final String UMENG_PUSH_SECRET = "";//推送
