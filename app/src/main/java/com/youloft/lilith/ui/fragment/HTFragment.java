@@ -128,7 +128,7 @@ public class HTFragment extends BaseFragment implements PullToRefreshLayout.OnRe
         mTopicRv = (RecyclerView) getView().findViewById(R.id.lv_topic);
         imageNoNet = (ImageView) getView().findViewById(R.id.default_image);
         llDefault = (LinearLayout) getView().findViewById(R.id.ll_default);
-        mToolBar.setTitle("星座话题");
+        mToolBar.setTitle(getResources().getString(R.string.topic_title));
         //设置recycleView
         mLayoutManager = new LinearLayoutManager(getContext());
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);

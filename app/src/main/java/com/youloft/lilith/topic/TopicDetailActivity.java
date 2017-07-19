@@ -313,7 +313,7 @@ public class TopicDetailActivity extends BaseActivity {
     }
 
     private void initView() {
-        toolBar.setTitle("星座话题");
+        toolBar.setTitle(getResources().getString(R.string.topic_title));
         mLayoutManager = new LinearLayoutManager(this);
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rvTopicDetail.setLayoutManager(mLayoutManager);

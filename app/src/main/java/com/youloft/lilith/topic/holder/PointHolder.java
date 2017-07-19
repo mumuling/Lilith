@@ -209,7 +209,7 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
                     public void onDataSuccess(PointBean pointBean) {
                         if (pointBean.data == null || pointBean.data.size() == 0) {
                             textLoadMore.setVisibility(View.VISIBLE);
-                            textLoadMore.setText("没有更多数据");
+                            textLoadMore.setText(mContext.getResources().getString(R.string.no_more_data));
                             imageLoading.setVisibility(View.GONE);
                             imageLoading.clearAnimation();
                             return;
@@ -221,7 +221,7 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
                         adapter.setPointBeanList(pointBean.data);
                         totalPoint = adapter.pointBeanList.size();
                         textLoadMore.setVisibility(View.VISIBLE);
-                        textLoadMore.setText("展开更多");
+                        textLoadMore.setText(mContext.getResources().getString(R.string.load_more));
                         imageLoading.setVisibility(View.GONE);
                         imageLoading.clearAnimation();
                     }
@@ -230,7 +230,7 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
                     protected void onFailed(Throwable e) {
                         super.onFailed(e);
                         textLoadMore.setVisibility(View.VISIBLE);
-                        textLoadMore.setText("没有更多数据");
+                        textLoadMore.setText(mContext.getResources().getString(R.string.no_more_data));
                         imageLoading.setVisibility(View.GONE);
                         imageLoading.clearAnimation();
 
@@ -358,16 +358,16 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
             llLoadMore.setVisibility(View.VISIBLE);
             commentDividerBottom.setVisibility(View.GONE);
             if (position >= 10) {
-                textLoadMore.setText("加载更多");
+                textLoadMore.setText(mContext.getResources().getString(R.string.load_more));
             } else {
-                textLoadMore.setText("没有更多数据");
+                textLoadMore.setText(mContext.getResources().getString(R.string.no_more_data));
             }
         } else {
             llLoadMore.setVisibility(View.GONE);
             commentDividerBottom.setVisibility(View.VISIBLE);
         }
         if (point.reply == 0) {
-            textCommentAnswerCount.setText("回复");
+            textCommentAnswerCount.setText(mContext.getResources().getString(R.string.reply));
         } else {
             textCommentAnswerCount.setText(String.valueOf(point.reply));
         }

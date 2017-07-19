@@ -187,7 +187,7 @@
             android:gravity="center"
             android:layout_gravity="center"
             android:id="@+id/text_load_more"
-            android:text="展开更多"
+            android:text="@string/load_more"
             android:textSize="15sp"
             android:textColor="#ffffff"/>
         <ImageView
