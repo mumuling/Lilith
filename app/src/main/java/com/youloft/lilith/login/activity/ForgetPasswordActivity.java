@@ -289,6 +289,8 @@ public class ForgetPasswordActivity extends BaseActivity implements BaseTextWatc
                         }
                         if(sendSmsBean.data.msg.equals("短信发送超出限制")){
                             Toaster.showShort("超出发送数量限制");
+                            handler.removeCallbacks(runnable);
+                            tvGetCode.setText(R.string.get_validation_code);
                             return;
                         }
                     }
