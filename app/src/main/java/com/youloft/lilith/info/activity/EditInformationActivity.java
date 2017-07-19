@@ -223,7 +223,6 @@ public class EditInformationActivity extends BaseActivity {
                 ivHeader.setImageResource(R.drawable.default_user_head_img);
             }
             //进来初始化的时候
-            handleEditText();
             mTempContent = detail.nickName;
             String con = detail.nickName;
             int measuredWidth = etNickName.getMeasuredWidth();
