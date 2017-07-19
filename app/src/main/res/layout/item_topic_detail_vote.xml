@@ -35,7 +35,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="请选择您的观点"
+        android:text="@string/choose_your_point"
         android:textSize="20sp"
         android:layout_marginTop="20dp"
         android:textColor="@color/white"
@@ -48,7 +48,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="发表的观点"
+        android:text="@string/published_point"
         android:layout_marginTop="37dp"
         android:textColor="@color/white"
         android:layout_marginLeft="20dp"

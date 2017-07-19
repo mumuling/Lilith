@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <FrameLayout
@@ -10,13 +11,13 @@
         android:layout_height="80dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="20.5dp"
-        android:background="#d8d8d8">
+        android:layout_marginTop="20.5dp">
 
-        <ImageView
+        <com.youloft.lilith.common.widgets.view.RoundImageView
             android:id="@+id/iv_banner"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:radius="2.5dp"
             android:scaleType="centerCrop" />
     </FrameLayout>
 </FrameLayout>

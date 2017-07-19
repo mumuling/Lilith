@@ -37,6 +37,8 @@ import com.youloft.lilith.topic.bean.ClickLikeBean;
 import com.youloft.lilith.topic.bean.ClickLikeEvent;
 import com.youloft.lilith.topic.bean.PointBean;
 import com.youloft.lilith.topic.bean.TopicDetailBean;
+import com.youloft.lilith.topic.db.PointAllCache;
+import com.youloft.lilith.topic.db.PointAllTable;
 import com.youloft.lilith.topic.db.PointAnswerCache;
 import com.youloft.lilith.topic.db.PointAnswerTable;
 import com.youloft.lilith.topic.db.PointCache;
@@ -207,17 +209,19 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
                     public void onDataSuccess(PointBean pointBean) {
                         if (pointBean.data == null || pointBean.data.size() == 0) {
                             textLoadMore.setVisibility(View.VISIBLE);
-                            textLoadMore.setText("没有更多数据");
+                            textLoadMore.setText(mContext.getResources().getString(R.string.no_more_data));
                             imageLoading.setVisibility(View.GONE);
                             imageLoading.clearAnimation();
                             return;
                         }
                        // handlePointTableInfo(pointBean.data);
-                        adapter.setPointBeanList(pointBean.data);
+                        PointAllCache.getIns(mContext).addPointListToDb(pointBean.data,pointBean.t);
+                        //removeRepeatPoint(pointBean.data,pointBean.t);
                         handleAnswerTable(pointBean.data,pointBean.t);
+                        adapter.setPointBeanList(pointBean.data);
                         totalPoint = adapter.pointBeanList.size();
                         textLoadMore.setVisibility(View.VISIBLE);
-                        textLoadMore.setText("展开更多");
+                        textLoadMore.setText(mContext.getResources().getString(R.string.load_more));
                         imageLoading.setVisibility(View.GONE);
                         imageLoading.clearAnimation();
                     }
@@ -226,13 +230,25 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
                     protected void onFailed(Throwable e) {
                         super.onFailed(e);
                         textLoadMore.setVisibility(View.VISIBLE);
-                        textLoadMore.setText("没有更多数据");
+                        textLoadMore.setText(mContext.getResources().getString(R.string.no_more_data));
                         imageLoading.setVisibility(View.GONE);
                         imageLoading.clearAnimation();
 
                     }
                 });
 
+
+    }
+
+    private void removeRepeatPoint(List<PointBean.DataBean> data, long t) {
+        if (data == null || data.size() == 0)return;
+        ArrayList<PointAllTable> pointAllTableList = PointAllCache.getIns(mContext).getPointListByPid(t);
+        PointAllCache pointAllCache = PointAllCache.getIns(mContext);
+        for (PointBean.DataBean point : data ) {
+            if (pointAllCache.pointIsExperid(point.id,t)) {
+                data.remove(point);
+            }
+        }
 
     }
 
@@ -342,16 +358,16 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
             llLoadMore.setVisibility(View.VISIBLE);
             commentDividerBottom.setVisibility(View.GONE);
             if (position >= 10) {
-                textLoadMore.setText("加载更多");
+                textLoadMore.setText(mContext.getResources().getString(R.string.load_more));
             } else {
-                textLoadMore.setText("没有更多数据");
+                textLoadMore.setText(mContext.getResources().getString(R.string.no_more_data));
             }
         } else {
             llLoadMore.setVisibility(View.GONE);
             commentDividerBottom.setVisibility(View.VISIBLE);
         }
         if (point.reply == 0) {
-            textCommentAnswerCount.setText("回复");
+            textCommentAnswerCount.setText(mContext.getResources().getString(R.string.reply));
         } else {
             textCommentAnswerCount.setText(String.valueOf(point.reply));
         }

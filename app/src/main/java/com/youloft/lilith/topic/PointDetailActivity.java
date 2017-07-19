@@ -27,6 +27,7 @@ import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.CalendarHelper;
+import com.youloft.lilith.common.utils.StringUtil;
 import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.common.utils.ViewUtil;
 import com.youloft.lilith.cons.view.LogInOrCompleteDialog;
@@ -354,7 +355,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
             imm.showSoftInput(commentEdit, 0);
         }
 
-        commentEdit.setHint("回复 " + replyName);
+        commentEdit.setHint("回复 " + StringUtil.toNameString(replyName));
 
     }
 

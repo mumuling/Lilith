@@ -34,7 +34,7 @@
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 android:id="@+id/text_confirm"
-                android:text="发表"
+                android:text="@string/publish"
                 android:textSize="17sp"
                 android:textColor="#de5deb"
                 android:layout_alignParentRight="true"

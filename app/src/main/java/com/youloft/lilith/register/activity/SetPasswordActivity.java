@@ -86,14 +86,14 @@ public class SetPasswordActivity extends BaseActivity {
         source = getIntent().getStringExtra("source");
 
         if (source.equals("20001")) {  //注册账号
-            tvBack.setText("注册账号");
-            btnLogin.setText("登录");
+            tvBack.setText(R.string.registered_account);
+            btnLogin.setText(R.string.login);
         } else if (source.equals("20002")) { //忘记密码
-            tvBack.setText("忘记密码");
-            btnLogin.setText("确认");
+            tvBack.setText(R.string.forget_password);
+            btnLogin.setText(R.string.confirm);
         } else {   //修改密码
-            tvBack.setText("修改密码");
-            btnLogin.setText("确认");
+            tvBack.setText(R.string.modify_password);
+            btnLogin.setText(R.string.confirm);
         }
 
         editTextSetting();

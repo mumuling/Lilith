@@ -52,7 +52,8 @@ public class FeedBackActivity extends BaseActivity {
         ButterKnife.bind(this);
         initTitle();
         mApiVersion = String.valueOf(android.os.Build.VERSION.SDK_INT);
-        etFeedbackPhone.setFilters(new InputFilter[]{new InputFilter.LengthFilter(11)});
+        String model = android.os.Build.MODEL;
+        mApiVersion = model + " " + mApiVersion;
     }
 
     /**
@@ -93,12 +94,13 @@ public class FeedBackActivity extends BaseActivity {
             Toaster.showShort("内容或号码不能为空");
             return;
         }
-        if(!LoginUtils.isPhoneNumber(feedPhone)){
-            Toaster.showShort("请输入正确的手机号码");
-            return;
+
+        String uid = "";
+        if (AppSetting.getUserInfo() != null) {
+            uid = String.valueOf(AppSetting.getUserInfo().data.userInfo.id);
         }
 
-        UpdateUserRepo.feedBack(feedPhone, getHostIP(), String.valueOf(AppSetting.getVersionCode()), mApiVersion, feedContent)
+        UpdateUserRepo.feedBack(feedPhone, getHostIP(), String.valueOf(AppSetting.getVersionCode()), mApiVersion, feedContent, uid)
                 .compose(this.<FeedBackBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
@@ -108,6 +110,7 @@ public class FeedBackActivity extends BaseActivity {
                     public void onDataSuccess(FeedBackBean feedBackBean) {
                         if (feedBackBean.data.result) {
                             Toaster.showShort("反馈成功");
+                            finish();
                         } else {
                             Toaster.showShort("网络异常");
                         }
@@ -118,6 +121,7 @@ public class FeedBackActivity extends BaseActivity {
 
     /**
      * 获取ip地址
+     *
      * @return
      */
     public static String getHostIP() {

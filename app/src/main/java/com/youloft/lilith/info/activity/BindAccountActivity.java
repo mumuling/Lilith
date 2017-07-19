@@ -12,6 +12,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.rx.RxObserver;
+import com.youloft.lilith.common.utils.LoginUtils;
 import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.info.event.BindAccountEvent;
 import com.youloft.lilith.info.repo.UpdateUserRepo;
@@ -148,6 +149,13 @@ public class BindAccountActivity extends BaseActivity {
      *
      */
     private void bindWeiXin() {
+        //先校验微信是否已经安装
+        if (!LoginUtils.isWxInstall(this)) {
+            Toaster.showShort("请先安装微信");
+            return;
+        }
+
+
         //0.先判断用户信息里面有没有电话
         //1.拉起微信的授权
         //2.发起请求
