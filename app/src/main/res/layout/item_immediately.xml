@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -11,13 +12,13 @@
         android:layout_marginTop="20dp"
         android:orientation="horizontal">
 
-        <ImageView
+        <com.youloft.lilith.common.widgets.view.RoundImageView
             android:id="@+id/iv_icon"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:scaleType="centerCrop"
-            android:layout_gravity="center_vertical"
-            android:background="#d8d8d8" />
+            app:radius="2.5dp"
+            android:layout_gravity="center_vertical" />
 
         <LinearLayout
             android:layout_width="0dp"

@@ -99,7 +99,7 @@
     <string name="logout_user">退出登录</string>
     <string name="bind_we_chat">绑定微信</string>
     <string name="feedback_hint_content">请输入遇到的问题或建议...</string>
-    <string name="phone_contact">联系电话</string>
+    <string name="phone_contact">联系方式: QQ/邮箱/电话</string>
     <string name="feed_commit">提交</string>
     <string name="we_chat_account">微信:  暗月莉莉斯</string>
     <string name="email_content">邮箱：lilith@Youloft.com</string>
