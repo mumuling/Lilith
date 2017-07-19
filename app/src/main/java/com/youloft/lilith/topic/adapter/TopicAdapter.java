@@ -55,6 +55,7 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private static int ITEM_TYPE_NO_DATA = 2003;//首页热门无数据item
     private static int ITEM_TYPY_BOTTOM = 3999;
     private boolean isHotTopic = false;
+    public HashSet<String> hashPosition = new HashSet<>();
 
 
     private List<TopicBean.DataBean> topicBeanList = new ArrayList<>();
@@ -76,10 +77,11 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         topicBeanList.addAll(data);
         notifyDataSetChanged();
     }
+
     public void setMoreData(List<TopicBean.DataBean> data) {
-        if (data == null || data.size() == 0)return;
+        if (data == null || data.size() == 0) return;
         topicBeanList.addAll(data);
-        notifyItemRangeChanged(topicBeanList.size() - data.size() + 1,data.size());
+        notifyItemRangeChanged(topicBeanList.size() - data.size() + 1, data.size());
     }
 
     @Override
@@ -89,7 +91,7 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             holder = new MyHeaderHolder(mInflater.inflate(R.layout.header_topic_rv, parent, false));
         } else if (viewType == ITEM_TYPE_HOT_TOPIC) {
             holder = new HotTopicViewHolder(mInflater.inflate(R.layout.list_item_hot_topic, parent, false));
-        } else if (viewType == ITEM_TYPE_NORMAL){
+        } else if (viewType == ITEM_TYPE_NORMAL) {
             holder = new NormalViewHolder(mInflater.inflate(R.layout.list_item_topic, parent, false));
         } else if (viewType == ITEM_TYPE_NO_DATA) {
             holder = new HotTopicNoDataViewHolder(mInflater.inflate(R.layout.list_item_hot_topic_no_data, parent, false));
@@ -103,20 +105,20 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof NormalViewHolder) {
             TopicBean.DataBean safeData = SafeUtil.getSafeData(topicBeanList, getRealPosition(position));
-            if(safeData == null){
+            if (safeData == null) {
                 return;
             }
-            ((NormalViewHolder) holder).bind(safeData,position);
+            ((NormalViewHolder) holder).bind(safeData, position);
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     AppAnalytics.onEvent("Topic", "C" + String.valueOf(position - 1));
                     ARouter.getInstance().build("/test/TopicDetailActivity")
                             .withInt("tid", topicBeanList.get(getRealPosition(position)).id)
-                            .withString("bakImg",topicBeanList.get(getRealPosition(position)).backImg)
+                            .withString("bakImg", topicBeanList.get(getRealPosition(position)).backImg)
                             .navigation();
                     if (holder instanceof HotTopicViewHolder) {
-                        AppAnalytics.onEvent("Hometopic", "C");
+                        AppAnalytics.onEvent("Hometopic", "C" + String.valueOf(position - 1));
                     }
                 }
             });
@@ -132,7 +134,7 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 return topicBeanList.size();
             }
         }
-        return topicBeanList.size() +  2;
+        return topicBeanList.size() + 2;
     }
 
     public int getRealPosition(int position) {
@@ -149,7 +151,7 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 return ITEM_TYPE_HOT_TOPIC;
             }
         }
-        return position == 0 ? ITEM_TYPE_HEADER :position == getItemCount() -1?ITEM_TYPY_BOTTOM : ITEM_TYPE_NORMAL;
+        return position == 0 ? ITEM_TYPE_HEADER : position == getItemCount() - 1 ? ITEM_TYPY_BOTTOM : ITEM_TYPE_NORMAL;
     }
 
     /**
@@ -163,7 +165,8 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         private boolean needReport = true;
         private TopicBean.DataBean topic;
         private boolean isFirst = true;
-        private HashSet<String> hashPosition = new HashSet<>();
+
+
         public NormalViewHolder(View itemView) {
             super(itemView);
             mTopicContent = (TextView) itemView.findViewById(R.id.topic_content);
@@ -171,24 +174,25 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             mTopicImage = (ImageView) itemView.findViewById(R.id.image_topic_bg);
         }
 
-        public void bind(TopicBean.DataBean topic,int position) {
-            if (topic == null)return;
-            if ( hashPosition != null && !hashPosition.contains(String.valueOf(position))) {
+        private static final String TAG = "NormalViewHolder";
+        public void bind(TopicBean.DataBean topic, int position) {
+            if (topic == null) return;
+            if (hashPosition != null && !hashPosition.contains(String.valueOf(position))) {
                 // 展示埋点
-                    AppAnalytics.onEvent("Topic", "IM" + String.valueOf(position - 1));
-                    hashPosition.add(String.valueOf(position));
-                }
-                this.topic = topic;
+                AppAnalytics.onEvent("Topic", "IM" + String.valueOf(position - 1));
+                hashPosition.add(String.valueOf(position));
+            }
+            this.topic = topic;
             mTopicContent.setText(topic.title);
             GlideApp.with(itemView)
                     .asBitmap()
                     .load(topic.backImg)
                     .dontAnimate()
-                    .signature(new ObjectKey("list:"+topic.backImg))
+                    .signature(new ObjectKey("list:" + topic.backImg))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
 //                    .transform(new MultiTransformation<Bitmap>(new CenterCrop(),new GlideBlurTransform(itemView.getContext())))
                     .transform(GlideBlurTransform.getInstance(LLApplication.getInstance()))
-                    .override(188,75)
+                    .override(188, 75)
                     .into(mTopicImage);
 
 
@@ -200,16 +204,18 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
      * 热门话题item的holder
      */
     public class HotTopicViewHolder extends NormalViewHolder {
-        private boolean isReport = false;
+        private HashSet<String> homePosition = new HashSet<>();
+
         public HotTopicViewHolder(View itemView) {
             super(itemView);
         }
 
         @Override
-        public void bind(TopicBean.DataBean topic ,int position) {
-            if (!isReport) {
-                AppAnalytics.onEvent("Hometopic", "IM");
-                isReport = true;
+        public void bind(TopicBean.DataBean topic, int position) {
+            if (homePosition != null && !homePosition.contains(String.valueOf(position))) {
+                // 展示埋点
+                AppAnalytics.onEvent("Hometopic", "IM" + String.valueOf(position - 1));
+                homePosition.add(String.valueOf(position));
             }
             mTopicContent.setText(topic.title);
 
@@ -217,10 +223,10 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     .asBitmap()
                     .load(topic.backImg)
                     .dontAnimate()
-                    .signature(new ObjectKey("list:"+topic.backImg))
+                    .signature(new ObjectKey("list:" + topic.backImg))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .transform(GlideBlurTransform.getInstance(LLApplication.getInstance()))
-                    .override(188,75)
+                    .override(188, 75)
                     .into(mTopicImage);
             mUserImageStackViewGroup.bindData(topic.voteUser, topic.totalVote);
         }
