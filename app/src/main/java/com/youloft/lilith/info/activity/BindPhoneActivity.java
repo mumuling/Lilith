@@ -20,6 +20,7 @@ import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.LoginUtils;
 import com.youloft.lilith.common.utils.Toaster;
+import com.youloft.lilith.info.event.BindAccountEvent;
 import com.youloft.lilith.info.repo.UpdateUserRepo;
 import com.youloft.lilith.login.MediaPlayerHelper;
 import com.youloft.lilith.login.PhoneFocusChangeListener;
@@ -29,6 +30,8 @@ import com.youloft.lilith.login.bean.UserBean;
 import com.youloft.lilith.login.repo.SendSmsRepo;
 import com.youloft.lilith.login.repo.SmsCodeRepo;
 import com.youloft.lilith.setting.AppSetting;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -383,6 +386,7 @@ public class BindPhoneActivity extends BaseActivity {
                     public void onDataSuccess(UserBean userBean) {
                         if (userBean.data.result == 0) {
                             AppSetting.saveUserInfo(userBean);
+                            EventBus.getDefault().post(new BindAccountEvent());
                             Toaster.showShort("绑定成功");
                             finish();
 
