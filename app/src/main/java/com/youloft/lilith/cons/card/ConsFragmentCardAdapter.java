@@ -56,6 +56,7 @@ public class ConsFragmentCardAdapter extends RecyclerView.Adapter<BaseHolder> {
             String s = ((ConsYSHolder) holder).initReportKey();
             if (!imreport.contains(s)){
                 AppAnalytics.onEvent(s + ".IM");
+                imreport.add(s);
             }
         }
     }
