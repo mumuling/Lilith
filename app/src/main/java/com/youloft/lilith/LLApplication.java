@@ -71,7 +71,7 @@ public class LLApplication extends Application {
         //初始化页面路由
         AppRouter.init(this, AppConfig.DebugMode);
         //社交化&登录
-        Config.DEBUG = true;
+        Config.DEBUG = false;
         SocializeApp.setAppKey(AppConfig.UMENG_APPKEY);//设置分享的AppKey
         SocializeApp.setWeixin(AppConfig.WEIXIN_APPKEY, AppConfig.WEIXIN_SECRET);
         SocializeApp.get(this);
