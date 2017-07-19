@@ -111,7 +111,11 @@ public class AuthorPointHolder extends RecyclerView.ViewHolder implements View.O
                 .into(imageCommentUser);
 
         //用户名字
-        textUserName.setText(StringUtil.toNameString(point.nickName));
+        if (AppSetting.getUserInfo() != null && AppSetting.getUserInfo().data.userInfo.id == point.userId) {
+            textUserName.setText(StringUtil.toNameString(AppSetting.getUserInfo().data.userInfo.nickName));
+        } else {
+            textUserName.setText(StringUtil.toNameString(point.nickName));
+        }
         //点赞数
         bindZan(point);
 
