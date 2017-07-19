@@ -259,6 +259,7 @@ public class LoginActivity extends BaseActivity implements BaseTextWatcher.OnTex
 
             @Override
             public void onError(SocializePlatform platform, int code, Throwable err) {
+                MediaPlayerHelper.getInstance().register(LoginActivity.this, svBackground);
             }
 
             @Override
