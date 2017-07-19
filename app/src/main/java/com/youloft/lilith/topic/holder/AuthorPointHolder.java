@@ -129,7 +129,7 @@ public class AuthorPointHolder extends RecyclerView.ViewHolder implements View.O
         for (int i = 0; i < topic.size(); i++) {
             TopicDetailBean.DataBean.OptionBean optionBean = topic.get(i);
             if (optionBean.id == point.topicOptionId) {
-                textVoteResult.setText("投票给" + optionBean.title);//投票
+                textVoteResult.setText("投票给: " + optionBean.title);//投票
             }
         }
         if (point.topicOptionId % 2 == 1) {
