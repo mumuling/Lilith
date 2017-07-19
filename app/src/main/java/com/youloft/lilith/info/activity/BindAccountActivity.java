@@ -3,6 +3,7 @@ package com.youloft.lilith.info.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -105,10 +106,13 @@ public class BindAccountActivity extends BaseActivity {
         }
         //这个是对手机号码的显示
         String phone = userInfo.data.userInfo.phone;
-        if (phone.length() != 11) return;
-        phone = phone.substring(0, 3) + "****" + phone.substring(7);
-        tvPhoneNumber.setText(phone);
-        tvPhoneNumber.setVisibility(View.VISIBLE);
+        if(!TextUtils.isEmpty(phone)){
+            if (phone.length() != 11) return;
+            phone = phone.substring(0, 3) + "****" + phone.substring(7);
+            tvPhoneNumber.setText(phone);
+            tvPhoneNumber.setVisibility(View.VISIBLE);
+        }
+
         //判断是不是微信三方登录的,如果是 直接给他隐藏了  后面的绑定微信是否显示就不管了
         if (userInfo.data.userInfo.thirdLogin) {
             llThirdBindContainer.setVisibility(View.INVISIBLE);

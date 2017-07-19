@@ -39,7 +39,6 @@
             android:layout_marginTop="14dp"
             android:background="@drawable/shp_feedback_bg"
             android:hint="@string/phone_contact"
-            android:inputType="number"
             android:padding="10dp"
             android:textColor="#999999"
             android:textColorHint="#999999"

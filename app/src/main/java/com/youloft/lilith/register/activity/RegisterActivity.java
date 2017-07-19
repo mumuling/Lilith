@@ -351,8 +351,10 @@ public class RegisterActivity extends BaseActivity {
                         if(sendSmsBean == null){
                             return;
                         }
-                        if(sendSmsBean.data.msg.equals("短信发送超出限制")){
-                            Toaster.showShort("超出发送数量限制");
+                        if(sendSmsBean.data.msg.equals("超出了发送数量限制")){
+                            Toaster.showShort("超出了发送数量限制");
+                            handler.removeCallbacks(runnable);
+                            tvGetCode.setText(R.string.get_validation_code);
                             return;
                         }
 
@@ -435,7 +437,7 @@ public class RegisterActivity extends BaseActivity {
             Toaster.showShort("手机号码不正确");
             return;
         }
-        smsCode.replaceAll(" ","");
+        smsCode = smsCode.replaceAll(" ","");
         if (smsCode.trim().length() != 6) {
             Toaster.showShort("请检查手机号码或者验证码");
             return;
