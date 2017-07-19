@@ -116,7 +116,7 @@ public class LogInOrCompleteDialog extends BaseDialog {
             dismiss();
             return;
         }
-        AppAnalytics.onEvent("Donepopup.IM");
+        AppAnalytics.onEvent("Datapopup.IM");
         hisDialogShow = true;
         initDate();
         super.show();
