@@ -25,7 +25,7 @@ import butterknife.OnClick;
 public class PrivacyDialog extends BaseDialog {
 
 
-    @BindView(R.id.tv_content)
+    @BindView(R.id.tc_content)
     TextView tvContent;
     Context context;
 
@@ -43,29 +43,40 @@ public class PrivacyDialog extends BaseDialog {
     private void initView() {
         setContentView(R.layout.dialog_privacy);
         ButterKnife.bind(this);
-
-        InputStream is = context.getResources().openRawResource(R.raw.privacy);
+        InputStream is = null;
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         try {
+            is = context.getResources().openRawResource(R.raw.privacy);
             byte[] buffer = new byte[1024];
-
             int length = -1;
-
             while ((length = is.read(buffer)) != -1) {
-
                 bos.write(buffer, 0, length);
-
             }
 
-
-            bos.close();
-            is.close();
+            String htmlContent = bos.toString();
+            Spanned spanned = Html.fromHtml(htmlContent);
+            tvContent.setText(spanned);
         } catch (IOException e) {
             e.printStackTrace();
+        }finally {
+            if (bos != null) {
+                try {
+                    bos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
-        String htmlContent = bos.toString();
-        tvContent.setText(Html.fromHtml(htmlContent));
+
+
     }
 
     @OnClick({R.id.iv_close, R.id.fl_root})
@@ -77,5 +88,4 @@ public class PrivacyDialog extends BaseDialog {
                 break;
         }
     }
-
 }

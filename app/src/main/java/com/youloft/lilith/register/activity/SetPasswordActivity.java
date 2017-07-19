@@ -130,11 +130,7 @@ public class SetPasswordActivity extends BaseActivity {
                     ivCleanPassword01.setVisibility(View.INVISIBLE);
                     ivIsShowPwd01.setVisibility(View.INVISIBLE);
                 }
-                if (android.text.TextUtils.isEmpty(etPassword.getText().toString())) {
-                    isPwdEmpty = false;
-                } else {
-                    isPwdEmpty = true;
-                }
+                isPwdEmpty = !android.text.TextUtils.isEmpty(etPassword.getText().toString());
                 if (isPwdEmpty && isConfirmPwdEmpty) {
                     btnLogin.setEnabled(true);
                 } else {
@@ -165,11 +161,7 @@ public class SetPasswordActivity extends BaseActivity {
                     ivCleanPassword02.setVisibility(View.INVISIBLE);
                     ivIsShowPwd02.setVisibility(View.INVISIBLE);
                 }
-                if (android.text.TextUtils.isEmpty(etConfirmPassword.getText().toString())) {
-                    isConfirmPwdEmpty = false;
-                } else {
-                    isConfirmPwdEmpty = true;
-                }
+                isConfirmPwdEmpty = !android.text.TextUtils.isEmpty(etConfirmPassword.getText().toString());
                 if (isPwdEmpty && isConfirmPwdEmpty) {
                     btnLogin.setEnabled(true);
                 } else {

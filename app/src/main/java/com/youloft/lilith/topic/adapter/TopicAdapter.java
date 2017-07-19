@@ -56,6 +56,7 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private static int ITEM_TYPY_BOTTOM = 3999;
     private boolean isHotTopic = false;
 
+    private HashSet<String> homePosition = new HashSet<>();
 
     private List<TopicBean.DataBean> topicBeanList = new ArrayList<>();
 
@@ -121,6 +122,14 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     }
                 }
             });
+
+            if (holder instanceof HotTopicViewHolder) {
+                if (homePosition != null && !homePosition.contains(String.valueOf(position))) {
+                    // 展示埋点
+                    AppAnalytics.onEvent("Hometopic", "IM" + String.valueOf(position - 1));
+                    homePosition.add(String.valueOf(position));
+                }
+            }
         }
     }
 
@@ -202,7 +211,6 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
      * 热门话题item的holder
      */
     public class HotTopicViewHolder extends NormalViewHolder {
-        private HashSet<String> homePosition = new HashSet<>();
 
         public HotTopicViewHolder(View itemView) {
             super(itemView);
@@ -210,11 +218,6 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         @Override
         public void bind(TopicBean.DataBean topic, int position) {
-            if (homePosition != null && !homePosition.contains(String.valueOf(position))) {
-                // 展示埋点
-                AppAnalytics.onEvent("Hometopic", "IM" + String.valueOf(position - 1));
-                homePosition.add(String.valueOf(position));
-            }
             mTopicContent.setText(topic.title);
 
             GlideApp.with(itemView)

@@ -141,11 +141,7 @@ public class BindPhoneActivity extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (TextUtils.isEmpty(etPhoneNumber.getText().toString())) {
-                    isPhoneEmpty = false;
-                } else {
-                    isPhoneEmpty = true;
-                }
+                isPhoneEmpty = !TextUtils.isEmpty(etPhoneNumber.getText().toString());
                 if (isCodeEmpty && isPhoneEmpty) {
                     btnLogin.setEnabled(true);
                 } else {
@@ -267,11 +263,7 @@ public class BindPhoneActivity extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (TextUtils.isEmpty(etVerificationCode.getText().toString())) {
-                    isCodeEmpty = false;
-                } else {
-                    isCodeEmpty = true;
-                }
+                isCodeEmpty = !TextUtils.isEmpty(etVerificationCode.getText().toString());
                 if (isCodeEmpty && isPhoneEmpty) {
                     btnLogin.setEnabled(true);
                 } else {

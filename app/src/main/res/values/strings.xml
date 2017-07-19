@@ -94,6 +94,7 @@
     <string name="capricorn">摩羯座</string>
     <string name="aquarius">水瓶座</string>
     <string name="pisces">双鱼座</string>
+    <string name="company_name">重庆可兰达科技有限公司</string>
 
     <string-array name="cons_luck_line_color">
         <item>#de5deb,#99de5deb,#0fde5deb</item>

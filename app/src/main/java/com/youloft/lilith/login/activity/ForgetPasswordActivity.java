@@ -181,11 +181,7 @@ public class ForgetPasswordActivity extends BaseActivity implements BaseTextWatc
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (TextUtils.isEmpty(etVerificationCode.getText().toString())) {
-                    isCodeEmpty = false;
-                } else {
-                    isCodeEmpty = true;
-                }
+                isCodeEmpty = !TextUtils.isEmpty(etVerificationCode.getText().toString());
                 if (isCodeEmpty && isPhoneEmpty) {
                     btnLogin.setEnabled(true);
                 } else {
