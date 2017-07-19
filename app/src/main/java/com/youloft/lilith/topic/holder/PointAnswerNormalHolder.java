@@ -99,13 +99,18 @@ public class PointAnswerNormalHolder extends RecyclerView.ViewHolder implements 
      */
     public void bindView(ReplyBean.DataBean dataBean,boolean isFirst) {
         if (dataBean == null)return;
+        UserBean userBean = AppSetting.getUserInfo();
         this.mData = dataBean;
         if (isFirst) {
             textCommentHot.setVisibility(View.VISIBLE);
         } else {
             textCommentHot.setVisibility(View.GONE);
         }
-        textUserName.setText(StringUtil.toNameString(dataBean.nickName));
+        if (userBean != null && userBean.data.userInfo.id == dataBean.uid) {
+            textUserName.setText(StringUtil.toNameString(userBean.data.userInfo.nickName));
+        } else {
+            textUserName.setText(StringUtil.toNameString(dataBean.nickName));
+        }
         textAnswerContent.setText(dataBean.contents);
         textUserConstellation.setText(ConsManager.getConsName(dataBean.signs));
         if (dataBean.sex == 1 ||dataBean.sex == 0) {
@@ -118,7 +123,12 @@ public class PointAnswerNormalHolder extends RecyclerView.ViewHolder implements 
             textToName.setVisibility(View.GONE);
         } else {
             textToName.setVisibility(View.VISIBLE);
-            textToName.setText(StringUtil.toNameString(dataBean.pName));
+            if (userBean != null && userBean.data.userInfo.id == dataBean.pid) {
+                textToName.setText(StringUtil.toNameString(userBean.data.userInfo.nickName));
+            } else {
+                textToName.setText(StringUtil.toNameString(dataBean.pName));
+            }
+
         }
         GlideApp.with(itemView)
                 .asBitmap()

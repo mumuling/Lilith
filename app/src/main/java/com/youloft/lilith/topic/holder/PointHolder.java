@@ -275,6 +275,7 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
      */
     public void bindNormal(final PointBean.DataBean point, final TopicDetailBean.DataBean option, final int position, boolean isLast) {
        if (point == null)return;
+        UserBean  userInfo = AppSetting.getUserInfo();
         GlideApp.with(itemView)
                 .asBitmap()
                 .load(point.headImg)
@@ -305,7 +306,11 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
 
 
         //用户名字
-        textUserName.setText(StringUtil.toNameString(point.nickName));
+        if (userInfo!= null && userInfo.data.userInfo.id == point.userId) {
+            textUserName.setText(StringUtil.toNameString(userInfo.data.userInfo.nickName));
+        } else {
+            textUserName.setText(StringUtil.toNameString(point.nickName));
+        }
         //点赞数
         bindZan(point);
         bindTime(point);
@@ -357,7 +362,11 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
                 if (i >= 3) break;
                 PointBean.DataBean.ReplyListBean reply = point.replyList.get(i);
                 if (reply != null) {
-                    replyTextArray[i].setText(StringUtil.toNameString(reply.nickName) + ": " + reply.contents);
+                    if (userInfo != null && userInfo.data.userInfo.id == reply.uid) {
+                        replyTextArray[i].setText(StringUtil.toNameString(userInfo.data.userInfo.nickName) + ": " + reply.contents);
+                    } else {
+                        replyTextArray[i].setText(StringUtil.toNameString(reply.nickName) + ": " + reply.contents);
+                    }
                     replyTextArray[i].setVisibility(View.VISIBLE);
                 } else {
                     replyTextArray[i].setVisibility(View.GONE);
