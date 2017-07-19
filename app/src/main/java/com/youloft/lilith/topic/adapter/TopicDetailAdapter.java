@@ -111,11 +111,20 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
         else if (holder instanceof OtherTopicHolder) {
             if (position == pointBeanList.size() + (pointBeanList.size() == 0 ? 2 : 1)) {
-                ((OtherTopicHolder) holder).bind(otherTopicList.get(position - pointBeanList.size() -(pointBeanList.size() == 0 ? 2 : 1)),true);
+                ((OtherTopicHolder) holder).bind(otherTopicList.get(position - pointBeanList.size() -(pointBeanList.size() == 0 ? 2 : 1)),getOtherTopicPosition(position),true);
             } else {
-                ((OtherTopicHolder) holder).bind(otherTopicList.get(position - pointBeanList.size() -(pointBeanList.size() == 0 ? 2 : 1)),false);
+                ((OtherTopicHolder) holder).bind(otherTopicList.get(position - pointBeanList.size() -(pointBeanList.size() == 0 ? 2 : 1)),getOtherTopicPosition(position),false);
             }
         }
+    }
+
+    private int getOtherTopicPosition(int position) {
+        if (pointBeanList.size() == 0) {
+            return position - 2;
+        } else {
+            return position - pointBeanList.size() - 1;
+        }
+
     }
 
     @Override

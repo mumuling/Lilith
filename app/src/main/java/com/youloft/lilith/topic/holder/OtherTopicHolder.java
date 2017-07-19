@@ -1,6 +1,7 @@
 package com.youloft.lilith.topic.holder;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -14,6 +15,8 @@ import com.youloft.lilith.topic.TopicDetailActivity;
 import com.youloft.lilith.topic.bean.TopicBean;
 import com.youloft.lilith.topic.widget.TopicUserImageLayout;
 import com.youloft.statistics.AppAnalytics;
+
+import java.util.HashSet;
 
 /**       话题详情页底部的其他话题推荐
  *version
@@ -29,6 +32,7 @@ public class OtherTopicHolder extends RecyclerView.ViewHolder {
     private TextView mOtherTopicText;
     private TopicBean.DataBean topic;
     private boolean isReport = false;
+    private HashSet<String> hashPosition = new HashSet<>();
 
     public OtherTopicHolder(View itemView) {
         super(itemView);
@@ -38,14 +42,15 @@ public class OtherTopicHolder extends RecyclerView.ViewHolder {
         mOtherTopicText = (TextView) itemView.findViewById(R.id.text_other_topic);
     }
 
-    public void bind(final TopicBean.DataBean topic, boolean first) {
+    private static final String TAG = "OtherTopicHolder";
+    public void bind(final TopicBean.DataBean topic, final int position , boolean first) {
         if (topic == null ) {
             return;
         }
         //更多话题展示的埋点
-        if (!isReport) {
-            AppAnalytics.onEvent("Commenttopic", "IM");
-            isReport = true;
+        if (!hashPosition.contains(String.valueOf(position))) {
+            AppAnalytics.onEvent("Commenttopic", "IM" + String.valueOf(position));
+            hashPosition.add(String.valueOf(position));
         }
 
        itemView.setOnClickListener(new View.OnClickListener() {
@@ -54,7 +59,7 @@ public class OtherTopicHolder extends RecyclerView.ViewHolder {
                 ARouter.getInstance().build("/test/TopicDetailActivity")
                         .withInt("tid",topic.id)
                         .navigation();
-                AppAnalytics.onEvent("Commenttopic", "C");
+                AppAnalytics.onEvent("Commenttopic", "C" + String.valueOf(position));
                 if (itemView.getContext() instanceof TopicDetailActivity) {
                     ((TopicDetailActivity) itemView.getContext()).finish();
                 }
