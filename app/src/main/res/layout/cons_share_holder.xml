@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cons_share_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/cons_bottom_bg"
-    android:paddingBottom="18dp"
-    android:paddingTop="20dp"
-    android:id="@+id/cons_share_root"
     android:orientation="vertical">
-    <TextView
-        android:layout_gravity="center"
-        android:textSize="14dp"
-        android:drawableLeft="@drawable/constellation_share_icon"
-        android:drawablePadding="5dp"
-        android:text="@string/cons_share_word"
-        android:textColor="@android:color/white"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-</LinearLayout>
+    <FrameLayout
+        android:background="@drawable/cons_bottom_bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="18dp"
+        android:paddingTop="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:drawableLeft="@drawable/constellation_share_icon"
+            android:drawablePadding="5dp"
+            android:text="@string/cons_share_word"
+            android:textColor="@android:color/white"
+            android:textSize="14dp" />
+    </FrameLayout>
+</FrameLayout>

@@ -59,7 +59,7 @@ public class RefreshImageView extends AppCompatImageView {
             if (getDrawable() instanceof AnimationDrawable) {
                 ((AnimationDrawable) getDrawable()).stop();
             }
-            setImageResource(R.drawable.grow_00043);
+            setImageResource(R.drawable.grow_00044);
         }
     }
 }

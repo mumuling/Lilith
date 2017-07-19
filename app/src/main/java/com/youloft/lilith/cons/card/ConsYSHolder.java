@@ -86,6 +86,11 @@ public class ConsYSHolder extends ConsBaseHolder {
     }
 
     @Override
+    public int getShadowBG() {
+        return R.drawable.card_shadow_center_pic;
+    }
+
+    @Override
     public void bindData(ConsPredictsBean data) {
         super.bindData(data);
         if (!isReport) {

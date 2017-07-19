@@ -58,4 +58,8 @@ public class ConsShareHolder extends ConsBaseHolder {
     public void bindData(ConsPredictsBean data) {
         super.bindData(data);
     }
+    @Override
+    public int getShadowBG() {
+        return R.drawable.card_shadow_down_pic;
+    }
 }

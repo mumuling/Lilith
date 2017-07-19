@@ -108,6 +108,11 @@ public class ConsMyInfoHolder extends ConsBaseHolder {
         detailInfo = data.data;
         bind();
     }
+    @Override
+    public int getShadowBG() {
+        return R.drawable.card_shadow_up_pic;
+    }
+
 
     private void bind() {
         bindDefault();

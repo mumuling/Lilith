@@ -1,42 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:id="@+id/root"
-    android:layout_height="wrap_content"
-    android:background="@color/cons_share_bg_color"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
-    <com.youloft.lilith.cons.view.LuckView
-        android:id="@+id/cons_luck_view"
+    <LinearLayout
+        android:id="@+id/root"
+        android:background="@color/cons_share_bg_color"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="185dp" />
+        android:layout_height="wrap_content">
 
-    <FrameLayout
-        android:id="@+id/cons_luck_bg_group"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@drawable/cons_luck_msg_bg">
+        <com.youloft.lilith.cons.view.LuckView
+            android:id="@+id/cons_luck_view"
+            android:layout_width="match_parent"
+            android:layout_height="185dp" />
 
-        <TextView
-            android:id="@+id/cons_luck_msg"
+        <FrameLayout
+            android:id="@+id/cons_luck_bg_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLines="2"
-            android:paddingBottom="4dp"
-            android:paddingLeft="8dp"
-            android:paddingRight="7dp"
-            android:paddingTop="3dp"
-            android:textColor="@android:color/white"
-            android:textSize="16dp" />
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/cons_luck_msg_bg">
 
-        <ImageView
-            android:id="@+id/cons_luck_msg_no_data"
-            android:visibility="visible"
-            android:src="@drawable/cons_no_data_no_net"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp" />
-    </FrameLayout>
-</LinearLayout>
+            <TextView
+                android:id="@+id/cons_luck_msg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="2"
+                android:paddingBottom="4dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="7dp"
+                android:paddingTop="3dp"
+                android:textColor="@android:color/white"
+                android:textSize="16dp" />
+
+            <ImageView
+                android:id="@+id/cons_luck_msg_no_data"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:src="@drawable/cons_no_data_no_net"
+                android:visibility="visible" />
+        </FrameLayout>
+    </LinearLayout>
+</FrameLayout>

@@ -2,6 +2,7 @@ package com.youloft.lilith.cons.card;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.view.ViewGroup;
 
 import com.youloft.lilith.R;
@@ -43,6 +44,10 @@ public class ConsCalWeekHolder extends ConsBaseHolder implements ConsCalendar.On
         super.bindData(data);
         mData = data;
         mWeekView.setData(data);
+    }
+    @Override
+    public int getShadowBG() {
+        return R.drawable.card_shadow_center_pic;
     }
 
     @Override
