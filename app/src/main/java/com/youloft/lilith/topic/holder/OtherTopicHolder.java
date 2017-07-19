@@ -12,6 +12,7 @@ import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.widgets.view.RoundImageView;
 import com.youloft.lilith.glide.GlideBlurTransform;
 import com.youloft.lilith.topic.TopicDetailActivity;
+import com.youloft.lilith.topic.adapter.TopicDetailAdapter;
 import com.youloft.lilith.topic.bean.TopicBean;
 import com.youloft.lilith.topic.widget.TopicUserImageLayout;
 import com.youloft.statistics.AppAnalytics;
@@ -32,7 +33,7 @@ public class OtherTopicHolder extends RecyclerView.ViewHolder {
     private TextView mOtherTopicText;
     private TopicBean.DataBean topic;
     private boolean isReport = false;
-    private HashSet<String> hashPosition = new HashSet<>();
+
 
     public OtherTopicHolder(View itemView) {
         super(itemView);
@@ -43,14 +44,14 @@ public class OtherTopicHolder extends RecyclerView.ViewHolder {
     }
 
     private static final String TAG = "OtherTopicHolder";
-    public void bind(final TopicBean.DataBean topic, final int position , boolean first) {
+    public void bind(TopicDetailAdapter adapter,final TopicBean.DataBean topic, final int position , boolean first) {
         if (topic == null ) {
             return;
         }
         //更多话题展示的埋点
-        if (!hashPosition.contains(String.valueOf(position))) {
+        if (!adapter.hashPosition.contains(String.valueOf(position))) {
             AppAnalytics.onEvent("Commenttopic", "IM" + String.valueOf(position));
-            hashPosition.add(String.valueOf(position));
+            adapter.hashPosition.add(String.valueOf(position));
         }
 
        itemView.setOnClickListener(new View.OnClickListener() {
