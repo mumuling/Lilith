@@ -223,19 +223,19 @@ public class EditInformationActivity extends BaseActivity {
                 ivHeader.setImageResource(R.drawable.default_user_head_img);
             }
             //进来初始化的时候
-            mTempContent = detail.nickName;
-            String con = detail.nickName;
-            int measuredWidth = etNickName.getMeasuredWidth();
-            TextPaint paint = etNickName.getPaint();
-            int textWidth = (int) paint.measureText(mTempContent);
-            if(textWidth > measuredWidth){
-                while (textWidth > measuredWidth) {
-                    con = con.substring(0,con.length()-1);
-                    textWidth = (int) paint.measureText(con);
-                }
-                etNickName.setText(con.substring(0,con.length()-2)+"...");
-            }
-            mName = mTempContent;
+//            mTempContent = detail.nickName;
+//            String con = detail.nickName;
+//            int measuredWidth = etNickName.getMeasuredWidth();
+//            TextPaint paint = etNickName.getPaint();
+//            int textWidth = (int) paint.measureText(mTempContent);
+//            if(textWidth > measuredWidth){
+//                while (textWidth > measuredWidth) {
+//                    con = con.substring(0,con.length()-1);
+//                    textWidth = (int) paint.measureText(con);
+//                }
+//                etNickName.setText(con.substring(0,con.length()-2)+"...");
+//            }
+            mName = detail.nickName;
             tvNickName.setText(StringUtil.toNameString(mName));
             etNickName.setText(detail.nickName);
 
