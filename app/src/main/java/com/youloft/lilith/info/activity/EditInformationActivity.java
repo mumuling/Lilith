@@ -158,15 +158,7 @@ public class EditInformationActivity extends BaseActivity {
         });
         etNickName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(20)});
     }
-boolean isFirst = true;
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        if (isFirst) {
-            handleEditText1();
-            isFirst = false;
-        }
-        super.onWindowFocusChanged(hasFocus);
-    }
+
 
     /**
      * 对edittext文字的处理
@@ -256,19 +248,7 @@ boolean isFirst = true;
             } else {
                 ivHeader.setImageResource(R.drawable.default_user_head_img);
             }
-            //进来初始化的时候
-//            mTempContent = detail.nickName;
-//            String con = detail.nickName;
-//            int measuredWidth = etNickName.getMeasuredWidth();
-//            TextPaint paint = etNickName.getPaint();
-//            int textWidth = (int) paint.measureText(mTempContent);
-//            if(textWidth > measuredWidth){
-//                while (textWidth > measuredWidth) {
-//                    con = con.substring(0,con.length()-1);
-//                    textWidth = (int) paint.measureText(con);
-//                }
-//                etNickName.setText(con.substring(0,con.length()-2)+"...");
-//            }
+
             mName = detail.nickName;
             tvNickName.setText(StringUtil.toNameString(mName));
             etNickName.setText(detail.nickName);
@@ -300,18 +280,6 @@ boolean isFirst = true;
             ivTipsTime.setVisibility(View.GONE);
 
             if (TextUtils.isEmpty(detail.birthLongi)) { //资料没完善过
-//                tvSex.setText(R.string.select_sex);
-//                tvSex.setTextColor(getResources().getColor(R.color.white_50));
-//                ivTipsSex.setVisibility(View.VISIBLE);
-//
-//                tvDateBirth.setText(R.string.select_date_birth);
-//                tvDateBirth.setTextColor(getResources().getColor(R.color.white_50));
-//                ivTipsDate.setVisibility(View.VISIBLE);
-//
-//                tvTimeBirth.setText(R.string.select_time_birth);
-//                tvTimeBirth.setTextColor(getResources().getColor(R.color.white_50));
-//                ivTipsTime.setVisibility(View.VISIBLE);
-
                 tvPlaceBirth.setText(R.string.select_place_birth);
                 tvPlaceBirth.setTextColor(getResources().getColor(R.color.white_50));
                 ivTipsBirthPlace.setVisibility(View.VISIBLE);
@@ -340,56 +308,64 @@ boolean isFirst = true;
                 mHomeLocation = tvPlaceNow.getText().toString();
 
             }
+            final TextWatcher etNameWatcher = new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (needSave) {
+                        mTempContent = s.toString();
+                    }
+                    if (!canSave  && needSave) {
+                        canSave = true;
+                        btlEditInformation.setShowSaveBtn(true);
+                    }
+                }
+            };
+            etNickName.post(new Runnable() {
+                @Override
+                public void run() {
+                    handleEditText1();
+                    etNickName.addTextChangedListener(etNameWatcher);
+                }
+            });
+            textWatcher = new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (!canSave) {
+                        canSave = true;
+                        btlEditInformation.setShowSaveBtn(true);
+                    }
+                }
+            };
+
+
+            tvSex.addTextChangedListener(textWatcher);
+            tvDateBirth.addTextChangedListener(textWatcher);
+            tvTimeBirth.addTextChangedListener(textWatcher);
+            tvPlaceBirth.addTextChangedListener(textWatcher);
+            tvPlaceNow.addTextChangedListener(textWatcher);
+
 
         }
-
-                textWatcher = new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                        if (!canSave) {
-                            canSave = true;
-                            btlEditInformation.setShowSaveBtn(true);
-                        }
-                    }
-                };
-                TextWatcher etNameWatcher = new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                        if (needSave) {
-                            mTempContent = s.toString();
-                        }
-                        if (!canSave  && needSave) {
-                            canSave = true;
-                            btlEditInformation.setShowSaveBtn(true);
-                        }
-                    }
-                };
-                etNickName.addTextChangedListener(etNameWatcher);
-                tvSex.addTextChangedListener(textWatcher);
-                tvDateBirth.addTextChangedListener(textWatcher);
-                tvTimeBirth.addTextChangedListener(textWatcher);
-                tvPlaceBirth.addTextChangedListener(textWatcher);
-                tvPlaceNow.addTextChangedListener(textWatcher);
 
 
 
