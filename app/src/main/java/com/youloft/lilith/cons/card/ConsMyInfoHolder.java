@@ -73,7 +73,7 @@ public class ConsMyInfoHolder extends ConsBaseHolder {
      */
     @OnClick(R.id.cons_my_info_root)
     public void checkLogStatus() {
-        AppAnalytics.onEvent("Fortuneslist", "C");
+        AppAnalytics.onEvent("Fortuneslist.C");
         EventBus.getDefault().post(new LoddingCheckEvent());
     }
 

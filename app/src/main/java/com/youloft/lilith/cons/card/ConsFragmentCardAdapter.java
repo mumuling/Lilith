@@ -5,6 +5,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
 import com.youloft.lilith.cons.bean.ConsPredictsBean;
+import com.youloft.statistics.AppAnalytics;
+
+import java.util.HashSet;
 
 /**
  * Created by zchao on 2017/7/4.
@@ -16,6 +19,9 @@ public class ConsFragmentCardAdapter extends RecyclerView.Adapter<BaseHolder> {
     private Context mContext;
     private ConsPredictsBean mData;
     private String mTitle = "";
+
+    private HashSet<String> imreport = new HashSet<>();
+
 
     public ConsFragmentCardAdapter(Context context) {
         mContext = context;
@@ -45,6 +51,13 @@ public class ConsFragmentCardAdapter extends RecyclerView.Adapter<BaseHolder> {
             ((ConsTitleHolder) holder).bindData(mTitle);
         } else if (holder instanceof ConsHotTopicHolder) {
             holder.bindData(null);
+        }
+        if (holder instanceof ConsYSHolder) {
+            String s = ((ConsYSHolder) holder).initReportKey();
+            if (!imreport.contains(s)){
+                AppAnalytics.onEvent(s + ".IM");
+                imreport.add(s);
+            }
         }
     }
 

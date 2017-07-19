@@ -112,7 +112,7 @@ public class ConsCalDetailActivity extends BaseActivity {
         if (mData != null) {
             bindData(mData);
         }
-        AppAnalytics.onEvent("Monthfortunes", "IM");
+        AppAnalytics.onEvent("Monthfortunes.IM");
         bindClick();
     }
 
@@ -127,7 +127,7 @@ public class ConsCalDetailActivity extends BaseActivity {
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(@NonNull Object o) throws Exception {
-                        AppAnalytics.onEvent("Monthshare", "C");
+                        AppAnalytics.onEvent("Monthshare.C");
                         share();
                     }
                 });
@@ -136,7 +136,7 @@ public class ConsCalDetailActivity extends BaseActivity {
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(@NonNull Object o) throws Exception {
-                        AppAnalytics.onEvent("Monthcancel", "C");
+                        AppAnalytics.onEvent("Monthcancel.C");
                         openAnim(false, distance);
                     }
                 });
