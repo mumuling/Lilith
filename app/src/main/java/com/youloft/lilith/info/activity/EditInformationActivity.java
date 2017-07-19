@@ -114,6 +114,7 @@ public class EditInformationActivity extends BaseActivity {
 
     private TextWatcher textWatcher;
     private String mTempContent;//edittext失去焦点的时候临时存储文字
+    private String mNickName;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -159,11 +160,14 @@ public class EditInformationActivity extends BaseActivity {
         int measuredWidth = etNickName.getMeasuredWidth();
         TextPaint paint = etNickName.getPaint();
         int textWidth = (int) paint.measureText(mTempContent);
-        while (textWidth > measuredWidth) {
-            con = con.substring(0,con.length()-1);
-            textWidth = (int) paint.measureText(con);
+        if(textWidth > measuredWidth){
+            while (textWidth > measuredWidth) {
+                con = con.substring(0,con.length()-1);
+                textWidth = (int) paint.measureText(con);
+            }
+            etNickName.setText(con.substring(0,con.length()-2)+"...");
         }
-        etNickName.setText(con.substring(0,con.length()-2)+"...");
+
     }
 
     /**
@@ -218,8 +222,21 @@ public class EditInformationActivity extends BaseActivity {
             } else {
                 ivHeader.setImageResource(R.drawable.default_user_head_img);
             }
-
-            mName = detail.nickName;
+            //进来初始化的时候
+            handleEditText();
+            mTempContent = detail.nickName;
+            String con = detail.nickName;
+            int measuredWidth = etNickName.getMeasuredWidth();
+            TextPaint paint = etNickName.getPaint();
+            int textWidth = (int) paint.measureText(mTempContent);
+            if(textWidth > measuredWidth){
+                while (textWidth > measuredWidth) {
+                    con = con.substring(0,con.length()-1);
+                    textWidth = (int) paint.measureText(con);
+                }
+                etNickName.setText(con.substring(0,con.length()-2)+"...");
+            }
+            mName = mTempContent;
             tvNickName.setText(StringUtil.toNameString(mName));
             etNickName.setText(detail.nickName);
 
@@ -326,21 +343,26 @@ public class EditInformationActivity extends BaseActivity {
      * 保存用户信息的网络请求
      */
     private void savaUserInfo() {
-        final String nickName = etNickName.getText().toString();
+        //这里输入框的内容有可能为  昵称加上...
+        //这时候真实的内容可能在 mTempContent 里面
+        if(TextUtils.isEmpty(mTempContent)){
+            mNickName = etNickName.getText().toString();
+        }else {
+            mNickName = mTempContent;
+        }
         final String sexStr = tvSex.getText().toString();
-
         String dateBirth = tvDateBirth.getText().toString();
         String timeBirth = tvTimeBirth.getText().toString();
         final String placeBirth = tvPlaceBirth.getText().toString();
         final String placeNow = tvPlaceNow.getText().toString();
-        if (TextUtils.isEmpty(nickName) || TextUtils.isEmpty(sexStr)
+        if (TextUtils.isEmpty(mNickName) || TextUtils.isEmpty(sexStr)
                 || TextUtils.isEmpty(dateBirth) || TextUtils.isEmpty(timeBirth)
                 || TextUtils.isEmpty(placeBirth) || TextUtils.isEmpty(placeNow)) {
             Toaster.showShort("请完善信息");
             return;
         }
 
-        if (nickName.trim().length() > 20) {//昵称长度不能超过20个
+        if (mNickName.trim().length() > 20) {//昵称长度不能超过20个
             Toaster.showShort("昵称过长");
             return;
         }
@@ -354,7 +376,7 @@ public class EditInformationActivity extends BaseActivity {
             return;
         }
 
-        if (nickName.equals(mName)
+        if (mNickName.equals(mName)
                 && mBirthDay.equals(dateBirth)
                 && mBirthTime.equals(timeBirth)
                 && mBirthLocation.equals(placeBirth)
@@ -379,7 +401,7 @@ public class EditInformationActivity extends BaseActivity {
         String headImg = userInfo.data.userInfo.headImg;
         final String time = CalendarHelper.format(mCal.getTime(), DATE_FORMAT);
 
-        UpdateUserRepo.updateUserInfo(userId, nickName, headImg, sex, time, placeBirth, birthLongi, birthLati, placeNow, liveLongi, liveLati)
+        UpdateUserRepo.updateUserInfo(userId, mNickName, headImg, sex, time, placeBirth, birthLongi, birthLati, placeNow, liveLongi, liveLati)
                 .compose(this.<UserBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
