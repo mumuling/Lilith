@@ -147,7 +147,6 @@ public class TopicDetailActivity extends BaseActivity {
                         handlePointTableInfo(pointBean);
                         pointList.addAll(pointBean.data);
                         handleAnswerTable(pointList,pointBean.t);
-                        pointAllCache.addPointListToDb(pointList,pointBean.t);
                         adapter.setPointBeanList(pointList);
                         totalPoint = pointBean.data.size();
                     }
