@@ -245,6 +245,7 @@ public class SettingActivity extends BaseActivity {
                             TopicInfoCache.getIns(SettingActivity.this).deleteTable();
                             EventBus.getDefault().post(new LoginEvent(false));
                             EventBus.getDefault().post(new TabChangeEvent(TabManager.TAB_INDEX_XZ));
+                            Toaster.showShort("退出成功");
                             finish();
                         } else {
                             Toaster.showShort("网络错误");
