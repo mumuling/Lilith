@@ -122,7 +122,9 @@
         <activity android:name=".info.activity.EditInformationActivity"
             android:windowSoftInputMode="stateHidden|stateUnchanged"
             android:screenOrientation="portrait"/>
-        <activity android:name=".cons.ConsCalDetailActivity" android:theme="@style/TranslucentThem"/>
+        <activity android:name=".cons.ConsCalDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/TranslucentThem"/>
         <activity android:name=".info.activity.ModifyPasswordActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".register.activity.RegisterActivity"
