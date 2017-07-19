@@ -102,6 +102,7 @@
                             android:layout_height="match_parent"
                             android:layout_gravity="center_vertical"
                             android:layout_weight="1"
+                            android:textCursorDrawable="@drawable/edit_cursorc_color"
                             android:background="@null"
                             android:cursorVisible="false"
                             android:hint="请输入昵称"

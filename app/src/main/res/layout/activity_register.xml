@@ -46,6 +46,7 @@
                     android:layout_centerVertical="true"
                     android:layout_weight="1"
                     android:background="@null"
+                    android:textCursorDrawable="@drawable/edit_cursorc_color"
                     android:digits="0123456789"
                     android:hint="@string/phone_number"
                     android:inputType="number"
@@ -131,6 +132,7 @@
                     android:cursorVisible="false"
                     android:hint="@string/input_validation_code"
                     android:inputType="number"
+                    android:textCursorDrawable="@drawable/edit_cursorc_color"
                     android:textColor="@color/translucent"
                     android:textColorHint="@color/white_50"
                     android:textSize="20dp" />

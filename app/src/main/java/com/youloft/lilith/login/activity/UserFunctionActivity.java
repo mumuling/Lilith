@@ -250,9 +250,9 @@ public class UserFunctionActivity extends BaseActivity implements OnTextChange {
                         if(sendSmsBean == null){
                             return;
                         }
-                        // TODO: 2017/7/18 校验msg
-                        if(!sendSmsBean.data.isSend){
+                        if(sendSmsBean.data.msg.equals("短信发送超出限制")){
                             Toaster.showShort("超出发送数量限制");
+                            return;
                         }
 
                     }
