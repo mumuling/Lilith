@@ -115,6 +115,8 @@
     <string name="password_desc">密码长度6-16位，支持数字、字母、字符</string>
     <string name="input_password">输入密码</string>
     <string name="confirm_password">确认密码</string>
+    <string name="cons_title_word_unlod" formatted="false">%s好, 请您完善资料获取准确运势!</string>
+    <string name="cons_title_word_lod" formatted="false">%s好 %s, 您的今日运势如下</string>
 
     <string-array name="cons_luck_line_color">
         <item>#de5deb,#99de5deb,#0fde5deb</item>

@@ -239,7 +239,8 @@ public class MyTopicActivity extends BaseActivity {
                 .subscribe(new RxObserver<MyTopicBean>() {
                     @Override
                     public void onDataSuccess(MyTopicBean myTopicBean) {
-                        if (myTopicBean.data != null) {
+                        if (myTopicBean.data != null && myTopicBean.data.size() != 0) {
+                            myTopicList.addAll(myTopicBean.data);
                             addReplyCount(myTopicBean.data,myTopicBean.t);
                             adapter.setMyTopicList(myTopicBean.data);
                         } else {

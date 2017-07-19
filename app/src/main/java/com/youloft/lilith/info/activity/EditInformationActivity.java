@@ -142,9 +142,7 @@ public class EditInformationActivity extends BaseActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
                     etNickName.setCursorVisible(true);
-
                     ivDeleteNickName.setVisibility(View.VISIBLE);
-
                     etNickName.setCursorVisible(true);
                     ivDeleteNickName.setVisibility(View.VISIBLE);
                     etNickName.setText(mTempContent);

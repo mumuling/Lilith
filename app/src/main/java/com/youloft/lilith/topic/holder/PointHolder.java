@@ -37,6 +37,8 @@ import com.youloft.lilith.topic.bean.ClickLikeBean;
 import com.youloft.lilith.topic.bean.ClickLikeEvent;
 import com.youloft.lilith.topic.bean.PointBean;
 import com.youloft.lilith.topic.bean.TopicDetailBean;
+import com.youloft.lilith.topic.db.PointAllCache;
+import com.youloft.lilith.topic.db.PointAllTable;
 import com.youloft.lilith.topic.db.PointAnswerCache;
 import com.youloft.lilith.topic.db.PointAnswerTable;
 import com.youloft.lilith.topic.db.PointCache;
@@ -213,8 +215,10 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
                             return;
                         }
                        // handlePointTableInfo(pointBean.data);
-                        adapter.setPointBeanList(pointBean.data);
+                        PointAllCache.getIns(mContext).addPointListToDb(pointBean.data,pointBean.t);
+                        //removeRepeatPoint(pointBean.data,pointBean.t);
                         handleAnswerTable(pointBean.data,pointBean.t);
+                        adapter.setPointBeanList(pointBean.data);
                         totalPoint = adapter.pointBeanList.size();
                         textLoadMore.setVisibility(View.VISIBLE);
                         textLoadMore.setText("展开更多");
@@ -233,6 +237,18 @@ public class PointHolder extends RecyclerView.ViewHolder implements View.OnClick
                     }
                 });
 
+
+    }
+
+    private void removeRepeatPoint(List<PointBean.DataBean> data, long t) {
+        if (data == null || data.size() == 0)return;
+        ArrayList<PointAllTable> pointAllTableList = PointAllCache.getIns(mContext).getPointListByPid(t);
+        PointAllCache pointAllCache = PointAllCache.getIns(mContext);
+        for (PointBean.DataBean point : data ) {
+            if (pointAllCache.pointIsExperid(point.id,t)) {
+                data.remove(point);
+            }
+        }
 
     }
 
