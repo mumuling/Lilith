@@ -3,7 +3,7 @@
     <string name="app_name_ch">莉莉斯</string>
     <string name="tttt">题目</string>
     <!--权限Label-->
-    <string name="lilith_permission_label">允许读取和更新丽丽丝设置</string>
+    <string name="lilith_permission_label">允许读取和更新莉莉斯设置</string>
     <string name="master_measure">大师亲算</string>
     <string name="cons_share_text">分享我的运势</string>
     <string name="cons_share_customization_text">定制我的运势</string>

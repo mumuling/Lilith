@@ -3,7 +3,7 @@
     <string name="app_name_ch">莉莉斯</string>
     <string name="tttt">題目</string>
     <!--權限Label-->
-    <string name="lilith_permission_label">允許讀取和更新麗麗絲設置</string>
+    <string name="lilith_permission_label">允許讀取和更新莉莉斯設置</string>
     <string name="master_measure">大師親算</string>
     <string name="cons_share_text">分享我的運勢</string>
     <string name="cons_share_customization_text">定製我的運勢</string>
@@ -95,8 +95,43 @@
     <string name="aquarius">水瓶座</string>
     <string name="pisces">雙魚座</string>
     <string name="company_name">重慶可蘭達科技有限公司</string>
+    <string name="check_update">檢查更新</string>
+    <string name="logout_user">退出登錄</string>
+    <string name="bind_we_chat">綁定微信</string>
+    <string name="feedback_hint_content">請輸入遇到的問題或建議...</string>
+    <string name="phone_contact">聯繫方式: QQ/郵箱/電話</string>
+    <string name="feed_commit">提交</string>
+    <string name="we_chat_account">微信:  暗月莉莉斯</string>
+    <string name="email_content">郵箱：lilith@Youloft.com</string>
+    <string name="qq_content">QQ群：180275927</string>
+    <string name="version_code">版本號: 1.0</string>
+    <string name="quckly_measure">立即測算</string>
+    <string name="rise_con">上升星座</string>
+    <string name="moon_con">月亮星座</string>
+    <string name="sun_con">太陽星座</string>
+    <string name="my_topic">我的話題</string>
+    <string name="my_information">我的資料</string>
+    <string name="else_login_method">其他登錄方式</string>
+    <string name="password_desc">密碼長度6-16位，支持数字、字母、字符</string>
+    <string name="input_password">輸入密碼</string>
+    <string name="confirm_password">確認密碼</string>
     <string name="cons_title_word_unlod" formatted="false">%s好, 請您完善資料獲取準確運勢!</string>
     <string name="cons_title_word_lod" formatted="false">%s好 %s, 您的今日運勢如下</string>
+
+    //話題
+    <string name="see_now">立即查看</string>
+    <string name="topic_title">星座話題</string>
+    <string name="choose_your_point">請選擇您的觀點</string>
+    <string name="published_point">發表的觀點</string>
+    <string name="reply">回復</string>
+    <string name="load_more">展開更多</string>
+    <string name="other_topic">其他話題</string>
+    <string name="hot_reply">熱門評論</string>
+    <string name="publish">發表</string>
+    <string name="no_more_data">沒有更多數據</string>
+    <string name="vote_to">投票給: </string>
+    <string name="no_point_now">暫無觀點</string>
+    <string name="click_to_see_topic">點擊查看更多</string>
 
     <string-array name="cons_luck_line_color">
         <item>#de5deb,#99de5deb,#0fde5deb</item>
