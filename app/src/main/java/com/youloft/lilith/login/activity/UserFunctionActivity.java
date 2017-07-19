@@ -38,7 +38,6 @@ import com.youloft.lilith.setting.AppSetting;
 import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
-import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -62,12 +61,6 @@ public class UserFunctionActivity extends BaseActivity implements OnTextChange {
     EditText etPhoneNumber;  //手机号码
     @BindView(R.id.iv_clean_number)
     ImageView ivCleanNumber; //情况手机号码
-    @BindViews({R.id.tv_code01, R.id.tv_code02, R.id.tv_code03, R.id.tv_code04, R.id.tv_code05, R.id.tv_code06})
-    TextView[] tvCodes;   //验证码数字显示
-    @BindViews({R.id.v_code_line01, R.id.v_code_line02, R.id.v_code_line03, R.id.v_code_line04, R.id.v_code_line05, R.id.v_code_line06})
-    View[] vCodeLines;   //验证码底部下划线
-    @BindView(R.id.ll_code_container)
-    LinearLayout llCodeContainer;  //验证码容器
     @BindView(R.id.tv_get_code)
     TextView tvGetCode;   //获取验证码
     @BindView(R.id.iv_code_right)
@@ -86,8 +79,6 @@ public class UserFunctionActivity extends BaseActivity implements OnTextChange {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_function);
         ButterKnife.bind(this);
-
-
         phoneNumberSetting();
         verificationCodeSetting();
 
@@ -109,24 +100,8 @@ public class UserFunctionActivity extends BaseActivity implements OnTextChange {
      * 验证码输入相关
      */
     private void verificationCodeSetting() {
-        etVerificationCode.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                //获取到焦点
-                if (hasFocus) {
-                    llCodeContainer.setVisibility(View.VISIBLE);
-                    etVerificationCode.setHint(null);
-                    //获取到焦点的时候,始终把光标放在最后面
-                    etVerificationCode.setSelection(etVerificationCode.getText().toString().length());
-                } else {//失去焦点的时候,判断有没有文字
-                    if (etVerificationCode.getText().toString().equals("")) {
-                        llCodeContainer.setVisibility(View.INVISIBLE);
-                        etVerificationCode.setHint(R.string.input_validation_code);
-                    }
-                }
-            }
-        });
-        etVerificationCode.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
+
+        etVerificationCode.setFilters(new InputFilter[]{new InputFilter.LengthFilter(11)});
         etVerificationCode.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -135,23 +110,41 @@ public class UserFunctionActivity extends BaseActivity implements OnTextChange {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String content = s.toString();
-                char[] chars = content.toCharArray();
-                //把输入框的验证码 显示到textview上面
-                for (int i = 0; i < 6; i++) {
-                    if (i > chars.length - 1) {
-                        tvCodes[i].setText(null);
-                        vCodeLines[i].setBackgroundResource(R.color.white_50);
-                    } else {
-                        tvCodes[i].setText(chars[i] + "");
-                        vCodeLines[i].setBackgroundResource(R.color.white);
-                    }
-                }
-                if (s.toString().length() == 6) {//验证码6位的时候
+
+                if (s.toString().length() == 11) {//验证码6位的时候
                     getSmsCode();
                 } else { //验证码不到6位的时候  一律隐藏验证码后面的小图标
                     ivCodeRight.setVisibility(View.INVISIBLE);
                     ivCodeError.setVisibility(View.INVISIBLE);
+                }
+                if (s == null || s.length() == 0) return;
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < s.length(); i++) {
+                    if (i != 1 && i != 3 && i != 5 && i != 7 && i != 9 && s.charAt(i) == ' ') {
+                        continue;
+                    } else {
+                        sb.append(s.charAt(i));
+                        if ((sb.length() == 2 || sb.length() == 4 || sb.length() == 6 || sb.length() == 8 || sb.length() == 10)
+                                && sb.charAt(sb.length() - 1) != ' ') {
+                            sb.insert(sb.length() - 1, ' ');
+                        }
+                    }
+                }
+                if (!sb.toString().equals(s.toString())) {
+                    int index = start + 1;
+                    if (sb.charAt(start) == ' ') {
+                        if (before == 0) {
+                            index++;
+                        } else {
+                            index--;
+                        }
+                    } else {
+                        if (before == 1) {
+                            index--;
+                        }
+                    }
+                    etVerificationCode.setText(sb.toString());
+                    etVerificationCode.setSelection(index);
                 }
             }
 
@@ -243,10 +236,10 @@ public class UserFunctionActivity extends BaseActivity implements OnTextChange {
                     @Override
                     public void onDataSuccess(SendSmsBean sendSmsBean) {
                         //确认短信发送成功了
-                        if(sendSmsBean == null){
+                        if (sendSmsBean == null) {
                             return;
                         }
-                        if(sendSmsBean.data.msg.equals("短信发送超出限制")){
+                        if (sendSmsBean.data.msg.equals("短信发送超出限制")) {
                             Toaster.showShort("超出发送数量限制");
                             return;
                         }
@@ -263,6 +256,7 @@ public class UserFunctionActivity extends BaseActivity implements OnTextChange {
      */
     private void getSmsCode() {
         String smsCode = etVerificationCode.getText().toString().trim();
+        smsCode = smsCode.replaceAll(" ","");
         SmsCodeRepo.getSmsCode(etPhoneNumber.getText().toString().replaceAll("-", ""), "Login", smsCode)
                 .compose(this.<SmsCodeBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
@@ -271,7 +265,7 @@ public class UserFunctionActivity extends BaseActivity implements OnTextChange {
                 .subscribe(new RxObserver<SmsCodeBean>() {
                     @Override
                     public void onDataSuccess(SmsCodeBean smsCodeBean) {
-                        if(smsCodeBean == null){
+                        if (smsCodeBean == null) {
                             return;
                         }
                         mSmsCodeBean = smsCodeBean;
@@ -320,7 +314,7 @@ public class UserFunctionActivity extends BaseActivity implements OnTextChange {
             Toaster.showShort("手机号码不正确");
             return;
         }
-        smsCode = smsCode.trim();
+        smsCode = smsCode.replaceAll(" ","").trim();
         if (isCodeRight) {  //这里的变量是验证了验证码之后  正确的时候才为true
             quicklyLogin(phoneNumber, smsCode);
         }
@@ -351,15 +345,15 @@ public class UserFunctionActivity extends BaseActivity implements OnTextChange {
                             }
                             Toaster.showShort("登录成功");
                             finish();
-                        } else if(userBean.data.result == 4){
+                        } else if (userBean.data.result == 4) {
                             Toaster.showShort("账号已禁用");
-                        }else if(userBean.data.result == 3){
+                        } else if (userBean.data.result == 3) {
                             Toaster.showShort("无此手机号");
-                        }else if(userBean.data.result == 2){
+                        } else if (userBean.data.result == 2) {
                             Toaster.showShort("验证码不正确或已失效");
-                        }else if(userBean.data.result == 1){
+                        } else if (userBean.data.result == 1) {
                             Toaster.showShort("手机号无效");
-                        }else {
+                        } else {
                             Toaster.showShort("网络异常");
                         }
 

@@ -59,12 +59,6 @@ public class RegisterActivity extends BaseActivity {
     EditText etPhoneNumber;  //手机号码
     @BindView(R.id.iv_clean_number)
     ImageView ivCleanNumber; //情况手机号码
-    @BindViews({R.id.tv_code01, R.id.tv_code02, R.id.tv_code03, R.id.tv_code04, R.id.tv_code05, R.id.tv_code06})
-    TextView[] tvCodes;   //验证码数字显示
-    @BindViews({R.id.v_code_line01, R.id.v_code_line02, R.id.v_code_line03, R.id.v_code_line04, R.id.v_code_line05, R.id.v_code_line06})
-    View[] vCodeLines;   //验证码底部下划线
-    @BindView(R.id.ll_code_container)
-    LinearLayout llCodeContainer;  //验证码容器
     @BindView(R.id.tv_get_code)
     TextView tvGetCode;   //获取验证码
     @BindView(R.id.tv_title)
@@ -224,24 +218,8 @@ public class RegisterActivity extends BaseActivity {
      * 验证码输入相关
      */
     private void verificationCodeSetting() {
-        etVerificationCode.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                //获取到焦点
-                if (hasFocus) {
-                    llCodeContainer.setVisibility(View.VISIBLE);
-                    etVerificationCode.setHint(null);
-                    //获取到焦点的时候,始终把光标放在最后面
-                    etVerificationCode.setSelection(etVerificationCode.getText().toString().length());
-                } else {//失去焦点的时候,判断有没有文字
-                    if (etVerificationCode.getText().toString().equals("")) {
-                        llCodeContainer.setVisibility(View.INVISIBLE);
-                        etVerificationCode.setHint(R.string.input_validation_code);
-                    }
-                }
-            }
-        });
-        etVerificationCode.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
+
+        etVerificationCode.setFilters(new InputFilter[]{new InputFilter.LengthFilter(11)});
         etVerificationCode.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -250,23 +228,41 @@ public class RegisterActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String content = s.toString();
-                char[] chars = content.toCharArray();
-                //把输入框的验证码 显示到textview上面
-                for (int i = 0; i < 6; i++) {
-                    if (i > chars.length - 1) {
-                        tvCodes[i].setText(null);
-                        vCodeLines[i].setBackgroundResource(R.color.white_50);
-                    } else {
-                        tvCodes[i].setText(chars[i] + "");
-                        vCodeLines[i].setBackgroundResource(R.color.white);
-                    }
-                }
-                if (s.toString().length() == 6) {//验证码6位的时候
+
+                if (s.toString().length() == 11) {//验证码6位的时候
                     getSmsCode();
                 } else { //验证码不到6位的时候  一律隐藏验证码后面的小图标
                     ivCodeRight.setVisibility(View.INVISIBLE);
                     ivCodeError.setVisibility(View.INVISIBLE);
+                }
+                if (s == null || s.length() == 0) return;
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < s.length(); i++) {
+                    if (i != 1 && i != 3 && i != 5 && i != 7 && i != 9 && s.charAt(i) == ' ') {
+                        continue;
+                    } else {
+                        sb.append(s.charAt(i));
+                        if ((sb.length() == 2 || sb.length() == 4 || sb.length() == 6 || sb.length() == 8 || sb.length() == 10)
+                                && sb.charAt(sb.length() - 1) != ' ') {
+                            sb.insert(sb.length() - 1, ' ');
+                        }
+                    }
+                }
+                if (!sb.toString().equals(s.toString())) {
+                    int index = start + 1;
+                    if (sb.charAt(start) == ' ') {
+                        if (before == 0) {
+                            index++;
+                        } else {
+                            index--;
+                        }
+                    } else {
+                        if (before == 1) {
+                            index--;
+                        }
+                    }
+                    etVerificationCode.setText(sb.toString());
+                    etVerificationCode.setSelection(index);
                 }
             }
 
@@ -373,6 +369,7 @@ public class RegisterActivity extends BaseActivity {
     private void getSmsCode() {
         //发起获取验证码的请求
         String smsCode = etVerificationCode.getText().toString();
+        smsCode = smsCode.replaceAll(" ","");
         SmsCodeRepo.getSmsCode(etPhoneNumber.getText().toString().replaceAll("-", ""), "Register", smsCode)
                 .compose(this.<SmsCodeBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
@@ -383,8 +380,6 @@ public class RegisterActivity extends BaseActivity {
                     public void onDataSuccess(SmsCodeBean smsCodeBean) {
                         if (smsCodeBean.data.result) {
                             mSmsCodeBean = smsCodeBean;
-                        } else {
-                            Toaster.showShort("网络错误");
                         }
                         //这里拿回了验证码的相关信息, 在验证码输入框的监听里面验证用户的验证码是否正确
                         checkSmsCode();
@@ -393,7 +388,7 @@ public class RegisterActivity extends BaseActivity {
                     @Override
                     protected void onFailed(Throwable e) {
                         super.onFailed(e);
-                        Toaster.showShort("网络错误");
+                        Toaster.showShort("网络异常");
                     }
                 });
     }
@@ -440,6 +435,7 @@ public class RegisterActivity extends BaseActivity {
             Toaster.showShort("手机号码不正确");
             return;
         }
+        smsCode.replaceAll(" ","");
         if (smsCode.trim().length() != 6) {
             Toaster.showShort("请检查手机号码或者验证码");
             return;
