@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.widget.EditText;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.rx.RxObserver;
@@ -100,7 +101,7 @@ public class FeedBackActivity extends BaseActivity {
             uid = String.valueOf(AppSetting.getUserInfo().data.userInfo.id);
         }
 
-        UpdateUserRepo.feedBack(feedPhone, getHostIP(), String.valueOf(AppSetting.getVersionCode()), mApiVersion, feedContent, uid)
+        UpdateUserRepo.feedBack(feedPhone, getHostIP(), AppConfig.VERSION_NAME, mApiVersion, feedContent, uid)
                 .compose(this.<FeedBackBean>bindToLifecycle())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
