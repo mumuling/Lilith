@@ -146,7 +146,7 @@ public class MyTopicHolder extends RecyclerView.ViewHolder {
         }
         textCommentTime.setText(CalendarHelper.getInterValTime(CalendarHelper.getTimeMillisByString(point.date), System.currentTimeMillis()));
        if (point.reply == 0) {
-           textCommentAnswerCount.setText("回复");
+           textCommentAnswerCount.setText(mContext.getResources().getString(R.string.reply));
        } else {
            textCommentAnswerCount.setText(String.valueOf(point.reply));
        }

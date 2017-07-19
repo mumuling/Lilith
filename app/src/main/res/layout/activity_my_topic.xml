@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:layout_marginLeft="20dp"
-        android:text="发表的观点"
+        android:text="@string/published_point"
         android:textColor="@color/white"
         android:textSize="20sp"
         />
@@ -44,7 +44,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="暂无观点"
+            android:text="@string/no_point_now"
             android:textColor="#80ffffff"
             android:textSize="11dp"
             android:layout_gravity="center_horizontal"/>
@@ -63,7 +63,7 @@
             android:layout_marginTop="70dp"
 
             android:background="@drawable/see_topic_bt_bg"
-            android:text="点击查看话题"/>
+            android:text="@string/click_to_see_topic"/>
 
     </LinearLayout>
 

@@ -118,6 +118,21 @@
     <string name="cons_title_word_unlod" formatted="false">%s好, 请您完善资料获取准确运势!</string>
     <string name="cons_title_word_lod" formatted="false">%s好 %s, 您的今日运势如下</string>
 
+    //话题
+    <string name="see_now">立即查看</string>
+    <string name="topic_title">星座话题</string>
+    <string name="choose_your_point">请选择您的观点</string>
+    <string name="published_point">发表的观点</string>
+    <string name="reply">回复</string>
+    <string name="load_more">展开更多</string>
+    <string name="other_topic">其他话题</string>
+    <string name="hot_reply">热门评论</string>
+    <string name="publish">发表</string>
+    <string name="no_more_data">没有更多数据</string>
+    <string name="vote_to">投票给: </string>
+    <string name="no_point_now">暂无观点</string>
+    <string name="click_to_see_topic">点击查看更多</string>
+
     <string-array name="cons_luck_line_color">
         <item>#de5deb,#99de5deb,#0fde5deb</item>
         <item>#ff6262,#99ff6161,#0fff6161</item>

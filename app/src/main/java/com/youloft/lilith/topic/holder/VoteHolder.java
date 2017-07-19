@@ -294,6 +294,9 @@ public class VoteHolder extends RecyclerView.ViewHolder {
      * @param backImage
      */
     public void bindView(final TopicDetailBean.DataBean topicInfo, String backImage) {
+        if (TextUtils.isEmpty(backImage) && topicInfo != null) {
+            backImage = topicInfo.backImg;
+        }
         if (!TextUtils.isEmpty(backImage) && needImage) {
             GlideApp.with(itemView.getContext())
 
