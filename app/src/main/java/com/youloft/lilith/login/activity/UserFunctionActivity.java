@@ -239,8 +239,8 @@ public class UserFunctionActivity extends BaseActivity implements OnTextChange {
                         if (sendSmsBean == null) {
                             return;
                         }
-                        if (sendSmsBean.data.msg.equals("短信发送超出限制")) {
-                            Toaster.showShort("超出发送数量限制");
+                        if (sendSmsBean.data.msg.equals("超出了发送数量限制")) {
+                            Toaster.showShort("超出了发送数量限制");
                             handler.removeCallbacks(runnable);
                             tvGetCode.setText(R.string.get_validation_code);
                             return;
