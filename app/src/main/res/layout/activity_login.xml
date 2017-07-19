@@ -246,7 +246,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:text="其他登录方式"
+                android:text="@string/else_login_method"
                 android:textColor="@color/white"
                 android:textSize="13dp" />
 
