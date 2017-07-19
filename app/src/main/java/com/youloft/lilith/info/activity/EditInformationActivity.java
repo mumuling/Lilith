@@ -414,9 +414,9 @@ public class EditInformationActivity extends BaseActivity {
         if (mNickName.equals(mName)
                 && mBirthDay.equals(dateBirth)
                 && mBirthTime.equals(timeBirth)
-                && mBirthLocation.equals(placeBirth)
+                && placeBirth.equals(mBirthLocation)
                 && mSex.equals(sexStr)
-                && mHomeLocation.equals(placeNow)) {
+                && placeNow.equals(mHomeLocation)) {
 
             Toaster.showShort("个人资料未变化");
             return;
