@@ -69,13 +69,13 @@ public class ImmediatelyMeasureHolder extends BaseMeasureHolder {
      * @param mIndex
      */
     private void reportEvent(int mIndex) {
-        AppAnalytics.onEvent("CC.Card", "IM" + mIndex);
+        AppAnalytics.onEvent("CC.Card.IM", "" + mIndex);
     }
 
     @OnClick(R.id.bt_measure)
     public void onViewClicked() {
         if (isDataSafe(mMeasureData)) return;
-        AppAnalytics.onEvent("CC.Card", "C" + mIndex);
+        AppAnalytics.onEvent("CC.Card.C", "" + mIndex);
         ARouter.getInstance().build("/ui/web")
                 .withString("url", mMeasureData.ads.get(0).url)
                 .navigation();

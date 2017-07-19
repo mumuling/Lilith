@@ -73,14 +73,14 @@ public class MasterMeasureHolder extends BaseMeasureHolder {
     }
 
     private void reportEventIM() {
-        AppAnalytics.onEvent("CC.Place", "IM"+0);
-        AppAnalytics.onEvent("CC.Place", "IM"+1);
-        AppAnalytics.onEvent("CC.Place", "IM"+2);
-        AppAnalytics.onEvent("CC.Place", "IM"+3);
-        AppAnalytics.onEvent("CC.Place", "IM"+4);
-        AppAnalytics.onEvent("CC.Place", "IM"+5);
-        AppAnalytics.onEvent("CC.Place", "IM"+6);
-        AppAnalytics.onEvent("CC.Place", "IM"+7);
+        AppAnalytics.onEvent("CC.Place.IM", ""+0);
+        AppAnalytics.onEvent("CC.Place.IM", ""+1);
+        AppAnalytics.onEvent("CC.Place.IM", ""+2);
+        AppAnalytics.onEvent("CC.Place.IM", ""+3);
+        AppAnalytics.onEvent("CC.Place.IM", ""+4);
+        AppAnalytics.onEvent("CC.Place.IM", ""+5);
+        AppAnalytics.onEvent("CC.Place.IM", ""+6);
+        AppAnalytics.onEvent("CC.Place.IM", ""+7);
     }
 
     @OnClick({R.id.ll_master01, R.id.ll_master02, R.id.ll_master03, R.id.ll_master04,
@@ -94,7 +94,7 @@ public class MasterMeasureHolder extends BaseMeasureHolder {
         ARouter.getInstance().build("/ui/web")
                 .withString("url", url)
                 .navigation();
-        AppAnalytics.onEvent("CC.Place", "C" + String.valueOf(index));
+        AppAnalytics.onEvent("CC.Place.C", "" + String.valueOf(index));
 
     }
 }

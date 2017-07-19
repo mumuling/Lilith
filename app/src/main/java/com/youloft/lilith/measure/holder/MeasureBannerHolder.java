@@ -44,7 +44,7 @@ public class MeasureBannerHolder extends BaseMeasureHolder {
             return;
         }
         if (reportTag) {
-            AppAnalytics.onEvent("CC.AD", "IM0");
+            AppAnalytics.onEvent("CC.AD.IM", "0");
             reportTag = false;
         }
         GlideApp.with(mContext).load(mMeasureData.ads.get(0).image).into(ivBanner);
@@ -58,7 +58,7 @@ public class MeasureBannerHolder extends BaseMeasureHolder {
     public void onViewClicked() {
         boolean b = isaBoolean(mMeasureData);
         if (b) return;
-        AppAnalytics.onEvent("CC.AD", "C0");
+        AppAnalytics.onEvent("CC.AD.C", "0");
         ARouter.getInstance().build("/ui/web")
                 .withString("url", mMeasureData.ads.get(0).url)
                 .navigation();

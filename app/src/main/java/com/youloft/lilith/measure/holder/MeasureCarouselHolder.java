@@ -112,7 +112,7 @@ public class MeasureCarouselHolder extends BaseMeasureHolder {
 
                 int index = position % mData.size();
                 if (mReportTag) {
-                    AppAnalytics.onEvent("CC.banner", "IM" + index);
+                    AppAnalytics.onEvent("CC.banner.IM", "" + index);
                     if (!mTags.contains(index)) {
                         mTags.add(index);
                     }
@@ -239,7 +239,7 @@ public class MeasureCarouselHolder extends BaseMeasureHolder {
                     if (mData == null) {
                         return;
                     }
-                    AppAnalytics.onEvent("CC.banner", "C" + index);
+                    AppAnalytics.onEvent("CC.banner.C", "" + index);
                     ARouter.getInstance().build("/ui/web")
                             .withString("url", mData.get(index).url)
                             .navigation();
