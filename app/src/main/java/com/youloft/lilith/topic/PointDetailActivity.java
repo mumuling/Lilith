@@ -68,27 +68,27 @@ import io.reactivex.schedulers.Schedulers;
 public class PointDetailActivity extends BaseActivity implements ScrollFrameLayout.IscrollChange {
 
     @BindView(R.id.ll_top_root)
-    LinearLayout llTopRoot;
+    LinearLayout llTopRoot;//顶部title
     @BindView(R.id.close_icon)
-    ImageView closeIcon;
+    ImageView closeIcon; //关闭按钮
     @BindView(R.id.command_num)
-    TextView commandNum;
+    TextView commandNum;  //评论数
     @BindView(R.id.root)
     SoftInputLayout root;
     @BindView(R.id.rv_comment_answer)
-    ScrollFrameLayout rvCommentAnswer;
+    ScrollFrameLayout rvCommentAnswer;//下滑f返回的ecyclerview
     @BindView(R.id.comment_edit)
-    EditText commentEdit;
+    EditText commentEdit;//底部编辑框
     @Autowired
-    public PointBean.DataBean point;
+    public PointBean.DataBean point;//观点信息
     @Autowired
-    public TopicDetailBean.DataBean topic;
+    public TopicDetailBean.DataBean topic;//话题信息
     @Autowired
-    public int position;
+    public int position;//上一级观点列表的位置信息
     @BindView(R.id.text_confirm)
-    TextView textConfirm;
+    TextView textConfirm;//确认按钮
     @BindView(R.id.image_pen)
-    ImageView imagePen;
+    ImageView imagePen;//
     @BindView(R.id.image_root)
     ImageView imageRoot;
     private LinearLayoutManager mLayoutManager;
@@ -96,12 +96,12 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
     private List<ReplyBean.DataBean> replyBeanList = new ArrayList<>();//回复的列表
     public static String TYPE_POINT = "type_point";
     public static String TYPE_ANSWER = "type_answer";
-    public int replyId = 0;
-    public String replyName;
-    private PointAnswerCache pointAnswerCache;
+    public int replyId = 0;//回复对象的ID
+    public String replyName;//回复的对象
+    private PointAnswerCache pointAnswerCache;//回复的数据缓存
     private InputMethodManager imm;
     private UserBean.DataBean.UserInfoBean userInfo = null;
-    private boolean isReplyAuthor = true;
+    private boolean isReplyAuthor = true;//是否是评论的作者
 
     private int replyCount = 0;//回复的条数
 

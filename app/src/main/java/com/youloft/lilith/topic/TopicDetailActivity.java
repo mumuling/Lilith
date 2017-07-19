@@ -55,21 +55,21 @@ public class TopicDetailActivity extends BaseActivity {
 
 
     @BindView(R.id.tool_bar)
-    BaseToolBar toolBar;
+    BaseToolBar toolBar;//顶部title
     @BindView(R.id.rv_topic_detail)
-    RecyclerView rvTopicDetail;
+    RecyclerView rvTopicDetail;//recyclerView
     private LinearLayoutManager mLayoutManager;
     private TopicDetailAdapter adapter;
     private VoteDialog voteDialog;
-    private TopicDetailBean.DataBean topicDtailInfo;
-    private List<PointBean.DataBean> pointList = new ArrayList<>();
-    private List<TopicBean.DataBean> otherTopicList = new ArrayList<>();
-    public int totalPoint = 0;
-    public int totalTopic = 0;
+    private TopicDetailBean.DataBean topicDtailInfo;//话题详细信息
+    private List<PointBean.DataBean> pointList = new ArrayList<>();//观点列表
+    private List<TopicBean.DataBean> otherTopicList = new ArrayList<>();//底部其他话题列表
+    public int totalPoint = 0;//总的观点数
+    public int totalTopic = 0;//底部其他话题列表的数量
     private boolean isMorePoint = true;
     private int isVote = 0;//是否参与过
-    private TopicInfoCache topicInfoCache;
-    private PointCache pointCache;
+    private TopicInfoCache topicInfoCache;//话题信息的数据库缓存
+    private PointCache pointCache;//观点信息的数据库缓存
     private boolean needLoadMoreTopic = true;//是否需要加载更多话题
     private boolean needAddAnswer = true;//是否需要加缓存回复的数量
     @Autowired
