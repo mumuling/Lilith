@@ -118,7 +118,7 @@ public class EditInformationActivity extends BaseActivity {
     private String mTempContent;//edittext失去焦点的时候临时存储文字
     private String mNickName;
 
-    private boolean needSave = true;
+    private boolean needSave = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -193,7 +193,7 @@ boolean isFirst = true;
         int measuredWidth = etNickName.getMeasuredWidth();
         TextPaint paint = etNickName.getPaint();
         int textWidth = (int) paint.measureText(con);
-        if(textWidth > measuredWidth){
+        if(textWidth > measuredWidth && con.length() > 2){
             while (textWidth > measuredWidth) {
                 con = con.substring(0,con.length()-1);
                 textWidth = (int) paint.measureText(con);
@@ -378,7 +378,7 @@ boolean isFirst = true;
                         if (needSave) {
                             mTempContent = s.toString();
                         }
-                        if (!canSave) {
+                        if (!canSave  && needSave) {
                             canSave = true;
                             btlEditInformation.setShowSaveBtn(true);
                         }
