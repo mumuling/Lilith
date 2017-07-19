@@ -1,0 +1,107 @@
+<resources>
+    <string name="app_name">Lilith</string>
+    <string name="app_name_ch">莉莉斯</string>
+    <string name="tttt">題目</string>
+    <!--權限Label-->
+    <string name="lilith_permission_label">允許讀取和更新麗麗絲設置</string>
+    <string name="master_measure">大師親算</string>
+    <string name="cons_share_text">分享我的運勢</string>
+    <string name="cons_share_customization_text">定製我的運勢</string>
+    <string name="cons_love_text">感情運勢上升</string>
+    <string name="cons_money_text">財富運勢上升</string>
+    <string name="cons_work_text">工作運勢上升</string>
+    <string name="nick_name">昵稱</string>
+    <string name="sex">性別</string>
+    <string name="date_birth">出生日期</string>
+    <string name="time_birth">出生時間</string>
+    <string name="place_birth">出生地</string>
+    <string name="place_now">現居地</string>
+    <string name="select_sex">請選擇性別</string>
+    <string name="select_date_birth">請選擇出生日期</string>
+    <string name="select_time_birth">請選擇出生時間</string>
+    <string name="select_place_birth">請選擇出生地</string>
+    <string name="select_place_now">請選擇現居住地</string>
+    <string name="user_information_desc">您的個人信息將用於訂製您的每日運勢</string>
+    <string name="quick_login">快捷登錄</string>
+    <string name="forget_password">忘記密碼</string>
+    <string name="forget_password_01">忘記密碼？</string>
+    <string name="registered_account">註冊賬號</string>
+    <string name="set_password">設置密碼</string>
+    <string name="phone_number">手機號</string>
+    <string name="input_validation_code">輸入驗證碼</string>
+    <string name="get_validation_code">獲取驗證碼</string>
+    <string name="login">登錄</string>
+    <string name="re_send">s后重發</string>
+    <string name="existing_number">已註冊賬號</string>
+    <string name="clause_description">登錄代表你同意星座的</string>
+    <string name="privacy_terms">隱私條款</string>
+    <string name="company">重慶可蘭達科技有限公司</string>
+    <string name="register">註冊</string>
+    <string name="wechat">微信</string>
+    <string name="password">密碼</string>
+    <string name="cons_share_word">分享我的運勢</string>
+    <string name="cons_cal_title">運勢日曆</string>
+    <string name="modify_password">修改密碼</string>
+    <string name="password_length_description">密碼長度6-16位，支持数字、字母、字符</string>
+    <string name="old_password">輸入原密碼</string>
+    <string name="new_password">輸入新密碼</string>
+    <string name="confirm_new_password">確認新密碼</string>
+    <string name="confirm">確認</string>
+    <string name="cons_hot_topic_card_title">熱門話題</string>
+    <string name="cons_hot_topic_card_more">查看全部</string>
+    <string name="topic_card_show_detail">立即查看</string>
+    <string name="share_activity_title">分享給好友</string>
+    <string name="share_activity_cancel">取消</string>
+    <string name="share_wxhy">微信好友</string>
+    <string name="share_wxcc">朋友圈</string>
+    <string name="man">男</string>
+    <string name="woman">女</string>
+    <string name="log_dialog_to_lod_btn">登錄查看</string>
+    <string name="log_dialog_to_complete_btn">填寫資料</string>
+    <string name="log_dialog_to_lod">查看專屬運勢,請登錄后填寫資料!</string>
+    <string name="log_dialog_to_complete">查看專屬運勢,請填寫資料!</string>
+    <string name="log_dialog_to_lod_topic">登錄后才可參与話題討論</string>
+    <string name="feed_back">意見反饋</string>
+    <string name="setting">設置</string>
+    <string name="bind_phone">綁定手機</string>
+    <string name="about_me">關於我們</string>
+    <string name="net_err">網絡異常</string>
+    <string name="out_program">再按一次退出程序</string>
+    <string name="cons_my_info_default_cn_word">喜怒哀樂喜歡錶現在臉上，讓人一看便知道，把心中的苦悶說出來會舒服一些。</string>
+    <string name="cons_my_info_default_en_word">Sorrow and happiness, like the expression on the face, let people see, you know, the heart of the depression will be comfortable.</string>
+    <string name="bind_account">綁定賬號</string>
+    <!--tab名字-->
+    <string name="cece">測測</string>
+    <string name="huati">話題</string>
+    <string name="me">我</string>
+
+    <!--運勢title-->
+    <string name="cons_ys_title_total">運勢概括</string>
+    <string name="cons_ys_title_love">感情運</string>
+    <string name="cons_ys_title_work">工作運</string>
+    <string name="cons_ys_title_money">財富運</string>
+
+    <!--星座-->
+    <string name="aries">白羊座</string>
+    <string name="taurus">金牛座</string>
+    <string name="gemini">雙子座</string>
+    <string name="cancer">巨蟹座</string>
+    <string name="leo">獅子座</string>
+    <string name="virgo">處女座</string>
+    <string name="libra">天秤座</string>
+    <string name="scorpio">天蠍座</string>
+    <string name="sagittarius">射手座</string>
+    <string name="capricorn">摩羯座</string>
+    <string name="aquarius">水瓶座</string>
+    <string name="pisces">雙魚座</string>
+    <string name="company_name">重慶可蘭達科技有限公司</string>
+    <string name="cons_title_word_unlod" formatted="false">%s好, 請您完善資料獲取準確運勢!</string>
+    <string name="cons_title_word_lod" formatted="false">%s好 %s, 您的今日運勢如下</string>
+
+    <string-array name="cons_luck_line_color">
+        <item>#de5deb,#99de5deb,#0fde5deb</item>
+        <item>#ff6262,#99ff6161,#0fff6161</item>
+        <item>#49b5ff,#9949b5ff,#0f49b5ff</item>
+        <item>#ffb74a,#99ffb74a,#0fffb74a</item>
+    </string-array>
+</resources>

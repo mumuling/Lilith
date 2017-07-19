@@ -41,7 +41,8 @@ public class ConsTitleHolder extends BaseHolder<String> {
         super(LayoutInflater.from(context).inflate(R.layout.cons_card_title, parent, false), context);
         ButterKnife.bind(this, itemView);
         setDefaultString();
-
+        unLoggin = mContext.getResources().getString(R.string.cons_title_word_unlod);
+        loggin = mContext.getResources().getString(R.string.cons_title_word_lod);
     }
 
     /**

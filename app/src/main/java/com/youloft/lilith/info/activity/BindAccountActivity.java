@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -46,9 +47,11 @@ public class BindAccountActivity extends BaseActivity {
     @BindView(R.id.tv_phone)
     TextView tvPhone;
     @BindView(R.id.tv_phone_number)
-    TextView tvPhoneNumber;
+    TextView tvPhoneNumber;        //绑定手机后面的显示的手机号码
     @BindView(R.id.tv_bind_weixin)
-    TextView tvBindWeixin;
+    TextView tvBindWeixin;   //微信后面的  已绑定文字
+    @BindView(R.id.ll_third_bind_container)
+    LinearLayout llThirdBindContainer;  //三方绑定的最外层容器
 
 
     @Override
@@ -58,7 +61,7 @@ public class BindAccountActivity extends BaseActivity {
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
         initTilte();
-        //进来的时候看看用户是否有手机号码,有就显示绑定的手机
+        //进来的时候看看用户是否有手机号码,有就显示绑定的手机  确认用户是不是微信登录,如果是就隐藏绑定微信
         initView();
     }
 
@@ -88,6 +91,7 @@ public class BindAccountActivity extends BaseActivity {
         });
     }
 
+    //绑定手机成功后 发过来的事件
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onBindAccount(BindAccountEvent bindAccountEvent) {
         initView();
@@ -98,17 +102,27 @@ public class BindAccountActivity extends BaseActivity {
         if (userInfo == null) {
             return;
         }
+        //这个是对手机号码的显示
+        String phone = userInfo.data.userInfo.phone;
+        if (phone.length() != 11) return;
+        phone = phone.substring(0, 3) + "****" + phone.substring(7);
+        tvPhoneNumber.setText(phone);
+        tvPhoneNumber.setVisibility(View.VISIBLE);
+        //判断是不是微信三方登录的,如果是 直接给他隐藏了  后面的绑定微信是否显示就不管了
+        if (userInfo.data.userInfo.thirdLogin) {
+            llThirdBindContainer.setVisibility(View.INVISIBLE);
+            return;
+        } else { // 不是就显示出来,继续执行下面的逻辑
+            llThirdBindContainer.setVisibility(View.VISIBLE);
+        }
+
+        //这个是判断是不是绑定了微信
         boolean bindWx = userInfo.data.userInfo.bindWx;
         if (bindWx) {
             tvBindWeixin.setVisibility(View.VISIBLE);
         } else {
             tvBindWeixin.setVisibility(View.INVISIBLE);
         }
-        String phone = userInfo.data.userInfo.phone;
-        if (phone.length() != 11) return;
-        phone = phone.substring(0, 3) + "****" + phone.substring(7);
-        tvPhoneNumber.setText(phone);
-        tvPhoneNumber.setVisibility(View.VISIBLE);
     }
 
 
@@ -187,7 +201,7 @@ public class BindAccountActivity extends BaseActivity {
                             AppSetting.saveUserInfo(userBean);
                             tvBindWeixin.setVisibility(View.VISIBLE);
                         } else {
-                            Toaster.showShort("绑定失败");
+                            Toaster.showShort(userBean.data.message+"");
                         }
                     }
 
