@@ -3,10 +3,12 @@ package com.youloft.lilith.login;
 import android.app.Activity;
 import android.content.Context;
 import android.media.MediaPlayer;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.youloft.lilith.LLApplication;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.utils.Utils;
 
@@ -38,17 +40,28 @@ public class MediaPlayerHelper implements SurfaceHolder.Callback {
     }
 
     private MediaPlayerHelper(Context content) {
-        mMediaPlayer = MediaPlayer.create(content, R.raw.bg_login);
-        mMediaPlayer.setLooping(true);
-        mMediaPlayer.start();
+        initMediaPlayIfNeed(content);
+    }
+
+    private void initMediaPlayIfNeed(Context content) {
+        if (mMediaPlayer == null) {
+            mMediaPlayer = MediaPlayer.create(content, R.raw.bg_login);
+            mMediaPlayer.setLooping(true);
+            mMediaPlayer.start();
+        }
     }
 
     /**
      * 注册需要使用此播放器的Activity,在activity中注册时需要在onResume()中注册，防止回退时候没法播放；
+     *
      * @param content
      * @param surfaceView
      */
     public void register(Activity content, SurfaceView surfaceView) {
+
+        if (surfaceView == mSurfaceView) {
+            return;
+        }
         list.add(content);
         if (mHolder != null) {
             mHolder.removeCallback(this);
@@ -56,10 +69,12 @@ public class MediaPlayerHelper implements SurfaceHolder.Callback {
         mSurfaceView = surfaceView;
         mHolder = mSurfaceView.getHolder();
         mHolder.addCallback(this);
+        Log.d(TAG, "register() called with: content = [" + content + "], surfaceView = [" + surfaceView + "]");
     }
 
     /**
      * 反注册,如果引用数为0，则释放MediaPlayer；在Activity的onDestroy()中进行反注册；
+     *
      * @param content
      */
     public void unregister(Activity content) {
@@ -82,18 +97,38 @@ public class MediaPlayerHelper implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        if (mMediaPlayer != null) {
-            mMediaPlayer.setDisplay(holder);
-        }
+        initMediaPlayIfNeed(LLApplication.getInstance());
+        init = true;
+//        Log.d(TAG, "surfaceCreated() called with: holder = [" + holder + "]" + " player:" + mMediaPlayer.isPlaying());
+
     }
+
+    private static final String TAG = "MediaPlayerHelper";
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+        if (init) {
+            mMediaPlayer.setDisplay(holder);
+
+        }
+        Log.d(TAG, "surfaceChanged() called with: holder = [" + holder + "], format = [" + format + "], width = [" + width + "], height = [" + height + "]" + mMediaPlayer.isPlaying());
 
     }
 
+
+    boolean init = false;
+
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        holder.removeCallback(this);
+        init = false;
+
+        if (mMediaPlayer != null) {
+            mMediaPlayer.stop();
+            mMediaPlayer.release();
+            mMediaPlayer = null;
+        }
+        Log.d(TAG, "surfaceDestroyed() called with: holder = [" + holder + "]");
+
+
     }
 }
