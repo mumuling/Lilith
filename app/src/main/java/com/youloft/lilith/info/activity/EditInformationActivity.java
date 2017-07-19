@@ -3,12 +3,14 @@ package com.youloft.lilith.info.activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -116,6 +118,8 @@ public class EditInformationActivity extends BaseActivity {
     private String mTempContent;//edittext失去焦点的时候临时存储文字
     private String mNickName;
 
+    private boolean needSave = true;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,8 +142,14 @@ public class EditInformationActivity extends BaseActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
                     etNickName.setCursorVisible(true);
-                    etNickName.setSelection(etNickName.length());
+
                     ivDeleteNickName.setVisibility(View.VISIBLE);
+
+                    etNickName.setCursorVisible(true);
+                    ivDeleteNickName.setVisibility(View.VISIBLE);
+                    etNickName.setText(mTempContent);
+                    needSave = true;
+                    etNickName.setSelection(mTempContent.length());
 
                 } else {
                     etNickName.setCursorVisible(false);
@@ -155,7 +165,7 @@ public class EditInformationActivity extends BaseActivity {
      * 对edittext文字的处理
      */
     private void handleEditText() {
-        mTempContent = etNickName.getText().toString();
+        needSave = false;
         String con = etNickName.getText().toString();
         int measuredWidth = etNickName.getMeasuredWidth();
         TextPaint paint = etNickName.getPaint();
@@ -167,6 +177,23 @@ public class EditInformationActivity extends BaseActivity {
             }
             etNickName.setText(con.substring(0,con.length()-2)+"...");
         }
+
+    }
+
+    private void handleEditText1() {
+        String con = AppSetting.getUserInfo().data.userInfo.nickName;
+        mTempContent =con;
+        int measuredWidth = etNickName.getMeasuredWidth();
+        TextPaint paint = etNickName.getPaint();
+        int textWidth = (int) paint.measureText(con);
+        if(textWidth > measuredWidth){
+            while (textWidth > measuredWidth) {
+                con = con.substring(0,con.length()-1);
+                textWidth = (int) paint.measureText(con);
+            }
+            etNickName.setText(con.substring(0,con.length()-2)+"...");
+        }
+
 
     }
 
@@ -308,31 +335,63 @@ public class EditInformationActivity extends BaseActivity {
             }
 
         }
-        textWatcher = new TextWatcher() {
+        new Handler().postDelayed(new Runnable() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public void run() {
+             handleEditText1();
+                textWatcher = new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        if (!canSave) {
+                            canSave = true;
+                            btlEditInformation.setShowSaveBtn(true);
+                        }
+                    }
+                };
+
+                TextWatcher etNameWatcher = new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        if (needSave) {
+                            mTempContent = s.toString();
+                        }
+                        if (!canSave) {
+                            canSave = true;
+                            btlEditInformation.setShowSaveBtn(true);
+                        }
+                    }
+                };
+                etNickName.addTextChangedListener(etNameWatcher);
+                tvSex.addTextChangedListener(textWatcher);
+                tvDateBirth.addTextChangedListener(textWatcher);
+                tvTimeBirth.addTextChangedListener(textWatcher);
+                tvPlaceBirth.addTextChangedListener(textWatcher);
+                tvPlaceNow.addTextChangedListener(textWatcher);
             }
+        },300);
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-            }
 
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (!canSave) {
-                    canSave = true;
-                    btlEditInformation.setShowSaveBtn(true);
-                }
-            }
-        };
-        etNickName.addTextChangedListener(textWatcher);
-        tvSex.addTextChangedListener(textWatcher);
-        tvDateBirth.addTextChangedListener(textWatcher);
-        tvTimeBirth.addTextChangedListener(textWatcher);
-        tvPlaceBirth.addTextChangedListener(textWatcher);
-        tvPlaceNow.addTextChangedListener(textWatcher);
 
 
     }
@@ -681,6 +740,7 @@ public class EditInformationActivity extends BaseActivity {
         etNickName.setCursorVisible(true);
         ivDeleteNickName.setVisibility(View.VISIBLE);
         etNickName.setText(mTempContent);
+        needSave = true;
         etNickName.setSelection(mTempContent.length());
     }
 

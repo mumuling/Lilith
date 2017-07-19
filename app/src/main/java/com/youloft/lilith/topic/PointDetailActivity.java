@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -209,6 +210,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
     }
 
     private void initView() {
+        getWindow().setSoftInputMode( WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         replyName = "";
         int statusHeight = ViewUtil.getStatusHeight();
         FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) llTopRoot.getLayoutParams();
@@ -352,7 +354,7 @@ public class PointDetailActivity extends BaseActivity implements ScrollFrameLayo
             imm.showSoftInput(commentEdit, 0);
         }
 
-        commentEdit.setHint("回复 " + replyName + ":");
+        commentEdit.setHint("回复 " + replyName);
 
     }
 

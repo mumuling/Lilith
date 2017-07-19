@@ -31,6 +31,7 @@ import com.youloft.lilith.topic.TopicRepo;
 import com.youloft.lilith.topic.adapter.PointAnswerAdapter;
 import com.youloft.lilith.topic.bean.ClickLikeBean;
 import com.youloft.lilith.topic.bean.ClickLikeEvent;
+import com.youloft.lilith.topic.bean.PointBean;
 import com.youloft.lilith.topic.bean.ReplyBean;
 import com.youloft.lilith.topic.db.TopicLikeCache;
 import com.youloft.lilith.topic.db.TopicLikingTable;
@@ -93,11 +94,11 @@ public class PointAnswerNormalHolder extends RecyclerView.ViewHolder implements 
     }
 
     /**
-     *
-     * @param dataBean  回复的数据
+     *  @param dataBean  回复的数据
+     * @param point
      * @param isFirst   是否为列表的第一条
      */
-    public void bindView(ReplyBean.DataBean dataBean,boolean isFirst) {
+    public void bindView(ReplyBean.DataBean dataBean, PointBean.DataBean point, boolean isFirst) {
         if (dataBean == null)return;
         UserBean userBean = AppSetting.getUserInfo();
         this.mData = dataBean;
@@ -110,6 +111,9 @@ public class PointAnswerNormalHolder extends RecyclerView.ViewHolder implements 
             textUserName.setText(StringUtil.toNameString(userBean.data.userInfo.nickName));
         } else {
             textUserName.setText(StringUtil.toNameString(dataBean.nickName));
+        }
+        if (point != null && dataBean.uid == point.userId) {
+            textUserName.setText(textUserName.getText().toString() + "(作者)");
         }
         textAnswerContent.setText(dataBean.contents);
         textUserConstellation.setText(ConsManager.getConsName(dataBean.signs));
