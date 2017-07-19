@@ -42,7 +42,6 @@
                 <EditText
                     android:id="@+id/et_phone_number"
                     android:layout_width="0dp"
-                    android:textCursorDrawable="@drawable/edit_cursorc_color"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_weight="1"
@@ -53,6 +52,7 @@
                     android:maxLines="1"
                     android:textColor="@color/white"
                     android:textColorHint="@color/white_50"
+                    android:textCursorDrawable="@drawable/edit_cursorc_color"
                     android:textSize="20dp" />
 
                 <FrameLayout
@@ -128,177 +128,38 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:textCursorDrawable="@drawable/edit_cursorc_color"
-                    android:cursorVisible="false"
                     android:hint="@string/input_validation_code"
                     android:inputType="number"
-                    android:textColor="@color/translucent"
+                    android:maxLines="1"
+                    android:textColor="@color/white"
                     android:textColorHint="@color/white_50"
+                    android:textCursorDrawable="@drawable/edit_cursorc_color"
                     android:textSize="20dp" />
 
-                <!--分割式验证码容器-->
-                <LinearLayout
-                    android:id="@+id/ll_code_container"
-                    android:layout_width="match_parent"
+                <!--显示验证码正确和错误-->
+                <FrameLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:visibility="invisible">
+                    android:layout_gravity="center_vertical|right"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="10dp">
 
-                    <FrameLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:id="@+id/tv_code01"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:textColor="@color/white"
-                            android:textSize="20dp" />
-
-                        <View
-                            android:id="@+id/v_code_line01"
-                            android:layout_width="12dp"
-                            android:layout_height="1dp"
-                            android:layout_gravity="bottom"
-                            android:layout_marginTop="5dp"
-                            android:background="@color/white_50" />
-                    </FrameLayout>
-
-                    <FrameLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="6dp">
-
-                        <TextView
-                            android:id="@+id/tv_code02"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:textColor="@color/white"
-                            android:textSize="20dp" />
-
-                        <View
-                            android:id="@+id/v_code_line02"
-                            android:layout_width="12dp"
-                            android:layout_height="1dp"
-                            android:layout_gravity="bottom"
-                            android:layout_marginTop="5dp"
-                            android:background="@color/white_50" />
-                    </FrameLayout>
-
-                    <FrameLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="6dp">
-
-                        <TextView
-                            android:id="@+id/tv_code03"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:textColor="@color/white"
-                            android:textSize="20dp" />
-
-                        <View
-                            android:id="@+id/v_code_line03"
-                            android:layout_width="12dp"
-                            android:layout_height="1dp"
-                            android:layout_gravity="bottom"
-                            android:layout_marginTop="5dp"
-                            android:background="@color/white_50" />
-                    </FrameLayout>
-
-                    <FrameLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="6dp">
-
-                        <TextView
-                            android:id="@+id/tv_code04"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:textColor="@color/white"
-                            android:textSize="20dp" />
-
-                        <View
-                            android:id="@+id/v_code_line04"
-                            android:layout_width="12dp"
-                            android:layout_height="1dp"
-                            android:layout_gravity="bottom"
-                            android:layout_marginTop="5dp"
-                            android:background="@color/white_50" />
-                    </FrameLayout>
-
-                    <FrameLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="6dp">
-
-                        <TextView
-                            android:id="@+id/tv_code05"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:textColor="@color/white"
-                            android:textSize="20dp" />
-
-                        <View
-                            android:id="@+id/v_code_line05"
-                            android:layout_width="12dp"
-                            android:layout_height="1dp"
-                            android:layout_gravity="bottom"
-                            android:layout_marginTop="5dp"
-                            android:background="@color/white_50" />
-                    </FrameLayout>
-
-                    <FrameLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="6dp">
-
-                        <TextView
-                            android:id="@+id/tv_code06"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:textColor="@color/white"
-                            android:textSize="20dp" />
-
-                        <View
-                            android:id="@+id/v_code_line06"
-                            android:layout_width="12dp"
-                            android:layout_height="1dp"
-                            android:layout_gravity="bottom"
-                            android:layout_marginTop="5dp"
-                            android:background="@color/white_50" />
-                    </FrameLayout>
-                    <!--显示验证码正确和错误-->
-                    <FrameLayout
+                    <ImageView
+                        android:id="@+id/iv_code_right"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="8dp">
+                        android:src="@drawable/login_right_icon"
+                        android:visibility="invisible" />
 
-                        <ImageView
-                            android:id="@+id/iv_code_right"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:src="@drawable/login_right_icon"
-                            android:visibility="invisible" />
-
-                        <ImageView
-                            android:id="@+id/iv_code_error"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:src="@drawable/mine_tips_icon"
-                            android:visibility="invisible" />
-                    </FrameLayout>
-
-                </LinearLayout>
+                    <ImageView
+                        android:id="@+id/iv_code_error"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/mine_tips_icon"
+                        android:visibility="invisible" />
+                </FrameLayout>
             </FrameLayout>
 
 

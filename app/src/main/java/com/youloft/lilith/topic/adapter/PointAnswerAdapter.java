@@ -71,9 +71,9 @@ public class PointAnswerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         if (holder instanceof PointAnswerNormalHolder) {
             if (replyList.size() == 0)return;
             if (position==1) {
-                ((PointAnswerNormalHolder) holder).bindView(replyList.get(position - 1),true);
+                ((PointAnswerNormalHolder) holder).bindView(replyList.get(position - 1),point,true);
             }else {
-                ((PointAnswerNormalHolder) holder).bindView(replyList.get(position - 1),false);
+                ((PointAnswerNormalHolder) holder).bindView(replyList.get(position - 1),point,false);
             }
 
         }
