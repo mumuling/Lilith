@@ -356,6 +356,13 @@ public class BindPhoneActivity extends BaseActivity {
                     @Override
                     public void onDataSuccess(SendSmsBean sendSmsBean) {
                         //确认短信发送成功了
+                        if(sendSmsBean == null){
+                            return;
+                        }
+                        if(sendSmsBean.data.msg.equals("短信发送超出限制")){
+                            Toaster.showShort("超出发送数量限制");
+                            return;
+                        }
                     }
                 });
 

@@ -290,6 +290,13 @@ public class ForgetPasswordActivity extends BaseActivity implements BaseTextWatc
                     @Override
                     public void onDataSuccess(SendSmsBean sendSmsBean) {
                         //证明验证码一件发送到手机了
+                        if(sendSmsBean == null){
+                            return;
+                        }
+                        if(sendSmsBean.data.msg.equals("短信发送超出限制")){
+                            Toaster.showShort("超出发送数量限制");
+                            return;
+                        }
                     }
                 });
         handler.postDelayed(runnable, 0);
