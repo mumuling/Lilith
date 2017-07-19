@@ -152,7 +152,7 @@ public class ConsMyInfoHolder extends ConsBaseHolder {
                             EventBus.getDefault().post(new LoddingCheckEvent());
                             return;
                         }
-                        AppAnalytics.onEvent("Homeshare1", "C");
+                        AppAnalytics.onEvent("Homeshare.C", "0");
                         EventBus.getDefault().post(new ShareConsEvent("1"));
                     }
                 });

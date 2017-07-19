@@ -48,7 +48,7 @@ public class ConsShareHolder extends ConsBaseHolder {
                             EventBus.getDefault().post(new LoddingCheckEvent());
                             return;
                         }
-                        AppAnalytics.onEvent("Homeshare2", "C");
+                        AppAnalytics.onEvent("Homeshare.C", "1");
                         EventBus.getDefault().post(new ShareConsEvent("2"));//分享订阅在XZFragment中
                     }
                 });
