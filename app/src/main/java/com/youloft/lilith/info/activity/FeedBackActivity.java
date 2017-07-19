@@ -53,7 +53,7 @@ public class FeedBackActivity extends BaseActivity {
         initTitle();
         mApiVersion = String.valueOf(android.os.Build.VERSION.SDK_INT);
         String model = android.os.Build.MODEL;
-        mApiVersion = model + " " + mApiVersion;
+        mApiVersion = model + "/" + mApiVersion;
     }
 
     /**

@@ -218,8 +218,12 @@ public class MyTopicActivity extends BaseActivity {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE
                         && lastVisibleItemPosition == totalItemCount - 1
                         && visibleItemCount > 0) {
-                    if (myTopicList!= null && myTopicList.size() >= 10) {
-                        loadMoreTopic();
+                    if (myTopicList!= null &&  rvMyTopic.getBottom() >= getWindowManager().getDefaultDisplay().getHeight()) {
+                        if (myTopicList.size() >=9) {
+                            loadMoreTopic();
+                        } else {
+                            Toaster.showShort("没有更多观点了。");
+                        }
                     }
                 }
             }
