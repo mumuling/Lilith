@@ -69,7 +69,7 @@ public class MediaPlayerHelper implements SurfaceHolder.Callback {
         mSurfaceView = surfaceView;
         mHolder = mSurfaceView.getHolder();
         mHolder.addCallback(this);
-        Log.d(TAG, "register() called with: content = [" + content + "], surfaceView = [" + surfaceView + "]");
+//        Log.d(TAG, "register() called with: content = [" + content + "], surfaceView = [" + surfaceView + "]");
     }
 
     /**
@@ -99,20 +99,15 @@ public class MediaPlayerHelper implements SurfaceHolder.Callback {
     public void surfaceCreated(SurfaceHolder holder) {
         initMediaPlayIfNeed(LLApplication.getInstance());
         init = true;
-//        Log.d(TAG, "surfaceCreated() called with: holder = [" + holder + "]" + " player:" + mMediaPlayer.isPlaying());
-
     }
 
-    private static final String TAG = "MediaPlayerHelper";
+//    private static final String TAG = "MediaPlayerHelper";
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         if (init) {
             mMediaPlayer.setDisplay(holder);
-
         }
-        Log.d(TAG, "surfaceChanged() called with: holder = [" + holder + "], format = [" + format + "], width = [" + width + "], height = [" + height + "]" + mMediaPlayer.isPlaying());
-
     }
 
 
@@ -121,14 +116,10 @@ public class MediaPlayerHelper implements SurfaceHolder.Callback {
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         init = false;
-
         if (mMediaPlayer != null) {
             mMediaPlayer.stop();
             mMediaPlayer.release();
             mMediaPlayer = null;
         }
-        Log.d(TAG, "surfaceDestroyed() called with: holder = [" + holder + "]");
-
-
     }
 }
