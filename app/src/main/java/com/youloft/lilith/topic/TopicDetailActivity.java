@@ -110,10 +110,11 @@ public class TopicDetailActivity extends BaseActivity {
                     @Override
                     public void onDataSuccess(TopicBean topicBean) {
                         if (topicBean.data != null) {
+                            totalTopic = topicBean.data.size();
                             chekTopic(topicBean.data);
                             otherTopicList.addAll(topicBean.data);
                             adapter.setOtherTopicList(topicBean.data);
-                            totalTopic = topicBean.data.size();
+
                         }
                     }
 
@@ -378,11 +379,12 @@ public class TopicDetailActivity extends BaseActivity {
                     public void onDataSuccess(TopicBean topicBean) {
                         if (topicBean.data != null) {
                             if (topicBean.data.size() == 0) needLoadMoreTopic = false;
+                            totalTopic = totalTopic + topicBean.data.size();
                             otherTopicList.clear();
                             //otherTopicList.addAll(topicBean.data);
                             chekTopic(topicBean.data);
                             adapter.setOtherTopicList(topicBean.data);
-                            totalTopic = totalTopic + topicBean.data.size();
+
                         }
                     }
 
