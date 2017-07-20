@@ -180,6 +180,12 @@ public class XZFragment extends BaseFragment implements PullToRefreshLayout.OnRe
                             }
                         }
                         sendFinish(pullToRefreshLayout);
+                        mConsList.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                mConsList.scrollToPosition(0);
+                            }
+                        });
                     }
 
                     @Override

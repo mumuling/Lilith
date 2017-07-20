@@ -70,6 +70,7 @@
     <string name="cons_my_info_default_cn_word">喜怒哀乐喜欢表现在脸上，让人一看便知道，把心中的苦闷说出来会舒服一些。</string>
     <string name="cons_my_info_default_en_word">Sorrow and happiness, like the expression on the face, let people see, you know, the heart of the depression will be comfortable.</string>
     <string name="bind_account">绑定账号</string>
+    <string name="edit_info">编辑资料</string>
     <!--tab名字-->
     <string name="cece">测测</string>
     <string name="huati">话题</string>

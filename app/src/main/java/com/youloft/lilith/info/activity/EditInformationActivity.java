@@ -201,7 +201,7 @@ public class EditInformationActivity extends BaseActivity {
      */
     private void initTitle() {
         btlEditInformation.setBackgroundColor(Color.TRANSPARENT);
-        btlEditInformation.setTitle("编辑资料");
+        btlEditInformation.setTitle(getResources().getString(R.string.edit_info));
         btlEditInformation.setShowShareBtn(false);
         btlEditInformation.setShowSaveBtn(false);
         btlEditInformation.setOnToolBarItemClickListener(new BaseToolBar.OnToolBarItemClickListener() {
