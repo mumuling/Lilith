@@ -217,7 +217,7 @@ public class LoginActivity extends BaseActivity implements BaseTextWatcher.OnTex
     public void forgetPassword(View view) {
         ARouter.getInstance()
                 .build("/test/ForgetPasswordActivity")
-                .withString("flag",ForgetPasswordActivity.FORGET_PASSWORD_FLAG)
+                .withString("flag", ForgetPasswordActivity.FORGET_PASSWORD_FLAG)
                 .navigation();
     }
 
@@ -240,6 +240,9 @@ public class LoginActivity extends BaseActivity implements BaseTextWatcher.OnTex
     //微信登录
     @OnClick(R.id.ll_wechat_login)
     public void wechatLogin(View view) {
+        if(!LoginUtils.canClick()){
+            return;
+        }
         //先校验微信是否已经安装
         if (!LoginUtils.isWxInstall(this)) {
             Toaster.showShort("请先安装微信");
@@ -259,12 +262,10 @@ public class LoginActivity extends BaseActivity implements BaseTextWatcher.OnTex
 
             @Override
             public void onError(SocializePlatform platform, int code, Throwable err) {
-                MediaPlayerHelper.getInstance().register(LoginActivity.this, svBackground);
             }
 
             @Override
             public void onCancel(SocializePlatform platform, int code) {
-                MediaPlayerHelper.getInstance().register(LoginActivity.this, svBackground);
 
             }
         });
