@@ -20,6 +20,6 @@ public class SendSmsRepo extends AbstractDataRepo{
     public static Flowable<SendSmsBean> sendSms(String phone,String smsType) {
         params.put("Phone",phone);
         params.put("SmsType",smsType);
-        return unionFlow(Urls.SEND_SMS_URL, null, params, true, SendSmsBean.class, "send_sms", 1);
+        return httpFlow(Urls.SEND_SMS_URL, null, params, true, SendSmsBean.class, null, 0);
     }
 }
