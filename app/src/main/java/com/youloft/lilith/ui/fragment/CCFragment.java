@@ -50,10 +50,6 @@ public class CCFragment extends BaseFragment implements PullToRefreshLayout.OnRe
         super(R.layout.fragment_cc);
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
-    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {

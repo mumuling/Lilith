@@ -1,6 +1,8 @@
 package com.youloft.lilith.ui;
 
 import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.support.annotation.Nullable;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -53,7 +55,6 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         GlideApp.get(getApplicationContext()).setMemoryCategory(MemoryCategory.HIGH);
-
         setContentView(R.layout.activity_lilith);
         SplashActivity.startSplashActivity(this, savedInstanceState);
         ARouter.getInstance().inject(this);
@@ -65,7 +66,6 @@ public class MainActivity extends BaseActivity {
         mMainTabManager = new TabManager(this);
         checkLogin();
     }
-
 
 
     /**
