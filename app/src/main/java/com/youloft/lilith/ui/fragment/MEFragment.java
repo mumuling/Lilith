@@ -154,12 +154,12 @@ public class MEFragment extends BaseFragment {
     }
 
     private ViewGroup.LayoutParams headerRootParams;
+
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        unbinder = ButterKnife.bind(this, rootView);
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ButterKnife.bind(this, view);
         flHeaderRoot.post(new Runnable() {
             @Override
             public void run() {
@@ -183,7 +183,7 @@ public class MEFragment extends BaseFragment {
         if (AppSetting.getUserInfo() != null) {
             setUserInfo();
         }
-        return rootView;
+
     }
 
     private void scaleHeaderRoot(float dy) {
@@ -270,7 +270,6 @@ public class MEFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
     }
 
     @OnClick(R.id.iv_header)

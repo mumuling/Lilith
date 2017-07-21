@@ -1,6 +1,7 @@
 package com.youloft.lilith.ui.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerViewCanPullAble;
 import android.view.LayoutInflater;
@@ -50,9 +51,14 @@ public class CCFragment extends BaseFragment implements PullToRefreshLayout.OnRe
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        unbinder = ButterKnife.bind(this, rootView);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ButterKnife.bind(this, view);
         ptrCC.setOnRefreshListener(this);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         rvCC.setLayoutManager(manager);
@@ -62,7 +68,6 @@ public class CCFragment extends BaseFragment implements PullToRefreshLayout.OnRe
         btlCC.setShowBackBtn(false);
         btlCC.setTitle(getResources().getString(R.string.cece));
         getMeasureData();
-        return rootView;
     }
 
     /**
@@ -77,6 +82,9 @@ public class CCFragment extends BaseFragment implements PullToRefreshLayout.OnRe
                 .subscribe(new RxObserver<MeasureBean>() {
                     @Override
                     public void onDataSuccess(MeasureBean measureBean) {
+                        if (measureBean == null) {
+                            return;
+                        }
                         mMeasureAdapter.setData(measureBean.data);
                         llNoNet.setVisibility(View.INVISIBLE);
                     }
@@ -92,7 +100,7 @@ public class CCFragment extends BaseFragment implements PullToRefreshLayout.OnRe
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
+//        unbinder.unbind();
     }
 
 
@@ -106,6 +114,9 @@ public class CCFragment extends BaseFragment implements PullToRefreshLayout.OnRe
                 .subscribe(new RxObserver<MeasureBean>() {
                     @Override
                     public void onDataSuccess(MeasureBean measureBean) {
+                        if (measureBean == null) {
+                            return;
+                        }
                         mMeasureAdapter.setData(measureBean.data);
                         pullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
                     }

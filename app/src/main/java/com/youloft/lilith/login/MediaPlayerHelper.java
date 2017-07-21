@@ -26,6 +26,7 @@ public class MediaPlayerHelper implements SurfaceHolder.Callback {
     private MediaPlayer mMediaPlayer;
     private SurfaceView mSurfaceView;
     private SurfaceHolder mHolder;
+
     private HashSet<Activity> list = new HashSet<>();
 
     public static MediaPlayerHelper getInstance() {
