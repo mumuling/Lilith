@@ -33,4 +33,6 @@ public class NetErrDialog extends BaseDialog {
             }
         }.sendEmptyMessageDelayed(0, 2000);
     }
+
+
 }

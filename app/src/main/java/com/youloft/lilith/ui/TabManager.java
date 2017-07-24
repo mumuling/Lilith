@@ -60,20 +60,21 @@ public class TabManager implements NavBarLayout.OnTabChangeListener {
         }
         ArrayList<TabItemBean> tabs = mNavBar.getTabs();
         removeAllFragment();
-        for (int i = 0; i < tabs.size(); i++) {
-            TabItemBean safeData = SafeUtil.getSafeData(tabs, i);
-            if (safeData == null) {
-                continue;
-            }
-            if (!mFragmentsCache.containsKey(safeData.mIndex)) {
-                Fragment fragment = fragmentCreator(safeData.mIndex);
-                if (fragment == null) {
-                    continue;
-                }
-                mFragmentsCache.put(safeData.mIndex, fragment);
-            }
-        }
-        bindTabFragment();
+
+//        for (int i = 0; i < tabs.size(); i++) {
+//            TabItemBean safeData = SafeUtil.getSafeData(tabs, i);
+//            if (safeData == null) {
+//                continue;
+//            }
+//            if (!mFragmentsCache.containsKey(safeData.mIndex)) {
+//                Fragment fragment = fragmentCreator(safeData.mIndex);
+//                if (fragment == null) {
+//                    continue;
+//                }
+//                mFragmentsCache.put(safeData.mIndex, fragment);
+//            }
+//        }
+//        bindTabFragment();
         setTabIndex(TAB_INDEX_XZ);
     }
 
@@ -128,14 +129,18 @@ public class TabManager implements NavBarLayout.OnTabChangeListener {
      * @param index
      */
     private void setTabIndex(int index) {
+        FragmentTransaction ft = mFragmentManager.beginTransaction();
         Fragment safeData = mFragmentsCache.get(index);
         if (safeData == null) {
-            return;
+            safeData = fragmentCreator(index);
+            if (safeData != null) {
+                mFragmentsCache.put(index, safeData);
+                ft.add(FRAGMENT_CONTAINER, safeData);
+            } else {
+                return;
+            }
         }
-
-        FragmentTransaction ft = mFragmentManager.beginTransaction();
         hidAll();
-
         ft.show(safeData);
         mNavBar.setSelectTab(index);
         ft.commitAllowingStateLoss();

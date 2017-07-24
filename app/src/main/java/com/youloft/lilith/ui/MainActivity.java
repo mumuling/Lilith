@@ -60,7 +60,7 @@ public class MainActivity extends BaseActivity {
         ARouter.getInstance().inject(this);
         EventBus.getDefault().register(this);
         ButterKnife.bind(this);
-        checkNet();
+//        checkNet();
         //更新配置项
         OnlineConfigAgent.getInstance().onAppStart(getApplicationContext());
         mMainTabManager = new TabManager(this);

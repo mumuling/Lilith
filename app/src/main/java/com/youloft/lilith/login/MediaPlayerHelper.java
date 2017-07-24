@@ -2,18 +2,23 @@ package com.youloft.lilith.login;
 
 import android.app.Activity;
 import android.content.Context;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
+import android.os.Environment;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.LLApplication;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.IOException;
 import java.util.HashSet;
 
 /**
@@ -46,9 +51,26 @@ public class MediaPlayerHelper implements SurfaceHolder.Callback {
 
     private void initMediaPlayIfNeed(Context content) {
         if (mMediaPlayer == null) {
-            mMediaPlayer = MediaPlayer.create(content, R.raw.bg_login);
-            mMediaPlayer.setLooping(true);
-            mMediaPlayer.start();
+//            mMediaPlayer = MediaPlayer.create(content, R.raw.bg_login);
+            mMediaPlayer = new MediaPlayer();
+
+            String uriStr = "android.resource://" + content.getPackageName() + "/" +R.raw.bg_login;
+            try {
+                mMediaPlayer.setDataSource(content, Uri.parse(uriStr));
+                mMediaPlayer.setLooping(true);
+//                mMediaPlayer.prepare();
+//                mMediaPlayer.start();
+                mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                mMediaPlayer.prepareAsync();
+                mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                    @Override
+                    public void onPrepared(MediaPlayer mp) {
+                        mMediaPlayer.start();
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -106,7 +128,7 @@ public class MediaPlayerHelper implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        if (init) {
+        if (init && mMediaPlayer != null) {
             mMediaPlayer.setDisplay(holder);
         }
     }
