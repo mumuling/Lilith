@@ -14,6 +14,10 @@
         <!--<item name="android:windowAnimationStyle">@style/SplashAnim</item>-->
         <item name="android:windowBackground">@drawable/welcome</item>
     </style>
+    <style name="TranceTheme" parent="AppTheme">　
+        <item name="android:windowBackground">@color/translucent</item>
+    　　<item name="android:windowIsTranslucent">true</item>　　
+    </style>
 
     <style name="TranslucentThem" parent="AppTheme">
         <item name="android:windowAnimationStyle">@style/Animation</item>
