@@ -86,6 +86,6 @@ public class ConsGuideDialog extends BaseDialog {
 
     @Override
     public void onBackPressed() {
-        super.dismiss();
+        close();
     }
 }

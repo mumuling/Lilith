@@ -26,7 +26,7 @@ import java.util.Map;
 public class CityInfoManager {
     private static String DB_NAME = "city.db";
     private static String TABLE_NAME = "city";
-    private static int DB_VERSION = 2;
+    private static int DB_VERSION = 3;
     protected Context mContext;
     private SQLiteDatabase db;
     private final int BUFFER_SIZE = 400000;
