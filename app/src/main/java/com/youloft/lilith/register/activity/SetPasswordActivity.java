@@ -261,6 +261,10 @@ public class SetPasswordActivity extends BaseActivity {
                     .subscribe(new RxObserver<UserBean>() {
                         @Override
                         public void onDataSuccess(UserBean userBean) {
+                            if(userBean == null){
+                                Toaster.showShort("网络异常");
+                                return;
+                            }
                             if (userBean.data.result == 0) {
                                 //这里代表注册成功,并且也登录了
                                 AppSetting.saveUserInfo(userBean); //保存用户信息
@@ -270,7 +274,13 @@ public class SetPasswordActivity extends BaseActivity {
                                 }
                                 Toaster.showShort("注册成功");
                                 finish();
-                            } else {
+                            } else if (userBean.data.result == 1){
+                                Toaster.showShort("手机号已存在");
+                            }else if (userBean.data.result == 2){
+                                Toaster.showShort("无效的手机号");
+                            }else if (userBean.data.result == 3){
+                                Toaster.showShort("验证码无效或者失效");
+                            }else {
                                 Toaster.showShort("注册失败");
                             }
                         }
@@ -278,7 +288,7 @@ public class SetPasswordActivity extends BaseActivity {
                         @Override
                         protected void onFailed(Throwable e) {
                             super.onFailed(e);
-                            Toaster.showShort("网络错误");
+                            Toaster.showShort("网络异常");
                         }
                     });
         } else if(source.equals("20002")){ //忘记密码
@@ -290,20 +300,27 @@ public class SetPasswordActivity extends BaseActivity {
                     .subscribe(new RxObserver<ModifyPasswordBean>() {
                         @Override
                         public void onDataSuccess(ModifyPasswordBean modifyPasswordBean) {
-
+                            if(modifyPasswordBean == null){
+                                Toaster.showShort("网络异常");
+                                return;
+                            }
                             if (modifyPasswordBean.data.result == 0) {//找回密码成功  打开登录页面
                                 ARouter.getInstance().build("/test/LoginActivity").navigation();
                                 Toaster.showShort("密码设置成功");
                                 finish();
-                            } else {//失败
-                                Toaster.showShort("网络错误");
+                            } else if(modifyPasswordBean.data.result == 1){//失败
+                                Toaster.showShort("验证码不正确或失效");
+                            }else if (modifyPasswordBean.data.result == 2){
+                                Toaster.showShort("无此用户");
+                            }else {
+                                Toaster.showShort("网络异常");
                             }
                         }
 
                         @Override
                         protected void onFailed(Throwable e) {
                             super.onFailed(e);
-                            Toaster.showShort("网络错误");
+                            Toaster.showShort("网络异常");
                         }
                     });
         }else {//修改密码
@@ -315,7 +332,10 @@ public class SetPasswordActivity extends BaseActivity {
                     .subscribe(new RxObserver<ModifyPasswordBean>() {
                         @Override
                         public void onDataSuccess(ModifyPasswordBean modifyPasswordBean) {
-
+                            if (modifyPasswordBean == null){
+                                Toaster.showShort("网络异常");
+                                return;
+                            }
                             if (modifyPasswordBean.data.result == 0) {//修改密码成功  打开登录页面
                                 ARouter.getInstance().build("/test/LoginActivity").navigation();
                                 Toaster.showShort("密码修改成功");
@@ -337,7 +357,7 @@ public class SetPasswordActivity extends BaseActivity {
                         @Override
                         protected void onFailed(Throwable e) {
                             super.onFailed(e);
-                            Toaster.showShort("网络错误");
+                            Toaster.showShort("网络异常");
                         }
                     });
         }
