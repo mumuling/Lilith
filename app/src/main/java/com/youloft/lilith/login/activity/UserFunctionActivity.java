@@ -338,6 +338,10 @@ public class UserFunctionActivity extends BaseActivity implements OnTextChange {
                 .subscribe(new RxObserver<UserBean>() {
                     @Override
                     public void onDataSuccess(UserBean userBean) {
+                        if(userBean == null){
+                            Toaster.showShort("网络异常");
+                            return;
+                        }
                         if (userBean.data.result == 0) {
 
                             AppSetting.saveUserInfo(userBean); //保存用户信息

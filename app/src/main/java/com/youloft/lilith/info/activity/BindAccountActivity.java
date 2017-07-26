@@ -207,6 +207,10 @@ public class BindAccountActivity extends BaseActivity {
                 .subscribe(new RxObserver<UserBean>() {
                     @Override
                     public void onDataSuccess(UserBean userBean) {
+                        if (userBean == null){
+                            Toaster.showShort("网络异常");
+                            return;
+                        }
                         if (userBean.data.result == 0) {
                             Toaster.showShort("绑定成功");
                             userBean.data.userInfo.bindWx = true;
@@ -220,7 +224,7 @@ public class BindAccountActivity extends BaseActivity {
                     @Override
                     protected void onFailed(Throwable e) {
                         super.onFailed(e);
-                        Toaster.showShort("网络错误");
+                        Toaster.showShort("网络异常");
                     }
                 });
 

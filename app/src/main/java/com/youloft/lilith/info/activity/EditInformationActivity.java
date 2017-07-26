@@ -444,6 +444,10 @@ public class EditInformationActivity extends BaseActivity {
                 .subscribe(new RxObserver<UserBean>() {
                     @Override
                     public void onDataSuccess(UserBean userBean) {
+                        if (userBean == null){
+                            Toaster.showShort("网络异常");
+                            return;
+                        }
                         if (userBean.data.result == 0) {//保存数据成功
                             //把这套数据存一份到本地
                             AppSetting.saveUserInfo(userBean);
@@ -459,7 +463,7 @@ public class EditInformationActivity extends BaseActivity {
                     @Override
                     protected void onFailed(Throwable e) {
                         super.onFailed(e);
-                        Toaster.showShort("网络错误");
+                        Toaster.showShort("网络异常");
                     }
                 });
     }
@@ -503,6 +507,10 @@ public class EditInformationActivity extends BaseActivity {
 
                     @Override
                     public void onDataSuccess(UpLoadHeaderBean upLoadHeaderBean) {
+                        if (upLoadHeaderBean == null){
+                            Toaster.showShort("头像上传失败");
+                            return;
+                        }
                         userInfo.data.userInfo.headImg = upLoadHeaderBean.data;
                         AppSetting.saveUserInfo(userInfo);
                         EventBus.getDefault().post(new UserInfoUpDateEvent());

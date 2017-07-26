@@ -109,6 +109,10 @@ public class FeedBackActivity extends BaseActivity {
                 .subscribe(new RxObserver<FeedBackBean>() {
                     @Override
                     public void onDataSuccess(FeedBackBean feedBackBean) {
+                        if (feedBackBean == null){
+                            Toaster.showShort("网络异常");
+                            return;
+                        }
                         if (feedBackBean.data.result) {
                             Toaster.showShort("反馈成功");
                             finish();

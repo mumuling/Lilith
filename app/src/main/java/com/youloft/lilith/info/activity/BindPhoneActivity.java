@@ -386,6 +386,10 @@ public class BindPhoneActivity extends BaseActivity {
                 .subscribe(new RxObserver<UserBean>() {
                     @Override
                     public void onDataSuccess(UserBean userBean) {
+                        if (userBean == null){
+                            Toaster.showShort("网络异常");
+                            return;
+                        }
                         if (userBean.data.result == 0) {
                             AppSetting.saveUserInfo(userBean);
                             EventBus.getDefault().post(new BindAccountEvent());

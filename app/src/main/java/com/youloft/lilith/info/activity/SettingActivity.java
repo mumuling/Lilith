@@ -230,6 +230,10 @@ public class SettingActivity extends BaseActivity {
                 .subscribe(new RxObserver<LogoutBean>() {
                     @Override
                     public void onDataSuccess(LogoutBean logoutBean) {
+                        if (logoutBean == null){
+                            Toaster.showShort("网络异常");
+                            return;
+                        }
                         String data = logoutBean.data;
                         if (data.equals("true")) {
                             //1.把tab设置到首页
@@ -248,14 +252,14 @@ public class SettingActivity extends BaseActivity {
                             Toaster.showShort("退出成功");
                             finish();
                         } else {
-                            Toaster.showShort("网络错误");
+                            Toaster.showShort("网络异常");
                         }
                     }
 
                     @Override
                     protected void onFailed(Throwable e) {
                         super.onFailed(e);
-                        Toaster.showShort("网络错误");
+                        Toaster.showShort("网络异常");
                     }
                 });
     }
