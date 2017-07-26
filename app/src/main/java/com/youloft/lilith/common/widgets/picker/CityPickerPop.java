@@ -21,8 +21,8 @@ import java.util.Map;
 /**
  * Desc: 省市区三级选择,带经纬度
  * Change:城市选择弹窗，如果没有特殊需求，请直接调用{@link #getDefCityPicker(Context)} (Context)},
- *        然后通过接口来获得选择结果{@link #setOnCityItemClickListener(OnPickerSelectListener)}}
- *        最后必须要调用show()才会弹出弹窗;
+ * 然后通过接口来获得选择结果{@link #setOnCityItemClickListener(OnPickerSelectListener)}}
+ * 最后必须要调用show()才会弹出弹窗;
  *
  * @author zchao created at 2017/7/13 14:13
  * @see
@@ -503,7 +503,7 @@ public class CityPickerPop extends PickerBaseDialog implements CanShow, OnWheelC
     private void updateAreas() {
         int pCurrent = mViewCity.getCurrentItem();
         mCurrentCityName = mCitisDatasMap.get(mCurrentProviceName)[pCurrent];
-        String[] areas = mDistrictDatasMap.get(mCurrentCityName);
+        String[] areas = mDistrictDatasMap.get(mCurrentProviceName + mCurrentCityName);
 
         if (areas == null) {
             areas = new String[]{""};
@@ -531,13 +531,13 @@ public class CityPickerPop extends PickerBaseDialog implements CanShow, OnWheelC
         } else {
             mViewDistrict.setCurrentItem(0);
             //获取第一个区名称
-            mCurrentDistrictName = mDistrictDatasMap.get(mCurrentCityName)[0];
+            mCurrentDistrictName = mDistrictDatasMap.get(mCurrentProviceName + mCurrentCityName)[0];
 
         }
         mCurrentCityInfo.pCity = mCurrentCityName;
         mCurrentCityInfo.pDistrict = mCurrentDistrictName;
-        mCurrentCityInfo.pLongitude = mLongAndLati.get(mCurrentDistrictName)[0];
-        mCurrentCityInfo.pLatitude = mLongAndLati.get(mCurrentDistrictName)[1];
+        mCurrentCityInfo.pLongitude = mLongAndLati.get(mCurrentCityName + mCurrentDistrictName)[0];
+        mCurrentCityInfo.pLatitude = mLongAndLati.get(mCurrentCityName + mCurrentDistrictName)[1];
         districtWheel.setPadding(padding);
     }
 
@@ -608,10 +608,10 @@ public class CityPickerPop extends PickerBaseDialog implements CanShow, OnWheelC
         } else if (wheel == mViewCity) {
             updateAreas();
         } else if (wheel == mViewDistrict) {
-            mCurrentDistrictName = mDistrictDatasMap.get(mCurrentCityName)[newValue];
+            mCurrentDistrictName = mDistrictDatasMap.get(mCurrentProviceName + mCurrentCityName)[newValue];
             mCurrentCityInfo.pDistrict = mCurrentDistrictName;
-            mCurrentCityInfo.pLongitude = mLongAndLati.get(mCurrentDistrictName)[0];
-            mCurrentCityInfo.pLatitude = mLongAndLati.get(mCurrentDistrictName)[1];
+            mCurrentCityInfo.pLongitude = mLongAndLati.get(mCurrentCityName + mCurrentDistrictName)[0];
+            mCurrentCityInfo.pLatitude = mLongAndLati.get(mCurrentCityName + mCurrentDistrictName)[1];
         }
     }
 }

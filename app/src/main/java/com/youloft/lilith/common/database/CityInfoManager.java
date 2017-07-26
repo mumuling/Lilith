@@ -118,13 +118,14 @@ public class CityInfoManager {
         if (mCitysDatasMap.isEmpty()) {
             for (Map.Entry<String, String[]> pro :
                     mProvinceDatasMap.entrySet()) {
+                String provin = pro.getKey();
                 String[] citys = pro.getValue();
                 for (int i = 0; i < citys.length; i++) {
-                    String safeArrayData = citys[i];
-                    if (safeArrayData == null) {
+                    String city = citys[i];
+                    if (city == null) {
                         continue;
                     }
-                    Cursor districts = rawQueryByKey("city", safeArrayData, "");
+                    Cursor districts = rawQueryByKey("city", "province", city, provin,"");
                     String[] dis = new String[districts.getCount()];
                     String[] lonandlat = new String[2];
                     while (districts.moveToNext()) {
@@ -134,10 +135,10 @@ public class CityInfoManager {
                         dis[districts.getPosition()] = district;
                         lonandlat[0] = longitude;
                         lonandlat[1] = latitude;
-                        mLongAndLat.put(district, lonandlat);
+                        mLongAndLat.put(city + district, lonandlat);
                     }
                     districts.close();
-                    mCitysDatasMap.put(safeArrayData, dis);
+                    mCitysDatasMap.put(provin + city, dis);
                 }
             }
         }
@@ -160,6 +161,15 @@ public class CityInfoManager {
     private Cursor rawQueryByKey(String row, String value, String distinct) {
         String distinctsql = TextUtils.isEmpty(distinct) ? "*" : "distinct " + distinct;
         String sql = "select " + distinctsql + " from " + TABLE_NAME + " where " + row + "='" + value + "'";
+        if (db == null || !db.isOpen()) {
+            db = openDatabase();
+        }
+        return db.rawQuery(sql, null);
+    }
+
+    private Cursor rawQueryByKey(String row,String row1, String value,  String value1, String distinct) {
+        String distinctsql = TextUtils.isEmpty(distinct) ? "*" : "distinct " + distinct;
+        String sql = "select " + distinctsql + " from " + TABLE_NAME + " where " + row + "='" + value + "' AND "+ row1 + "='" + value1 + "'";
         if (db == null || !db.isOpen()) {
             db = openDatabase();
         }

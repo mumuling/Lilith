@@ -321,6 +321,9 @@ public class ConsCalDetailActivity extends BaseActivity {
     @Override
     public void finish() {
         super.finish();
+        if (mBg != null && !mBg.isRecycled()) {
+            mBg.recycle();
+        }
         mBg = null;
         overridePendingTransition(0, 0);
     }
