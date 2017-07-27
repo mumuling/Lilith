@@ -257,7 +257,7 @@ public class ViewUtil {
 
             height += ViewUtil.dp2px(122);
             int width = view.getMeasuredWidth() - view.getPaddingLeft() - view.getPaddingRight();
-            bigBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+            bigBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
             Canvas bigCanvas = new Canvas(bigBitmap);
 
             bigCanvas.drawColor(view.getResources().getColor(R.color.tab_share_color));
