@@ -11,17 +11,14 @@ import android.widget.TextView;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
-import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.measure.bean.MeasureBean;
 import com.youloft.statistics.AppAnalytics;
 
 import java.util.List;
 
-import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnItemClick;
 
 /**
  * 大师亲算的holder

@@ -1,19 +1,12 @@
 package com.youloft.lilith.cons;
 
-import android.content.Context;
-import android.location.Location;
-import android.location.LocationManager;
-
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.youloft.lilith.LLApplication;
 import com.youloft.lilith.common.AbstractDataRepo;
 import com.youloft.lilith.common.net.Urls;
 import com.youloft.lilith.common.utils.LocationUtil;
-import com.youloft.lilith.common.utils.Utils;
 import com.youloft.lilith.cons.bean.ConsPredictsBean;
 
 import java.util.HashMap;
-import java.util.List;
 
 import io.reactivex.Flowable;
 

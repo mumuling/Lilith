@@ -1,9 +1,6 @@
 package com.youloft.lilith.share;
 
-import android.app.Dialog;
-
 import com.alibaba.android.arouter.utils.TextUtils;
-import com.umeng.socialize.editorpage.ShareActivity;
 import com.youloft.socialize.SocializePlatform;
 import com.youloft.socialize.wrapper.ShareListener;
 import com.youloft.statistics.AppAnalytics;

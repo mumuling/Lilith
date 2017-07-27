@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
@@ -19,7 +18,6 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.youloft.lilith.R;
-import com.youloft.lilith.common.utils.LogUtil;
 import com.youloft.lilith.common.utils.SafeUtil;
 import com.youloft.lilith.common.utils.ViewUtil;
 import com.youloft.lilith.cons.bean.LuckData;
@@ -197,9 +195,9 @@ public class LuckView extends View {
 
     @Override
     public void draw(Canvas canvas) {
-        long start = System.currentTimeMillis();
+//        long start = System.currentTimeMillis();
         super.draw(canvas);
-        LogUtil.d("LuckView", "draw time=" + (System.currentTimeMillis() - start));
+//        LogUtil.d("LuckView", "draw time=" + (System.currentTimeMillis() - start));
     }
 
     /**

@@ -1,34 +1,23 @@
 package com.youloft.lilith.ui.fragment;
 
-import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
-import com.bumptech.glide.load.MultiTransformation;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.youloft.lilith.R;
-import com.youloft.lilith.common.GlideApp;
 import com.youloft.lilith.common.base.BaseFragment;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.NetUtil;
 import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.common.widgets.view.PullToRefreshLayout;
-import com.youloft.lilith.glide.GlideBlurTransform;
-import com.youloft.lilith.topic.TopicDetailActivity;
 import com.youloft.lilith.topic.TopicRepo;
 import com.youloft.lilith.topic.adapter.TopicAdapter;
 import com.youloft.lilith.topic.bean.TopicBean;
-import com.youloft.lilith.ui.WebActivity;
 import com.youloft.lilith.ui.view.BaseToolBar;
 
 import java.util.ArrayList;
@@ -36,7 +25,6 @@ import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
-import io.reactivex.internal.schedulers.RxThreadFactory;
 import io.reactivex.schedulers.Schedulers;
 
 /**

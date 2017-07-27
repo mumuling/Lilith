@@ -9,7 +9,6 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -51,7 +50,7 @@ public class BaseToolBar extends ToolBarLayout {
         boolean showBackBtn = a.getBoolean(R.styleable.BaseToolBar_show_back_btn, true);
         boolean showTitle = a.getBoolean(R.styleable.BaseToolBar_show_title_btn, true);
         boolean showShareBtn = a.getBoolean(R.styleable.BaseToolBar_show_share_btn, true);
-
+        a.recycle();
         mBackBtn.setVisibility(showBackBtn ? VISIBLE : GONE);
         mShareBtn.setVisibility(showShareBtn ? VISIBLE : GONE);
         mTitleTV.setVisibility(showTitle ? VISIBLE : GONE);

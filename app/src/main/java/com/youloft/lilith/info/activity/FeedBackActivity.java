@@ -2,7 +2,6 @@ package com.youloft.lilith.info.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.InputFilter;
 import android.text.TextUtils;
 import android.widget.EditText;
 
@@ -11,7 +10,6 @@ import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.rx.RxObserver;
-import com.youloft.lilith.common.utils.LoginUtils;
 import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.info.bean.FeedBackBean;
 import com.youloft.lilith.info.repo.UpdateUserRepo;
@@ -27,7 +25,6 @@ import java.util.Enumeration;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 

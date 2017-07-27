@@ -2,7 +2,6 @@ package com.youloft.lilith.cons.card;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.view.ViewGroup;
 
 import com.youloft.lilith.R;

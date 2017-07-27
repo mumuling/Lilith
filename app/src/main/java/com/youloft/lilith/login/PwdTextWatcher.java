@@ -2,12 +2,9 @@ package com.youloft.lilith.login;
 
 import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-
-import com.umeng.socialize.media.Base;
 
 /**
  * Created by gyh on 2017/7/13.

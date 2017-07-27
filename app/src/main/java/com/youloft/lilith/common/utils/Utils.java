@@ -2,11 +2,7 @@ package com.youloft.lilith.common.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.Resources;
-import android.support.annotation.DimenRes;
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
-import android.util.Base64;
 
 /**
  * 工具类入口用于管理Context

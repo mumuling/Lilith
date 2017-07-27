@@ -3,7 +3,6 @@ package com.youloft.lilith.topic;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.youloft.lilith.LLApplication;
 import com.youloft.lilith.common.AbstractDataRepo;
-import com.youloft.lilith.common.net.AbsResponse;
 import com.youloft.lilith.common.net.Urls;
 import com.youloft.lilith.topic.bean.ClickLikeBean;
 import com.youloft.lilith.topic.bean.MyTopicBean;
@@ -15,7 +14,6 @@ import com.youloft.lilith.topic.bean.TopicDetailBean;
 import com.youloft.lilith.topic.bean.VoteBean;
 
 import java.util.HashMap;
-import java.util.List;
 
 import io.reactivex.Flowable;
 

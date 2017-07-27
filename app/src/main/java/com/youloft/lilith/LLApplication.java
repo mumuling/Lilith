@@ -1,7 +1,6 @@
 package com.youloft.lilith;
 
 import android.app.Application;
-import android.os.Environment;
 
 import com.umeng.socialize.Config;
 import com.youloft.lilith.api.LilithApi;
@@ -14,11 +13,6 @@ import com.youloft.lilith.router.AppRouter;
 import com.youloft.lilith.setting.AppSetting;
 import com.youloft.socialize.SocializeApp;
 import com.youloft.statistics.AppAnalytics;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
@@ -47,6 +41,8 @@ public class LLApplication extends Application {
         AppConfig.init(this);
         //初始化三方SDK
         initThirdSDK();
+
+//        LeakCanary.install(this);
         //初始化在线参数
         OnlineConfigAgent
                 .initConfig(CONFIG_APP_KEY, String.valueOf(AppConfig.VERSION_CODE))

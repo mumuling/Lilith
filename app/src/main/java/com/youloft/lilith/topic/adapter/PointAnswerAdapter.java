@@ -1,7 +1,6 @@
 package com.youloft.lilith.topic.adapter;
 
 import android.content.Context;
-import android.graphics.Point;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;

@@ -3,7 +3,6 @@ package com.youloft.lilith.topic.db;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.text.TextUtils;
 
 /**     点赞信息的增、删、查、改
  *version

@@ -2,14 +2,11 @@ package com.youloft.lilith.topic.widget;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.graphics.Rect;
-import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
-import android.widget.FrameLayout;
 
 import com.youloft.lilith.common.utils.ViewUtil;
 

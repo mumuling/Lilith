@@ -1,6 +1,5 @@
 package com.youloft.lilith.topic;
 
-import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;

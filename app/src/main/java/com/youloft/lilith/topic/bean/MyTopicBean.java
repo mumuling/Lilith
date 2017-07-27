@@ -4,7 +4,6 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.youloft.lilith.common.net.AbsResponse;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  *

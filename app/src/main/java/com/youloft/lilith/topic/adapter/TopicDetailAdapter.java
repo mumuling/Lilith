@@ -1,29 +1,19 @@
 package com.youloft.lilith.topic.adapter;
 
-import android.animation.ValueAnimator;
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.R;
-import com.youloft.lilith.common.utils.Toaster;
-import com.youloft.lilith.common.utils.ViewUtil;
-import com.youloft.lilith.topic.PointDetailActivity;
 import com.youloft.lilith.topic.bean.PointBean;
 import com.youloft.lilith.topic.bean.TopicBean;
 import com.youloft.lilith.topic.bean.TopicDetailBean;
 import com.youloft.lilith.topic.holder.OtherTopicHolder;
 import com.youloft.lilith.topic.holder.PointHolder;
 import com.youloft.lilith.topic.holder.VoteHolder;
-import com.youloft.lilith.topic.widget.VoteDialog;
-import com.youloft.lilith.topic.widget.VoteView;
 
 import java.util.ArrayList;
 import java.util.HashSet;

@@ -21,7 +21,6 @@ import com.youloft.lilith.common.base.BaseActivity;
 import com.youloft.lilith.common.event.TabChangeEvent;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.Toaster;
-import com.youloft.lilith.info.activity.SettingActivity;
 import com.youloft.lilith.login.MediaPlayerHelper;
 import com.youloft.lilith.login.bean.ModifyPasswordBean;
 import com.youloft.lilith.login.bean.UserBean;

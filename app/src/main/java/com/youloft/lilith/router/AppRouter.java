@@ -1,7 +1,6 @@
 package com.youloft.lilith.router;
 
 import android.app.Application;
-import android.util.Log;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 

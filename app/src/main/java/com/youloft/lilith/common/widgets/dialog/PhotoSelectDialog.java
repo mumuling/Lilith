@@ -3,13 +3,11 @@ package com.youloft.lilith.common.widgets.dialog;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.StyleRes;
 import android.view.View;
 
 import com.youloft.lilith.R;
-import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.info.activity.EditInformationActivity;
 
 import butterknife.ButterKnife;

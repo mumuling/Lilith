@@ -17,7 +17,6 @@ import com.youloft.lilith.common.base.BaseFragment;
 import com.youloft.lilith.common.event.ConsChangeEvent;
 import com.youloft.lilith.common.rx.RxObserver;
 import com.youloft.lilith.common.utils.CalendarHelper;
-import com.youloft.lilith.common.utils.Toaster;
 import com.youloft.lilith.common.utils.ViewUtil;
 import com.youloft.lilith.common.widgets.view.PullToRefreshLayout;
 import com.youloft.lilith.cons.ConsRepo;
@@ -62,6 +61,7 @@ public class XZFragment extends BaseFragment implements PullToRefreshLayout.OnRe
     private ConsFragmentCardAdapter mCardAdapter;
     private GregorianCalendar mCal = new GregorianCalendar();
     private float changeStateRange = ViewUtil.dp2px(200);
+    private ConsGuideDialog consGuideDialog;
 
     public XZFragment() {
         super(R.layout.fragment_xz);
@@ -114,12 +114,16 @@ public class XZFragment extends BaseFragment implements PullToRefreshLayout.OnRe
             }
         }
         ConsGuideDialog.mBg = bitmap;
-        new ConsGuideDialog(getActivityContext()).setConsImageLocation(location).show();
+        consGuideDialog = new ConsGuideDialog(getActivityContext()).setConsImageLocation(location);
+        consGuideDialog.show();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (consGuideDialog != null && consGuideDialog.isShowing()) {
+            consGuideDialog.dismiss();
+        }
         EventBus.getDefault().unregister(this);
     }
 

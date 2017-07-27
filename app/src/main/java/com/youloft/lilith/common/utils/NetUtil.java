@@ -5,8 +5,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import com.youloft.lilith.LLApplication;
-
 
 /**
  * Desc: 网络请求工具类，包括公共参数的封装

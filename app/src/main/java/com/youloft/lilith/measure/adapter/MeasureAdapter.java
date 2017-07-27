@@ -1,12 +1,9 @@
 package com.youloft.lilith.measure.adapter;
 
 import android.app.Activity;
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.youloft.lilith.R;
 import com.youloft.lilith.common.utils.SafeUtil;
 import com.youloft.lilith.measure.bean.MeasureBean;
 import com.youloft.lilith.measure.holder.BaseMeasureHolder;

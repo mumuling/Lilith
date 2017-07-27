@@ -1,14 +1,8 @@
 package com.youloft.lilith.cons.card;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-
-import com.umeng.socialize.media.Base;
-import com.youloft.lilith.R;
 
 /**
  * Created by zchao on 2017/7/4.

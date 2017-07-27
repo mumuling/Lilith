@@ -2,9 +2,7 @@ package com.youloft.lilith.login;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 
 public abstract class BaseTextWatcher implements TextWatcher {
     protected OnTextChange listener;

@@ -3,10 +3,8 @@ package com.youloft.lilith.common.widgets.view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Paint;
-import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 import android.util.TypedValue;
-import android.widget.TextView;
 
 import com.youloft.lilith.R;
 

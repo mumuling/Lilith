@@ -5,18 +5,12 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.Environment;
-import android.util.Log;
-import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.youloft.lilith.AppConfig;
 import com.youloft.lilith.LLApplication;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.utils.Utils;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.util.HashSet;

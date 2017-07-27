@@ -8,11 +8,8 @@ import com.youloft.lilith.info.bean.FeedBackBean;
 import com.youloft.lilith.info.bean.LogoutBean;
 import com.youloft.lilith.info.bean.OldPasswordBean;
 import com.youloft.lilith.info.bean.UpLoadHeaderBean;
-import com.youloft.lilith.info.bean.UpdateUserInfoBean;
 import com.youloft.lilith.login.bean.ModifyPasswordBean;
 import com.youloft.lilith.login.bean.UserBean;
-
-import org.json.JSONObject;
 
 import java.util.HashMap;
 

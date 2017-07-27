@@ -12,7 +12,6 @@ import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 
 import com.youloft.lilith.R;
-import com.youloft.lilith.common.utils.ViewUtil;
 
 /**
  * Desc: 可以控制圆角的Imageview

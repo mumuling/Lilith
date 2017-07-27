@@ -1,7 +1,6 @@
 package com.youloft.lilith.topic.holder;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -16,8 +15,6 @@ import com.youloft.lilith.topic.adapter.TopicDetailAdapter;
 import com.youloft.lilith.topic.bean.TopicBean;
 import com.youloft.lilith.topic.widget.TopicUserImageLayout;
 import com.youloft.statistics.AppAnalytics;
-
-import java.util.HashSet;
 
 /**       话题详情页底部的其他话题推荐
  *version

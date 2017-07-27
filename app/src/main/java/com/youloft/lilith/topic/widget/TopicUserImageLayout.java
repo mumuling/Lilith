@@ -1,7 +1,6 @@
 package com.youloft.lilith.topic.widget;
 
 import android.content.Context;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;

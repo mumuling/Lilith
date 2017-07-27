@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.GlideApp;
-import com.youloft.lilith.common.utils.SafeUtil;
 import com.youloft.lilith.measure.bean.MeasureBean;
 import com.youloft.statistics.AppAnalytics;
 

@@ -15,7 +15,6 @@ import android.widget.RelativeLayout;
 
 import com.youloft.lilith.R;
 
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 

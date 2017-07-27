@@ -4,12 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.youloft.lilith.AppConfig;
-import com.youloft.lilith.setting.AppSetting;
-import com.youloft.lilith.topic.bean.PointBean;
-
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -51,7 +46,7 @@ public class PointCache {
     public int updateDataByCode(PointTable pointTable) {
         if (pointTable == null)return -1;
         SQLiteDatabase db = PointTableHelper.getInstance(mContext).getWritableDatabase();
-        return db.update(pointTable.TABLE_NAME, pointTable.createContentValues(),
+        return db.update(PointTable.TABLE_NAME, pointTable.createContentValues(),
                 PointTable.Columns.PID+ " =? "
                        , new String[]{String.valueOf(pointTable.pid)});
     }

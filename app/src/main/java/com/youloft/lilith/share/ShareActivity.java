@@ -23,18 +23,11 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
-import com.youloft.lilith.cons.consmanager.LoddingCheckEvent;
-import com.youloft.lilith.cons.consmanager.ShareConsEvent;
-import com.youloft.lilith.login.bean.UserBean;
-import com.youloft.lilith.setting.AppSetting;
 import com.youloft.socialize.SocializeAction;
 import com.youloft.socialize.SocializeApp;
 import com.youloft.socialize.SocializePlatform;
 import com.youloft.socialize.media.ShareImage;
 import com.youloft.socialize.media.ShareWeb;
-import com.youloft.statistics.AppAnalytics;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.concurrent.TimeUnit;
 

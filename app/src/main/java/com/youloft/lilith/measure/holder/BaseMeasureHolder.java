@@ -6,8 +6,6 @@ import android.view.View;
 
 import com.youloft.lilith.measure.bean.MeasureBean;
 
-import java.util.List;
-
 /**
  * 测测的基类holder
  *

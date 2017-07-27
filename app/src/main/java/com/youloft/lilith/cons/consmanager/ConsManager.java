@@ -1,6 +1,5 @@
 package com.youloft.lilith.cons.consmanager;
 
-import com.bumptech.glide.util.Util;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.utils.Utils;
 

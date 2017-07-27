@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.text.TextPaint;
 
-import com.youloft.lilith.R;
 import com.youloft.lilith.common.utils.Utils;
 import com.youloft.lilith.common.utils.ViewUtil;
 import com.youloft.lilith.cons.consmanager.ConsManager;

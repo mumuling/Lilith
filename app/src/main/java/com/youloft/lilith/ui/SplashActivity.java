@@ -10,6 +10,8 @@ import android.support.annotation.Nullable;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.base.BaseActivity;
 
+import java.lang.ref.WeakReference;
+
 /**
  * Created by zchao on 2017/7/18.
  * desc: 先大致写着，
@@ -18,7 +20,7 @@ import com.youloft.lilith.common.base.BaseActivity;
 
 public class SplashActivity extends BaseActivity {
 
-//    private ViewPager mGuidePager;
+    //    private ViewPager mGuidePager;
 //    private int[] pagerSrc = {R.drawable.welcome, R.drawable.welcome, R.drawable.welcome};
 //    private HashMap<String, View> views = new HashMap<>();
     @Override
@@ -28,15 +30,28 @@ public class SplashActivity extends BaseActivity {
 //            setContentView(R.layout.lilith_guide);
 //            init();
 //        } else {
-            new Handler() {
-                @Override
-                public void handleMessage(Message msg) {
-                    finish();
-                }
-            }.sendEmptyMessageDelayed(0, 2000);
+        MyHandler handler = new MyHandler(this);
+
+        handler.sendEmptyMessageDelayed(0, 2000);
+
 //        }
     }
 
+    static class MyHandler extends Handler {
+        WeakReference<Activity> mWeakReference;
+
+        public MyHandler(Activity activity) {
+            mWeakReference = new WeakReference<Activity>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            final Activity activity = mWeakReference.get();
+            if (activity != null) {
+                activity.finish();
+            }
+        }
+    }
 //    private void init() {
 //        mGuidePager = (ViewPager) findViewById(R.id.guide_pager);
 //        mGuidePager.setAdapter(new PagerAdapter() {

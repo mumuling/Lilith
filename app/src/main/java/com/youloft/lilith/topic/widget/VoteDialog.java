@@ -13,8 +13,6 @@ import android.widget.TextView;
 import com.youloft.lilith.R;
 import com.youloft.lilith.common.widgets.dialog.BaseDialog;
 
-import butterknife.BindView;
-
 /**
  *
  */

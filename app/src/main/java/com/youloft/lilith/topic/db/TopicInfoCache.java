@@ -4,19 +4,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.youloft.lilith.AppConfig;
-import com.youloft.lilith.common.rx.RxObserver;
-import com.youloft.lilith.setting.AppSetting;
-import com.youloft.lilith.topic.TopicRepo;
-import com.youloft.lilith.topic.bean.PointBean;
-import com.youloft.lilith.topic.bean.TopicDetailBean;
-import com.youloft.lilith.topic.bean.VoteBean;
-
-import java.util.List;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
-
 /**
  *
  */
