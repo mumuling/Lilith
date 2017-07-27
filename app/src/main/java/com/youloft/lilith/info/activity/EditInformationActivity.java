@@ -469,7 +469,7 @@ public class EditInformationActivity extends BaseActivity {
     //头像的点击事件
     @OnClick(R.id.iv_header)
     public void onHeaderClicked() {
-        fileHandle = new UserFileHandle(ivHeader, ivBlurBg);
+        fileHandle = new UserFileHandle(ivHeader, ivBlurBg,this);
         fileHandle.handle(this, null, null, null, null);
         fileHandle.setOnUpLoadListener(new UserFileHandle.OnUpLoadListener() {
             @Override

@@ -136,7 +136,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".info.activity.BindPhoneActivity"
             android:screenOrientation="portrait"/>
-
+        <activity android:name=".info.activity.CropActivity"
+            android:screenOrientation="portrait"/>
 
         <service android:name=".info.DownloadService"/>
     </application>
