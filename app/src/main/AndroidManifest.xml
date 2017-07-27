@@ -40,6 +40,7 @@
         </activity>
         <activity android:name=".ui.MainActivity"
             android:screenOrientation="portrait"
+            android:launchMode="singleTask"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/TranceTheme">
             <intent-filter>
@@ -50,6 +51,7 @@
         </activity>
         <activity android:name=".ui.SplashActivity"
             android:screenOrientation="portrait"
+            android:launchMode="singleInstance"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/ClearTheme"/>
         <activity

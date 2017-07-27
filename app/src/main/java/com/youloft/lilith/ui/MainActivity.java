@@ -52,6 +52,7 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         GlideApp.get(getApplicationContext()).setMemoryCategory(MemoryCategory.HIGH);
+
         setContentView(R.layout.activity_lilith);
         SplashActivity.startSplashActivity(this, savedInstanceState);
         ARouter.getInstance().inject(this);
