@@ -8,6 +8,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="numberPickerStyle">@style/NumberPicker</item>
+        <item name="android:windowAnimationStyle">@style/Anima</item>
     </style>
 
     <style name="ClearTheme" parent="AppTheme">
@@ -65,10 +66,10 @@
     </style>
 
     <style name="Anima" parent="@android:style/Animation.Activity">
-        <item name="android:activityOpenEnterAnimation">@null</item>
-        <item name="android:activityOpenExitAnimation">@null</item>
-        <item name="android:activityCloseEnterAnimation">@anim/slide_in_alpha</item>
-        <item name="android:activityCloseExitAnimation">@anim/slide_out_alpha</item>
+        <item name="android:activityOpenEnterAnimation">@anim/slide_in_right</item>
+        <item name="android:activityOpenExitAnimation">@anim/slide_out_left</item>
+        <item name="android:activityCloseEnterAnimation">@anim/slide_in_left</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_out_right</item>
     </style>
 
 

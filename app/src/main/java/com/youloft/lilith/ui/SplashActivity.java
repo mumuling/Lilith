@@ -112,6 +112,5 @@ public class SplashActivity extends BaseActivity {
     @Override
     public void finish() {
         super.finish();
-        overridePendingTransition(R.anim.slide_in_alpha, R.anim.slide_out_alpha);
     }
 }
